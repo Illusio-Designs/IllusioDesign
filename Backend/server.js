@@ -5,7 +5,7 @@ const session = require('express-session');
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
 const sequelize = require('./config/database');
-const userRoutes = require('./routes/userRoutes');
+const userRoutes = require('./routes/private/userRoutes');
 require('./passport-setup'); // Import Passport configuration
 
 const app = express();
@@ -25,18 +25,6 @@ app.use(passport.session());
 
 // Use user routes
 app.use('/api', userRoutes);
-
-// Google authentication routes
-app.get('/auth/google', passport.authenticate('google', {
-    scope: ['profile', 'email'],
-}));
-
-app.get('/auth/google/callback', passport.authenticate('google', {
-    failureRedirect: '/login', // Redirect to login on failure
-}), (req, res) => {
-    // Successful authentication, redirect to a protected route
-    res.redirect('/api/users'); // Redirect to users or any other route
-});
 
 // Sync database and start server
 const startServer = async () => {

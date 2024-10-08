@@ -1,7 +1,7 @@
 // routes/userRoutes.js
 const express = require('express');
 const router = express.Router();
-const userController = require('../controllers/userController');
+const userController = require('../../controllers/Private/userController'); // Ensure this path is correct
 const passport = require('passport');
 
 // Public routes
@@ -22,6 +22,7 @@ router.get('/auth/google/callback',
 router.get('/current_user', userController.getCurrentUser); // Get current user
 
 // Private route (you can implement authentication middleware)
-router.get('/users/:id', authenticate, userController.getUserById); // Get a user by ID
+// router.get('/users/:id', authenticate, userController.getUserById); // Get a user by ID
 
+// Export the router
 module.exports = router;
