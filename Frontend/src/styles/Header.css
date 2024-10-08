@@ -1,0 +1,83 @@
+/* src/styles/Header.css */
+
+.header {
+    background-color: white;
+    border-bottom: 1px solid #e5e7eb; /* Light gray border */
+    padding: 1rem 2rem; /* Vertical and horizontal padding */
+    transition: box-shadow 0.3s; /* Smooth shadow transition */
+  }
+  
+  .header:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Shadow on hover */
+  }
+  
+  .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px; /* Centering the content */
+    margin: 0 auto; /* Centering the container */
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .logo-image {
+    height: 40px; /* Adjust logo height */
+    margin-right: 0.5rem; /* Space between logo and text */
+  }
+  
+  .logo-text {
+    font-size: 1.5rem; /* Font size for the logo text */
+    font-weight: bold;
+    color: #1f2937; /* Dark gray */
+  }
+  
+  .nav-menu {
+    display: flex;
+    gap: 2rem; /* Space between navigation items */
+    list-style: none; /* Remove bullet points */
+  }
+  
+  .nav-link {
+    text-decoration: none; /* Remove underline */
+    font-weight: 500; /* Medium weight */
+    color: #4b5563; /* Gray for links */
+    position: relative; /* For pseudo-element */
+    transition: color 0.3s; /* Smooth color transition */
+  }
+  
+  .nav-link:hover {
+    color: #3b82f6; /* Blue color on hover */
+  }
+  
+  .nav-link::after {
+    content: '';
+    display: block;
+    height: 2px;
+    width: 0;
+    background: #3b82f6; /* Blue underline */
+    transition: width 0.3s; /* Smooth transition for underline */
+  }
+  
+  .nav-link:hover::after {
+    width: 100%; /* Full width on hover */
+  }
+  
+  .cta-button {
+    background-color: #3b82f6; /* Blue background */
+    color: white; /* White text */
+    padding: 0.5rem 1rem; /* Padding for button */
+    border-radius: 0.375rem; /* Rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Shadow */
+    transition: background-color 0.3s, transform 0.3s; /* Smooth transition */
+  }
+  
+  .cta-button:hover {
+    background-color: #2563eb; /* Darker blue on hover */
+    transform: translateY(-2px); /* Button lift effect */
+  }
+  
