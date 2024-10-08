@@ -1,0 +1,25 @@
+{
+  "name": "illusio",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "express": "^4.x.x",
+    "mysql2": "^2.x.x",
+    "sequelize": "^6.x.x",
+    "passport": "^0.x.x",
+    "passport-google-oauth20": "^2.x.x",
+    "express-session": "^1.x.x",
+    "cookie-parser": "^1.x.x"
+  },
+  "devDependencies": {
+    "nodemon": "^2.x.x"
+  }
+}
