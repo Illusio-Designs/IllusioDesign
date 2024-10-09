@@ -1,40 +1,38 @@
 // passport-setup.js
 const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const LocalStrategy = require('passport-local').Strategy;
 const User = require('./models/User'); // Import your User model
+const bcrypt = require('bcrypt');
 
 passport.serializeUser((user, done) => {
-    done(null, user.id); // Store user ID in session
+    done(null, user.id);
 });
 
 passport.deserializeUser(async (id, done) => {
     try {
         const user = await User.findByPk(id);
-        done(null, user); // Retrieve user from database
+        done(null, user);
     } catch (error) {
         done(error, null);
     }
 });
 
-// Google OAuth strategy
-passport.use(new GoogleStrategy({
-    clientID: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: '/auth/google/callback',
-}, async (accessToken, refreshToken, profile, done) => {
-    try {
-        // Check if user already exists in the database
-        let user = await User.findOne({ where: { email: profile.emails[0].value } });
-        if (!user) {
-            // If not, create a new user
-            user = await User.create({
-                name: profile.displayName,
-                email: profile.emails[0].value,
-                password: null, // No password for Google login
-            });
+// Local strategy for username and password login
+passport.use(new LocalStrategy(
+    { usernameField: 'email' }, // Tell passport to use 'email' as the username field
+    async (email, password, done) => {
+        try {
+            const user = await User.findOne({ where: { email } });
+            if (!user) {
+                return done(null, false, { message: 'Invalid credentials' });
+            }
+            const isMatch = await bcrypt.compare(password, user.password);
+            if (!isMatch) {
+                return done(null, false, { message: 'Invalid credentials' });
+            }
+            return done(null, user);
+        } catch (error) {
+            return done(error);
         }
-        done(null, user); // User found or created
-    } catch (error) {
-        done(error, null);
     }
-}));
+));

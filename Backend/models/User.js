@@ -19,7 +19,7 @@ const User = sequelize.define('User', {
     },
     password: {
         type: DataTypes.STRING,
-        allowNull: true, // Allow null for Google login
+        allowNull: false, // Ensure this is not nullable
     },
 }, {
     timestamps: true,

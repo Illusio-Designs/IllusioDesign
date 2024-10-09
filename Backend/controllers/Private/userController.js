@@ -1,52 +1,60 @@
 // controllers/userController.js
 const User = require('../../models/User');
+const bcrypt = require('bcrypt');
+const passport = require('passport');
 
-// Create a new user
-const createUser = async (req, res) => {
+// Register a new user
+const registerUser = async (req, res) => {
+    const { name, email, password } = req.body;
+
     try {
-        const { name, email, password } = req.body;
-        const newUser = await User.create({ name, email, password });
-        res.status(201).json(newUser);
+        const existingUser = await User.findOne({ where: { email } });
+        if (existingUser) {
+            return res.status(400).json({ error: 'User already exists' });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const newUser = await User.create({
+            name,
+            email,
+            password: hashedPassword,
+        });
+
+        res.status(201).json({ message: 'User registered successfully', user: newUser });
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        console.error('Registration error:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 };
 
-// Get all users
-const getAllUsers = async (req, res) => {
-    try {
-        const users = await User.findAll();
-        res.json(users);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
+// Login a user
+const loginUser = (req, res, next) => {
+    passport.authenticate('local', async (err, user, info) => {
+        if (err) {
+            console.error('Login error:', err);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+        if (!user) {
+            return res.status(401).json({ error: 'Invalid credentials' });
+        }
 
-// Function to handle Google login success
-const googleLoginSuccess = (req, res) => {
-    // User is authenticated, send user info or redirect
-    res.redirect('/api/users'); // Redirect to users or any other route
-};
+        const isMatch = await bcrypt.compare(req.body.password, user.password);
+        if (!isMatch) {
+            return res.status(401).json({ error: 'Invalid credentials' });
+        }
 
-// Function to handle Google login failure
-const googleLoginFailure = (req, res) => {
-    res.status(401).json({ error: 'Login failed' });
-};
-
-// Function to get the current logged-in user
-const getCurrentUser = (req, res) => {
-    if (req.user) {
-        res.json(req.user); // Send user info if logged in
-    } else {
-        res.status(401).json({ error: 'Not authenticated' });
-    }
+        req.logIn(user, (err) => {
+            if (err) {
+                console.error('Login session error:', err);
+                return res.status(500).json({ error: 'Internal server error' });
+            }
+            return res.status(200).json({ message: 'Login successful', user });
+        });
+    })(req, res, next);
 };
 
 // Export the controller functions
 module.exports = {
-    createUser,
-    getAllUsers,
-    googleLoginSuccess,
-    googleLoginFailure,
-    getCurrentUser,
+    registerUser,
+    loginUser,
 };
