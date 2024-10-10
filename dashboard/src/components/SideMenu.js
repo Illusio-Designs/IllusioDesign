@@ -11,7 +11,7 @@ const SideMenu = () => {
                     <Link to="/team">Team</Link>
                 </li>
                 <li>
-                    <Link to="/projects">projects</Link>
+                    <Link to="/projects">Projects</Link>
                 </li>
                 <li>
                     <Link to="/blog">Blog</Link>
