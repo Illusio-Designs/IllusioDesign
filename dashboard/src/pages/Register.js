@@ -17,7 +17,7 @@ const Register = () => {
             const response = await registerUser(name, email, password); // Call the API utility function
             console.log('User registered:', response);
             // Redirect to login or dashboard
-            navigate('/login'); // Redirect to login page
+            navigate('/'); // Redirect to login page
         } catch (err) {
             setError(err); // Set the error message
         }
@@ -41,7 +41,7 @@ const Register = () => {
                 </div>
                 <button type="submit">Register</button>
                 {error && <p style={{ color: 'red' }}>{error}</p>}
-                <p>If you have already registered, please <a href="/login">go to login</a>.</p>
+                <p>If you have already registered, please <a href="/">go to login</a>.</p>
             </form>
         </div>
     );

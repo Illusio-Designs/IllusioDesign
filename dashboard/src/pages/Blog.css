@@ -1,0 +1,11 @@
+.portfolio-items {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.portfolio-item {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+}

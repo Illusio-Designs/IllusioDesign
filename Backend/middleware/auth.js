@@ -1,9 +1,12 @@
 // middleware/auth.js
 const authenticate = (req, res, next) => {
-    if (req.isAuthenticated()) {
-        return next(); // User is authenticated, proceed to the next middleware
+    console.log(`Authentication check for: ${req.originalUrl}`);
+    if (req.isAuthenticated && req.isAuthenticated()) {
+        console.log(`User authenticated: ${req.user.email}`);
+        return next();
     }
-    res.status(403).json({ error: 'Forbidden' }); // User is not authenticated
+    console.warn(`Unauthorized access attempt to: ${req.originalUrl} from IP: ${req.ip}`);
+    res.status(401).json({ error: 'Unauthorized' });
 };
 
-module.exports = authenticate;
+module.exports = { authenticate };

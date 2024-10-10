@@ -3,11 +3,6 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
 const User = sequelize.define('User', {
-    id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-    },
     name: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -16,13 +11,16 @@ const User = sequelize.define('User', {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
+        validate: {
+            isEmail: true, // Validates format of the email
+        },
     },
     password: {
         type: DataTypes.STRING,
-        allowNull: false, // Ensure this is not nullable
+        allowNull: false,
     },
 }, {
-    timestamps: true,
+    // Additional model options if needed
 });
 
 module.exports = User;

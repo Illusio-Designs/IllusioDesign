@@ -1,0 +1,29 @@
+.side-menu {
+    width: 200px; /* Set the width of the side menu */
+    background-color: #f4f4f4; /* Background color */
+    padding: 20px; /* Padding around the menu */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Optional shadow */
+}
+
+.side-menu h2 {
+    margin: 0 0 20px; /* Margin for the heading */
+}
+
+.side-menu ul {
+    list-style-type: none; /* Remove default list styling */
+    padding: 0; /* Remove default padding */
+}
+
+.side-menu li {
+    margin: 10px 0; /* Margin between menu items */
+}
+
+.side-menu a {
+    text-decoration: none; /* Remove underline from links */
+    color: #333; /* Link color */
+    font-weight: bold; /* Bold text */
+}
+
+.side-menu a:hover {
+    color: #007bff; /* Change color on hover */
+}

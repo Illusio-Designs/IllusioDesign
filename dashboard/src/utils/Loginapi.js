@@ -1,15 +1,14 @@
-// src/api/api.js
+// src/utils/axiosInstance.js
 import axios from 'axios';
-import { API_BASE_URL } from '../config';
-
-
+import { API_BASE_URL } from '../config'; // Ensure you have a config file with the base URL
 
 // Create an Axios instance with the base URL
 const api = axios.create({
-    baseURL: API_BASE_URL,
+    baseURL: API_BASE_URL, // e.g., 'http://localhost:5000/api'
     headers: {
         'Content-Type': 'application/json',
     },
+    withCredentials: true, // Enable sending cookies with every request
 });
 
 // Function to log in a user
