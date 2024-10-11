@@ -1,17 +1,21 @@
 // server.js
-require('dotenv').config(); // Load environment variables
+
+require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
-const cors = require('cors'); // Import CORS
-const sequelize = require('./config/database'); // Ensure this is the correct path
-require('./middleware/passport-setup'); // Import Passport configuration
+const cors = require('cors');
+const sequelize = require('./config/database');
+require('./middleware/passport-setup');
+const path = require('path');
+const morgan = require('morgan');
+const helmet = require('helmet');
 
 // Private Routes Import
-const projectRoutes = require('./routes/private/projectRoutes'); // Import project routes
-const userRoutes = require('./routes/private/userRoutes'); // Import user routes
+const projectRoutes = require('./routes/private/projectRoutes');
+const userRoutes = require('./routes/private/userRoutes');
 
 // Public Routes Import
 const projectPublicRoutes = require('./routes/public/projectPublicRoutes');
@@ -19,20 +23,23 @@ const projectPublicRoutes = require('./routes/public/projectPublicRoutes');
 const app = express();
 
 // Middleware
-app.use(express.json());
+app.use(morgan('dev')); // Logging middleware
+app.use(express.json({ limit: '50mb' })); // Increase payload limit
+app.use(express.urlencoded({ limit: '50mb', extended: true })); // Increase payload limit for URL-encoded data
 app.use(cookieParser());
+app.use(helmet()); // Add helmet for security
 
 // CORS setup
 app.use(cors({
-    origin: 'http://localhost:3000', // Replace with your React app's URL
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
-    credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+    origin: ['http://localhost:3000'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
 }));
 
 // Initialize Sequelize Store
 const sessionStore = new SequelizeStore({
     db: sequelize,
-    tableName: 'Sessions', // Optional: customize session table name
+    tableName: 'Sessions',
 });
 
 // Sync the session store
@@ -40,15 +47,15 @@ sessionStore.sync();
 
 // Session setup with SequelizeStore
 app.use(session({
-    key: 'session_cookie_name', // Customize session cookie name if desired
-    secret: process.env.SESSION_SECRET || 'your_secret_key', // Use a strong secret in production
-    store: sessionStore, // Use SequelizeStore
+    key: 'session_cookie_name',
+    secret: process.env.SESSION_SECRET || 'your_secret_key',
+    store: sessionStore,
     resave: false,
     saveUninitialized: false,
     cookie: {
-        secure: process.env.NODE_ENV === 'production', // Set to true in production (HTTPS)
-        httpOnly: true, // Mitigates XSS attacks
-        sameSite: 'lax', // Helps protect against CSRF attacks
+        secure: process.env.NODE_ENV === 'production', // Set secure cookies in production
+        httpOnly: true,
+        sameSite: 'lax', // Adjust as needed
         maxAge: 1000 * 60 * 60, // 1 hour
     },
 }));
@@ -58,14 +65,28 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Routes
-app.use('/api', userRoutes); // User routes for login and registration
-app.use('/api/projects', projectRoutes); // Project routes
-app.use('/api/public/projects', projectPublicRoutes); // Public project routes
+app.use('/api', userRoutes);
+app.use('/api/projects', projectRoutes);
+app.use('/api/public/projects', projectPublicRoutes);
+
+// Serve static files for uploads
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// 404 Handler
+app.use((req, res, next) => {
+    res.status(404).json({ error: 'Not Found' });
+});
+
+// Global error handler
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ error: 'Something went wrong!' });
+});
 
 // Sync database and start server
 const startServer = async () => {
     try {
-        await sequelize.sync({ alter: true }); // Sync the database
+        await sequelize.sync({ alter: true }); // Consider using migrations for production
         app.listen(process.env.PORT || 5000, () => {
             console.log(`Server is running on port ${process.env.PORT || 5000}`);
         });
