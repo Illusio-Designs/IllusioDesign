@@ -1,0 +1,61 @@
+/* src/components/QuillEditor.css */
+
+.quill-editor {
+  border: 1px solid #ccc; /* Light gray border around the editor */
+  border-radius: 4px; /* Rounded corners */
+  margin-bottom: 20px; /* Spacing below the editor */
+}
+
+.ql-container {
+  min-height: 200px; /* Minimum height for the editor */
+  border: none; /* Remove the default border */
+}
+
+.ql-editor {
+  padding: 10px; /* Padding inside the editor */
+  font-family: Arial, sans-serif; /* Set a consistent font */
+  font-size: 14px; /* Font size for the editor text */
+  line-height: 1.5; /* Improved line height for readability */
+}
+
+/* Customize the toolbar */
+.ql-toolbar {
+  border: 1px solid #ddd; /* Border around the toolbar */
+  border-radius: 4px; /* Rounded corners for the toolbar */
+  background-color: #f9f9f9; /* Light background color for the toolbar */
+  padding: 10px; /* Padding around the toolbar */
+}
+
+.ql-toolbar button {
+  background: none; /* Transparent background for buttons */
+  border: none; /* No border for buttons */
+  cursor: pointer; /* Pointer cursor on hover */
+  padding: 5px 10px; /* Padding for buttons */
+  transition: background-color 0.3s; /* Smooth background color transition */
+}
+
+.ql-toolbar button:hover {
+  background-color: #e0e0e0; /* Light background on hover */
+}
+
+/* Custom styles for toolbar icons */
+.ql-toolbar .ql-picker {
+  margin-right: 10px; /* Space between picker and other buttons */
+}
+
+/* Output styling */
+.output {
+  margin-top: 20px; /* Spacing above the output section */
+  padding: 10px; /* Padding for output section */
+  border: 1px solid #ddd; /* Border around the output section */
+  border-radius: 4px; /* Rounded corners for the output section */
+  background-color: #f9f9f9; /* Light background for output section */
+}
+
+.output h2 {
+  margin-top: 0; /* Remove margin on top of output heading */
+}
+
+.output div {
+  white-space: pre-wrap; /* Preserve whitespace in output */
+}

@@ -1,57 +1,54 @@
-// src/pages/Login.js
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import { loginUser } from '../utils/Loginapi'; // Correctly import loginUser from axiosInstance
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { loginUser } from '../utils/Loginapi';
 
-const Login = () => {
+const Login = ({ setIsAuthenticated }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const navigate = useNavigate(); // Initialize useNavigate
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
 
         try {
-            const response = await loginUser(email, password); // Call the API service
-            console.log('User logged in:', response);
-            // Redirect to the dashboard after successful login
-            navigate('/dashboard'); // Redirect to the dashboard
+            const response = await loginUser(email, password);
+            console.log('API Response:', response);
+            localStorage.setItem('user', JSON.stringify(response.user)); // Store user data in local storage
+            console.log('User data stored in local storage:', response.user);
+            setIsAuthenticated(true);
+            navigate('/dashboard');
         } catch (err) {
-            setError(err); // Set the error message
-            console.error('Login failed:', err);
+            console.error('Error response:', err.response);
+            setError(err.response?.data?.error || 'Login failed');
         }
     };
 
     const handleRegister = () => {
-        navigate('/register'); // Redirect to the register page
+        navigate('/register');
     };
 
     return (
         <div>
             <h2>Login</h2>
             <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Email:</label>
-                    <input 
-                        type="email" 
-                        value={email} 
-                        onChange={(e) => setEmail(e.target.value)} 
-                        required 
-                    />
-                </div>
-                <div>
-                    <label>Password:</label>
-                    <input 
-                        type="password" 
-                        value={password} 
-                        onChange={(e) => setPassword(e.target.value)} 
-                        required 
-                    />
-                </div>
+                <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Email"
+                    required
+                />
+                <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Password"
+                    required
+                />
                 <button type="submit">Login</button>
-                <button type="button" onClick={handleRegister}>Register</button> {/* Button to redirect to register page */}
+                <button type="button" onClick={handleRegister}>Register</button>
                 {error && <p style={{ color: 'red' }}>{error}</p>}
             </form>
         </div>

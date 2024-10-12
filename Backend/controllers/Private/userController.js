@@ -1,4 +1,3 @@
-// controllers/Private/userController.js
 const User = require('../../models/User');
 const bcrypt = require('bcrypt');
 const passport = require('passport');
@@ -9,19 +8,17 @@ const registerUser = async (req, res) => {
 
     try {
         console.log(`Attempting to register user with email: ${email}`);
-        // Check if user already exists
         const existingUser = await User.findOne({ where: { email } });
         if (existingUser) {
             console.warn(`Registration failed: User with email ${email} already exists.`);
             return res.status(400).json({ error: 'User already exists.' });
         }
 
-        // Hash the password before saving
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = await User.create({
             name,
             email,
-            password: hashedPassword, // Store the hashed password
+            password: hashedPassword,
         });
         console.log(`User registered successfully: ${email}`);
         res.status(201).json({ id: newUser.id, name: newUser.name, email: newUser.email });
@@ -66,9 +63,18 @@ const logoutUser = (req, res) => {
     });
 };
 
+// Get current logged-in user
+const getCurrentUser = (req, res) => {
+    if (req.isAuthenticated()) {
+        return res.status(200).json(req.user);
+    }
+    return res.status(401).json({ error: 'User not authenticated' });
+};
+
 // Export the controller functions
 module.exports = {
     registerUser,
     loginUser,
-    logoutUser, // Export the logout function
+    logoutUser,
+    getCurrentUser, // Export the getCurrentUser function
 };
