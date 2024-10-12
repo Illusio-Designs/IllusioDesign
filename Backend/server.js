@@ -26,12 +26,13 @@ const projectRoutes = require('./routes/private/projectRoutes');
 const userRoutes = require('./routes/private/userRoutes');
 const blogRoutes = require('./routes/private/blogRoutes');
 const seoRoutes = require('./routes/private/seoRoutes');
+const sliderRoutes = require('./routes/private/sliderRoutes');
 
 // Public Routes Import
 const projectPublicRoutes = require('./routes/public/projectPublicRoutes');
 const blogPublicRoutes = require('./routes/public/blogPublicRoutes');
 const seoPublicRoutes = require('./routes/public/seoPublicRoutes');
-
+const sliderPublicRoutes = require('./routes/public/sliderPublicRoutes');
 const app = express();
 
 // Middleware
@@ -43,7 +44,7 @@ app.use(helmet()); // Add helmet for security
 
 // CORS setup
 app.use(cors({
-    origin: ['http://localhost:3000', 'http://localhost:5173'],
+    origin: ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:3001'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
 }));
@@ -84,11 +85,13 @@ app.use('/api', userRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/blog', blogRoutes);
 app.use('/api/seo', seoRoutes);
+app.use('/api/sliders', sliderRoutes);
 
 // Public Routes
 app.use('/api/public/projects', projectPublicRoutes);
 app.use('/api/public/seo', seoPublicRoutes);
 app.use('/api/public/blogs', blogPublicRoutes);
+app.use('/api/public/sliders', sliderPublicRoutes);
 
 // Serve static files for uploads
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));

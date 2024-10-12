@@ -4,7 +4,7 @@ import { getAllBlogs, createBlog, updateBlogById, deleteBlogById } from '../util
 import { useDropzone } from 'react-dropzone';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import './blog.css';
+import './Blog.css';
 
 Modal.setAppElement('#root');
 

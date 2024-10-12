@@ -1,0 +1,160 @@
+/* src/pages/Slider.css */
+
+.slider-management {
+  padding: 20px;
+  font-family: Arial, sans-serif; /* Added font family for consistency */
+}
+
+.error-message {
+  color: red;
+  margin-bottom: 15px;
+}
+
+.success-message {
+  color: green;
+  margin-bottom: 15px;
+}
+
+.create-button {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s; /* Added transition for smooth hover */
+}
+
+.create-button:hover {
+  background-color: #45a049;
+}
+
+.sliders-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.sliders-table th,
+.sliders-table td {
+  border: 1px solid #ddd;
+  padding: 10px; /* Increased padding for better readability */
+}
+
+.sliders-table th {
+  background-color: #f2f2f2;
+  text-align: left;
+  font-weight: bold; /* Added bold font for headers */
+}
+
+.edit-button,
+.delete-button {
+  padding: 5px 10px;
+  margin-right: 5px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s; /* Added transition for buttons */
+}
+
+.edit-button {
+  background-color: #2196f3;
+  color: white;
+}
+
+.edit-button:hover {
+  background-color: #0b7dda;
+}
+
+.delete-button {
+  background-color: #f44336;
+  color: white;
+}
+
+.delete-button:hover {
+  background-color: #da190b;
+}
+
+.slider-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  width: 80%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Added box shadow for depth */
+}
+
+.slider-modal-overlay {
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
+.slider-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-input {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.3s; /* Added transition for input focus */
+}
+
+.form-input:focus {
+  border-color: #4caf50; /* Highlight border on focus */
+  outline: none; /* Remove default outline */
+}
+
+.dropzone {
+  border: 2px dashed #ccc;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  margin-bottom: 15px;
+  transition: border-color 0.3s; /* Added transition for dropzone */
+}
+
+.dropzone:hover {
+  border-color: #4caf50; /* Change border color on hover */
+}
+
+.form-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end; /* Align buttons to the right */
+}
+
+.submit-button {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s; /* Added transition for smooth hover */
+}
+
+.submit-button:hover {
+  background-color: #45a049;
+}
+
+.cancel-button {
+  background-color: #f44336;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s; /* Added transition for smooth hover */
+}
+
+.cancel-button:hover {
+  background-color: #da190b;
+}
