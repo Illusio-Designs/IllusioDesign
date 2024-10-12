@@ -2,6 +2,7 @@
 
 .blog-page {
     padding: 20px;
+    font-family: Arial, sans-serif; /* Added font family for consistency */
 }
 
 h1, h2 {
@@ -30,9 +31,15 @@ h1, h2 {
 }
 
 .input, .textarea {
-    padding: 8px;
+    padding: 10px; /* Increased padding for better readability */
     border: 1px solid #ccc;
     border-radius: 4px;
+    transition: border-color 0.3s; /* Added transition for input focus */
+}
+
+.input:focus, .textarea:focus {
+    border-color: #4caf50; /* Highlight border on focus */
+    outline: none; /* Remove default outline */
 }
 
 .textarea {
@@ -42,11 +49,16 @@ h1, h2 {
 
 .button {
     padding: 10px 15px;
-    background-color: #007BFF;
+    background-color: #4caf50; /* Match project button color */
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
+    transition: background-color 0.3s; /* Added transition for smooth hover */
+}
+
+.button:hover {
+    background-color: #45a049; /* Match project button hover color */
 }
 
 .button:disabled {
@@ -68,9 +80,74 @@ h1, h2 {
 
 .blog-link {
     text-decoration: none;
-    color: #007BFF;
+    color: #007BFF; /* Match project link color */
 }
 
 .blog-actions {
     margin-top: 10px;
+}
+
+.error-message {
+    color: red;
+    margin-bottom: 15px;
+}
+
+.success-message {
+    color: green;
+    margin-bottom: 15px;
+}
+
+.submit-button {
+    background-color: #4caf50; /* Match project button color */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s; /* Added transition for smooth hover */
+}
+
+.submit-button:hover {
+    background-color: #45a049; /* Match project button hover color */
+}
+
+.cancel-button {
+    background-color: #f44336; /* Match project cancel button color */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s; /* Added transition for smooth hover */
+}
+
+.cancel-button:hover {
+    background-color: #da190b; /* Match project cancel button hover color */
+}
+
+.editor-container {
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px; /* Added padding for better spacing */
+    background-color: #f9f9f9; /* Light background for the editor */
+}
+
+.dropzone {
+    border: 2px dashed #ccc;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    margin-bottom: 15px;
+    transition: border-color 0.3s; /* Added transition for dropzone */
+}
+
+.dropzone:hover {
+    border-color: #4caf50; /* Change border color on hover */
+}
+
+.form-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end; /* Align buttons to the right */
 }

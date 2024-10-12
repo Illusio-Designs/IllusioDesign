@@ -1,124 +1,183 @@
-// src/components/BlogPage.jsx
-
 import React, { useEffect, useState } from 'react';
-import blogApi from '../utils/blogApi'; // Import the default export
-import { Link } from 'react-router-dom'; // Assuming you're using React Router
-import { useDropzone } from 'react-dropzone'; // Import Dropzone
-import ReactQuill from 'react-quill'; // Import Quill
-import 'react-quill/dist/quill.snow.css'; // Import Quill CSS
-import './blog.css'; // Import the CSS file
+import Modal from 'react-modal';
+import { getAllBlogs, createBlog, updateBlogById, deleteBlogById } from '../utils/blogApi';
+import { useDropzone } from 'react-dropzone';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import './blog.css';
+
+Modal.setAppElement('#root');
 
 const BlogPage = () => {
     const [blogs, setBlogs] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
     const [newBlog, setNewBlog] = useState({
         title: '',
-        content: '', // Quill content will be stored as text or HTML
+        content: '',
         publishedDate: '',
-        image: '',
+        image: null,
         metaDescription: '',
         seoTitle: '',
         url: '',
     });
-    const [creating, setCreating] = useState(false);
+    const [editBlogId, setEditBlogId] = useState(null);
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
 
-    // Fetch all published blogs on component mount
     useEffect(() => {
-        const fetchBlogs = async () => {
-            try {
-                const data = await blogApi.getAllBlogs();
-                setBlogs(data);
-            } catch (err) {
-                // Set error message as a string
-                setError(err.message || 'An error occurred while fetching blogs.');
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchBlogs();
     }, []);
 
-    // Handle input changes for creating a new blog
-    const handleNewBlogChange = (e) => {
-        const { name, value } = e.target;
-        setNewBlog((prevState) => ({
-            ...prevState,
-            [name]: value,
-        }));
+    const fetchBlogs = async () => {
+        try {
+            const data = await getAllBlogs();
+            setBlogs(data);
+        } catch (err) {
+            setError('Failed to fetch blogs.');
+        }
     };
 
-    // Handle content changes for Quill editor
+    const openModal = () => setModalIsOpen(true);
+    const closeModal = () => {
+        setModalIsOpen(false);
+        setEditBlogId(null);
+        setNewBlog({
+            title: '',
+            content: '',
+            publishedDate: '',
+            image: null,
+            metaDescription: '',
+            seoTitle: '',
+            url: '',
+        });
+    };
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setNewBlog((prev) => ({ ...prev, [name]: value }));
+    };
+
     const handleContentChange = (content) => {
         setNewBlog((prev) => ({ ...prev, content }));
     };
 
-    // Handle image upload
     const handleDrop = (acceptedFiles) => {
         const file = acceptedFiles[0];
-        const formData = new FormData();
-        formData.append('image', file);
-
-        blogApi
-            .post('/blogs/uploads', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            })
-            .then((response) => {
-                const imageUrl = response.data.url;
-                setNewBlog((prev) => ({ ...prev, image: imageUrl }));
-            })
-            .catch(() => {
-                setError('Failed to upload image.');
-            });
+        setNewBlog((prev) => ({ ...prev, image: file }));
     };
 
     const { getRootProps, getInputProps } = useDropzone({ onDrop: handleDrop });
 
-    // Handle creating a new blog
-    const handleCreateBlog = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        setCreating(true);
-        setError(null); // Reset error before creating
+        setError('');
+        setSuccess('');
+    
         try {
-            const createdBlog = await blogApi.createBlog(newBlog);
-            setBlogs((prevBlogs) => [...prevBlogs, createdBlog.blog]); // Adjust based on API response
-            setNewBlog({
-                title: '',
-                content: '',
-                publishedDate: '',
-                image: '',
-                metaDescription: '',
-                seoTitle: '',
-                url: '',
-            });
+            let blog;
+            if (editBlogId) {
+                blog = await updateBlogById(editBlogId, newBlog); // Directly use newBlog
+                setBlogs((prev) => prev.map((b) => (b.id === editBlogId ? blog : b)));
+                setSuccess('Blog updated successfully!');
+            } else {
+                blog = await createBlog(newBlog); // Directly use newBlog
+                setBlogs((prev) => [...prev, blog]);
+                setSuccess('Blog created successfully!');
+            }
+            closeModal();
         } catch (err) {
-            // Set error message as a string
-            setError(err.message || 'Failed to create the blog.');
-        } finally {
-            setCreating(false);
+            console.error('Error during blog submission:', err);
+            setError(err.message || 'Failed to save blog.');
+        }
+    };
+    
+
+    // Function to handle editing a blog
+    const handleEdit = (blog) => {
+        setEditBlogId(blog.id);
+        setNewBlog({
+            title: blog.title,
+            content: blog.content,
+            publishedDate: blog.publishedDate,
+            image: blog.image,
+            metaDescription: blog.metaDescription,
+            seoTitle: blog.seoTitle,
+            url: blog.url,
+        });
+        openModal();
+    };
+
+    // Function to handle deleting a blog
+    const handleDelete = async (blogId) => {
+        if (window.confirm('Are you sure you want to delete this blog?')) {
+            try {
+                await deleteBlogById(blogId);
+                setBlogs((prev) => prev.filter((b) => b.id !== blogId));
+                setSuccess('Blog deleted successfully!');
+            } catch (err) {
+                console.error('Error deleting blog:', err);
+                setError('Failed to delete blog.');
+            }
         }
     };
 
-    if (loading) return <p>Loading blogs...</p>;
-    if (error) return <p>Error: {error}</p>; // Render the error message as a string
-
     return (
         <div className="blog-page">
-            <h1>Blog Posts</h1>
+            <h2>Blog Management</h2>
+            {error && <p className="error-message">{error}</p>}
+            {success && <p className="success-message">{success}</p>}
+            <button onClick={openModal} className="create-button">
+                Create New Blog
+            </button>
 
-            {/* Create New Blog Form */}
-            <section className="form-section">
-                <h2>Create New Blog</h2>
-                <form onSubmit={handleCreateBlog} className="form">
+            <h3>Existing Blogs</h3>
+            <table className="projects-table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Published Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {blogs.map((blog) => (
+                        <tr key={blog.id}>
+                            <td>{blog.title}</td>
+                            <td>{new Date(blog.publishedDate).toLocaleDateString()}</td>
+                            <td>
+                                <button
+                                    onClick={() => handleEdit(blog)}
+                                    className="edit-button"
+                                >
+                                    Edit
+                                </button>
+                                <button
+                                    onClick={() => handleDelete(blog.id)}
+                                    className="delete-button"
+                                >
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+
+            <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={closeModal}
+                contentLabel="Blog Modal"
+                className="project-modal"
+                overlayClassName="project-modal-overlay"
+            >
+                <h2>{editBlogId ? 'Edit Blog' : 'Create New Blog'}</h2>
+                <form onSubmit={handleSubmit} className="project-form">
                     <input
                         type="text"
                         name="title"
                         placeholder="Title"
                         value={newBlog.title}
-                        onChange={handleNewBlogChange}
+                        onChange={handleChange}
                         required
                         className="form-input"
                     />
@@ -141,7 +200,7 @@ const BlogPage = () => {
                         name="metaDescription"
                         placeholder="Meta Description"
                         value={newBlog.metaDescription}
-                        onChange={handleNewBlogChange}
+                        onChange={handleChange}
                         required
                         className="form-input"
                     />
@@ -150,7 +209,7 @@ const BlogPage = () => {
                         name="seoTitle"
                         placeholder="SEO Title"
                         value={newBlog.seoTitle}
-                        onChange={handleNewBlogChange}
+                        onChange={handleChange}
                         required
                         className="form-input"
                     />
@@ -159,32 +218,25 @@ const BlogPage = () => {
                         name="url"
                         placeholder="SEO URL"
                         value={newBlog.url}
-                        onChange={handleNewBlogChange}
+                        onChange={handleChange}
                         required
                         className="form-input"
                     />
 
-                    <button type="submit" disabled={creating} className="button">
-                        {creating ? 'Creating...' : 'Create Blog'}
-                    </button>
+                    <div className="form-buttons">
+                        <button type="submit" className="submit-button">
+                            {editBlogId ? 'Update Blog' : 'Create Blog'}
+                        </button>
+                        <button
+                            type="button"
+                            onClick={closeModal}
+                            className="cancel-button"
+                        >
+                            Cancel
+                        </button>
+                    </div>
                 </form>
-            </section>
-
-            {/* Blog List */}
-            <section className="blog-list">
-                <h2>All Blogs</h2>
-                <ul>
-                    {blogs.map((blog) => (
-                        <li key={blog.id} className="blog-item">
-                            <Link to={`/blog/${blog.id}`} className="blog-link">
-                                <h3>{blog.title}</h3>
-                                <p>{blog.content.substring(0, 100)}...</p>
-                                <p>Published on: {new Date(blog.publishedDate).toLocaleDateString()}</p>
-                            </Link>
-                        </li>
-                    ))}
-                </ul>
-            </section>
+            </Modal>
         </div>
     );
 };

@@ -1,4 +1,5 @@
-const { DataTypes, Model } = require('sequelize');
+const { DataTypes } = require('sequelize');
+const { Model } = require('sequelize');
 const sequelize = require('../config/database');
 
 class Blog extends Model {
@@ -24,7 +25,7 @@ Blog.init(
     },
     publishedDate: {
       type: DataTypes.DATE,
-      allowNull: false,
+      allowNull: true,
     },
     image: {
       type: DataTypes.STRING,
@@ -32,6 +33,18 @@ Blog.init(
     },
     seoId: {
       type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    metaDescription: {
+      type: DataTypes.STRING, // Add this field
+      allowNull: true,
+    },
+    seoTitle: {
+      type: DataTypes.STRING, // Add this field
+      allowNull: true,
+    },
+    url: {
+      type: DataTypes.STRING, // Add this field
       allowNull: true,
     },
   },

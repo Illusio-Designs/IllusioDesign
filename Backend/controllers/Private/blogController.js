@@ -1,66 +1,109 @@
 const Blog = require('../../models/Blog');
 const SEO = require('../../models/SEO');
+const multer = require('multer');
+const path = require('path');
+
+// Set up Multer storage for image uploads
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/blogs');
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+
+exports.upload = multer({ storage: storage });
+
+exports.uploadImage = (req, res) => {
+  if (req.file) {
+    res.json({ url: `/uploads/blogs/${req.file.filename}` });
+  } else {
+    res.status(400).json({ error: 'Image upload failed' });
+  }
+};
 
 exports.createBlog = async (req, res) => {
-  const { title, content, publishedDate, image, metaDescription, seoTitle, url } = req.body;
-
   try {
-    const seo = await SEO.create({
-      metaDescription,
-      title: seoTitle,
-      url,
+    const { title, content, publishedDate, metaDescription, seoTitle, url } = req.body;
+    const image = req.file ? req.file.filename : null;
+
+    // Create or find existing SEO record
+    const [seo, created] = await SEO.findOrCreate({
+      where: { url }, // Ensure URL is unique
+      defaults: {
+        metaDescription,
+        title: seoTitle,
+      },
     });
 
-    const blog = await Blog.create({
+    // Create Blog with the associated seoId
+    const newBlog = await Blog.create({
       title,
       content,
-      publishedDate,
+      publishedDate: new Date(publishedDate),
       image,
       seoId: seo.id,
     });
 
-    const blogWithSeo = await Blog.findByPk(blog.id, { include: { model: SEO, as: 'seo' } });
-
-    res.status(201).json(blogWithSeo);
+    return res.status(201).json(newBlog);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server Error' });
+    console.error('Error creating blog:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
 
+
+
+
+
 exports.updateBlog = async (req, res) => {
   const { id } = req.params;
-  const { title, content, publishedDate, image, metaDescription, seoTitle, url } = req.body;
+  const { title, content, publishedDate, metaDescription, seoTitle, url } = req.body;
+  const image = req.file ? req.file.filename : null;
 
   try {
-    const blog = await Blog.findByPk(id, { include: { model: SEO, as: 'seo' } });
+    const blog = await Blog.findByPk(id);
     if (!blog) {
       return res.status(404).json({ message: 'Blog not found' });
     }
 
-    await blog.update({
-      title: title || blog.title,
-      content: content || blog.content,
-      publishedDate: publishedDate || blog.publishedDate,
-      image: image || blog.image,
+    // Update blog fields
+    blog.title = title || blog.title;
+    blog.content = content || blog.content;
+    blog.publishedDate = publishedDate || blog.publishedDate;
+    blog.image = image || blog.image;
+
+    // Update or create the associated SEO record
+    const [seo, created] = await SEO.findOrCreate({
+      where: { url }, // Ensure URL is unique
+      defaults: {
+        metaDescription,
+        title: seoTitle,
+      },
     });
 
-    if (blog.seo) {
-      await blog.seo.update({
-        metaDescription: metaDescription || blog.seo.metaDescription,
-        title: seoTitle || blog.seo.title,
-        url: url || blog.seo.url,
-      });
+    // If SEO record already exists, update it
+    if (!created) {
+      seo.metaDescription = metaDescription || seo.metaDescription;
+      seo.title = seoTitle || seo.title;
+      await seo.save();
     }
 
-    const updatedBlog = await Blog.findByPk(id, { include: { model: SEO, as: 'seo' } });
-    res.status(200).json(updatedBlog);
+    // Link the blog to the SEO record
+    blog.seoId = seo.id;
+
+    await blog.save();
+
+    res.status(200).json(blog);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server Error' });
+    console.error('Error updating blog:', error);
+    res.status(500).json({ message: 'Server Error', error: error.message });
   }
 };
 
+
+// Function to delete a blog
 exports.deleteBlog = async (req, res) => {
   const { id } = req.params;
 
@@ -83,6 +126,7 @@ exports.deleteBlog = async (req, res) => {
   }
 };
 
+// Function to get all blogs
 exports.getAllBlogs = async (req, res) => {
   try {
     const blogs = await Blog.findAll({ include: { model: SEO, as: 'seo' } });
