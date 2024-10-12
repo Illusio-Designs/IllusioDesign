@@ -4,9 +4,14 @@ import '../styles/Header.css'; // Import custom CSS for additional styling
 import Logo from '../assets/logo.png'
 
 const Header = () => {
+  const navLinks = document.querySelector('.nav-links');
+      function onToggleMenu(e){
+          e.name = e.name === "menu" ? "close" : "menu"
+          navLinks.classList.toggle('max-md:top-[100px]');
+      }
   return (
     <>
-    <header className='py-3'>
+    <header className='py-4 mt-4 mb-4 border-[#ec691f] border-t-2 border-b-2'>
       <div className='container m-auto'>
         <nav className='flex justify-between items-center'>
         <motion.a
@@ -23,26 +28,7 @@ const Header = () => {
         </motion.a>
         <div className='flex items-center'>
           <ul className="nav-links flex max-lg:absolute left-0 top-[-100%] max-lg:min-h-[60px] w-full lg:flex-row flex-col max-lg:gap-4 max-lg:p-5">
-            <li>
-              <motion.a 
-                initial="initial"
-                whileHover="hovered"
-                transition="duration"
-                className="text-md text-[#000] uppercase tracking-wider font-medium py-2 px-4 relative block whitespace-nowrap overflow-hidden" href="#">
-                <motion.div variants={{initial: {y: 0}, hovered: {y: "-120%"}, duration: 0.5 }}>About Us</motion.div>
-                <motion.div className='absolute inset-y-2 inset-x-4 hover:text-[#ec691f]' variants={{initial: {y: "120%"}, hovered: {y: 0}, duration: 0.5}}>About Us</motion.div>
-              </motion.a>
-            </li>
-            <li>
-              <motion.a 
-                initial="initial"
-                whileHover="hovered"
-                transition="duration"
-                className="text-md text-[#000] uppercase tracking-wider font-medium py-2 px-4 relative block whitespace-nowrap overflow-hidden" href="#">
-                <motion.div variants={{initial: {y: 0}, hovered: {y: "-120%"}, duration: 0.5 }}>Project</motion.div>
-                <motion.div className='absolute inset-y-2 inset-x-4 hover:text-[#ec691f]' variants={{initial: {y: "120%"}, hovered: {y: 0}, duration: 0.5}}>Project</motion.div>
-              </motion.a>
-            </li>
+            
             <li>
               <motion.a 
                 initial="initial"
@@ -59,6 +45,17 @@ const Header = () => {
                 whileHover="hovered"
                 transition="duration"
                 className="text-md text-[#000] uppercase tracking-wider font-medium py-2 px-4 relative block whitespace-nowrap overflow-hidden" href="#">
+                <motion.div variants={{initial: {y: 0}, hovered: {y: "-120%"}, duration: 0.5 }}>Project</motion.div>
+                <motion.div className='absolute inset-y-2 inset-x-4 hover:text-[#ec691f]' variants={{initial: {y: "120%"}, hovered: {y: 0}, duration: 0.5}}>Project</motion.div>
+              </motion.a>
+            </li>
+            
+            <li>
+              <motion.a 
+                initial="initial"
+                whileHover="hovered"
+                transition="duration"
+                className="text-md text-[#000] uppercase tracking-wider font-medium py-2 px-4 relative block whitespace-nowrap overflow-hidden" href="#">
                 <motion.div variants={{initial: {y: 0}, hovered: {y: "-120%"}, duration: 0.5 }}>Blog</motion.div>
                 <motion.div className='absolute inset-y-2 inset-x-4 hover:text-[#ec691f]' variants={{initial: {y: "120%"}, hovered: {y: 0}, duration: 0.5}}>Blog</motion.div>
               </motion.a>
@@ -69,8 +66,8 @@ const Header = () => {
                 whileHover="hovered"
                 transition="duration"
                 className="text-md text-[#000] uppercase tracking-wider font-medium py-2 px-4 relative block whitespace-nowrap overflow-hidden" href="#">
-                <motion.div variants={{initial: {y: 0}, hovered: {y: "-120%"}, duration: 0.5 }}>Contact Us</motion.div>
-                <motion.div className='absolute inset-y-2 inset-x-4 hover:text-[#ec691f]' variants={{initial: {y: "120%"}, hovered: {y: 0}, duration: 0.5}}>Contact Us</motion.div>
+                <motion.div variants={{initial: {y: 0}, hovered: {y: "-120%"}, duration: 0.5 }}>About Us</motion.div>
+                <motion.div className='absolute inset-y-2 inset-x-4 hover:text-[#ec691f]' variants={{initial: {y: "120%"}, hovered: {y: 0}, duration: 0.5}}>About Us</motion.div>
               </motion.a>
             </li>
           </ul>
@@ -80,10 +77,11 @@ const Header = () => {
             initial="initial"
             whileHover="hovered"
             transition="duration"
-            className="text-lg text-[#fff] bg-[#ec691f] rounded-full uppercase tracking-wider font-normal py-3 px-5 relative block whitespace-nowrap overflow-hidden" href="#">
-              <motion.div variants={{initial: {y: 0}, hovered: {y: "-120%"}, duration: 0.5 }}>Get Started</motion.div>
-              <motion.div className='absolute inset-y-3 inset-x-5' variants={{initial: {y: "120%"}, hovered: {y: 0}, duration: 0.5}}>Get Started</motion.div>
+            className="text-md text-[#fff] bg-[#ec691f] rounded-full uppercase tracking-wider font-normal py-3 px-5 relative block whitespace-nowrap overflow-hidden" href="#">
+              <motion.div variants={{initial: {y: 0}, hovered: {y: "-120%"}, duration: 0.5 }}>Contact Us</motion.div>
+              <motion.div className='absolute inset-y-3 inset-x-5' variants={{initial: {y: "120%"}, hovered: {y: 0}, duration: 0.5}}>Contact Us</motion.div>
           </motion.a>
+
           <ion-icon name="menu" className="text-3xl bg-black cursor-pointer md:hidden" onclick="onToggleMenu(this)"></ion-icon>
         </div>
         </nav>
