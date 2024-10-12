@@ -1,22 +1,15 @@
-// routes/private/blogRoutes.js
 const express = require('express');
 const router = express.Router();
 const blogController = require('../../controllers/Private/blogController');
-const { authenticate } = require('../../middleware/auth'); // Import your authentication middleware
+const { authenticate } = require('../../middleware/auth');
 
-// All routes here are protected
 console.log('Blog Controller:', blogController);
 
-// Create a new blog
-router.post('/', authenticate, blogController.createBlog);
-
-// Update a blog by ID
-router.put('/:id', authenticate, blogController.updateBlog);
-
-// Delete a blog by ID
+// Use the upload middleware for creating and updating blogs
+router.post('/', authenticate, blogController.upload.single('image'), blogController.createBlog);
+router.put('/:id', authenticate, blogController.upload.single('image'), blogController.updateBlog);
 router.delete('/:id', authenticate, blogController.deleteBlog);
-
-// (Optional) Get all blogs (for admin)
 router.get('/', authenticate, blogController.getAllBlogs);
+router.post('/uploads', authenticate, blogController.upload.single('image'), blogController.uploadImage);
 
 module.exports = router;

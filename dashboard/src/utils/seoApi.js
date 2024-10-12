@@ -42,63 +42,46 @@ const handleApiError = (error, customMessage) => {
     throw new Error(errorMessage);
 };
 
-// Export functions directly
-export const getAllBlogs = async () => {
+// Get all SEO entries
+export const getAllSEO = async () => {
     try {
-        const response = await api.get('/public/blogs');
+        const response = await api.get('/seo');
         return response.data;
     } catch (error) {
-        handleApiError(error, 'Failed to fetch blogs');
+        handleApiError(error, 'Failed to fetch SEO entries');
     }
 };
 
-// Update createBlog to handle file uploads
-export const createBlog = async (blogData) => {
+// Create a new SEO entry
+export const createSEO = async (seoData) => {
     try {
-        const formData = new FormData();
-        // Append all blog data to FormData
-        for (const key in blogData) {
-            formData.append(key, blogData[key]);
-        }
-        const response = await api.post('/blog', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data', // Set the content type for file uploads
-            },
-        });
+        const response = await api.post('/seo', seoData);
         return response.data;
     } catch (error) {
-        handleApiError(error, 'Failed to create the blog');
+        handleApiError(error, 'Failed to create SEO entry');
     }
 };
 
-// Update updateBlogById to handle file uploads
-export const updateBlogById = async (blogId, blogData) => {
+// Update an existing SEO entry
+export const updateSEO = async (seoId, seoData) => {
     try {
-        const formData = new FormData();
-        // Append all blog data to FormData
-        for (const key in blogData) {
-            formData.append(key, blogData[key]);
-        }
-        const response = await api.put(`/blog/${blogId}`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data', // Set the content type for file uploads
-            },
-        });
+        const response = await api.put(`/seo/${seoId}`, seoData);
         return response.data;
     } catch (error) {
-        handleApiError(error, `Failed to update blog with ID ${blogId}`);
+        handleApiError(error, `Failed to update SEO entry with ID ${seoId}`);
     }
 };
 
-// Add the deleteBlogById function
-export const deleteBlogById = async (blogId) => {
+// Delete an SEO entry
+export const deleteSEO = async (seoId) => {
     try {
-        const response = await api.delete(`/blog/${blogId}`);
+        const response = await api.delete(`/seo/${seoId}`);
         return response.data;
     } catch (error) {
-        handleApiError(error, `Failed to delete blog with ID ${blogId}`);
+        handleApiError(error, `Failed to delete SEO entry with ID ${seoId}`);
     }
 };
 
 // Optionally, you can export the default API instance if needed
 export default api;
+
