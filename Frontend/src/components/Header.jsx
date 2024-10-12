@@ -74,7 +74,6 @@ const Header = () => {
               <motion.div variants={{initial: {y: 0}, hovered: {y: "-120%"}, duration: 0.5 }}>Get Started</motion.div>
               <motion.div className='absolute inset-y-3 inset-x-5' variants={{initial: {y: "120%"}, hovered: {y: 0}, duration: 0.5}}>Get Started</motion.div>
           </motion.a>
-          {/* <a href='#' className='btn btn-orange get-started'>Get Started</a> */}
           <ion-icon name="menu" className="text-3xl bg-black cursor-pointer md:hidden" onclick="onToggleMenu(this)"></ion-icon>
         </div>
         </nav>
