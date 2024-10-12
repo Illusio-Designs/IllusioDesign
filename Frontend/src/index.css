@@ -1,7 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+@font-face {
+  font-family: 'Quantify';
+  src: local('Quantify'), url(./fonts/Quantify.woff) format('woff');
+}
 :root {
   /* font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif; */
   line-height: 1.5;
@@ -10,16 +13,13 @@
   color-scheme: light dark;
   --theme-color: #ec691f;
   --white: #fff;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  /* color: rgba(255, 255, 255, 0.87); */
+  /* background-color: #242424; */
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-body {
-  font-family: "Raleway", sans-serif;
 }
 h1 {
   font-size: 3.2em;
@@ -36,6 +36,9 @@ p {
 .btn-orange {
   background-color: var(--theme-color);
   color: var(--white);
+}
+.quantify-font {
+  font-family: 'Quantify';
 }
 /*
 button {

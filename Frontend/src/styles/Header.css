@@ -1,11 +1,15 @@
 header {
   background-color: var(--white);
+  
 }
 nav img {
   width: 200px;
 }
+nav a {
+  font-family: 'Quantify';
+}
 .get-started {
-  font-size: 16px;
+  font-size: 18px;
   line-height: normal;
   letter-spacing: .05em;
   font-weight: 500;
