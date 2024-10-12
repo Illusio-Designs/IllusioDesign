@@ -1,11 +1,76 @@
-.portfolio-items {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+/* src/components/BlogPage.css */
+
+.blog-page {
+    padding: 20px;
 }
 
-.portfolio-item {
+h1, h2 {
+    color: #333;
+}
+
+.form-section {
+    margin-bottom: 30px;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.input, .textarea {
+    padding: 8px;
     border: 1px solid #ccc;
-    padding: 10px;
+    border-radius: 4px;
+}
+
+.textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+.button {
+    padding: 10px 15px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
     border-radius: 5px;
+    cursor: pointer;
+}
+
+.button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.blog-list {
+    margin-top: 30px;
+}
+
+.blog-item {
+    margin-bottom: 15px;
+    padding: 15px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.blog-link {
+    text-decoration: none;
+    color: #007BFF;
+}
+
+.blog-actions {
+    margin-top: 10px;
 }

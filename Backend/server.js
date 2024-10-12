@@ -1,5 +1,3 @@
-// server.js
-
 require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
@@ -12,13 +10,27 @@ require('./middleware/passport-setup');
 const path = require('path');
 const morgan = require('morgan');
 const helmet = require('helmet');
+const bodyParser = require('body-parser');
+
+// Import models
+const Blog = require('./models/Blog');
+const SEO = require('./models/SEO');
+const Project = require('./models/Project');
+const User = require('./models/User');
+
+// Import association definition function
+const defineAssociations = require('./models/associations');
 
 // Private Routes Import
 const projectRoutes = require('./routes/private/projectRoutes');
 const userRoutes = require('./routes/private/userRoutes');
+const blogRoutes = require('./routes/private/blogRoutes');
+const seoRoutes = require('./routes/private/seoRoutes');
 
 // Public Routes Import
 const projectPublicRoutes = require('./routes/public/projectPublicRoutes');
+const blogPublicRoutes = require('./routes/public/blogPublicRoutes');
+const seoPublicRoutes = require('./routes/public/seoPublicRoutes');
 
 const app = express();
 
@@ -31,7 +43,7 @@ app.use(helmet()); // Add helmet for security
 
 // CORS setup
 app.use(cors({
-    origin: ['http://localhost:3000'],
+    origin: ['http://localhost:3000', 'http://localhost:5173'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
 }));
@@ -64,10 +76,19 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Routes
+// Define model associations
+defineAssociations();
+
+// Private Routes
 app.use('/api', userRoutes);
 app.use('/api/projects', projectRoutes);
+app.use('/api/blog', blogRoutes);
+app.use('/api/seo', seoRoutes);
+
+// Public Routes
 app.use('/api/public/projects', projectPublicRoutes);
+app.use('/api/public/seo', seoPublicRoutes);
+app.use('/api/public/blogs', blogPublicRoutes);
 
 // Serve static files for uploads
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -86,7 +107,10 @@ app.use((err, req, res, next) => {
 // Sync database and start server
 const startServer = async () => {
     try {
+        // Sync all models with the database
         await sequelize.sync({ alter: true }); // Consider using migrations for production
+        console.log('Database synced');
+
         app.listen(process.env.PORT || 5000, () => {
             console.log(`Server is running on port ${process.env.PORT || 5000}`);
         });
