@@ -8,14 +8,3 @@ nav img {
 nav a {
   font-family: 'Quantify';
 }
-.get-started {
-  font-size: 18px;
-  line-height: normal;
-  letter-spacing: .05em;
-  font-weight: 500;
-  text-transform: uppercase;
-}
-.get-started:hover {
-  background-color: var(--theme-color);
-  color: var(--white);
-}
