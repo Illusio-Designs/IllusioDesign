@@ -44,7 +44,7 @@ app.use(helmet()); // Add helmet for security
 
 // CORS setup
 app.use(cors({
-    origin: ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:3001'],
+    origin: '*', // Allow access from any origin
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
 }));

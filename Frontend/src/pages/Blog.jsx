@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
-import { getAllBlogs } from '../utils/blogApi'; // Adjust the import path as needed
+import { getAllBlogs } from '../utils/api'; // Adjust the import path as needed
 
 const Blog = () => {
     const [blogs, setBlogs] = useState([]); // State to hold the blog list

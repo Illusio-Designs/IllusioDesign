@@ -16,39 +16,39 @@ exports.getAllBlogs = async (req, res) => {
   }
 };
 
-exports.getBlogById = async (req, res) => {
-  const { id } = req.params;
+// exports.getBlogById = async (req, res) => {
+//   const { id } = req.params;
 
-  try {
-    const blog = await Blog.findByPk(id, { include: { model: SEO, as: 'seo' } });
-    if (!blog) {
-      return res.status(404).json({ message: 'Blog not found' });
-    }
-    res.status(200).json(blog);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server Error' });
-  }
-};
+//   try {
+//     const blog = await Blog.findByPk(id, { include: { model: SEO, as: 'seo' } });
+//     if (!blog) {
+//       return res.status(404).json({ message: 'Blog not found' });
+//     }
+//     res.status(200).json(blog);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Server Error' });
+//   }
+// };
 
-exports.getBlogByURL = async (req, res) => {
-  const { url } = req.params;
+// exports.getBlogByURL = async (req, res) => {
+//   const { url } = req.params;
 
-  try {
-    const seo = await SEO.findOne({
-      where: { url },
-      include: { model: Blog, as: 'blog' },
-    });
-    if (!seo || !seo.blog) {
-      return res.status(404).json({ message: 'Blog not found' });
-    }
+//   try {
+//     const seo = await SEO.findOne({
+//       where: { url },
+//       include: { model: Blog, as: 'blog' },
+//     });
+//     if (!seo || !seo.blog) {
+//       return res.status(404).json({ message: 'Blog not found' });
+//     }
 
-    res.status(200).json(seo.blog);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server Error' });
-  }
-};
+//     res.status(200).json(seo.blog);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Server Error' });
+//   }
+// };
 
 exports.getBlogByTitle = async (req, res) => {
   const { title } = req.params;
