@@ -7,10 +7,10 @@ const path = require('path');
 // Set up Multer storage for image uploads
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/projects'); // Define the upload folder
+    cb(null, 'uploads/projects');
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname)); // Append timestamp to filename
+    cb(null, Date.now() + path.extname(file.originalname));
   },
 });
 
@@ -19,7 +19,7 @@ const upload = multer({ storage: storage });
 // Upload Image Endpoint
 const uploadImage = (req, res) => {
   if (req.file) {
-    res.json({ url: `http://localhost:5000/uploads/projects/${req.file.filename}` });
+    res.json({ url: `/uploads/projects/${req.file.filename}` });
   } else {
     res.status(400).json({ error: 'Image upload failed' });
   }

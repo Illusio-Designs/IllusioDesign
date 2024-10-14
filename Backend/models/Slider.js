@@ -20,6 +20,13 @@ Slider.init({
 }, {
     sequelize,
     modelName: 'Slider',
+    timestamps: true, // Add timestamps for createdAt and updatedAt
 });
+
+// Error handling example for create and update operations
+// Example usage (not part of the model):
+// Slider.create({ title: 'New Slider', type: 'home', mediaUrl: 'url' })
+//     .then(slider => console.log(slider))
+//     .catch(error => console.error('Error creating slider:', error));
 
 module.exports = Slider;
