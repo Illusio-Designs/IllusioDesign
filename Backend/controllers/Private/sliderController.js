@@ -1,4 +1,4 @@
-const Slider = require('../../models/Slider'); // Adjust the path as necessary
+const Slider = require('../../models/Slider');
 
 // Create Slider
 exports.createSlider = async (req, res) => {
@@ -61,14 +61,4 @@ exports.getAllSliders = async (req, res) => {
         console.error('Error fetching sliders:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
-};
-
-// Additional Uploads (if needed)
-exports.uploadImage = (req, res) => {
-    if (!req.file) {
-        return res.status(400).json({ error: 'No file uploaded' });
-    }
-
-    const mediaUrl = `/uploads/sliders/${req.file.filename}`;
-    res.status(200).json({ mediaUrl });
 };
