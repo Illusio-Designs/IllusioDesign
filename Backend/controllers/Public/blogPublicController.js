@@ -16,7 +16,6 @@ exports.getAllBlogs = async (req, res) => {
   }
 };
 
-
 exports.getBlogById = async (req, res) => {
   const { id } = req.params;
 
@@ -45,6 +44,24 @@ exports.getBlogByURL = async (req, res) => {
     }
 
     res.status(200).json(seo.blog);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
+
+exports.getBlogByTitle = async (req, res) => {
+  const { title } = req.params;
+
+  try {
+    const blog = await Blog.findOne({
+      where: { title },
+      include: [{ model: SEO, as: 'seo' }],
+    });
+    if (!blog) {
+      return res.status(404).json({ message: 'Blog not found' });
+    }
+    res.status(200).json(blog);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server Error' });

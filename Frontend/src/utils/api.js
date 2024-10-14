@@ -20,4 +20,31 @@ export const getAllProjects = async () => {
     }
 };
 
+export const getAllBlogs = async () => {
+    try {
+        const response = await api.get('/public/blogs');
+        return response.data;
+    } catch (error) {
+        handleApiError(error, 'Failed to fetch blogs');
+    }
+};
+
+export const getBlogByTitle = async (title) => {
+    try {
+        const response = await api.get(`/public/blogs/title/${title}`);
+        return response.data;
+    } catch (error) {
+        handleApiError(error, 'Failed to fetch blog by title');
+    }
+};
+
+export const getProjectByTitle = async (title) => {
+    try {
+        const response = await api.get(`/public/projects/title/${title}`);
+        return response.data;
+    } catch (error) {
+        handleApiError(error, 'Failed to fetch project by title');
+    }
+};
+
 export default api;
