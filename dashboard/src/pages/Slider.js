@@ -43,6 +43,8 @@ const SliderPage = () => {
         setModalIsOpen(false);
         setEditSliderId(null);
         setNewSlider({ title: '', type: '', media: null });
+        setError('');
+        setSuccess('');
     };
 
     const handleChange = (e) => {
@@ -112,21 +114,23 @@ const SliderPage = () => {
     return (
         <div className="slider-container">
             <h1>Slider Management</h1>
-            <button onClick={openModal}>Add Slider</button>
+            <button className="create-button" onClick={openModal}>Add Slider</button>
             {error && <p className="error">{error}</p>}
             {success && <p className="success">{success}</p>}
-            <ul>
+            <ul className="sliders-table">
                 {sliders.map((slider) => (
                     <li key={slider.id}>
                         <h2>{slider.title}</h2>
-                        <button onClick={() => handleEdit(slider)}>Edit</button>
-                        <button onClick={() => handleDelete(slider.id)}>Delete</button>
+                        <div className="slider-buttons">
+                            <button className="edit-button" onClick={() => handleEdit(slider)}>Edit</button>
+                            <button className="delete-button" onClick={() => handleDelete(slider.id)}>Delete</button>
+                        </div>
                     </li>
                 ))}
             </ul>
-            <Modal isOpen={modalIsOpen} onRequestClose={closeModal}>
+            <Modal isOpen={modalIsOpen} onRequestClose={closeModal} className="slider-modal" overlayClassName="slider-modal-overlay">
                 <h2>{editSliderId ? 'Edit Slider' : 'Add Slider'}</h2>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} className="slider-form">
                     <div>
                         <label>Title:</label>
                         <input
@@ -135,11 +139,12 @@ const SliderPage = () => {
                             value={newSlider.title}
                             onChange={handleChange}
                             required
+                            className="form-input"
                         />
                     </div>
                     <div>
                         <label>Type:</label>
-                        <select name="type" value={newSlider.type} onChange={handleChange} required>
+                        <select name="type" value={newSlider.type} onChange={handleChange} required className="form-input">
                             <option value="">Select Type</option>
                             <option value="project">Project</option>
                             <option value="home">Home</option>
@@ -150,8 +155,10 @@ const SliderPage = () => {
                         <p>Drag 'n' drop a file here, or click to select a file</p>
                     </div>
                     {newSlider.media && <p>File: {newSlider.media.name}</p>}
-                    <button type="submit">{editSliderId ? 'Update' : 'Create'}</button>
-                    <button type="button" onClick={closeModal}>Cancel</button>
+                    <div className="form-buttons">
+                        <button type="submit" className="submit-button">{editSliderId ? 'Update' : 'Create'}</button>
+                        <button type="button" className="cancel-button" onClick={closeModal}>Cancel</button>
+                    </div>
                 </form>
             </Modal>
         </div>

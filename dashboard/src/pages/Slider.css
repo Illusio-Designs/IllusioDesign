@@ -1,16 +1,14 @@
-/* src/pages/Slider.css */
-
-.slider-management {
+.slider-container {
   padding: 20px;
-  font-family: Arial, sans-serif; /* Added font family for consistency */
+  font-family: Arial, sans-serif; 
 }
 
-.error-message {
+.error {
   color: red;
   margin-bottom: 15px;
 }
 
-.success-message {
+.success {
   color: green;
   margin-bottom: 15px;
 }
@@ -22,7 +20,7 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s; /* Added transition for smooth hover */
+  transition: background-color 0.3s; 
 }
 
 .create-button:hover {
@@ -30,31 +28,31 @@
 }
 
 .sliders-table {
-  width: 100%;
-  border-collapse: collapse;
+  list-style: none;
+  padding: 0;
   margin-top: 20px;
 }
 
-.sliders-table th,
-.sliders-table td {
-  border: 1px solid #ddd;
-  padding: 10px; /* Increased padding for better readability */
+.sliders-table li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
 }
 
-.sliders-table th {
-  background-color: #f2f2f2;
-  text-align: left;
-  font-weight: bold; /* Added bold font for headers */
+.slider-buttons {
+  display: flex;
 }
 
 .edit-button,
 .delete-button {
   padding: 5px 10px;
-  margin-right: 5px;
+  margin-left: 5px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s; /* Added transition for buttons */
+  transition: background-color 0.3s; 
 }
 
 .edit-button {
@@ -87,7 +85,7 @@
   max-width: 800px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Added box shadow for depth */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); 
 }
 
 .slider-modal-overlay {
@@ -104,12 +102,12 @@
   margin-bottom: 15px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  transition: border-color 0.3s; /* Added transition for input focus */
+  transition: border-color 0.3s; 
 }
 
 .form-input:focus {
-  border-color: #4caf50; /* Highlight border on focus */
-  outline: none; /* Remove default outline */
+  border-color: #4caf50; 
+  outline: none; 
 }
 
 .dropzone {
@@ -118,17 +116,17 @@
   text-align: center;
   cursor: pointer;
   margin-bottom: 15px;
-  transition: border-color 0.3s; /* Added transition for dropzone */
+  transition: border-color 0.3s; 
 }
 
 .dropzone:hover {
-  border-color: #4caf50; /* Change border color on hover */
+  border-color: #4caf50; 
 }
 
 .form-buttons {
   display: flex;
   gap: 10px;
-  justify-content: flex-end; /* Align buttons to the right */
+  justify-content: flex-end; 
 }
 
 .submit-button {
@@ -138,7 +136,7 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s; /* Added transition for smooth hover */
+  transition: background-color 0.3s; 
 }
 
 .submit-button:hover {
@@ -152,7 +150,7 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s; /* Added transition for smooth hover */
+  transition: background-color 0.3s; 
 }
 
 .cancel-button:hover {
