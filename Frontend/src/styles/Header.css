@@ -8,3 +8,7 @@ nav img {
 nav a {
   font-family: 'Quantify';
 }
+.contact-btn:hover .rounded-full {
+  background-color: transparent;
+  border: 2px solid;
+}

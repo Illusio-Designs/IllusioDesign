@@ -11,8 +11,8 @@ const Header = () => {
       }
   return (
     <>
-    <header className='py-4 mt-4 mb-4 border-[#ec691f] border-t-2 border-b-2'>
-      <div className='container m-auto'>
+    <header className='pt-4'>
+      <div className='container m-auto py-4 border-[#ec691f] border-t-2 border-b-2'>
         <nav className='flex justify-between items-center'>
         <motion.a
           className="navbar-brand" href="/"
@@ -44,7 +44,7 @@ const Header = () => {
                 initial="initial"
                 whileHover="hovered"
                 transition="duration"
-                className="text-md text-[#000] uppercase tracking-wider font-medium py-2 px-4 relative block whitespace-nowrap overflow-hidden" href="#">
+                className="text-md text-[#000] uppercase tracking-wider font-medium py-2 px-4 relative block whitespace-nowrap overflow-hidden" href="/project">
                 <motion.div variants={{initial: {y: 0}, hovered: {y: "-120%"}, duration: 0.5 }}>Project</motion.div>
                 <motion.div className='absolute inset-y-2 inset-x-4 hover:text-[#ec691f]' variants={{initial: {y: "120%"}, hovered: {y: 0}, duration: 0.5}}>Project</motion.div>
               </motion.a>
@@ -56,8 +56,8 @@ const Header = () => {
                 whileHover="hovered"
                 transition="duration"
                 className="text-md text-[#000] uppercase tracking-wider font-medium py-2 px-4 relative block whitespace-nowrap overflow-hidden" href="#">
-                <motion.div variants={{initial: {y: 0}, hovered: {y: "-120%"}, duration: 0.5 }}>Blog</motion.div>
-                <motion.div className='absolute inset-y-2 inset-x-4 hover:text-[#ec691f]' variants={{initial: {y: "120%"}, hovered: {y: 0}, duration: 0.5}}>Blog</motion.div>
+                <motion.div variants={{initial: {y: 0}, hovered: {y: "-150%"}, duration: 0.5 }}>Blog</motion.div>
+                <motion.div className='absolute inset-y-2 inset-x-4 hover:text-[#ec691f]' variants={{initial: {y: "150%"}, hovered: {y: 0}, duration: 0.5}}>Blog</motion.div>
               </motion.a>
             </li>
             <li>
@@ -77,11 +77,16 @@ const Header = () => {
             initial="initial"
             whileHover="hovered"
             transition="duration"
-            className="text-md text-[#fff] bg-[#ec691f] rounded-full uppercase tracking-wider font-normal py-3 px-5 relative block whitespace-nowrap overflow-hidden" href="#">
-              <motion.div variants={{initial: {y: 0}, hovered: {y: "-120%"}, duration: 0.5 }}>Contact Us</motion.div>
-              <motion.div className='absolute inset-y-3 inset-x-5' variants={{initial: {y: "120%"}, hovered: {y: 0}, duration: 0.5}}>Contact Us</motion.div>
-          </motion.a>
-
+            className="text-md text-[#fff] bg-[#ec691f] rounded-full uppercase tracking-wider py-3 px-5 relative whitespace-nowrap overflow-hidden flex items-center gap-3 contact-btn" href="#">
+              <motion.div variants={{initial: {y: 0}, hovered: {y: "-195%"}, duration: 0.5 }}>Contact Us </motion.div>
+              <motion.div className='absolute inset-y-6 inset-x-5' variants={{initial: {y: "195%"}, hovered: {y: 0}, duration: 0.5}}>Contact Us</motion.div>
+              <div className='bg-white p-3 rounded-full border-2 border-white'>
+                <svg width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                  <path stroke="#ec691f" d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z "/>
+                  <line x1="0" y1="16" x2="16" y2="16" stroke="#ec691f" strokeWidth="2" />
+                </svg>
+              </div>
+          </motion.a>          
           <ion-icon name="menu" className="text-3xl bg-black cursor-pointer md:hidden" onclick="onToggleMenu(this)"></ion-icon>
         </div>
         </nav>

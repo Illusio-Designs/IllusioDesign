@@ -15,7 +15,7 @@ const letterAnimation = {
 
 const Hero = () => {
   return (
-    <section className="relative bg-[#1E1E2F] text-white py-20 h-screen flex items-center justify-center">
+    <section className="relative bg-[#1E1E2F] text-white py-20 flex items-center justify-center">
       <div className="container mx-auto text-center">
         {/* Main headline */}
         <motion.h1
