@@ -8,51 +8,51 @@ import imgbgcard from "../assets/img-bg-card.png";
 
 const Project = () => {
 
-    // const [projects, setProjects] = useState([]); // State to hold the project list
-    // const [loading, setLoading] = useState(true); // State to handle loading
-    // const [error, setError] = useState(null); // State to handle errors
+    const [projects, setProjects] = useState([]); // State to hold the project list
+    const [loading, setLoading] = useState(true); // State to handle loading
+    const [error, setError] = useState(null); // State to handle errors
 
-    // useEffect(() => {
-    //     const fetchProjects = async () => {
-    //         try {
-    //             const projectData = await getAllProjects();
-    //             console.log("Projects Data:", projectData); // Log the data to debug
+    useEffect(() => {
+        const fetchProjects = async () => {
+            try {
+                const projectData = await getAllProjects();
+                console.log("Projects Data:", projectData); // Log the data to debug
                 
-    //             // Check if the response is an array or has a specific key
-    //             if (Array.isArray(projectData)) {
-    //                 setProjects(projectData);
-    //             } else if (projectData.projects && Array.isArray(projectData.projects)) {
-    //                 setProjects(projectData.projects);
-    //             } else {
-    //                 console.warn("Unexpected project data format:", projectData);
-    //                 setProjects([]);
-    //             }
-    //         } catch (err) {
-    //             console.error('Error fetching projects:', err);
-    //             setError(err);
-    //         } finally {
-    //             setLoading(false);
-    //         }
-    //     };
+                // Check if the response is an array or has a specific key
+                if (Array.isArray(projectData)) {
+                    setProjects(projectData);
+                } else if (projectData.projects && Array.isArray(projectData.projects)) {
+                    setProjects(projectData.projects);
+                } else {
+                    console.warn("Unexpected project data format:", projectData);
+                    setProjects([]);
+                }
+            } catch (err) {
+                console.error('Error fetching projects:', err);
+                setError(err);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-    //     fetchProjects();
-    // }, []);
+        fetchProjects();
+    }, []);
 
-    // if (loading) {
-    //     return (
-    //         <>
-    //             <div>Loading projects...</div>
-    //         </>
-    //     );
-    // }
+    if (loading) {
+        return (
+            <>
+                <div>Loading projects...</div>
+            </>
+        );
+    }
 
-    // if (error) {
-    //     return (
-    //         <>
-    //             <div>Error fetching projects: {error}</div>
-    //         </>
-    //     );
-    // }
+    if (error) {
+        return (
+            <>
+                <div>Error fetching projects: {error}</div>
+            </>
+        );
+    }
 
     return (
         <>
@@ -191,8 +191,8 @@ const Project = () => {
                                         </div>                                        
                                     </a>
                                     <div className='py-[30px] grid gap-4'>
-                                        <div className='uppercase text-lg'>E-commerce</div>
-                                        <div className='quantify-font text-3xl'>Raven.gg — the leading brand for custom esports clothing design</div>
+                                        <div className='uppercase text-lg'>{project.industry}</div>
+                                        <div className='quantify-font text-3xl'>{project.title}</div>
                                     </div>
                                 </div>
                             </div>
