@@ -7,6 +7,9 @@ const SideMenu = () => {
         <div className="side-menu">
             <h2>Menu</h2>
             <ul>
+            <li>
+                    <Link to="/slider">Slider</Link>
+                </li>
                 <li>
                     <Link to="/team">Team</Link>
                 </li>

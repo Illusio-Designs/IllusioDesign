@@ -20,4 +20,42 @@ export const getAllProjects = async () => {
     }
 };
 
+export const getAllBlogs = async () => {
+    try {
+        const response = await api.get('/public/blogs');
+        return response.data;
+    } catch (error) {
+        handleApiError(error, 'Failed to fetch blogs');
+    }
+};
+
+export const getBlogByTitle = async (title) => {
+    try {
+        const response = await api.get(`/public/blogs/title/${title}`);
+        return response.data;
+    } catch (error) {
+        handleApiError(error, 'Failed to fetch blog by title');
+    }
+};
+
+export const getProjectByTitle = async (title) => {
+    try {
+        const response = await api.get(`/public/projects/title/${title}`);
+        return response.data;
+    } catch (error) {
+        handleApiError(error, 'Failed to fetch project by title');
+    }
+};
+
+// Function to get SEO data
+export const getSeoData = async (pageId) => {
+    try {
+        const response = await api.get(`/public/seo/${pageId}`); // Adjust the endpoint as necessary
+        return response.data; // Return the response data
+    } catch (error) {
+        console.error('Error fetching SEO data:', error); // Log the error for debugging
+        throw error.response?.data?.error || 'Failed to fetch SEO data'; // Throw the error message
+    }
+};
+
 export default api;

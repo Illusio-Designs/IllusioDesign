@@ -49,17 +49,17 @@ const Header = () => {
                 <motion.div className='absolute inset-y-2 inset-x-4 hover:text-[#ec691f]' variants={{initial: {y: "120%"}, hovered: {y: 0}, duration: 0.5}}>Project</motion.div>
               </motion.a>
             </li>
-            
             <li>
               <motion.a 
                 initial="initial"
                 whileHover="hovered"
                 transition="duration"
                 className="text-md text-[#000] uppercase tracking-wider font-medium py-2 px-4 relative block whitespace-nowrap overflow-hidden" href="#">
-                <motion.div variants={{initial: {y: 0}, hovered: {y: "-150%"}, duration: 0.5 }}>Blog</motion.div>
-                <motion.div className='absolute inset-y-2 inset-x-4 hover:text-[#ec691f]' variants={{initial: {y: "150%"}, hovered: {y: 0}, duration: 0.5}}>Blog</motion.div>
+                <motion.div variants={{initial: {y: 0}, hovered: {y: "-120%"}, duration: 0.5 }}>Blog</motion.div>
+                <motion.div className='absolute inset-y-2 inset-x-4 hover:text-[#ec691f]' variants={{initial: {y: "120%"}, hovered: {y: 0}, duration: 0.5}}>Blog</motion.div>
               </motion.a>
             </li>
+            
             <li>
               <motion.a 
                 initial="initial"

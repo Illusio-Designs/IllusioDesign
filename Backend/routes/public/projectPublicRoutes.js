@@ -4,5 +4,7 @@ const projectController = require('../../controllers/Public/projectPublicControl
 
 // Public routes
 router.get('/', projectController.getAllProjects); // Get all projects
+router.get('/:title', projectController.getProjectByTitle);
+
 
 module.exports = router; // Export the public routes

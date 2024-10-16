@@ -11,7 +11,7 @@
             "driver": "MySQL",
             "name": "localhost",
             "database": "illusio",
-            "username": "rishi"
+            "username": "root"
         }
     ]
 }

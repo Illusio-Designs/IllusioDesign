@@ -8,8 +8,9 @@ import Projects from './pages/Project';
 import Blog from './pages/Blog';
 import Referral from './pages/Referral';
 import Booking from './pages/Booking';
-import api from './utils/Loginapi'; // Adjust the import based on your structure
-
+import api from './utils/Loginapi'; 
+// Adjust the import based on your structure
+import Slider from './pages/Slider';
 const App = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false); // Manage authentication state
     const [loading, setLoading] = useState(true); // Manage loading state
@@ -44,6 +45,7 @@ const App = () => {
                 <Route path="/" element={<Login setIsAuthenticated={setIsAuthenticated} />} /> {/* Pass setIsAuthenticated */}
                 <Route path="/dashboard" element={isAuthenticated ? <DefaultLayout><h1>Welcome to the Dashboard</h1></DefaultLayout> : <Navigate to="/" />} />
                 <Route path="/team" element={isAuthenticated ? <DefaultLayout><Team /></DefaultLayout> : <Navigate to="/" />} />
+                <Route path="/slider" element={isAuthenticated ? <DefaultLayout><Slider /></DefaultLayout> : <Navigate to="/" />} />
                 <Route path="/projects" element={isAuthenticated ? <DefaultLayout><Projects /></DefaultLayout> : <Navigate to="/" />} />
                 <Route path="/blog" element={isAuthenticated ? <DefaultLayout><Blog /></DefaultLayout> : <Navigate to="/" />} />
                 <Route path="/referral" element={isAuthenticated ? <DefaultLayout><Referral /></DefaultLayout> : <Navigate to="/" />} />
