@@ -5,9 +5,6 @@ const router = express.Router();
 const projectController = require('../../controllers/Private/projectController'); // Ensure this path is correct
 const { authenticate } = require('../../middleware/auth'); // Import your authentication middleware
 
-// Debugging: Check if projectController is loaded correctly
-console.log('Project Controller:', projectController);
-
 // Create a new project (POST /api/projects)
 router.post('/', authenticate, projectController.createProject);
 

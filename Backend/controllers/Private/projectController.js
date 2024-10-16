@@ -1,20 +1,7 @@
 // controllers/Private/projectController.js
 
 const Project = require('../../models/Project'); // Ensure the path is correct
-const multer = require('multer');
-const path = require('path');
-
-// Set up Multer storage for image uploads
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/projects');
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
-});
-
-const upload = multer({ storage: storage });
+const { uploadProject } = require('../../middleware/multerConfig'); // Import your upload configuration
 
 // Upload Image Endpoint
 const uploadImage = (req, res) => {
@@ -104,7 +91,7 @@ const deleteProject = async (req, res) => {
 
 // Export controller functions
 module.exports = {
-  upload: upload.single('image'),
+  upload: uploadProject.single('image'), // Use the new upload configuration
   uploadImage,
   createProject,
   updateProject,

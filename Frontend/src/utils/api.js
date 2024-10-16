@@ -58,4 +58,38 @@ export const getSeoData = async (pageId) => {
     }
 };
 
+
+export const sendPublicPagePath = async (pathname) => {
+  try {
+    console.log('Sending pathname:', pathname); 
+    const response = await api.post('/public/page-paths', { path: pathname }); // Correct endpoint
+    console.log('Sent page path to backend:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Error sending page path to backend:', error.response ? error.response.data : error.message);
+    throw error;
+  }
+};
+
+export const fetchExistingPaths = async () => {
+  try {
+    const response = await api.get('/public/page-paths'); // Correct endpoint
+    return response.data.map(pathObj => pathObj.path); 
+  } catch (error) {
+    console.error('Error fetching existing paths:', error);
+    return [];
+  }
+};
+
+export const fetchPages = async () => {
+  try {
+    const response = await api.get('/page-paths'); // Assuming this endpoint is set up correctly
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching pages:', error.response ? error.response.data : error.message);
+    throw error;
+  }
+};
+  
+  
 export default api;

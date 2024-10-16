@@ -72,7 +72,12 @@ const BlogPage = () => {
         e.preventDefault();
         setError('');
         setSuccess('');
-    
+        
+        // Add default value for publishedDate if empty
+        if (!newBlog.publishedDate) {
+            newBlog.publishedDate = new Date().toISOString(); // Set to current date if empty
+        }
+
         try {
             let blog;
             if (editBlogId) {
@@ -90,15 +95,13 @@ const BlogPage = () => {
             setError(err.message || 'Failed to save blog.');
         }
     };
-    
 
-    // Function to handle editing a blog
     const handleEdit = (blog) => {
         setEditBlogId(blog.id);
         setNewBlog({
             title: blog.title,
             content: blog.content,
-            publishedDate: blog.publishedDate,
+            publishedDate: blog.publishedDate ? blog.publishedDate.slice(0, 16) : '', // Format date for input
             image: blog.image,
             metaDescription: blog.metaDescription,
             seoTitle: blog.seoTitle,
@@ -107,7 +110,6 @@ const BlogPage = () => {
         openModal();
     };
 
-    // Function to handle deleting a blog
     const handleDelete = async (blogId) => {
         if (window.confirm('Are you sure you want to delete this blog?')) {
             try {

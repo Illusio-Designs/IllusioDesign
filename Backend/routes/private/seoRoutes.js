@@ -4,7 +4,6 @@ const router = express.Router();
 const seoController = require('../../controllers/Private/seoController');
 const { authenticate } = require('../../middleware/auth'); // Import your authentication middleware
 
-console.log('seo Controller:', seoController);
 
 // Create a new SEO entry
 router.post('/', authenticate, seoController.createSEO);
