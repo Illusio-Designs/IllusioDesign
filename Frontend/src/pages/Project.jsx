@@ -187,7 +187,7 @@ const Project = () => {
                                 <div className='mx-3 max-lg:mb-3'>
                                     <a className='scale-100' href='#' style={{ maskImage: `url(${imgbgcard})`, maskSize: '100% 100%', maskRepeat: 'no-repeat'}}>
                                         <div className='project-img overflow-hidden relative'>
-                                            <img className='duration-1000 hover:scale-110 block' src='../src/assets/project1.webp' />
+                                            <img className='duration-1000 hover:scale-110 block' src={project.mainImage} />
                                         </div>                                        
                                     </a>
                                     <div className='py-[30px] grid gap-4'>
