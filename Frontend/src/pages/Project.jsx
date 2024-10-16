@@ -184,6 +184,7 @@ const Project = () => {
                                         <div className='quantify-font text-3xl'>Raven.gg — the leading brand for custom esports clothing design</div>
                                     </div>
                                 </div>
+                                {projects.map((project) => (
                                 <div className='mx-3 max-lg:mb-3'>
                                     <a className='scale-100' href='#' style={{ maskImage: `url(${imgbgcard})`, maskSize: '100% 100%', maskRepeat: 'no-repeat'}}>
                                         <div className='project-img overflow-hidden relative'>
@@ -195,6 +196,7 @@ const Project = () => {
                                         <div className='quantify-font text-3xl'>{project.title}</div>
                                     </div>
                                 </div>
+                                ))}
                             </div>
                         </div>
                     </div>
