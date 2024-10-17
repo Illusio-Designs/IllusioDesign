@@ -46,6 +46,16 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(cookieParser());
 app.use(helmet());
 
+// CORS Configuration
+const apiCorsOptions = {
+    origin: ['http://localhost:3001', 'http://localhost:5173'], // Specify allowed origins
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true, // Ensure credentials are sent with requests
+};
+
+// Apply CORS middleware globally
+app.use(cors(apiCorsOptions));
+
 // Initialize Sequelize Store
 const sessionStore = new SequelizeStore({
     db: sequelize,
@@ -77,15 +87,7 @@ app.use(passport.session());
 // Define model associations
 defineAssociations();
 
-// CORS Configuration for API Routes
-const apiCorsOptions = {
-    origin: ['http://localhost:3001', 'http://localhost:5173'], // Specify allowed origins
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true,
-};
-
-// Apply CORS to API Routes
-app.use('/api', cors(apiCorsOptions));
+// Apply routes
 app.use('/api', userRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/blog', blogRoutes);
@@ -93,13 +95,13 @@ app.use('/api/seo', seoRoutes);
 app.use('/api/sliders', sliderRoutes);
 app.use('/api/page-paths', pagePathRoutes);
 
-// Apply CORS to Public API Routes
-app.use('/api/public', cors(apiCorsOptions));
-app.use('/api/public/projects', projectPublicRoutes);
+// Apply Public API Routes
+app.use('/api/public', projectPublicRoutes);
 app.use('/api/public/seo', seoPublicRoutes);
 app.use('/api/public/blogs', blogPublicRoutes);
 app.use('/api/public/sliders', sliderPublicRoutes);
 app.use('/api/public/page-paths', pagePathsPublicRoutes);
+app.use('/api/public/projects', projectPublicRoutes);
 
 // CORS Configuration for Static Files
 const staticCorsOptions = {
@@ -121,7 +123,7 @@ app.use('/api/*', (req, res) => {
 });
 
 // Global error handler
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({ error: 'Something went wrong!' });
 });

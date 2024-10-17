@@ -16,6 +16,10 @@ const api = axios.create({
 export const loginUser = async (email, password) => {
     try {
         const response = await api.post(`/login`, { email, password });
+        console.log('Login response:', response); // Log the entire response for debugging
+        // Check the structure of the response to find the token
+        localStorage.setItem('token', response.data.token); // Store the token
+        console.log('Token stored in localStorage:', response.data.token); // Log the stored token
         return response.data; // Return the response data
     } catch (error) {
         throw error.response?.data?.error || 'Login failed'; // Throw the error message

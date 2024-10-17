@@ -1,6 +1,7 @@
 const User = require('../../models/User');
 const bcrypt = require('bcrypt');
 const passport = require('passport');
+const jwt = require('jsonwebtoken'); // Import JWT
 
 // Register a new user
 const registerUser = async (req, res) => {
@@ -45,7 +46,12 @@ const loginUser = (req, res, next) => {
                 return res.status(500).json({ error: 'Internal server error' });
             }
             console.log(`User logged in successfully: ${user.email}`);
-            return res.status(200).json({ message: 'Login successful', user: { id: user.id, name: user.name, email: user.email } });
+
+            // Generate a token
+            const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+            // Return the token along with user info
+            return res.status(200).json({ message: 'Login successful', token, user: { id: user.id, name: user.name, email: user.email } });
         });
     })(req, res, next);
 };

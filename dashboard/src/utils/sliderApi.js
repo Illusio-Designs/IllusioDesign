@@ -13,11 +13,12 @@ const api = axios.create({
 api.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem('token');
+        console.log('Retrieving token from localStorage:', token); // Log the retrieved token
         if (token) {
-            console.log('Attaching token to headers:', token); // Debugging token
             config.headers['Authorization'] = `Bearer ${token}`;
+        } else {
+            console.warn('No token found in localStorage'); // Warn if no token
         }
-        console.log('Request Headers:', config.headers); // Log headers for debugging
         return config;
     },
     (error) => Promise.reject(error)

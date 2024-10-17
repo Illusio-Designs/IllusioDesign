@@ -17,18 +17,22 @@ const App = () => {
 
     useEffect(() => {
         const checkUserLoggedIn = async () => {
-            try {
-                const response = await api.get('/current_user'); // Check current user status
-                console.log('Current user:', response.data); // Debugging log
-                if (response.data) {
-                    setIsAuthenticated(true); // User is authenticated
+            const token = localStorage.getItem('token'); // Check if token exists
+            if (token) {
+                try {
+                    const response = await api.get('/current_user'); // Check current user status
+                    console.log('Current user:', response.data); // Debugging log
+                    if (response.data) {
+                        setIsAuthenticated(true); // User is authenticated
+                    }
+                } catch (error) {
+                    console.warn('User not authenticated:', error); // Handle authentication error
+                    setIsAuthenticated(false); // User is not authenticated
                 }
-            } catch (error) {
-                console.warn('User not authenticated:', error); // Handle authentication error
-                setIsAuthenticated(false); // User is not authenticated
-            } finally {
-                setLoading(false); // Stop loading
+            } else {
+                setIsAuthenticated(false); // No token means not authenticated
             }
+            setLoading(false); // Stop loading
         };
 
         checkUserLoggedIn(); // Call function to check user login status
