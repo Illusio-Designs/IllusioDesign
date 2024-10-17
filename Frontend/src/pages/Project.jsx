@@ -4,7 +4,6 @@ import { getAllProjects } from '../utils/api';
 import { motion } from 'framer-motion';
 import Header from '../components/Header';
 import bgcard from "../assets/bg-card.png";
-import imgbgcard from "../assets/img-bg-card.png";
 import { API_IMAGE_BASE_URL } from '../config';
 
 const Project = () => {
@@ -13,14 +12,14 @@ const Project = () => {
     const [error, setError] = useState(null);
     const [featuredProject, setFeaturedProject] = useState(null);
 
-    // Fallback/default image path
-    // const defaultImage = '/uploads/projects/default-project.webp'; // Ensure this image exists in public/uploads/projects/
-
     // Helper function to construct full image URL
-    const getFullImageUrl = (imagePath) => {
-        if (!imagePath) return defaultImage;
-        if (imagePath.startsWith('http')) return imagePath;
-        return `${API_IMAGE_BASE_URL}${imagePath}`;
+    const getFullImageUrl = (imageName) => {
+        if (!imageName) return '';
+        if (imageName.startsWith('http')) return imageName; // Return if it's already a full URL
+
+        const fullUrl = `${API_IMAGE_BASE_URL}${imageName}`;
+        console.log("Constructed Image URL:", fullUrl); // Log the constructed URL for debugging
+        return fullUrl;
     };
 
     useEffect(() => {
@@ -130,24 +129,19 @@ const Project = () => {
                                 <a 
                                     className='slider scale-100' 
                                     href='#' 
-                                    /* style={{ 
-                                        maskImage: `url(${imgbgcard})`, 
-                                        maskSize: '100% 100%', 
-                                        maskRepeat: 'no-repeat' 
-                                    }} */
                                 >
                                     <div className='project-img overflow-hidden relative'>
                                         <img 
                                             className='duration-1000 hover:scale-110 block w-full h-full object-cover' 
                                             src={getFullImageUrl(featuredProject.mainImage)} 
                                             alt={featuredProject.title}
-                                            onError={(e) => { 
-                                                e.target.src = defaultImage; 
-                                                console.error(`Failed to load image: ${e.target.src}`);
-                                            }}
                                             onLoad={(e) => {
                                                 console.log("Featured image loaded:", e.target.src);
-                                                console.log("Image natural dimensions:", e.target.naturalWidth, "x", e.target.naturalHeight);
+                                            }}
+                                            onError={(e) => {
+                                                console.error("Error loading image:", e.target.src);
+                                                e.target.onerror = null; // Prevent looping
+                                                e.target.src = 'path/to/placeholder/image.png'; // Set a placeholder image
                                             }}
                                         />
                                     </div>
@@ -159,61 +153,56 @@ const Project = () => {
                             </div>
                         )}
                     </div>
-                    </div>
-                </section>
-                <section className='project-post py-20'>
-                    <div className='container mx-auto'>
-                        <div className='grid grid-cols-3 max-lg:grid-cols-1'>
-                            <div className='mx-3 max-lg:mb-3'>1</div>
-                            <div className='mx-3 col-span-2'>
-                                <motion.h1 className='quantify-font text-5xl'>
-                                    We've helped over {projects.length} firms reach their full potential, and we're happy to do the same for you! Find out how our skills can contribute to your success.
-                                </motion.h1>
-                                <div className='grid grid-cols-2 max-lg:grid-cols-1 pt-12'>
-                                    {projects.map((project, index) => {
-                                        console.log(`Project ${index} Main Image:`, project.mainImage);
-                                        return (
-                                            <div className='mx-3 max-lg:mb-3' key={project.id || index}>
-                                                <a 
-                                                    className='scale-100' 
-                                                    href='#' 
-                                                    /* style={{ 
-                                                        maskImage: `url(${imgbgcard})`, 
-                                                        maskSize: '100% 100%', 
-                                                        maskRepeat: 'no-repeat' 
-                                                    }} */
-                                                >
-                                                    <div className='project-img overflow-hidden relative'>
-                                                        <img
-                                                            className='duration-1000 hover:scale-110 block w-full h-full object-cover'
-                                                            src={getFullImageUrl(project.mainImage)}
-                                                            alt={project.title || 'Project Image'}
-                                                            onError={(e) => { 
-                                                                e.target.src = defaultImage; 
-                                                                console.error(`Failed to load image: ${e.target.src}`);
-                                                            }}
-                                                            onLoad={(e) => {
-                                                                console.log(`Project ${index} image loaded:`, e.target.src);
-                                                                console.log(`Project ${index} image dimensions:`, e.target.naturalWidth, "x", e.target.naturalHeight);
-                                                            }}
-                                                        />
-                                                    </div>
-                                                </a>
-                                                <div className='py-[30px] grid gap-4'>
-                                                    <div className='uppercase text-lg'>{project.industry}</div>
-                                                    <div className='quantify-font text-3xl'>{project.title}</div>
+                </div>
+            </section>
+            <section className='project-post py-20'>
+                <div className='container mx-auto'>
+                    <div className='grid grid-cols-3 max-lg:grid-cols-1'>
+                        <div className='mx-3 max-lg:mb-3'>1</div>
+                        <div className='mx-3 col-span-2'>
+                            <motion.h1 className='quantify-font text-5xl'>
+                                We've helped over {projects.length} firms reach their full potential, and we're happy to do the same for you! Find out how our skills can contribute to your success.
+                            </motion.h1>
+                            <div className='grid grid-cols-2 max-lg:grid-cols-1 pt-12'>
+                                {projects.map((project, index) => {
+                                    console.log(`Project ${index} Main Image:`, project.mainImage);
+                                    return (
+                                        <div className='mx-3 max-lg:mb-3' key={project.id || index}>
+                                            <a 
+                                                className='scale-100' 
+                                                href='#' 
+                                            >
+                                                <div className='project-img overflow-hidden relative'>
+                                                    <img
+                                                        className='duration-1000 hover:scale-110 block w-full h-full object-cover'
+                                                        src={getFullImageUrl(project.mainImage)}
+                                                        alt={project.title || 'Project Image'}
+                                                        onLoad={(e) => {
+                                                            console.log(`Project ${index} image loaded:`, e.target.src);
+                                                            console.log(`Project ${index} image dimensions:`, e.target.naturalWidth, "x", e.target.naturalHeight);
+                                                        }}
+                                                        onError={(e) => {
+                                                            console.error("Error loading project image:", e.target.src);
+                                                            e.target.onerror = null; // Prevent looping
+                                                            e.target.src = 'path/to/placeholder/image.png'; // Set a placeholder image
+                                                        }}
+                                                    />
                                                 </div>
+                                            </a>
+                                            <div className='py-[30px] grid gap-4'>
+                                                <div className='uppercase text-lg'>{project.industry}</div>
+                                                <div className='quantify-font text-3xl'>{project.title}</div>
                                             </div>
-                                        );
-                                    })}
-                                </div>
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </div>
                     </div>
-                </section>
-            </>
-    
+                </div>
+            </section>
+        </>
+    );
+};
 
-    
-)};
 export default Project;

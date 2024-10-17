@@ -12,23 +12,13 @@ const Blog = () => {
     useEffect(() => {
         const fetchBlogs = async () => {
             try {
-                const blogData = await getAllBlogs();
-                console.log("Blogs Data:", blogData); // Log the data to debug
-                
-                // Check if the response is an array or has a specific key
-                if (Array.isArray(blogData)) {
-                    setBlogs(blogData);
-                } else if (blogData.blogs && Array.isArray(blogData.blogs)) {
-                    setBlogs(blogData.blogs);
-                } else {
-                    console.warn("Unexpected blog data format:", blogData);
-                    setBlogs([]);
-                }
+                const data = await getAllBlogs();
+                console.log("Fetched Blogs:", data); // Log the fetched data
+                setBlogs(data);
+                console.log("Blogs State:", blogs); // Log the state after setting it
             } catch (err) {
                 console.error('Error fetching blogs:', err);
-                setError(err);
-            } finally {
-                setLoading(false);
+                setError('Failed to fetch blogs.');
             }
         };
 
@@ -59,16 +49,27 @@ const Blog = () => {
                 {blogs.length === 0 ? (
                     <div>No blogs available.</div>
                 ) : (
-                    <ul>
-                        {blogs.map((blog) => (
-                            <li key={blog.id} className="blog-item">
-                                <h3>{blog.title}</h3>
-                                <p><strong>Author:</strong> {blog.author}</p>
-                                <p><strong>Date:</strong> {blog.date}</p>
-                                <div dangerouslySetInnerHTML={{ __html: blog.content }}></div>
-                            </li>
-                        ))}
-                    </ul>
+                    <table className="projects-table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Published Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {blogs.map((blog) => (
+                                <tr key={blog.id}>
+                                    <td>{blog.title}</td>
+                                    <td>{new Date(blog.publishedDate).toLocaleDateString()}</td>
+                                    <td>
+                                        <button onClick={() => handleEdit(blog)} className="edit-button">Edit</button>
+                                        <button onClick={() => handleDelete(blog.id)} className="delete-button">Delete</button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 )}
             </div>
         </>

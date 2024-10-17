@@ -46,15 +46,13 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(cookieParser());
 app.use(helmet());
 
-// CORS Configuration
-const apiCorsOptions = {
-    origin: ['http://localhost:3001', 'http://localhost:5173'], // Specify allowed origins
+// CORS configuration
+app.use(cors({
+    origin: ['http://localhost:5173', 'http://localhost:3001', 'https://api.illusiodesigns.agency'], // Replace with your frontend URL
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true, // Ensure credentials are sent with requests
-};
-
-// Apply CORS middleware globally
-app.use(cors(apiCorsOptions));
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+}));
 
 // Initialize Sequelize Store
 const sessionStore = new SequelizeStore({
@@ -96,14 +94,12 @@ app.use('/api/sliders', sliderRoutes);
 app.use('/api/page-paths', pagePathRoutes);
 
 // Apply Public API Routes
-app.use('/api/public', projectPublicRoutes);
 app.use('/api/public/seo', seoPublicRoutes);
 app.use('/api/public/blogs', blogPublicRoutes);
 app.use('/api/public/sliders', sliderPublicRoutes);
 app.use('/api/public/page-paths', pagePathsPublicRoutes);
 app.use('/api/public/projects', projectPublicRoutes);
 
-// CORS Configuration for Static Files
 const staticCorsOptions = {
     origin: '*', // Allow all origins for static files
     methods: ['GET'],
@@ -135,8 +131,9 @@ const startServer = async () => {
         await sequelize.sync({ alter: true }); // Consider using migrations for production
         console.log('Database synced');
 
-        app.listen(process.env.PORT || 3000, () => {
-            console.log(`Server is running on port ${process.env.PORT || 3000}`);
+        const PORT = process.env.PORT || 3000;
+        app.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
         });
     } catch (error) {
         console.error('Unable to connect to the database:', error);

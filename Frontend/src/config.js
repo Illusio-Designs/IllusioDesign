@@ -1,5 +1,5 @@
-// export const API_BASE_URL = import.meta.ILLUSIO_API_URL || 'http://localhost:3000/api';
-// export const API_IMAGE_BASE_URL = import.meta.ILLUSIO_API_IMAGE_URL || 'http://localhost:3000';
+export const API_BASE_URL = import.meta.ILLUSIO_API_URL || 'http://localhost:3000/api';
+export const API_IMAGE_BASE_URL = import.meta.ILLUSIO_API_IMAGE_URL || 'http://localhost:3000';
 
-export const API_BASE_URL = import.meta.ILLUSIO_API_URL || 'https://api.illusiodesigns.agency/api';
-export const API_IMAGE_BASE_URL = import.meta.ILLUSIO_API_IMAGE_URL || 'https://api.illusiodesigns.agency';
+// export const API_BASE_URL = import.meta.ILLUSIO_API_URL || 'https://api.illusiodesigns.agency/api';
+// export const API_IMAGE_BASE_URL = import.meta.ILLUSIO_API_IMAGE_URL || 'https://api.illusiodesigns.agency';
