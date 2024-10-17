@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+// src/components/Login.js
+
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { loginUser } from '../utils/Loginapi';
 
@@ -18,15 +20,15 @@ const Login = ({ setIsAuthenticated }) => {
             localStorage.setItem('user', JSON.stringify(response.user)); // Store user data in local storage
             console.log('User data stored in local storage:', response.user);
             setIsAuthenticated(true);
-            navigate('/dashboard');
+            navigate('/dashboard'); // Redirect to dashboard after successful login
         } catch (err) {
-            console.error('Error response:', err.response);
-            setError(err.response?.data?.error || 'Login failed');
+            console.error('Error response:', err);
+            setError(err || 'Login failed'); // Handle login error
         }
     };
 
     const handleRegister = () => {
-        navigate('/register');
+        navigate('/register'); // Navigate to register page
     };
 
     return (

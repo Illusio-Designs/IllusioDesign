@@ -26,9 +26,12 @@ const SliderPage = () => {
     useEffect(() => {
         const fetchSliders = async () => {
             try {
+                console.log('Fetching sliders...');
                 const data = await getAllSliders();
+                console.log('Fetched sliders:', data);
                 setSliders(data);
             } catch (err) {
+                console.error('Error fetching sliders:', err);
                 setError('Failed to fetch sliders.');
             }
         };
@@ -36,10 +39,12 @@ const SliderPage = () => {
     }, []);
 
     const openModal = () => {
+        console.log('Opening modal');
         setModalIsOpen(true);
     };
 
     const closeModal = () => {
+        console.log('Closing modal and resetting form');
         setModalIsOpen(false);
         setEditSliderId(null);
         setNewSlider({ title: '', type: '', media: null });
@@ -49,11 +54,13 @@ const SliderPage = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
+        console.log(`Form field changed - ${name}:`, value);
         setNewSlider((prev) => ({ ...prev, [name]: value }));
     };
 
     const handleDrop = (acceptedFiles) => {
         const file = acceptedFiles[0];
+        console.log('File dropped:', file);
         setNewSlider((prev) => ({ ...prev, media: file }));
     };
 
@@ -61,10 +68,12 @@ const SliderPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log('Form submitted with data:', newSlider);
         setError('');
         setSuccess('');
 
         if (!newSlider.media) {
+            console.error('No file uploaded');
             setError('No file uploaded');
             return;
         }
@@ -75,23 +84,35 @@ const SliderPage = () => {
             formData.append('title', newSlider.title);
             formData.append('type', newSlider.type);
 
+            console.log('FormData contents:');
+            for (let pair of formData.entries()) {
+                console.log(pair[0], pair[1]);
+            }
+
             let slider;
             if (editSliderId) {
+                console.log('Updating slider with ID:', editSliderId);
                 slider = await updateSliderById(editSliderId, formData);
+                console.log('Updated slider:', slider);
                 setSliders((prev) => prev.map((s) => (s.id === editSliderId ? slider : s)));
                 setSuccess('Slider updated successfully!');
             } else {
+                console.log('Creating new slider');
                 slider = await createSlider(formData);
+                console.log('Created slider:', slider);
                 setSliders((prev) => [...prev, slider]);
                 setSuccess('Slider created successfully!');
             }
             closeModal();
         } catch (err) {
+            console.error('Error saving slider:', err);
+            console.error('Error response:', err.response);
             setError(err.response?.data?.error || 'Failed to save slider.');
         }
     };
 
     const handleEdit = (slider) => {
+        console.log('Editing slider:', slider);
         setNewSlider({
             title: slider.title,
             type: slider.type,
@@ -102,14 +123,20 @@ const SliderPage = () => {
     };
 
     const handleDelete = async (sliderId) => {
+        console.log('Deleting slider with ID:', sliderId);
         try {
             await deleteSliderById(sliderId);
+            console.log('Slider deleted successfully');
             setSliders((prev) => prev.filter((slider) => slider.id !== sliderId));
             setSuccess('Slider deleted successfully!');
         } catch (err) {
+            console.error('Error deleting slider:', err);
             setError('Failed to delete slider.');
         }
     };
+
+    console.log('Current sliders state:', sliders);
+    console.log('Current newSlider state:', newSlider);
 
     return (
         <div className="slider-container">

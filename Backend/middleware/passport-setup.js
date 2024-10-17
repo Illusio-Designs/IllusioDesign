@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt');
 // Configure the local strategy
 passport.use(new LocalStrategy(
     {
-        usernameField: 'email', // Specify that 'email' is the username field
+        usernameField: 'email',
         passwordField: 'password',
     },
     async (email, password, done) => {
@@ -15,15 +15,15 @@ passport.use(new LocalStrategy(
         try {
             const user = await User.findOne({ where: { email } });
             if (!user) {
-                console.warn(`Passport LocalStrategy: User with email ${email} not found.`);
+                console.warn(`User with email ${email} not found.`);
                 return done(null, false, { message: 'Incorrect email.' });
             }
             const isMatch = await bcrypt.compare(password, user.password);
             if (!isMatch) {
-                console.warn(`Passport LocalStrategy: Incorrect password for email ${email}.`);
+                console.warn(`Incorrect password for email ${email}.`);
                 return done(null, false, { message: 'Incorrect password.' });
             }
-            console.log(`Passport LocalStrategy: User authenticated: ${email}`);
+            console.log(`User authenticated: ${email}`);
             return done(null, user);
         } catch (error) {
             console.error('Passport LocalStrategy Error:', error);
@@ -32,25 +32,25 @@ passport.use(new LocalStrategy(
     }
 ));
 
-// Serialize user into the sessions
+// Serialize user into the session
 passport.serializeUser((user, done) => {
-    console.log(`Passport SerializeUser: Serializing user ID: ${user.id}`);
+    console.log(`Serializing user ID: ${user.id}`);
     done(null, user.id);
 });
 
-// Deserialize user from the sessions
+// Deserialize user from the session
 passport.deserializeUser(async (id, done) => {
-    console.log(`Passport DeserializeUser: Deserializing user ID: ${id}`);
+    console.log(`Deserializing user ID: ${id}`);
     try {
         const user = await User.findByPk(id);
         if (!user) {
-            console.warn(`Passport DeserializeUser: User with ID ${id} not found.`);
+            console.warn(`User with ID ${id} not found.`);
             return done(null, false);
         }
-        console.log(`Passport DeserializeUser: User deserialized: ${user.email}`);
+        console.log(`User deserialized: ${user.email}`);
         done(null, user);
     } catch (error) {
-        console.error('Passport DeserializeUser Error:', error);
+        console.error('DeserializeUser Error:', error);
         done(error);
     }
 });

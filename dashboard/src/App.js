@@ -8,9 +8,9 @@ import Projects from './pages/Project';
 import Blog from './pages/Blog';
 import Referral from './pages/Referral';
 import Booking from './pages/Booking';
-import api from './utils/Loginapi'; 
-// Adjust the import based on your structure
 import Slider from './pages/Slider';
+import api from './utils/Loginapi'; // Adjust import based on your structure
+
 const App = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false); // Manage authentication state
     const [loading, setLoading] = useState(true); // Manage loading state
@@ -38,18 +38,27 @@ const App = () => {
         return <div>Loading...</div>; // Show loading state while checking authentication
     }
 
+    // Create a PrivateRoute component to simplify protected routes
+    const PrivateRoute = ({ element }) => {
+        return isAuthenticated ? element : <Navigate to="/" />;
+    };
+
     return (
         <Router>
             <Routes>
                 <Route path="/register" element={<Register />} />
                 <Route path="/" element={<Login setIsAuthenticated={setIsAuthenticated} />} /> {/* Pass setIsAuthenticated */}
-                <Route path="/dashboard" element={isAuthenticated ? <DefaultLayout><h1>Welcome to the Dashboard</h1></DefaultLayout> : <Navigate to="/" />} />
-                <Route path="/team" element={isAuthenticated ? <DefaultLayout><Team /></DefaultLayout> : <Navigate to="/" />} />
-                <Route path="/slider" element={isAuthenticated ? <DefaultLayout><Slider /></DefaultLayout> : <Navigate to="/" />} />
-                <Route path="/projects" element={isAuthenticated ? <DefaultLayout><Projects /></DefaultLayout> : <Navigate to="/" />} />
-                <Route path="/blog" element={isAuthenticated ? <DefaultLayout><Blog /></DefaultLayout> : <Navigate to="/" />} />
-                <Route path="/referral" element={isAuthenticated ? <DefaultLayout><Referral /></DefaultLayout> : <Navigate to="/" />} />
-                <Route path="/booking" element={isAuthenticated ? <DefaultLayout><Booking /></DefaultLayout> : <Navigate to="/" />} />
+                
+                {/* Protected routes */}
+                <Route path="/dashboard" element={<PrivateRoute element={<DefaultLayout><h1>Welcome to the Dashboard</h1></DefaultLayout>} />} />
+                <Route path="/team" element={<PrivateRoute element={<DefaultLayout><Team /></DefaultLayout>} />} />
+                <Route path="/slider" element={<PrivateRoute element={<DefaultLayout><Slider /></DefaultLayout>} />} />
+                <Route path="/projects" element={<PrivateRoute element={<DefaultLayout><Projects /></DefaultLayout>} />} />
+                <Route path="/blog" element={<PrivateRoute element={<DefaultLayout><Blog /></DefaultLayout>} />} />
+                <Route path="/referral" element={<PrivateRoute element={<DefaultLayout><Referral /></DefaultLayout>} />} />
+                <Route path="/booking" element={<PrivateRoute element={<DefaultLayout><Booking /></DefaultLayout>} />} />
+
+                {/* Catch-all route for 404 */}
                 <Route path="*" element={<h1>404 Not Found</h1>} />
             </Routes>
         </Router>

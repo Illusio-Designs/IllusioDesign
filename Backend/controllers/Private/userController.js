@@ -57,9 +57,15 @@ const logoutUser = (req, res) => {
             console.error('Logout error:', err);
             return res.status(500).json({ error: 'Internal server error' });
         }
-        res.clearCookie('session_cookie_name'); // Replace with your session cookie name if different
-        console.log(`User logged out successfully: ${req.user?.email || 'Unknown user'}`);
-        res.status(200).json({ message: 'Logout successful' });
+        req.session.destroy((err) => {
+            if (err) {
+                console.error('Session destruction error:', err);
+                return res.status(500).json({ error: 'Internal server error' });
+            }
+            res.clearCookie('session_cookie_name'); // Replace with your session cookie name if different
+            console.log(`User logged out successfully`);
+            res.status(200).json({ message: 'Logout successful' });
+        });
     });
 };
 
@@ -76,5 +82,5 @@ module.exports = {
     registerUser,
     loginUser,
     logoutUser,
-    getCurrentUser, // Export the getCurrentUser function
+    getCurrentUser,
 };

@@ -9,12 +9,15 @@ const api = axios.create({
     withCredentials: true,
 });
 
+// Add request interceptor to attach the token to headers
 api.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem('token');
         if (token) {
+            console.log('Attaching token to headers:', token); // Debugging token
             config.headers['Authorization'] = `Bearer ${token}`;
         }
+        console.log('Request Headers:', config.headers); // Log headers for debugging
         return config;
     },
     (error) => Promise.reject(error)

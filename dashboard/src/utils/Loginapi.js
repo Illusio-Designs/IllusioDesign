@@ -1,3 +1,5 @@
+// src/utils/Loginapi.js
+
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
 
@@ -20,7 +22,7 @@ export const loginUser = async (email, password) => {
     }
 };
 
-// Function to register a user
+// Function to register a user (can be expanded)
 export const registerUser = async (name, email, password) => {
     try {
         const response = await api.post(`/register`, { name, email, password });
