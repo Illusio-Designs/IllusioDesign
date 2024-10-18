@@ -141,7 +141,7 @@ const Project = () => {
                                             onError={(e) => {
                                                 console.error("Error loading image:", e.target.src);
                                                 e.target.onerror = null; // Prevent looping
-                                                e.target.src = 'path/to/placeholder/image.png'; // Set a placeholder image
+                                                // e.target.src = 'path/to/placeholder/image.png'; // Set a placeholder image
                                             }}
                                         />
                                     </div>
@@ -184,7 +184,7 @@ const Project = () => {
                                                         onError={(e) => {
                                                             console.error("Error loading project image:", e.target.src);
                                                             e.target.onerror = null; // Prevent looping
-                                                            e.target.src = 'path/to/placeholder/image.png'; // Set a placeholder image
+                                                            // e.target.src = 'path/to/placeholder/image.png'; // Set a placeholder image
                                                         }}
                                                     />
                                                 </div>

@@ -1,4 +1,3 @@
-// src/components/ProjectManagement.jsx
 import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import {
@@ -6,9 +5,9 @@ import {
   createProject,
   updateProjectById,
   deleteProjectById,
+  uploadImage,
 } from '../utils/projectApi';
 import { useDropzone } from 'react-dropzone';
-import api from '../utils/projectApi';
 import ReactQuill from 'react-quill'; // Import Quill
 import 'react-quill/dist/quill.snow.css'; // Import Quill CSS
 import './Project.css'; // Custom styles
@@ -77,25 +76,16 @@ const ProjectManagement = () => {
     setNewProject((prev) => ({ ...prev, content }));
   };
 
-  const handleDrop = (acceptedFiles) => {
+  const handleDrop = async (acceptedFiles) => {
     const file = acceptedFiles[0];
-    const formData = new FormData();
-    formData.append('image', file);
-
-    api
-      .post('/projects/uploads', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-      .then((response) => {
-        const imageUrl = response.data.url;
-        setNewProject((prev) => ({ ...prev, mainImage: imageUrl }));
-        setSuccess('Image uploaded successfully!');
-      })
-      .catch(() => {
-        setError('Failed to upload image.');
-      });
+    try {
+      const imageUrl = await uploadImage(file); // Use the uploadImage function
+      setNewProject((prev) => ({ ...prev, mainImage: imageUrl }));
+      setSuccess('Image uploaded successfully!');
+    } catch (error) {
+      console.error(error);
+      setError('Failed to upload image.');
+    }
   };
 
   const { getRootProps, getInputProps } = useDropzone({ onDrop: handleDrop });
@@ -104,6 +94,24 @@ const ProjectManagement = () => {
     e.preventDefault();
     setError('');
     setSuccess('');
+
+    // Debugging: Log the project data before submission
+    console.log('Project data before submission:', newProject);
+
+    // Validate that all required fields are filled
+    const isValid =
+      newProject.title &&
+      newProject.year &&
+      newProject.industry &&
+      newProject.services &&
+      newProject.timeline &&
+      newProject.content &&
+      newProject.mainImage; // Add any other validations if necessary
+
+    if (!isValid) {
+      setError('All fields are required.');
+      return;
+    }
 
     try {
       let project;
@@ -177,134 +185,78 @@ const ProjectManagement = () => {
               <td>{project.industry}</td>
               <td>{project.services}</td>
               <td>
-                <button
-                  onClick={() => handleEdit(project)}
-                  className="edit-button"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDelete(project.id)}
-                  className="delete-button"
-                >
-                  Delete
-                </button>
+                <button onClick={() => handleEdit(project)}>Edit</button>
+                <button onClick={() => handleDelete(project.id)}>Delete</button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        contentLabel="Project Modal"
-        className="project-modal"
-        overlayClassName="project-modal-overlay"
-      >
+      <Modal isOpen={modalIsOpen} onRequestClose={closeModal} className="modal">
         <h2>{editProjectId ? 'Edit Project' : 'Create New Project'}</h2>
-        <form onSubmit={handleSubmit} className="project-form">
+        <form onSubmit={handleSubmit}>
           <input
             type="text"
             name="title"
-            placeholder="Title"
             value={newProject.title}
             onChange={handleChange}
+            placeholder="Project Title"
             required
-            className="form-input"
           />
           <input
-            type="number"
+            type="text"
             name="year"
-            placeholder="Year"
             value={newProject.year}
             onChange={handleChange}
+            placeholder="Year"
             required
-            className="form-input"
           />
           <input
             type="text"
             name="industry"
-            placeholder="Industry"
             value={newProject.industry}
             onChange={handleChange}
+            placeholder="Industry"
             required
-            className="form-input"
           />
           <input
             type="text"
             name="services"
-            placeholder="Services"
             value={newProject.services}
             onChange={handleChange}
+            placeholder="Services"
             required
-            className="form-input"
           />
           <input
             type="text"
             name="timeline"
-            placeholder="Timeline"
             value={newProject.timeline}
             onChange={handleChange}
+            placeholder="Timeline"
             required
-            className="form-input"
           />
-
-          {/* Quill Rich Text Editor */}
-          <div className="editor-container">
-            <ReactQuill
-              value={newProject.content}
-              onChange={handleContentChange}
-              modules={ProjectManagement.modules}
-              formats={ProjectManagement.formats}
-            />
-          </div>
-
           <div {...getRootProps()} className="dropzone">
             <input {...getInputProps()} />
-            <p>Drag & drop the main image here, or click to select one</p>
+            <p>Drag 'n' drop main image here, or click to select</p>
+            {newProject.mainImage && <img src={newProject.mainImage} alt="Uploaded" />}
           </div>
-
+          <ReactQuill value={newProject.content} onChange={handleContentChange} />
           <input
             type="text"
             name="assetLink"
-            placeholder="Asset Link"
             value={newProject.assetLink}
             onChange={handleChange}
-            required
-            className="form-input"
+            placeholder="Asset Link"
           />
-
-          <div className="form-buttons">
-            <button type="submit" className="submit-button">
-              {editProjectId ? 'Update Project' : 'Create Project'}
-            </button>
-            <button
-              type="button"
-              onClick={closeModal}
-              className="cancel-button"
-            >
-              Cancel
-            </button>
-          </div>
+          <button type="submit" className="submit-button">
+            {editProjectId ? 'Update Project' : 'Create Project'}
+          </button>
+          <button type="button" onClick={closeModal}>Cancel</button>
         </form>
       </Modal>
     </div>
   );
 };
-
-// Quill modules and formats
-ProjectManagement.modules = {
-  toolbar: [
-    [{ 'header': [1, 2, false] }],
-    ['bold', 'italic', 'underline'],
-    ['link', 'image'],
-    ['clean'] // remove formatting button
-  ],
-};
-
-ProjectManagement.formats = [
-  'header', 'bold', 'italic', 'underline', 'link', 'image'
-];
 
 export default ProjectManagement;

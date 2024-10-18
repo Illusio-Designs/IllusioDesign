@@ -1,143 +1,66 @@
-require('dotenv').config();
 const express = require('express');
-const session = require('express-session');
-const SequelizeStore = require('connect-session-sequelize')(session.Store);
-const passport = require('passport');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-const sequelize = require('./config/database');
-require('./middleware/passport-setup');
-const path = require('path');
-const morgan = require('morgan');
-const helmet = require('helmet');
-const bodyParser = require('body-parser');
+const sequelize = require('./config/db');
+const morgan = require('morgan'); // Logging middleware for HTTP requests
 
-// Import models
-const Blog = require('./models/Blog');
-const SEO = require('./models/SEO');
-const Project = require('./models/Project');
-const User = require('./models/User');
-const PagePath = require('./models/pagePath');
-
-// Import association definition function
-const defineAssociations = require('./models/associations');
-
-// Private Routes Import
-const projectRoutes = require('./routes/private/projectRoutes');
-const userRoutes = require('./routes/private/userRoutes');
-const blogRoutes = require('./routes/private/blogRoutes');
-const seoRoutes = require('./routes/private/seoRoutes');
-const sliderRoutes = require('./routes/private/sliderRoutes');
-const pagePathRoutes = require('./routes/private/pagePathRoutes');
-
-// Public Routes Import
-const projectPublicRoutes = require('./routes/public/projectPublicRoutes');
-const blogPublicRoutes = require('./routes/public/blogPublicRoutes');
-const seoPublicRoutes = require('./routes/public/seoPublicRoutes');
-const sliderPublicRoutes = require('./routes/public/sliderPublicRoutes');
-const pagePathsPublicRoutes = require('./routes/public/pagePathPublicRoutes');
+const userRoutes = require('./routes/Private/userRoutes');
+const blogRoutes = require('./routes/Private/blogRoutes');
+const projectRoutes = require('./routes/Private/projectRoutes');
+const seoRoutes = require('./routes/Private/seoRoutes');
 
 const app = express();
-
-// Middleware
-app.use(morgan('dev'));
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ limit: '50mb', extended: true }));
-app.use(cookieParser());
-app.use(helmet());
+require('dotenv').config();
 
 // CORS configuration
-app.use(cors({
-    origin: ['http://localhost:5173', 'http://localhost:3001', 'https://api.illusiodesigns.agency'], // Replace with your frontend URL
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
-}));
+const corsOptions = {
+    origin: 'http://localhost:3001', // Your frontend URL
+    credentials: true, // Allow credentials to be included
+};
 
-// Initialize Sequelize Store
-const sessionStore = new SequelizeStore({
-    db: sequelize,
-    tableName: 'Sessions',
-});
+// Middleware
+app.use(cors(corsOptions)); // Use the configured CORS options
+app.use(express.json());
+app.use(cookieParser());
+app.use(morgan('dev')); // Log incoming requests in development mode
 
-// Sync the session store
-sessionStore.sync();
-
-// Session setup with SequelizeStore
-app.use(session({
-    key: 'session_cookie_name',
-    secret: process.env.SESSION_SECRET || 'your_secret_key',
-    store: sessionStore,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        secure: process.env.NODE_ENV === 'production', // Set secure cookies in production
-        httpOnly: true,
-        sameSite: 'lax',
-        maxAge: 1000 * 60 * 60, // 1 hour
-    },
-}));
-
-// Initialize Passport
-app.use(passport.initialize());
-app.use(passport.session());
-
-// Define model associations
-defineAssociations();
-
-// Apply routes
-app.use('/api', userRoutes);
+// Routes
+app.use('/api/users', userRoutes);
+app.use('/api/blogs', blogRoutes);
 app.use('/api/projects', projectRoutes);
-app.use('/api/blog', blogRoutes);
 app.use('/api/seo', seoRoutes);
-app.use('/api/sliders', sliderRoutes);
-app.use('/api/page-paths', pagePathRoutes);
 
-// Apply Public API Routes
-app.use('/api/public/seo', seoPublicRoutes);
-app.use('/api/public/blogs', blogPublicRoutes);
-app.use('/api/public/sliders', sliderPublicRoutes);
-app.use('/api/public/page-paths', pagePathsPublicRoutes);
-app.use('/api/public/projects', projectPublicRoutes);
+// Database synchronization
+sequelize.sync()
+    .then(() => {
+        console.log('Database & tables created!');
+    })
+    .catch(err => {
+        console.error('Unable to connect to the database:', err);
+        process.exit(1); // Exit the process if database connection fails
+    });
 
-const staticCorsOptions = {
-    origin: '*', // Allow all origins for static files
-    methods: ['GET'],
-};
-
-// Apply CORS to Static Routes
-app.use('/uploads', cors(staticCorsOptions), express.static(path.join(__dirname, 'uploads')));
-
-// 404 Handler for Public Routes
-app.use('/api/public/*', (req, res) => {
-    res.status(404).json({ error: 'Public route not found' });
-});
-
-// 404 Handler for Private Routes
-app.use('/api/*', (req, res) => {
-    res.status(404).json({ error: 'Private route not found' });
-});
-
-// Global error handler
+// Error handling middleware
 app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).json({ error: 'Something went wrong!' });
+    console.error(err.stack); // Log the error stack
+    res.status(500).json({ message: 'Internal Server Error' });
 });
 
-// Sync database and start server
-const startServer = async () => {
-    try {
-        // Sync all models with the database
-        await sequelize.sync({ alter: true }); // Consider using migrations for production
-        console.log('Database synced');
+// Handle uncaught exceptions and promise rejections
+process.on('uncaughtException', (err) => {
+    console.error('Uncaught Exception:', err);
+    // You can perform additional logging here
+    process.exit(1); // Exit the process
+});
 
-        const PORT = process.env.PORT || 3000;
-        app.listen(PORT, () => {
-            console.log(`Server is running on port ${PORT}`);
-        });
-    } catch (error) {
-        console.error('Unable to connect to the database:', error);
-    }
-};
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+    // You can perform additional logging here
+    process.exit(1); // Exit the process
+});
 
-startServer();
+// Start the server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});

@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { loginUser } from '../utils/Loginapi';
 
 const Login = ({ setIsAuthenticated }) => {
-    const [email, setEmail] = useState('');
+    const [email, setEmail] = useState(''); // Using email instead of username
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
@@ -15,7 +15,7 @@ const Login = ({ setIsAuthenticated }) => {
         setError('');
 
         try {
-            const response = await loginUser(email, password);
+            const response = await loginUser(email, password); // Call loginUser with email
             console.log('API Response:', response);
             localStorage.setItem('user', JSON.stringify(response.user)); // Store user data in local storage
             console.log('User data stored in local storage:', response.user);

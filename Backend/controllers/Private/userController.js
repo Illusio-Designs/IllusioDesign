@@ -1,92 +1,57 @@
-const User = require('../../models/User');
-const bcrypt = require('bcrypt');
-const passport = require('passport');
-const jwt = require('jsonwebtoken'); // Import JWT
+const User = require('../../models/userModel');
+const md5 = require('md5');
+const jwt = require('jsonwebtoken');
 
-// Register a new user
-const registerUser = async (req, res) => {
-    const { name, email, password } = req.body;
+const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 
-    try {
-        console.log(`Attempting to register user with email: ${email}`);
-        const existingUser = await User.findOne({ where: { email } });
-        if (existingUser) {
-            console.warn(`Registration failed: User with email ${email} already exists.`);
-            return res.status(400).json({ error: 'User already exists.' });
-        }
+// User controller
 
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = await User.create({
-            name,
-            email,
-            password: hashedPassword,
-        });
-        console.log(`User registered successfully: ${email}`);
-        res.status(201).json({ id: newUser.id, name: newUser.name, email: newUser.email });
-    } catch (error) {
-        console.error('Error registering user:', error);
-        res.status(500).json({ error: 'Internal server error' });
+exports.createUser = async (req, res) => {
+  console.log('Request body:', req.body); // Log the request body
+  console.log('Uploaded file:', req.file); // Log the uploaded file
+
+  try {
+    const { username, password, email } = req.body; // Extract username, email, and password from body
+    const hashedPassword = md5(password); // Hash the password using MD5
+    const userImage = req.file ? req.file.filename : null; // Get the filename from multer
+
+    // Check if the image is null
+    if (!userImage) {
+      return res.status(400).json({ error: 'User image is required' }); // Send error if no image
     }
+
+    // Create the user
+    const user = await User.create({ username, password: hashedPassword, email, userImage });
+    res.status(201).json(user); // Return created user
+  } catch (error) {
+    res.status(500).json({ error: error.message }); // Send error message if something goes wrong
+  }
 };
 
-// Login a user
-const loginUser = (req, res, next) => {
-    passport.authenticate('local', (err, user, info) => {
-        if (err) {
-            console.error('Authentication error:', err);
-            return res.status(500).json({ error: 'Internal server error' });
-        }
-        if (!user) {
-            console.warn(`Login failed: ${info.message} for email: ${req.body.email}`);
-            return res.status(401).json({ error: info.message || 'Invalid credentials' });
-        }
-        req.logIn(user, (err) => {
-            if (err) {
-                console.error('Login error:', err);
-                return res.status(500).json({ error: 'Internal server error' });
-            }
-            console.log(`User logged in successfully: ${user.email}`);
 
-            // Generate a token
-            const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+// Login user
+// Login user
+exports.loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body; // Ensure you're using email
+    const user = await User.findOne({ where: { email } }); // Search by email
 
-            // Return the token along with user info
-            return res.status(200).json({ message: 'Login successful', token, user: { id: user.id, name: user.name, email: user.email } });
-        });
-    })(req, res, next);
-};
-
-// Logout a user
-const logoutUser = (req, res) => {
-    req.logout((err) => {
-        if (err) {
-            console.error('Logout error:', err);
-            return res.status(500).json({ error: 'Internal server error' });
-        }
-        req.session.destroy((err) => {
-            if (err) {
-                console.error('Session destruction error:', err);
-                return res.status(500).json({ error: 'Internal server error' });
-            }
-            res.clearCookie('session_cookie_name'); // Replace with your session cookie name if different
-            console.log(`User logged out successfully`);
-            res.status(200).json({ message: 'Logout successful' });
-        });
-    });
-};
-
-// Get current logged-in user
-const getCurrentUser = (req, res) => {
-    if (req.isAuthenticated()) {
-        return res.status(200).json(req.user);
+    if (!user || user.password !== md5(password)) { // Check password
+      return res.status(401).json({ message: 'Invalid email or password' });
     }
-    return res.status(401).json({ error: 'User not authenticated' });
+
+    // Generate JWT token
+    const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: '1h' });
+    
+    res.json({ token });
+  } catch (error) {
+    console.error('Login Error:', error); // Log error details to the console
+    res.status(500).json({ error: error.message }); // Send error message as response
+  }
 };
 
-// Export the controller functions
-module.exports = {
-    registerUser,
-    loginUser,
-    logoutUser,
-    getCurrentUser,
+
+// Logout user
+exports.logoutUser = (req, res) => {
+  res.status(200).json({ message: 'User logged out successfully' });
 };

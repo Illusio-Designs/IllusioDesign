@@ -1,18 +1,12 @@
 const express = require('express');
-const router = express.Router();
 const userController = require('../../controllers/Private/userController');
+const upload = require('../../config/multer');
+const authenticate = require('../../middleware/authenticate');
 
-// Registration route
-router.post('/register', userController.registerUser);
+const router = express.Router();
 
-// Login route
+router.post('/create', upload.single('userImage'), userController.createUser);
 router.post('/login', userController.loginUser);
+router.post('/logout', authenticate, userController.logoutUser);
 
-// Logout route
-router.post('/logout', userController.logoutUser);
-
-// Get current user route
-router.get('/current_user', userController.getCurrentUser); // Add this route
-
-// Export the router
 module.exports = router;
