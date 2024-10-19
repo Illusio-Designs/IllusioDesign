@@ -1,11 +1,9 @@
-// src/components/Login.js
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { loginUser } from '../utils/Loginapi';
 
 const Login = ({ setIsAuthenticated }) => {
-    const [email, setEmail] = useState(''); // Using email instead of username
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
@@ -15,20 +13,19 @@ const Login = ({ setIsAuthenticated }) => {
         setError('');
 
         try {
-            const response = await loginUser(email, password); // Call loginUser with email
-            console.log('API Response:', response);
-            localStorage.setItem('user', JSON.stringify(response.user)); // Store user data in local storage
-            console.log('User data stored in local storage:', response.user);
-            setIsAuthenticated(true);
-            navigate('/dashboard'); // Redirect to dashboard after successful login
+            const response = await loginUser(email, password);
+            if (response.token) {
+                localStorage.setItem('token', response.token);
+                setIsAuthenticated(true);
+                navigate('/dashboard');
+            }
         } catch (err) {
-            console.error('Error response:', err);
-            setError(err || 'Login failed'); // Handle login error
+            setError(err || 'Login failed. Please check your credentials.');
         }
     };
 
     const handleRegister = () => {
-        navigate('/register'); // Navigate to register page
+        navigate('/register');
     };
 
     return (

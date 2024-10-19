@@ -1,21 +1,44 @@
+// config/multer.js
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 
-// Define the storage for uploaded files
-const storage = multer.diskStorage({
+// Ensure upload folder exists
+const ensureUploadPathExists = (uploadPath) => {
+  if (!fs.existsSync(uploadPath)) {
+    fs.mkdirSync(uploadPath, { recursive: true });
+  }
+};
+
+// Storage configuration for user images
+const userStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    // Set the destination to uploads/users
     const uploadPath = path.join(__dirname, '../uploads/users');
+    ensureUploadPathExists(uploadPath);
     cb(null, uploadPath);
   },
   filename: (req, file, cb) => {
-    // Set the filename to include a timestamp to avoid collisions
-    cb(null, Date.now() + path.extname(file.originalname)); // Add timestamp to avoid filename collisions
+    const uniqueName = Date.now() + path.extname(file.originalname);
+    cb(null, uniqueName);
   },
 });
 
-// Initialize multer with the defined storage
-const upload = multer({ storage: storage });
+// Multer middleware for user image upload
+const uploadUserImage = multer({ storage: userStorage });
 
-// Export the upload middleware
-module.exports = upload;
+// Storage configuration for project images
+const projectStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadPath = path.join(__dirname, '../uploads/projects');
+    ensureUploadPathExists(uploadPath);
+    cb(null, uploadPath);
+  },
+  filename: (req, file, cb) => {
+    const uniqueName = Date.now() + path.extname(file.originalname);
+    cb(null, uniqueName);
+  },
+});
+
+const uploadProjectImage = multer({ storage: projectStorage });
+
+module.exports = { uploadUserImage, uploadProjectImage };

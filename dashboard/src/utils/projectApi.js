@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
 
-// Create an Axios instance with default settings
 const api = axios.create({
     baseURL: API_BASE_URL,
     headers: {
@@ -10,88 +9,66 @@ const api = axios.create({
     withCredentials: true,
 });
 
-// Function to check if the token is expired
-const isTokenExpired = (token) => {
-    if (!token) return true;
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    return Date.now() >= payload.exp * 1000; // Check if the current time is past the expiration
-};
+// Add Authorization header to each request
+api.interceptors.request.use((config) => {
+    const token = localStorage.getItem('token'); // Or wherever you're storing it
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+});
 
-// Add a request interceptor to attach the token to headers
-api.interceptors.request.use(
-    (config) => {
-        const token = localStorage.getItem('token');
-        console.log('Retrieving token from localStorage:', token);
-        if (token && !isTokenExpired(token)) {
-            config.headers['Authorization'] = `Bearer ${token}`;
-        } else {
-            console.warn('Token is expired or not found in localStorage');
-        }
-        return config;
-    },
-    (error) => Promise.reject(error)
-);
-
-// Function to upload an image
-export const uploadImage = async (imageFile) => {
+export const createProject = async (projectData) => {
     const formData = new FormData();
-    formData.append('image', imageFile);
-
+    for (const key in projectData) {
+        formData.append(key, projectData[key]);
+    }
     try {
-        const response = await api.post('/projects/uploads', formData, {
+        const response = await api.post('/projects', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
         });
-        return response.data.url; // Adjust according to your backend response
+        return response.data;
     } catch (error) {
-        console.error('Error uploading image:', error.response?.data || error.message);
-        throw error.response?.data?.error || 'Failed to upload image';
+        throw error.response?.data?.error || 'Failed to create project';
     }
 };
 
-// Function to get all projects
 export const getAllProjects = async () => {
     try {
-        const response = await api.get('/public/projects'); // Adjust the endpoint as necessary
-        return response.data; // Return the response data
+        const response = await api.get('/projects');
+        console.log('Projects fetched successfully:', response.data);
+        return response.data;
     } catch (error) {
         console.error('Error fetching projects:', error);
         throw error.response?.data?.error || 'Failed to fetch projects';
     }
 };
 
-// Function to create a new project
-export const createProject = async (projectData) => {
-    try {
-        const response = await api.post('/projects', projectData);
-        return response.data; // Return the newly created project data
-    } catch (error) {
-        console.error('Error creating project:', error.response?.data || error.message);
-        throw error.response?.data?.error || 'Failed to create project';
-    }
-};
 
-// Function to update a project by ID
 export const updateProjectById = async (projectId, projectData) => {
+    const formData = new FormData();
+    for (const key in projectData) {
+        formData.append(key, projectData[key]);
+    }
     try {
-        const response = await api.put(`/projects/${projectId}`, projectData);
-        return response.data; // Return the updated project data
+        const response = await api.put(`/projects/${projectId}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        return response.data;
     } catch (error) {
-        console.error('Error updating project:', error);
         throw error.response?.data?.error || 'Failed to update project';
     }
 };
 
-// Function to delete a project by ID
 export const deleteProjectById = async (projectId) => {
     try {
-        const response = await api.delete(`/projects/${projectId}`);
-        return response.data; // Return the response data for the deleted project
+        await api.delete(`/projects/${projectId}`);
+        return { message: 'Project deleted successfully' };
     } catch (error) {
-        console.error('Error deleting project:', error);
         throw error.response?.data?.error || 'Failed to delete project';
     }
 };
-
-export default api; // Export the Axios instance for use in other modules
