@@ -11,6 +11,7 @@ import config from './config';
 import '../styles/App.css';
 import EditUser from './components/editUser';
 import UserList from './pages/User';
+import Project from './pages/Project';
 
 const AppLayout = () => {
   const { isAuthenticated } = useAuth();
@@ -40,6 +41,10 @@ const AppLayout = () => {
             <Route 
               path="/user/edit/:id" 
               element={<ProtectedRoute element={<EditUser />} />} 
+            />
+             <Route 
+              path="/project" 
+              element={<ProtectedRoute element={<Project />} />} 
             />
             <Route path="/login" element={isAuthenticated ? <Navigate to="/home" /> : <Login />} />
           </Routes>

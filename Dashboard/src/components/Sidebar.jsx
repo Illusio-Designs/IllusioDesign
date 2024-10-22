@@ -12,6 +12,9 @@ const Sidebar = () => {
         <li>
           <Link to="/user">User</Link>
         </li>
+        <li>
+          <Link to="/project">Project</Link>
+        </li>
       </ul>
     </nav>
   );
