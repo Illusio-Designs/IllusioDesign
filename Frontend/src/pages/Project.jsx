@@ -1,10 +1,11 @@
 // Project.jsx
 import React, { useEffect, useState } from 'react';
-import { getAllProjects } from '../utils/api';
+import { getAllPublicProjects } from '../utils/api'; // Updated import to use getAllPublicProjects
 import { motion } from 'framer-motion';
 import Header from '../components/Header';
 import bgcard from "../assets/bg-card.png";
 import { API_IMAGE_BASE_URL } from '../config';
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom for client-side routing
 
 const Project = () => {
     const [projects, setProjects] = useState([]);
@@ -17,48 +18,39 @@ const Project = () => {
         if (!imageName) return '';
         if (imageName.startsWith('http')) return imageName; // Return if it's already a full URL
 
-        const fullUrl = `${API_IMAGE_BASE_URL}${imageName}`;
-        console.log("Constructed Image URL:", fullUrl); // Log the constructed URL for debugging
+        const fullUrl = `${API_IMAGE_BASE_URL}/project/${imageName}`;
         return fullUrl;
     };
 
     useEffect(() => {
-        const fetchProjects = async () => {
+        const fetchPublicProjects = async () => {
             try {
-                const projectData = await getAllProjects();
-                console.log("Projects Data:", projectData);
+                const projectData = await getAllPublicProjects(); // Updated to use getAllPublicProjects
 
                 if (Array.isArray(projectData)) {
                     setProjects(projectData);
                     if (projectData.length > 0) {
                         setFeaturedProject(projectData[0]);
-                        console.log("Featured Project Main Image:", projectData[0].mainImage);
-                    }
-                } else if (projectData.projects && Array.isArray(projectData.projects)) {
-                    setProjects(projectData.projects);
-                    if (projectData.projects.length > 0) {
-                        setFeaturedProject(projectData.projects[0]);
-                        console.log("Featured Project Main Image:", projectData.projects[0].mainImage);
                     }
                 } else {
                     console.warn("Unexpected project data format:", projectData);
                     setProjects([]);
                 }
             } catch (err) {
-                console.error('Error fetching projects:', err);
+                console.error('Error fetching public projects:', err);
                 setError(err);
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchProjects();
+        fetchPublicProjects();
     }, []);
 
     if (loading) {
         return (
             <div className="flex justify-center items-center h-screen">
-                <div className="text-xl">Loading projects...</div>
+                <div className="text-xl">Loading public projects...</div>
             </div>
         );
     }
@@ -66,7 +58,7 @@ const Project = () => {
     if (error) {
         return (
             <div className="flex justify-center items-center h-screen">
-                <div className="text-red-500 text-xl">Error fetching projects: {error.message || error.toString()}</div>
+                <div className="text-red-500 text-xl">Error fetching public projects: {error.message || error.toString()}</div>
             </div>
         );
     }
@@ -126,30 +118,22 @@ const Project = () => {
                         </div>
                         {featuredProject && (
                             <div className='mx-3'>
-                                <a 
+                                <Link 
+                                    to={`/project-inside/${encodeURIComponent(featuredProject.title)}`} // Use title for the link
                                     className='slider scale-100' 
-                                    href='#' 
                                 >
                                     <div className='project-img overflow-hidden relative'>
                                         <img 
                                             className='duration-1000 hover:scale-110 block w-full h-full object-cover' 
-                                            src={getFullImageUrl(featuredProject.mainImage)} 
+                                            src={getFullImageUrl(featuredProject.image)} 
                                             alt={featuredProject.title}
-                                            onLoad={(e) => {
-                                                console.log("Featured image loaded:", e.target.src);
-                                            }}
-                                            onError={(e) => {
-                                                console.error("Error loading image:", e.target.src);
-                                                e.target.onerror = null; // Prevent looping
-                                                // e.target.src = 'path/to/placeholder/image.png'; // Set a placeholder image
-                                            }}
                                         />
                                     </div>
                                     <div className='pt-[30px] pb-[70px] px-[50px] grid gap-4 bg-[#ec691f] text-white'>
                                         <div className='uppercase text-lg'>{featuredProject.industry}</div>
                                         <div className='quantify-font text-3xl'>{featuredProject.title}</div>
                                     </div>
-                                </a>
+                                </Link>
                             </div>
                         )}
                     </div>
@@ -165,30 +149,20 @@ const Project = () => {
                             </motion.h1>
                             <div className='grid grid-cols-2 max-lg:grid-cols-1 pt-12'>
                                 {projects.map((project, index) => {
-                                    console.log(`Project ${index} Main Image:`, project.mainImage);
                                     return (
                                         <div className='mx-3 max-lg:mb-3' key={project.id || index}>
-                                            <a 
+                                            <Link 
+                                                to={`/project/${project.id}`} 
                                                 className='scale-100' 
-                                                href='#' 
                                             >
                                                 <div className='project-img overflow-hidden relative'>
                                                     <img
                                                         className='duration-1000 hover:scale-110 block w-full h-full object-cover'
-                                                        src={getFullImageUrl(project.mainImage)}
+                                                        src={getFullImageUrl(project.image)}
                                                         alt={project.title || 'Project Image'}
-                                                        onLoad={(e) => {
-                                                            console.log(`Project ${index} image loaded:`, e.target.src);
-                                                            console.log(`Project ${index} image dimensions:`, e.target.naturalWidth, "x", e.target.naturalHeight);
-                                                        }}
-                                                        onError={(e) => {
-                                                            console.error("Error loading project image:", e.target.src);
-                                                            e.target.onerror = null; // Prevent looping
-                                                            // e.target.src = 'path/to/placeholder/image.png'; // Set a placeholder image
-                                                        }}
                                                     />
                                                 </div>
-                                            </a>
+                                            </Link>
                                             <div className='py-[30px] grid gap-4'>
                                                 <div className='uppercase text-lg'>{project.industry}</div>
                                                 <div className='quantify-font text-3xl'>{project.title}</div>

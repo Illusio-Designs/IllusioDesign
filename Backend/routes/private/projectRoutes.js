@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const projectController = require('../../controller/private/projectController');
-const upload = require('../../middleware/upload');
+const upload = require('../../middleware/upload'); // Import the multer upload middleware
 const authenticate = require('../../middleware/auth'); // JWT middleware for protected routes
 
 // Create project with image upload
-router.post('/', authenticate, upload.single('projectImage'), projectController.createProject);
+router.post('/', authenticate, upload.single('projectImage'), projectController.createProject); // Ensure 'projectImage' matches the form input name
 
 // Get all projects (Protected route)
 router.get('/', authenticate, projectController.getAllProjects);

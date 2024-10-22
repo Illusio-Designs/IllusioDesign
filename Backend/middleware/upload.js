@@ -1,41 +1,61 @@
+// middleware/upload.js
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
+
+// Ensure the upload directory exists
+const createUploadDir = (dir) => {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+};
+
+// Create upload directories
+const userUploadDir = 'uploads/user';
+const projectUploadDir = 'uploads/project';
+createUploadDir(userUploadDir);
+createUploadDir(projectUploadDir);
 
 // Configure Multer storage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    // Choose the destination folder based on the field name
-    if (file.fieldname === 'projectImage') {
-      cb(null, 'uploads/project'); // Uploads folder for projects
-    } else if (file.fieldname === 'userImage') {
-      cb(null, 'uploads/user'); // Uploads folder for users
+    // Dynamically set upload directory based on the field name
+    if (file.fieldname === 'image') {
+      cb(null, userUploadDir);
+    } else if (file.fieldname === 'projectImage') {
+      cb(null, projectUploadDir);
     } else {
-      cb(new Error('Invalid field name for upload'), false);
+      cb(new Error('Invalid field name'), false);
     }
   },
   filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname)); // Generate unique filename
+    const timestamp = Date.now();
+    const extension = path.extname(file.originalname);
+    const filename = `image-${timestamp}${extension}`;
+    cb(null, filename);
   }
 });
 
-// File filter function
+// File filter for images
 const fileFilter = (req, file, cb) => {
   const allowedTypes = /jpeg|jpg|png|gif/;
-  const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
   const mimetype = allowedTypes.test(file.mimetype);
-  
-  if (extname && mimetype) {
+  const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+
+  if (mimetype && extname) {
     cb(null, true);
   } else {
-    cb(new Error('Only images are allowed!'), false);
+    cb(new Error('Only image files are allowed!'), false);
   }
 };
 
+// Create multer instance
 const upload = multer({
   storage: storage,
   fileFilter: fileFilter,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB file size limit
+  limits: {
+    fileSize: 5 * 1024 * 1024 // 5MB
+  }
 });
 
 module.exports = upload;

@@ -5,7 +5,6 @@ import Project from './pages/Project';
 import ProjectInside from './pages/ProjectInside';
 import Blog from './pages/Blog';
 import BlogInside from './pages/BlogInside';
-import { sendPublicPagePath, fetchExistingPaths, fetchPages } from './utils/api';
 
 function App() {
   const action = useNavigationType();
@@ -15,33 +14,9 @@ function App() {
   const [existingPaths, setExistingPaths] = useState([]);
   const [dynamicPages, setDynamicPages] = useState([]);
 
-  // Fetch existing paths from the backend on component mount
-  useEffect(() => {
-    const fetchPaths = async () => {
-      try {
-        const paths = await fetchExistingPaths();
-        setExistingPaths(paths);
-      } catch (error) {
-        console.error('Error fetching existing paths:', error);
-      }
-    };
+  // Removed the useEffect hook that fetched existing paths from the backend
 
-    fetchPaths();
-  }, []);
-
-  // Fetch dynamic pages on component mount
-  useEffect(() => {
-    const fetchDynamicPages = async () => {
-      try {
-        const pages = await fetchPages(); // Fetch dynamic pages
-        setDynamicPages(pages);
-      } catch (error) {
-        console.error('Error fetching dynamic pages:', error);
-      }
-    };
-
-    fetchDynamicPages();
-  }, []);
+  // Removed the useEffect hook that fetched dynamic pages
 
   // Scroll to top on navigation
   useEffect(() => {
@@ -50,22 +25,7 @@ function App() {
     }
   }, [action]);
 
-  // Send the current pathname to the backend
-  useEffect(() => {
-    const sendPath = async () => {
-      if (!existingPaths.includes(pathname)) {
-        try {
-          await sendPublicPagePath(pathname); // Send pathname to the backend
-          console.log('Successfully sent pathname:', pathname);
-          setExistingPaths(prevPaths => [...prevPaths, pathname]); // Update state with new path
-        } catch (error) {
-          console.error('Failed to send pathname:', error);
-        }
-      }
-    };
-
-    sendPath();
-  }, [pathname, existingPaths]);
+  // Removed the useEffect hook that sent the current pathname to the backend
 
   return (
     <Routes>

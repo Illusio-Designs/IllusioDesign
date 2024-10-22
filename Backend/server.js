@@ -6,9 +6,13 @@ const path = require('path');
 const cors = require('cors'); // Import CORS
 const sequelize = require('./config/database');
 
+// Private routes
 const userRoutes = require('./routes/private/userRoutes');
 const projectRoutes = require('./routes/private/projectRoutes'); // Import project routes
 const seoRoutes = require('./routes/private/seoRoutes'); // Import SEO routes
+
+// Public Routes
+const projectPublicRoutes = require('./routes/public/projectPublicRoutes');
 
 // Load environment variables early
 dotenv.config();
@@ -18,7 +22,7 @@ const app = express();
 
 // Middleware setup
 const corsOptions = {
-  origin: 'http://localhost:5173', // Replace with your frontend URL
+  origin: ['http://localhost:5173', 'http://localhost:5174'],// Replace with your frontend URL
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
   allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
   credentials: true, // Allow credentials (cookies, authorization headers, etc.)
@@ -49,6 +53,9 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/users', userRoutes);
 app.use('/projects', projectRoutes); // Use project routes
 app.use('/seo', seoRoutes); // Use SEO routes
+
+// Use the public project routes
+app.use('/api/public/projects', projectPublicRoutes);
 
 // Error handling middleware (optional)
 app.use((err, req, res, next) => {

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { listUsers, deleteUser } from '../services/loginApi'; // Import listUsers and deleteUser functions
+import AddUser from '../components/AddUser'; // Import the new AddUser component
 
 const User = () => {
   const [users, setUsers] = useState([]); // State to hold user list
@@ -51,6 +52,7 @@ const User = () => {
   return (
     <div>
       <h1>User List</h1>
+      <AddUser onUserAdded={(newUser) => setUsers((prevUsers) => [...prevUsers, newUser])} /> {/* Use the AddUser component */}
       <table>
         <thead>
           <tr>

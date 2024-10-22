@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Projects', {
+    await queryInterface.createTable('projects', {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -42,12 +42,11 @@ module.exports = {
       },
       seoId: {
         type: Sequelize.INTEGER,
-        allowNull: false,
         references: {
-          model: 'SEOs', // Reference to the SEO table
+          model: 'SEOs', // Ensure this matches your SEO table name
           key: 'id',
         },
-        onDelete: 'CASCADE', // Delete project if the related SEO entry is deleted
+        allowNull: false,
       },
       createdAt: {
         type: Sequelize.DATE,
@@ -63,6 +62,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Projects');
+    await queryInterface.dropTable('projects');
   },
 };

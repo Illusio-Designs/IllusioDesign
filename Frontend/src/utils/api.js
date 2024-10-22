@@ -9,41 +9,47 @@ const api = axios.create({
     },
 });
 
-// Function to get all projects
-export const getAllProjects = async () => {
+// Function to get all public projects
+export const getAllPublicProjects = async () => {
     try {
         const response = await api.get('/public/projects'); // Adjust the endpoint as necessary
         return response.data; // Return the response data
     } catch (error) {
-        console.error('Error fetching projects:', error); // Log the error for debugging
-        throw error.response?.data?.error || 'Failed to fetch projects'; // Throw the error message
+        console.error('Error fetching public projects:', error); // Log the error for debugging
+        throw error.response?.data?.error || 'Failed to fetch public projects'; // Throw the error message
     }
 };
 
+// Function to get a project by title
+export const getProjectByTitle = async (title) => {
+    try {
+        const response = await api.get(`/public/projects/${title}`); // Adjust the endpoint as necessary
+        return response.data; // Return the response data
+    } catch (error) {
+        console.error('Error fetching project by title:', error); // Log the error for debugging
+        throw error.response?.data?.error || 'Failed to fetch project by title'; // Throw the error message
+    }
+};
+
+// Function to get all blogs (if needed)
 export const getAllBlogs = async () => {
     try {
         const response = await api.get('/public/blogs');
         return response.data;
     } catch (error) {
-        handleApiError(error, 'Failed to fetch blogs');
+        console.error('Error fetching blogs:', error); // Log the error for debugging
+        throw error.response?.data?.error || 'Failed to fetch blogs'; // Throw the error message
     }
 };
 
+// Function to get a blog by title (if needed)
 export const getBlogByTitle = async (title) => {
     try {
         const response = await api.get(`/public/blogs/title/${title}`);
         return response.data;
     } catch (error) {
-        handleApiError(error, 'Failed to fetch blog by title');
-    }
-};
-
-export const getProjectByTitle = async (title) => {
-    try {
-        const response = await api.get(`/public/projects/title/${title}`);
-        return response.data;
-    } catch (error) {
-        handleApiError(error, 'Failed to fetch project by title');
+        console.error('Error fetching blog by title:', error); // Log the error for debugging
+        throw error.response?.data?.error || 'Failed to fetch blog by title'; // Throw the error message
     }
 };
 
@@ -58,38 +64,39 @@ export const getSeoData = async (pageId) => {
     }
 };
 
-
+// Function to send public page path
 export const sendPublicPagePath = async (pathname) => {
-  try {
-    console.log('Sending pathname:', pathname); 
-    const response = await api.post('/public/page-paths', { path: pathname }); // Correct endpoint
-    console.log('Sent page path to backend:', response.data);
-    return response.data;
-  } catch (error) {
-    console.error('Error sending page path to backend:', error.response ? error.response.data : error.message);
-    throw error;
-  }
+    try {
+        console.log('Sending pathname:', pathname); 
+        const response = await api.post('/public/page-paths', { path: pathname }); // Correct endpoint
+        console.log('Sent page path to backend:', response.data);
+        return response.data;
+    } catch (error) {
+        console.error('Error sending page path to backend:', error.response ? error.response.data : error.message);
+        throw error;
+    }
 };
 
+// Function to fetch existing paths
 export const fetchExistingPaths = async () => {
-  try {
-    const response = await api.get('/public/page-paths'); // Correct endpoint
-    return response.data.map(pathObj => pathObj.path); 
-  } catch (error) {
-    console.error('Error fetching existing paths:', error);
-    return [];
-  }
+    try {
+        const response = await api.get('/public/page-paths'); // Correct endpoint
+        return response.data.map(pathObj => pathObj.path); 
+    } catch (error) {
+        console.error('Error fetching existing paths:', error);
+        return [];
+    }
 };
 
+// Function to fetch pages
 export const fetchPages = async () => {
-  try {
-    const response = await api.get('/page-paths'); // Assuming this endpoint is set up correctly
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching pages:', error.response ? error.response.data : error.message);
-    throw error;
-  }
+    try {
+        const response = await api.get('/page-paths'); // Assuming this endpoint is set up correctly
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching pages:', error.response ? error.response.data : error.message);
+        throw error;
+    }
 };
-  
-  
+
 export default api;

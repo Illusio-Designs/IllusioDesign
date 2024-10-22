@@ -1,17 +1,23 @@
 const { Project, SEO } = require('../../models'); // Adjust path if necessary
 const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
 
 // Create SEO and Project
 exports.createProject = async (req, res) => {
   try {
-    const { title, content, year, timeline, services, industry, website } = req.body;
-    
-    // Create SEO entry
-    const seoData = { title, description: content, url: website }; // Adjust description as needed
-    const seo = await SEO.create(seoData);
+    const { title, content, year, timeline, services, industry, website, seoTitle, seoDescription, seoUrl } = req.body;
+    const image = req.file ? req.file.filename : null; // Get the uploaded image path
 
-    // Create Project entry
-    const projectData = {
+    // Create a new SEO entry
+    const newSEO = await SEO.create({
+      title: seoTitle,
+      description: seoDescription,
+      url: seoUrl
+    });
+
+    // Create a new project with the associated SEO ID
+    const newProject = await Project.create({
       title,
       content,
       year,
@@ -19,27 +25,32 @@ exports.createProject = async (req, res) => {
       services,
       industry,
       website,
-      image: req.file ? req.file.filename : null, // Handle image upload
-      seoId: seo.id // Assuming there's a foreign key in the Project model
-    };
-    
-    const project = await Project.create(projectData);
-    
-    res.status(201).json({ message: 'Project created successfully', project });
+      image, // Save the image path to the database
+      seoId: newSEO.id // Associate the new SEO ID
+    });
+
+    res.status(201).json(newProject);
   } catch (error) {
     console.error('Error creating project:', error);
-    res.status(500).json({ message: 'Server error', error: error.message });
+    res.status(500).json({ message: 'Error creating project', error: error.message });
   }
 };
 
-// Get all projects
+// Get all projects with associated SEO data
 exports.getAllProjects = async (req, res) => {
   try {
-    const projects = await Project.findAll({ include: [SEO] }); // Include SEO data
+    const projects = await Project.findAll({
+      include: [{
+        model: SEO,
+        as: 'seo', // Use the alias defined in the association
+        attributes: ['id', 'title', 'description'] // Specify the fields you want to include
+      }]
+    });
+
     res.json(projects);
   } catch (error) {
     console.error('Failed to fetch projects:', error);
-    res.status(500).json({ message: 'Failed to fetch projects' });
+    res.status(500).json({ message: 'Failed to fetch projects', error: error.message });
   }
 };
 
@@ -67,7 +78,15 @@ exports.updateProjectById = async (req, res) => {
       return res.status(404).json({ message: 'Project not found' });
     }
 
-    // Update project fields
+    // Delete the old image if a new one is uploaded
+    if (req.file) {
+      const oldImagePath = path.join(__dirname, '../../uploads', project.image);
+      if (fs.existsSync(oldImagePath)) {
+        fs.unlinkSync(oldImagePath); // Delete the old image
+      }
+      project.image = req.file.filename; // Update with new image
+    }
+
     const { title, content, year, timeline, services, industry, website } = req.body;
     project.title = title;
     project.content = content;
@@ -76,7 +95,6 @@ exports.updateProjectById = async (req, res) => {
     project.services = services;
     project.industry = industry;
     project.website = website;
-    if (req.file) project.image = req.file.filename; // Handle image upload
 
     await project.save();
     res.json({ message: 'Project updated successfully', project });
@@ -85,19 +103,28 @@ exports.updateProjectById = async (req, res) => {
     res.status(500).json({ message: 'Failed to update project', error: error.message });
   }
 };
-
 // Delete project by ID
 exports.deleteProjectById = async (req, res) => {
   const projectId = req.params.id;
+
   try {
-    const result = await Project.destroy({ where: { id: projectId } });
-    if (!result) {
+    const project = await Project.findByPk(projectId);
+    if (!project) {
       return res.status(404).json({ message: 'Project not found' });
     }
+
+    // Delete project image if it exists
+    if (project.image) {
+      const imagePath = path.join(__dirname, '../../uploads', project.image);
+      if (fs.existsSync(imagePath)) {
+        fs.unlinkSync(imagePath); // Delete the image
+      }
+    }
+
+    await project.destroy(); // Delete project from the database
     res.json({ message: 'Project deleted successfully' });
   } catch (error) {
     console.error('Delete error:', error);
     res.status(500).json({ message: 'Failed to delete project', error: error.message });
   }
 };
-    

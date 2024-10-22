@@ -1,6 +1,7 @@
-const User = require('../../models/user');
+const { User } = require('../../models'); // Assuming you have an index.js in your models folder
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const fs = require('fs');
 const path = require('path');
 
 // Utility function to generate JWT token
@@ -74,11 +75,10 @@ exports.register = async (req, res) => {
 // Other controller methods remain the same...
 // Login user
 exports.login = async (req, res) => {
-  try {
-    const { email, password } = req.body;
+  const { email, password } = req.body;
 
-    // Find user by email
-    const user = await User.findOne({ where: { email } });
+  try {
+    const user = await User.findOne({ where: { email } }); // Ensure User is defined
     if (!user) {
       return res.status(400).json({ message: 'Invalid email or password.' });
     }
@@ -119,23 +119,29 @@ exports.listUsers = async (req, res) => {
 
 // Update user by ID
 exports.updateUserById = async (req, res) => {
-  const userId = req.params.id; // Get user ID from request parameters
-  const { username, email, password } = req.body; // Extract new values from request body
+  const userId = req.params.id;
+  const { username, email, password } = req.body;
 
   try {
-    // Find the user
     const user = await User.findByPk(userId);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Update user fields
+    // Delete the old image if a new one is uploaded
+    if (req.file) {
+      const oldImagePath = path.join(__dirname, '../../uploads', user.image);
+      if (fs.existsSync(oldImagePath)) {
+        fs.unlinkSync(oldImagePath); // Delete the old image
+      }
+      user.image = req.file.filename; // Update with new image
+    }
+
     if (username) user.username = username;
     if (email) user.email = email;
-    if (password) user.password = await bcrypt.hash(password, 10); // Hash new password
-    if (req.file) user.image = req.file.filename; // Update image if provided
+    if (password) user.password = await bcrypt.hash(password, 10);
 
-    await user.save(); // Save updated user
+    await user.save();
     res.json({ message: 'User updated successfully', user });
   } catch (error) {
     console.error('Update error:', error);
@@ -143,15 +149,26 @@ exports.updateUserById = async (req, res) => {
   }
 };
 
+
 // Delete user by ID
 exports.deleteUserById = async (req, res) => {
-  const userId = req.params.id; // Get user ID from request parameters
+  const userId = req.params.id;
 
   try {
-    const result = await User.destroy({ where: { id: userId } });
-    if (!result) {
+    const user = await User.findByPk(userId);
+    if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
+
+    // Delete user image if it exists
+    if (user.image) {
+      const imagePath = path.join(__dirname, '../../uploads', user.image);
+      if (fs.existsSync(imagePath)) {
+        fs.unlinkSync(imagePath); // Delete the image
+      }
+    }
+
+    await user.destroy(); // Delete user from the database
     res.json({ message: 'User deleted successfully' });
   } catch (error) {
     console.error('Delete error:', error);

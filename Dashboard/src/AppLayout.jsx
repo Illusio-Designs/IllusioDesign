@@ -8,10 +8,12 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import ProtectedRoute from './components/ProtectedRoute';
 import config from './config';
-import '../styles/App.css';
+import './styles/App.css';
 import EditUser from './components/editUser';
 import UserList from './pages/User';
 import Project from './pages/Project';
+import EditProject from './components/EditProject'; // Ensure the path is correct
+import AddUser from './components/AddUser'; // Import the new AddUser component
 
 const AppLayout = () => {
   const { isAuthenticated } = useAuth();
@@ -42,9 +44,17 @@ const AppLayout = () => {
               path="/user/edit/:id" 
               element={<ProtectedRoute element={<EditUser />} />} 
             />
-             <Route 
+            <Route 
               path="/project" 
               element={<ProtectedRoute element={<Project />} />} 
+            />
+            <Route 
+              path="/project/edit/:id" 
+              element={<ProtectedRoute element={<EditProject />} />} 
+            />
+            <Route 
+              path="/user/add" 
+              element={<ProtectedRoute element={<AddUser />} />} 
             />
             <Route path="/login" element={isAuthenticated ? <Navigate to="/home" /> : <Login />} />
           </Routes>
