@@ -39,6 +39,44 @@ api.interceptors.response.use(
   }
 );
 
+// api.js
+export const registerUser = async (formData) => {
+  try {
+    // Log the FormData contents for debugging
+    for (let pair of formData.entries()) {
+      console.log(pair[0] + ': ' + pair[1]); // Debug log
+    }
+
+    const response = await api.post('/users/register', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data', // Ensure correct content type
+      },
+    });
+
+    if (response.data.token) {
+      localStorage.setItem('token', response.data.token);
+    }
+    return response.data;
+  } catch (error) {
+    console.error('Registration Error:', error.response?.data || error.message);
+    throw error;
+  }
+};
+
+export const updateUser = async (id, formData) => {
+  try {
+    const response = await api.put(`/users/update/${id}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error updating user:', error);
+    throw error;
+  }
+};
+
 // Get user by ID
 export const getUserById = async (id) => {
   try {
@@ -50,30 +88,6 @@ export const getUserById = async (id) => {
   }
 };
 
-// Update user
-export const updateUser = async (id, data) => {
-  try {
-    const response = await api.put(`/users/update/${id}`, data);
-    return response.data;
-  } catch (error) {
-    console.error('Error updating user:', error);
-    throw error;
-  }
-};
-
-// Other existing functions...
-export const registerUser = async (formData) => {
-  try {
-    const response = await api.post('/users/register', formData);
-    if (response.data.token) {
-      localStorage.setItem('token', response.data.token);
-    }
-    return response.data;
-  } catch (error) {
-    console.error('Registration Error:', error.response?.data || error.message);
-    throw error;
-  }
-};
 
 export const loginUser = async ({ email, password }) => {
   try {

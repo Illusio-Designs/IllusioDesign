@@ -13,7 +13,6 @@ const Home = () => {
 
   return (
     <div className="home-page">
-      <h2>Welcome to the Dashboard</h2>
       <button onClick={handleLogout}>Logout</button> {/* Logout Button */}
     </div>
   );

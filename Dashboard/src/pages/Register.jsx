@@ -42,16 +42,16 @@ const Register = () => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
-
+  
     try {
       const submitData = new FormData();
       submitData.append('username', formData.username);
       submitData.append('email', formData.email);
       submitData.append('password', formData.password);
       if (image) {
-        submitData.append('image', image);
+        submitData.append('image', image); // Append image correctly
       }
-
+  
       await register(submitData);
       navigate('/');
     } catch (err) {
@@ -61,6 +61,7 @@ const Register = () => {
       setIsLoading(false);
     }
   };
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">

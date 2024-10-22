@@ -7,7 +7,10 @@ const Sidebar = () => {
     <nav className="sidebar">
       <ul>
         <li>
-          <Link to="/user">User</Link> {/* Updated link to /users */}
+          <Link to="/home">Home</Link>
+        </li>
+        <li>
+          <Link to="/user">User</Link>
         </li>
       </ul>
     </nav>
