@@ -33,7 +33,7 @@ const Register = () => {
         setError('Please upload an image file');
         return;
       }
-      setImage(file);
+      setImage(file); // Ensure the image is set
       setError('');
     }
   };
@@ -50,6 +50,8 @@ const Register = () => {
       submitData.append('password', formData.password);
       if (image) {
         submitData.append('image', image); // Append image correctly
+      } else {
+        console.error('No image selected'); // Debug log
       }
   
       await register(submitData);

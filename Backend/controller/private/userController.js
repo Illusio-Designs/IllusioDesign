@@ -1,9 +1,16 @@
-// userController.js
 const User = require('../../models/user');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const path = require('path');
 
+// Utility function to generate JWT token
+const generateToken = (userId) => {
+  return jwt.sign({ id: userId }, process.env.JWT_SECRET || 'your-secret-key', {
+    expiresIn: '1h',
+  });
+};
+
+// Register a new user
 exports.register = async (req, res) => {
   try {
     const { username, email, password } = req.body;
@@ -32,11 +39,8 @@ exports.register = async (req, res) => {
     };
 
     // Add image if it exists
-    // Check both req.file (for multer) and req.body.image (for FormData)
     if (req.file) {
-      // Store the complete path or URL that will be used to access the image
-      userData.image = `/uploads/user/${req.file.filename}`;
-      console.log('Image saved:', userData.image); // Debug log
+      userData.image = req.file.filename;
     }
 
     // Create a new user
@@ -47,7 +51,7 @@ exports.register = async (req, res) => {
       id: newUser.id,
       username: newUser.username,
       email: newUser.email,
-      image: newUser.image,
+      image: newUser.image
     };
 
     // Generate a token
@@ -64,48 +68,6 @@ exports.register = async (req, res) => {
       message: 'Server error', 
       error: error.message 
     });
-  }
-};
-
-// Update the updateUserById method as well
-exports.updateUserById = async (req, res) => {
-  const userId = req.params.id;
-  const { username, email, password } = req.body;
-
-  try {
-    const user = await User.findByPk(userId);
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    // Update user fields
-    if (username) user.username = username;
-    if (email) user.email = email;
-    if (password) user.password = await bcrypt.hash(password, 10);
-    
-    // Handle image update
-    if (req.file) {
-      user.image = `/uploads/user/${req.file.filename}`;
-      console.log('Updated image:', user.image); // Debug log
-    }
-
-    await user.save();
-    
-    // Remove password from response
-    const userResponse = {
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      image: user.image
-    };
-
-    res.json({ 
-      message: 'User updated successfully', 
-      user: userResponse 
-    });
-  } catch (error) {
-    console.error('Update error:', error);
-    res.status(500).json({ message: 'Failed to update user', error: error.message });
   }
 };
 
@@ -156,7 +118,30 @@ exports.listUsers = async (req, res) => {
 };
 
 // Update user by ID
+exports.updateUserById = async (req, res) => {
+  const userId = req.params.id; // Get user ID from request parameters
+  const { username, email, password } = req.body; // Extract new values from request body
 
+  try {
+    // Find the user
+    const user = await User.findByPk(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Update user fields
+    if (username) user.username = username;
+    if (email) user.email = email;
+    if (password) user.password = await bcrypt.hash(password, 10); // Hash new password
+    if (req.file) user.image = req.file.filename; // Update image if provided
+
+    await user.save(); // Save updated user
+    res.json({ message: 'User updated successfully', user });
+  } catch (error) {
+    console.error('Update error:', error);
+    res.status(500).json({ message: 'Failed to update user', error: error.message });
+  }
+};
 
 // Delete user by ID
 exports.deleteUserById = async (req, res) => {
