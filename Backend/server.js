@@ -7,6 +7,8 @@ const cors = require('cors'); // Import CORS
 const sequelize = require('./config/database');
 
 const userRoutes = require('./routes/private/userRoutes');
+const projectRoutes = require('./routes/private/projectRoutes'); // Import project routes
+const seoRoutes = require('./routes/private/seoRoutes'); // Import SEO routes
 
 // Load environment variables early
 dotenv.config();
@@ -45,6 +47,8 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Private routes
 app.use('/users', userRoutes);
+app.use('/projects', projectRoutes); // Use project routes
+app.use('/seo', seoRoutes); // Use SEO routes
 
 // Error handling middleware (optional)
 app.use((err, req, res, next) => {

@@ -1,10 +1,17 @@
 const multer = require('multer');
 const path = require('path');
 
-// Configure Multer
+// Configure Multer storage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/user'); // Uploads folder
+    // Choose the destination folder based on the field name
+    if (file.fieldname === 'projectImage') {
+      cb(null, 'uploads/project'); // Uploads folder for projects
+    } else if (file.fieldname === 'userImage') {
+      cb(null, 'uploads/user'); // Uploads folder for users
+    } else {
+      cb(new Error('Invalid field name for upload'), false);
+    }
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -12,6 +19,7 @@ const storage = multer.diskStorage({
   }
 });
 
+// File filter function
 const fileFilter = (req, file, cb) => {
   const allowedTypes = /jpeg|jpg|png|gif/;
   const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
