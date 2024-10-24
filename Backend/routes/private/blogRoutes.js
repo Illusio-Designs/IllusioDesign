@@ -1,4 +1,3 @@
-// routes/blogRoutes.js
 const express = require('express');
 const blogController = require('../../controller/private/blogController');
 const upload = require('../../middleware/upload');
@@ -6,7 +5,7 @@ const authMiddleware = require('../../middleware/auth'); // Assuming you have an
 const router = express.Router();
 
 // Create a new blog post (protected route with file upload)
-router.post('/',
+router.post('/', 
   authMiddleware, 
   upload.single('blogImage'), // for uploading a single image
   blogController.createBlog
@@ -19,14 +18,14 @@ router.get('/', blogController.getAllBlogs);
 router.get('/:id', blogController.getBlogById);
 
 // Update a blog post by ID (protected route with file upload)
-router.put('/:id',
+router.put('/:id', 
   authMiddleware, 
   upload.single('blogImage'), 
   blogController.updateBlogById
 );
 
 // Delete a blog post by ID (protected route)
-router.delete('/:id',
+router.delete('/:id', 
   authMiddleware, 
   blogController.deleteBlogById
 );

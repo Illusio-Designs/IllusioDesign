@@ -37,6 +37,10 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
       },
+      image: {
+        type: Sequelize.STRING, // Store the image filename or path
+        allowNull: true, // Allow null if an image is optional
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
