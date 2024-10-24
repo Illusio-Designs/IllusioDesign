@@ -10,6 +10,7 @@ const sequelize = require('./config/database');
 const userRoutes = require('./routes/private/userRoutes');
 const projectRoutes = require('./routes/private/projectRoutes'); // Import project routes
 const seoRoutes = require('./routes/private/seoRoutes'); // Import SEO routes
+const blogRoutes = require('./routes/private/blogRoutes');
 
 // Public Routes
 const projectPublicRoutes = require('./routes/public/projectPublicRoutes');
@@ -53,6 +54,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/users', userRoutes);
 app.use('/projects', projectRoutes); // Use project routes
 app.use('/seo', seoRoutes); // Use SEO routes
+app.use('/blog', blogRoutes);
 
 // Use the public project routes
 app.use('/api/public/projects', projectPublicRoutes);
