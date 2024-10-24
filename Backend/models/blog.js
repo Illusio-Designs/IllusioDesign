@@ -1,39 +1,58 @@
-module.exports = (sequelize, DataTypes) => {
-  const Blog = sequelize.define('Blog', {
+const { Model, DataTypes } = require('sequelize');
+
+module.exports = (sequelize) => {
+  class Blog extends Model {
+    static associate(models) {
+      Blog.belongsTo(models.SEO, {
+        foreignKey: 'seoId',
+        as: 'seo'
+      });
+    }
+  }
+
+  Blog.init({
     title: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false
     },
     category: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false
     },
     publish_date: {
       type: DataTypes.DATE,
-      allowNull: false,
+      allowNull: false
     },
     content: {
       type: DataTypes.TEXT,
-      allowNull: false,
+      allowNull: false
     },
     tags: {
       type: DataTypes.STRING,
-      allowNull: true, // Allow null if tags are optional
+      allowNull: true,
+      defaultValue: ''
     },
     image: {
-      type: DataTypes.STRING, // Store the image filename or path
-      allowNull: true, // Allow null if the image is optional
+      type: DataTypes.STRING,
+      allowNull: true
     },
+    author: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    seoId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'SEOs',
+        key: 'id'
+      }
+    }
+  }, {
+    sequelize,
+    modelName: 'Blog',
+    tableName: 'blogs'
   });
-
-  Blog.associate = (models) => {
-    Blog.belongsTo(models.SEO, {
-      foreignKey: 'seoId',
-      as: 'seo', // Alias for the relationship
-      onUpdate: 'CASCADE',
-      onDelete: 'SET NULL', // Behavior when the SEO record is deleted
-    });
-  };
 
   return Blog;
 };

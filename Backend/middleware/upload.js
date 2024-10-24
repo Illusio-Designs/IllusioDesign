@@ -1,4 +1,3 @@
-// middleware/upload.js
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
@@ -10,37 +9,42 @@ const createUploadDir = (dir) => {
   }
 };
 
-// Create upload directories
-const userUploadDir = 'uploads/user';
-const projectUploadDir = 'uploads/project';
-const blogUploadDir = 'uploads/blog'; // New blog upload directory
-createUploadDir(userUploadDir);
-createUploadDir(projectUploadDir);
-createUploadDir(blogUploadDir); // Ensure blog directory exists
+// Define upload directories for different entities
+const uploadDirs = {
+  user: 'uploads/user',
+  project: 'uploads/project',
+  blog: 'uploads/blog' // Add blog upload directory
+};
 
-// Configure Multer storage
+// Create all necessary upload directories
+Object.values(uploadDirs).forEach(createUploadDir);
+
+// Configure Multer storage with dynamic destination based on field name
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    // Dynamically set upload directory based on the field name
-    if (file.fieldname === 'image') {
-      cb(null, userUploadDir);
-    } else if (file.fieldname === 'projectImage') {
-      cb(null, projectUploadDir);
-    } else if (file.fieldname === 'blogImage') { // New field for blog image
-      cb(null, blogUploadDir);
-    } else {
-      cb(new Error('Invalid field name'), false);
+    let uploadPath;
+
+    // Determine the upload directory based on the field name
+    switch (file.fieldname) {
+      case 'image': // For blog images
+        uploadPath = uploadDirs.blog; // Store images in uploads/blog
+        break;
+      default:
+        return cb(new Error('Invalid field name'), false);
     }
+
+    cb(null, uploadPath);
   },
   filename: (req, file, cb) => {
     const timestamp = Date.now();
-    const extension = path.extname(file.originalname);
-    const filename = `image-${timestamp}${extension}`;
+    const extension = path.extname(file.originalname).toLowerCase();
+    const originalName = path.basename(file.originalname, extension); // Get original file name without extension
+    const filename = `${originalName}-${timestamp}${extension}`; // Use original name for clarity
     cb(null, filename);
   }
 });
 
-// File filter for images
+// File filter for image validation
 const fileFilter = (req, file, cb) => {
   const allowedTypes = /jpeg|jpg|png|gif/;
   const mimetype = allowedTypes.test(file.mimetype);
@@ -49,16 +53,16 @@ const fileFilter = (req, file, cb) => {
   if (mimetype && extname) {
     cb(null, true);
   } else {
-    cb(new Error('Only image files are allowed!'), false);
+    cb(new Error('Only image files (jpeg, jpg, png, gif) are allowed!'), false);
   }
 };
 
-// Create multer instance
+// Create multer instance with storage and file filter
 const upload = multer({
   storage: storage,
   fileFilter: fileFilter,
   limits: {
-    fileSize: 5 * 1024 * 1024 // 5MB
+    fileSize: 5 * 1024 * 1024 // Limit file size to 5MB
   }
 });
 

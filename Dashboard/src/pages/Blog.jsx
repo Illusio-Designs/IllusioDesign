@@ -1,239 +1,113 @@
-import React, { useEffect, useState } from 'react';
-import { listBlogs, createBlog, deleteBlog, updateBlog } from '../services/blogApi'; // Import the API functions
-import QuillEditor from '../components/QuillEditor'; // Import the QuillEditor component
-import DOMPurify from 'dompurify'; // Import DOMPurify for sanitizing HTML
+import React, { useState, useEffect } from 'react';
+import { getAllBlogs, deleteBlog } from '../services/blogApi'; // Use getAllBlogs instead of listBlogs
+import EditBlog from '../components/EditBlog'; // Modal component for adding/editing blogs
 
-const Blog = () => {
-  const [blogs, setBlogs] = useState([]); // State to hold the list of blogs
-  const [newBlog, setNewBlog] = useState({
-    title: '',
-    content: '',
-    author: '',
-    category: '',
-    tags: '',
-    publishedDate: '',
-    blogImage: null,
-    seoTitle: '',
-    seoDescription: '',
-    seoUrl: ''
-  }); // State for new blog form
-  const [showForm, setShowForm] = useState(false); // State to toggle the form visibility
-  const [isEditing, setIsEditing] = useState(false); // State to check if we are in editing mode
-  const [editBlogId, setEditBlogId] = useState(null); // Store blog ID for editing
+const BlogPage = () => {
+  const [blogs, setBlogs] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedBlog, setSelectedBlog] = useState(null); // Blog selected for editing
 
-  // Fetch the list of blogs when the component mounts
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await listBlogs();
-        setBlogs(response); // Set the blogs state with the fetched data
+        const fetchedBlogs = await getAllBlogs(); // Updated to use getAllBlogs
+        setBlogs(fetchedBlogs);
       } catch (error) {
         console.error('Error fetching blogs:', error);
       }
     };
-
     fetchBlogs();
   }, []);
 
-  // Handle input changes for other form fields
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewBlog((prev) => ({ ...prev, [name]: value }));
+  const handleAddBlog = () => {
+    setSelectedBlog(null); // Clear the selected blog for adding a new one
+    setShowModal(true); // Show modal
   };
 
-  // Handle content change from QuillEditor
-  const handleContentChange = (content) => {
-    setNewBlog((prev) => ({ ...prev, content }));
+  const handleEditBlog = (blog) => {
+    setSelectedBlog(blog); // Set the blog to be edited
+    setShowModal(true); // Show modal
   };
 
-  // Handle file input change for image upload
-  const handleFileChange = (e) => {
-    setNewBlog((prev) => ({ ...prev, blogImage: e.target.files[0] })); // Store the file object
-  };
-
-  // Handle form submission to create or update a blog
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const formData = new FormData(); // Create a FormData object to handle file uploads
-
-    // Append blog data to FormData except for the image if it hasn't been changed
-    for (const key in newBlog) {
-      if (key !== 'blogImage') {
-        formData.append(key, newBlog[key]);
+  const handleDeleteBlog = async (id) => {
+    const confirmDelete = window.confirm('Are you sure you want to delete this blog?');
+    if (confirmDelete && id) {
+      try {
+        await deleteBlog(id); // Call to backend to delete the blog and associated SEO data
+        setBlogs(blogs.filter(blog => blog.id !== id)); // Remove the blog from the state
+        console.log(`Blog with ID ${id} deleted successfully.`);
+      } catch (error) {
+        console.error('Error deleting blog:', error);
+        alert('Failed to delete blog. Please try again.');
       }
-    }
-
-    // Only append the image if it's present (i.e., the user has uploaded a new one)
-    if (newBlog.blogImage) {
-      formData.append('blogImage', newBlog.blogImage); // Append the image file
-    }
-
-    try {
-      if (isEditing) {
-        await updateBlog(editBlogId, formData); // Call update API if editing
-        setBlogs((prev) =>
-          prev.map((blog) =>
-            blog.id === editBlogId ? { ...blog, ...newBlog } : blog
-          )
-        ); // Update the blog list
-        setIsEditing(false); // Reset editing state
-      } else {
-        const createdBlog = await createBlog(formData); // Send FormData to the API
-        setBlogs((prev) => [...prev, createdBlog]); // Add the new blog to the list
-      }
-
-      // Reset the form after submission
-      setNewBlog({
-        title: '',
-        content: '',
-        author: '',
-        category: '',
-        tags: '',
-        publishedDate: '',
-        blogImage: null,
-        seoTitle: '',
-        seoDescription: '',
-        seoUrl: ''
-      });
-      setShowForm(false); // Hide the form after submission
-    } catch (error) {
-      console.error('Error submitting blog:', error);
+    } else {
+      console.error('Invalid blog ID:', id);
     }
   };
+  
 
-  // Handle edit button click
-  const handleEdit = (blog) => {
-    setIsEditing(true);
-    setEditBlogId(blog.id); // Set blog ID for editing
-    setNewBlog({
-      title: blog.title,
-      content: blog.content,
-      author: blog.author,
-      category: blog.category,
-      tags: blog.tags,
-      publishedDate: blog.publishedDate,
-      blogImage: blog.blogImage,
-      seoTitle: blog.seo?.title || '',
-      seoDescription: blog.seo?.description || '',
-      seoUrl: blog.seo?.url || ''
-    });
-    setShowForm(true); // Show the form in edit mode
-  };
-
-  // Handle delete button click
-  const handleDelete = async (blogId) => {
-    try {
-      await deleteBlog(blogId); // Call the API to delete the blog
-      setBlogs((prev) => prev.filter((blog) => blog.id !== blogId)); // Remove the deleted blog from the list
-    } catch (error) {
-      console.error('Error deleting blog:', error);
-    }
-  };
 
   return (
-    <div>
-      <h1>Blog Management</h1>
-      <button onClick={() => setShowForm(true)}>Add New Blog</button>
+    <div className="container mx-auto p-4">
+      <div className="flex justify-between mb-4">
+        <h2 className="text-xl font-bold">Blogs</h2>
+        <button
+          className="bg-green-500 text-white px-4 py-2 rounded"
+          onClick={handleAddBlog}
+        >
+          Add Blog
+        </button>
+      </div>
+      <table className="min-w-full bg-white">
+        <thead>
+          <tr>
+            <th className="py-2">Title</th>
+            <th className="py-2">Category</th>
+            <th className="py-2">Author</th>
+            <th className="py-2">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {blogs.map(blog => (
+            <tr key={blog.id} className="border-t">
+              <td className="py-2">{blog.title}</td>
+              <td className="py-2">{blog.category}</td>
+              <td className="py-2">{blog.author}</td>
+              <td className="py-2 flex space-x-2">
+                <button
+                  className="bg-blue-500 text-white px-2 py-1 rounded"
+                  onClick={() => handleEditBlog(blog)}
+                >
+                  Edit
+                </button>
+                <button
+                  className="bg-red-500 text-white px-2 py-1 rounded"
+                  onClick={() => handleDeleteBlog(blog.id)} // Ensure blog.id is used here
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
 
-      {showForm && (
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="title"
-            placeholder="Blog Title"
-            value={newBlog.title}
-            onChange={handleInputChange}
-            required
-          />
-          <QuillEditor
-            name="content"
-            placeholder="Blog Content"
-            value={newBlog.content}
-            onChange={handleContentChange}
-            required
-          />
-          <input
-            type="text"
-            name="author"
-            placeholder="Author"
-            value={newBlog.author}
-            onChange={handleInputChange}
-            required
-          />
-          <input
-            type="text"
-            name="category"
-            placeholder="Category"
-            value={newBlog.category}
-            onChange={handleInputChange}
-            required
-          />
-          <input
-            type="text"
-            name="tags"
-            placeholder="Tags (comma separated)"
-            value={newBlog.tags}
-            onChange={handleInputChange}
-          />
-          <input
-            type="date"
-            name="publishedDate"
-            value={newBlog.publishedDate}
-            onChange={handleInputChange}
-            required
-          />
-
-          {/* Image Upload */}
-          <input
-            type="file"
-            name="blogImage"
-            onChange={handleFileChange}
-            accept="image/*"
-          />
-
-          {/* SEO Fields */}
-          <input
-            type="text"
-            name="seoTitle"
-            placeholder="SEO Title"
-            value={newBlog.seoTitle}
-            onChange={handleInputChange}
-          />
-          <input
-            type="text"
-            name="seoDescription"
-            placeholder="SEO Description"
-            value={newBlog.seoDescription}
-            onChange={handleInputChange}
-          />
-          <input
-            type="text"
-            name="seoUrl"
-            placeholder="SEO URL"
-            value={newBlog.seoUrl}
-            onChange={handleInputChange}
-          />
-
-          <button type="submit">{isEditing ? 'Update' : 'Create'} Blog</button>
-        </form>
+        </tbody>
+      </table>
+      {showModal && (
+        <EditBlog
+          blog={selectedBlog} // Pass the selected blog for editing or null for adding
+          onClose={() => setShowModal(false)}
+          onBlogUpdated={(updatedBlog) => {
+            if (selectedBlog) {
+              setBlogs(blogs.map(b => (b.id === updatedBlog.id ? updatedBlog : b)));
+            } else {
+              setBlogs([...blogs, updatedBlog]);
+            }
+            setShowModal(false);
+          }}
+        />
       )}
-
-      {/* Blog List */}
-      <ul>
-        {blogs.map((blog) => (
-          <li key={blog.id}>
-            <h2>{blog.title}</h2>
-            <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(blog.content) }} />
-            <p>Author: {blog.author}</p>
-            <p>Category: {blog.category}</p>
-            <p>Published Date: {new Date(blog.publishedDate).toLocaleDateString()}</p>
-            <button onClick={() => handleEdit(blog)}>Edit</button>
-            <button onClick={() => handleDelete(blog.id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
     </div>
   );
 };
 
-export default Blog;
+export default BlogPage;

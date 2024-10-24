@@ -1,0 +1,23 @@
+/* src/styles/Blog.css */
+
+.blog-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Space between blog boxes */
+}
+
+.blog-box {
+    border: 1px solid #ccc; /* Border for each blog box */
+    border-radius: 5px; /* Rounded corners */
+    padding: 15px; /* Padding inside the box */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.blog-image {
+    max-width: 100%; /* Responsive image */
+    height: auto; /* Maintain aspect ratio */
+}
+
+.blog-content {
+    margin-top: 10px; /* Space above content */
+}

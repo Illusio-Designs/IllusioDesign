@@ -1,6 +1,8 @@
+// src/pages/BlogInside.jsx
+
 import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
-import { getBlogByTitle } from '../utils/api';
+import { getPublicBlogByTitle } from '../utils/api';
 
 const BlogInside = () => {
     const [blog, setBlog] = useState(null);
@@ -10,7 +12,7 @@ const BlogInside = () => {
     useEffect(() => {
         const fetchBlog = async () => {
             try {
-                const data = await getBlogByTitle('example-title'); // Replace 'example-title' with the actual title
+                const data = await getPublicBlogByTitle('example-title'); // Replace 'example-title' with the actual title or use routing to get the title dynamically
                 setBlog(data);
             } catch (error) {
                 setError(error.message);

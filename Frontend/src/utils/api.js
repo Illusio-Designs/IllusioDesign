@@ -31,8 +31,8 @@ export const getProjectByTitle = async (title) => {
     }
 };
 
-// Function to get all blogs (if needed)
-export const getAllBlogs = async () => {
+// Function to get all blogs
+export const getAllPublicBlogs = async () => {
     try {
         const response = await api.get('/public/blogs');
         return response.data;
@@ -42,8 +42,8 @@ export const getAllBlogs = async () => {
     }
 };
 
-// Function to get a blog by title (if needed)
-export const getBlogByTitle = async (title) => {
+// Function to get a blog by title
+export const getPublicBlogByTitle = async (title) => {
     try {
         const response = await api.get(`/public/blogs/title/${title}`);
         return response.data;

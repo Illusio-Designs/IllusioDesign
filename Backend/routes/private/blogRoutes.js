@@ -1,33 +1,22 @@
 const express = require('express');
-const blogController = require('../../controller/private/blogController');
-const upload = require('../../middleware/upload');
-const authMiddleware = require('../../middleware/auth'); // Assuming you have an auth middleware
 const router = express.Router();
+const blogController = require('../../controller/private/blogController'); // Adjust the path to your controller
+const upload = require('../../middleware/upload'); // Adjust the path to your multer config
+const authenticate = require('../../middleware/auth'); // Adjust the path to your middleware
 
-// Create a new blog post (protected route with file upload)
-router.post('/', 
-  authMiddleware, 
-  upload.single('blogImage'), // for uploading a single image
-  blogController.createBlog
-);
+// Route to create a new blog (with image upload)
+router.post('/', authenticate, upload.single('image'), blogController.createBlog);
 
-// Get all blog posts
-router.get('/', blogController.getAllBlogs);
+// Route to update a blog by ID (with optional image upload)
+router.put('/:id', authenticate, upload.single('image'), blogController.updateBlogById);
 
-// Get a single blog post by ID
-router.get('/:id', blogController.getBlogById);
+// Route to get a blog by ID
+router.get('/:id', authenticate, blogController.getBlogById);
 
-// Update a blog post by ID (protected route with file upload)
-router.put('/:id', 
-  authMiddleware, 
-  upload.single('blogImage'), 
-  blogController.updateBlogById
-);
+// Route to delete a blog by ID
+router.delete('/:id', authenticate, blogController.deleteBlogById);
 
-// Delete a blog post by ID (protected route)
-router.delete('/:id', 
-  authMiddleware, 
-  blogController.deleteBlogById
-);
+// Route to get all blogs
+router.get('/', authenticate, blogController.getAllBlogs);
 
 module.exports = router;
