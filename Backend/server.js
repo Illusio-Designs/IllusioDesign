@@ -12,6 +12,7 @@ const userRoutes = require('./routes/private/userRoutes');
 const projectRoutes = require('./routes/private/projectRoutes');
 const seoRoutes = require('./routes/private/seoRoutes');
 const blogRoutes = require('./routes/private/blogRoutes');
+const proposalRoutes = require('./routes/private/proposalRoutes');
 
 // Public Routes
 const projectPublicRoutes = require('./routes/public/projectPublicRoutes');
@@ -95,6 +96,7 @@ app.use('/users', userRoutes);
 app.use('/projects', projectRoutes);
 app.use('/seo', seoRoutes);
 app.use('/blog', blogRoutes);
+app.use('/proposals', proposalRoutes);
 
 // Public routes
 app.use('/api/public/projects', projectPublicRoutes);
