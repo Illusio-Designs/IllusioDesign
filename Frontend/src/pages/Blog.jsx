@@ -57,7 +57,7 @@ const Blog = () => {
                         <div className="grid grid-cols-3 gap-4 max-lg:grid-cols-1">
                             {blogs.map((blog) => (
                                 <div key={blog.id} className="blog-box mx-3">
-                                    <Link to={`/blog/${blog.id}`}>
+                                    <Link to={`/blog-inside/${blog.title}`}>
                                         <div className="overflow-hidden relative">
                                             <img 
                                                 className="duration-1000 hover:scale-110 block w-full h-full object-cover" 

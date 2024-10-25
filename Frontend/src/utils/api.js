@@ -45,7 +45,7 @@ export const getAllPublicBlogs = async () => {
 // Function to get a blog by title
 export const getPublicBlogByTitle = async (title) => {
     try {
-        const response = await api.get(`/public/blogs/title/${title}`);
+        const response = await api.get(`/public/blogs/${title}`);
         return response.data;
     } catch (error) {
         console.error('Error fetching blog by title:', error); // Log the error for debugging

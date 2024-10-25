@@ -34,9 +34,6 @@ function App() {
       <Route path="/project-inside/:title" element={<ProjectInside />} />
       <Route path="/blog" element={<Blog />} />
       <Route path="/blog-inside/:title" element={<BlogInside />} />
-      {dynamicPages.map(page => (
-        <Route key={`dynamic-${page.id}`} path={`/${page.path}`} element={<BlogInside />} />
-      ))}
     </Routes>
   );
 }

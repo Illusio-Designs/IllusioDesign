@@ -4,7 +4,7 @@ const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
 const path = require('path');
 const cors = require('cors');
-const helmet = require('helmet'); // Import Helmet for security headers
+const helmet = require('helmet');
 const sequelize = require('./config/database');
 
 // Private routes
@@ -23,13 +23,33 @@ dotenv.config();
 // Create an instance of the express app
 const app = express();
 
-// Security middleware
-app.use(helmet()); // Set secure headers
+// Security middleware with customized Helmet configuration
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      imgSrc: ["'self'", "data:", "blob:", "http:", "https:"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      connectSrc: ["'self'", "http:", "https:"],
+    },
+  },
+  crossOriginResourcePolicy: { policy: "cross-origin" },
+  crossOriginEmbedderPolicy: false,
+}));
 
 // CORS setup
+const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174'];
+
 const corsOptions = {
-  origin: ['http://localhost:5173', 'http://localhost:5174'], // Replace with your frontend URLs
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
   preflightContinue: false,
@@ -38,23 +58,37 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(cookieParser());
-app.use(express.json()); // Parse JSON bodies
-app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
+app.use(express.json({ limit: '50mb' })); // Increased limit for larger payloads
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // Set up session
 app.use(session({
-  secret: process.env.SESSION_SECRET, // Secret from .env
+  secret: process.env.SESSION_SECRET || 'your-fallback-secret-key-here',
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
   cookie: {
-    secure: process.env.NODE_ENV === 'production', // Secure in production
-    httpOnly: true, // Prevent client-side JavaScript from accessing cookies
-    maxAge: 1000 * 60 * 60 * 2 // Cookie expires in 2 hours
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    sameSite: 'lax',
+    maxAge: 1000 * 60 * 60 * 2 // 2 hours
   }
 }));
 
-// Serve static files from 'uploads'
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// Custom middleware to handle static file requests
+app.use('/uploads', (req, res, next) => {
+  res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+  res.setHeader('Access-Control-Allow-Origin', allowedOrigins.join(', '));
+  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  
+  // Handle OPTIONS requests
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(204);
+  }
+  
+  next();
+}, express.static(path.join(__dirname, 'uploads')));
 
 // Private routes
 app.use('/users', userRoutes);
@@ -66,28 +100,69 @@ app.use('/blog', blogRoutes);
 app.use('/api/public/projects', projectPublicRoutes);
 app.use('/api/public/blogs', blogPublicRoutes);
 
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
 // Error handling for unknown routes (404)
-app.use((req, res, next) => {
-  res.status(404).json({ message: 'Route not found!' });
+app.use((req, res) => {
+  res.status(404).json({ 
+    status: 'error',
+    message: 'Route not found!',
+    path: req.originalUrl 
+  });
 });
 
 // General error handling middleware
 app.use((err, req, res, next) => {
-  console.error(err.stack); // Log stack trace for debugging
-  res.status(500).json({ message: 'Something went wrong!', error: err.message });
+  console.error(`[${new Date().toISOString()}] Error:`, err);
+  
+  const status = err.status || 500;
+  const message = process.env.NODE_ENV === 'production' 
+    ? 'An internal server error occurred'
+    : err.message;
+
+  res.status(status).json({
+    status: 'error',
+    message,
+    ...(process.env.NODE_ENV !== 'production' && { stack: err.stack })
+  });
 });
 
 // Define the port
 const PORT = process.env.PORT || 3000;
 
-// Sync database and start server
-sequelize.sync()
-  .then(() => {
-    console.log('Database & tables created!');
+// Database connection with retry logic
+const connectWithRetry = async (retries = 5, interval = 5000) => {
+  for (let i = 0; i < retries; i++) {
+    try {
+      await sequelize.sync();
+      console.log('Database connection established successfully');
+      return true;
+    } catch (err) {
+      console.error(`Database connection attempt ${i + 1} failed:`, err);
+      if (i === retries - 1) throw err;
+      await new Promise(resolve => setTimeout(resolve, interval));
+    }
+  }
+  return false;
+};
+
+// Start server
+const startServer = async () => {
+  try {
+    await connectWithRetry();
+    
     app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
+      console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
     });
-  })
-  .catch(err => {
-    console.error('Unable to connect to the database:', err);
-  });
+  } catch (err) {
+    console.error('Failed to start server:', err);
+    process.exit(1);
+  }
+};
+
+startServer();
+
+module.exports = app; // Export for testing
