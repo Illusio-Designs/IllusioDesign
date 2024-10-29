@@ -1,158 +1,346 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { updateUser, getUserById } from '../services/loginApi';
-import apiUrl from '../config';
+import { createBlog, updateBlog } from '../services/blogApi';
+import QuillEditor from './QuillEditor';
 
-const EditUser = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '', // Optional for update
+const EditBlog = ({ blog, onClose, onBlogUpdated }) => {
+  const [blogData, setBlogData] = useState({
+    title: '',
+    category: '',
+    keywords: '',
+    publish_date: new Date().toISOString().split('T')[0],
+    content: '',
+    tags: '',
+    author: '',
+    meta_description: '',
+    slug: '',
+    canonical_url: '',
+    image_alt_text: '', // Added image_alt_text here
+    focus_keyword: '',
+    excerpt: '',
   });
+
   const [image, setImage] = useState(null);
-  const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [currentImage, setCurrentImage] = useState('');
+  const [imagePreview, setImagePreview] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState({ text: '', type: '' });
 
-  // Fetch current user data
+  const requiredFields = ['title', 'category', 'publish_date', 'content', 'author', 'slug'];
+
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const user = await getUserById(id); // Use the new function here
-        setFormData({
-          username: user.username,
-          email: user.email,
-          password: '', // Leave password empty
-        });
-        setCurrentImage(user.image);
-      } catch (err) {
-        console.error('Error fetching user:', err);
-        setError('Failed to load user data');
-      }
-    };
+    if (blog) {
+      const formattedDate = blog.publish_date
+        ? new Date(blog.publish_date).toISOString().split('T')[0]
+        : new Date().toISOString().split('T')[0];
 
-    fetchUserData();
-  }, [id]);
+      setBlogData({
+        title: blog.title || '',
+        category: blog.category || '',
+        keywords: blog.keywords || '',
+        publish_date: formattedDate,
+        content: blog.content || '',
+        tags: blog.tags || '',
+        author: blog.author || '',
+        meta_description: blog.meta_description || '',
+        slug: blog.slug || (blog.title ? blog.title.toLowerCase().replace(/[^a-z0-9]+/g, '-') : ''),
+        canonical_url: blog.canonical_url || '',
+        image_alt_text: blog.image_alt_text || '', // Populate image_alt_text from blog
+        focus_keyword: blog.focus_keyword || '',
+        excerpt: blog.excerpt || '',
+      });
+
+      if (blog.image) {
+        setImagePreview(blog.image);
+      }
+    }
+  }, [blog]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value
-    }));
+    setBlogData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleImageChange = (e) => {
+  const handleFileChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      if (file.size > 5 * 1024 * 1024) { // 5MB limit
-        setError('File size should be less than 5MB');
-        return;
-      }
-      if (!file.type.match('image.*')) {
-        setError('Please upload an image file');
-        return;
-      }
+    if (file && file.type.startsWith('image/')) {
       setImage(file);
-      setError('');
+      setImagePreview(URL.createObjectURL(file));
+    } else {
+      setMessage({ text: 'Please select a valid image file', type: 'error' });
     }
+  };
+
+  const handleQuillChange = (content) => {
+    setBlogData((prev) => ({ ...prev, content }));
+  };
+
+  const validateBlogData = (data) => {
+    const missingFields = requiredFields.filter((field) => !data[field]);
+    if (missingFields.length > 0) {
+      setMessage({ 
+        text: `Missing required fields: ${missingFields.join(', ')}`, 
+        type: 'error' 
+      });
+      return false;
+    }
+    return true;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
-    setError('');
-
-    // Create FormData object
-    const updateFormData = new FormData();
-
-    // Only append fields that have values
-    if (formData.username) updateFormData.append('username', formData.username);
-    if (formData.email) updateFormData.append('email', formData.email);
-    if (formData.password) updateFormData.append('password', formData.password);
-    if (image) updateFormData.append('image', image);
-
-    try {
-      await updateUser(id, updateFormData);
-      navigate('/user'); // Redirect to users list after successful update
-    } catch (err) {
-      console.error('Update error:', err);
-      setError(err.response?.data?.message || 'Update failed. Please try again.');
-    } finally {
-      setIsLoading(false);
+    setLoading(true);
+    setMessage({ text: '', type: '' });
+ 
+    if (!validateBlogData(blogData)) {
+       setLoading(false);
+       return;
     }
-  };
+ 
+    console.log('blogData:', blogData); // Check if fields are correct
+    console.log('image:', image); // Check if image is set correctly
+ 
+    try {
+       const formData = new FormData();
+       Object.entries(blogData).forEach(([key, value]) => {
+          formData.append(key, value || '');
+       });
+       if (image) formData.append('blogimage', image);
+ 
+       console.log('formData before sending:', formData); // Check FormData contents
+ 
+       const response = blog
+          ? await updateBlog(blog.id, formData)
+          : await createBlog(formData);
+ 
+       console.log('Response from server:', response); // Check server response
+       
+       setMessage({ text: blog ? 'Blog updated successfully!' : 'Blog created successfully!', type: 'success' });
+       if (onBlogUpdated) onBlogUpdated(response.blog || response);
+       setTimeout(() => { onClose(); }, 1500);
+    } catch (error) {
+       console.log('Error:', error); // Log error details
+       setMessage({ text: error.response?.data?.message || 'Error saving blog', type: 'error' });
+    } finally {
+       setLoading(false);
+    }
+ };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Edit User
+    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 overflow-y-auto">
+      <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-4xl my-8">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-bold">
+            {blog ? 'Edit Blog' : 'Add Blog'}
           </h2>
+          <button 
+            onClick={onClose}
+            className="text-gray-500 hover:text-gray-700"
+          >
+            ✕
+          </button>
         </div>
-        
-        {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-            <span className="block sm:inline">{error}</span>
+
+        {message.text && (
+          <div className={`p-4 mb-4 rounded ${
+            message.type === 'success' 
+              ? 'bg-green-100 text-green-700' 
+              : 'bg-red-100 text-red-700'
+          }`}>
+            {message.text}
           </div>
         )}
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="rounded-md shadow-sm -space-y-px">
-            <div>
-              <input
-                name="username"
-                type="text"
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Username"
-                value={formData.username}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <input
-                name="email"
-                type="email"
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Email"
-                value={formData.email}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <input
-                name="password"
-                type="password"
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="New Password (leave empty if unchanged)"
-                value={formData.password}
-                onChange={handleChange}
-              />
-            </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Image
+                Title*
               </label>
-              {currentImage && <img src={`${apiUrl}/uploads/user/${currentImage}`} alt="Current" className="h-20 w-20 object-cover" />}
               <input
-                type="file"
-                onChange={handleImageChange}
-                accept="image/*"
-                required // Ensure image is required
+                type="text"
+                name="title"
+                value={blogData.title}
+                onChange={handleChange}
+                required
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Category*
+              </label>
+              <input
+                type="text"
+                name="category"
+                value={blogData.category}
+                onChange={handleChange}
+                required
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Publish Date*
+              </label>
+              <input
+                type="date"
+                name="publish_date"
+                value={blogData.publish_date}
+                onChange={handleChange}
+                required
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Author*
+              </label>
+              <input
+                type="text"
+                name="author"
+                value={blogData.author}
+                onChange={handleChange}
+                required
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
               />
             </div>
           </div>
 
           <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Content*
+            </label>
+            <QuillEditor
+              value={blogData.content}
+              onChange={handleQuillChange}
+              className="mt-1 block w-full rounded-md border-gray-300 min-h-[200px]"
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Keywords
+              </label>
+              <input
+                type="text"
+                name="keywords"
+                value={blogData.keywords}
+                onChange={handleChange}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Tags
+              </label>
+              <input
+                type="text"
+                name="tags"
+                value={blogData.tags}
+                onChange={handleChange}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Slug*
+              </label>
+              <input
+                type="text"
+                name="slug"
+                value={blogData.slug}
+                onChange={handleChange}
+                required
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Excerpt
+              </label>
+              <textarea
+                name="excerpt"
+                value={blogData.excerpt}
+                onChange={handleChange}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Meta Description
+              </label>
+              <textarea
+                name="meta_description"
+                value={blogData.meta_description}
+                onChange={handleChange}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Canonical URL
+              </label>
+              <input
+                type="text"
+                name="canonical_url"
+                value={blogData.canonical_url}
+                onChange={handleChange}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Image
+            </label>
+            <input
+              type="file"
+              onChange={handleFileChange}
+              accept="image/*"
+              className="mt-1 block w-full border border-gray-300 rounded-md"
+            />
+            {imagePreview && (
+              <img
+                src={imagePreview}
+                alt="Preview"
+                className="mt-2 w-32 h-32 object-cover rounded-md"
+              />
+            )}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Image Alt Text
+            </label>
+            <input
+              type="text"
+              name="image_alt_text"
+              value={blogData.image_alt_text}
+              onChange={handleChange}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            />
+          </div>
+
+          <div className="flex justify-end">
             <button
               type="submit"
-              className={`group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-              disabled={isLoading}
+              disabled={loading}
+              className="mt-4 bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow hover:bg-blue-700 disabled:opacity-50"
             >
-              {isLoading ? 'Updating...' : 'Update User'}
+              {loading ? 'Saving...' : (blog ? 'Update Blog' : 'Add Blog')}
             </button>
           </div>
         </form>
@@ -161,4 +349,4 @@ const EditUser = () => {
   );
 };
 
-export default EditUser;
+export default EditBlog;

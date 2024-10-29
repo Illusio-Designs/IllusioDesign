@@ -27,10 +27,10 @@ const storage = multer.diskStorage({
             case 'image':
                 uploadPath = uploadDirs.user; // Store user images in uploads/user
                 break;
-            case 'projectImage':
+            case 'projectimage':
                 uploadPath = uploadDirs.project;
                 break;
-            case 'blogImage':
+            case 'blogimage':
                 uploadPath = uploadDirs.blog;
                 break;
             default:

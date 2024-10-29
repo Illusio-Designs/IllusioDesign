@@ -7,6 +7,10 @@ const createBlog = async (req, res) => {
         const { title, meta_description, keywords, slug, canonical_url, author, publish_date, content, tags, image_alt_text, focus_keyword, category, excerpt } = req.body;
         const image = req.file ? req.file.filename : null; // Get the uploaded image filename
 
+        // Logging to debug the image upload
+        console.log('Create Blog - Request File:', req.file);
+        console.log('Create Blog - Image Filename:', image);
+
         const newBlog = await Blog.create({
             title,
             meta_description,
@@ -42,6 +46,11 @@ const updateBlogById = async (req, res) => {
         const { title, meta_description, keywords, slug, canonical_url, author, publish_date, content, tags, image_alt_text, focus_keyword, category, excerpt } = req.body;
         const image = req.file ? req.file.filename : blog.image; // Use uploaded image if provided, otherwise keep the existing one
 
+        // Logging to debug the image and other data
+        console.log('Update Blog - Request File:', req.file);
+        console.log('Update Blog - Image Filename to Save:', image);
+        console.log('Update Blog - Request Body:', req.body);
+
         await blog.update({
             title,
             meta_description,
@@ -65,6 +74,7 @@ const updateBlogById = async (req, res) => {
     }
 };
 
+// Other CRUD operations remain the same
 // Get blog by ID
 const getBlogById = async (req, res) => {
     const { id } = req.params;
