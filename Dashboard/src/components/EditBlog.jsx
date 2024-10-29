@@ -14,7 +14,7 @@ const EditBlog = ({ blog, onClose, onBlogUpdated }) => {
     meta_description: '',
     slug: '',
     canonical_url: '',
-    image_alt_text: '', // Added image_alt_text here
+    image_alt_text: '',
     focus_keyword: '',
     excerpt: '',
   });
@@ -43,13 +43,14 @@ const EditBlog = ({ blog, onClose, onBlogUpdated }) => {
         meta_description: blog.meta_description || '',
         slug: blog.slug || (blog.title ? blog.title.toLowerCase().replace(/[^a-z0-9]+/g, '-') : ''),
         canonical_url: blog.canonical_url || '',
-        image_alt_text: blog.image_alt_text || '', // Populate image_alt_text from blog
+        image_alt_text: blog.image_alt_text || '',
         focus_keyword: blog.focus_keyword || '',
         excerpt: blog.excerpt || '',
       });
 
+      // Set the image preview to the old image URL if it exists
       if (blog.image) {
-        setImagePreview(blog.image);
+        setImagePreview(`http://localhost:3000/uploads/blog/${blog.image}`); // Use the full URL here
       }
     }
   }, [blog]);
@@ -76,9 +77,9 @@ const EditBlog = ({ blog, onClose, onBlogUpdated }) => {
   const validateBlogData = (data) => {
     const missingFields = requiredFields.filter((field) => !data[field]);
     if (missingFields.length > 0) {
-      setMessage({ 
-        text: `Missing required fields: ${missingFields.join(', ')}`, 
-        type: 'error' 
+      setMessage({
+        text: `Missing required fields: ${missingFields.join(', ')}`,
+        type: 'error'
       });
       return false;
     }
@@ -89,40 +90,40 @@ const EditBlog = ({ blog, onClose, onBlogUpdated }) => {
     e.preventDefault();
     setLoading(true);
     setMessage({ text: '', type: '' });
- 
+
     if (!validateBlogData(blogData)) {
-       setLoading(false);
-       return;
+      setLoading(false);
+      return;
     }
- 
+
     console.log('blogData:', blogData); // Check if fields are correct
     console.log('image:', image); // Check if image is set correctly
- 
+
     try {
-       const formData = new FormData();
-       Object.entries(blogData).forEach(([key, value]) => {
-          formData.append(key, value || '');
-       });
-       if (image) formData.append('blogimage', image);
- 
-       console.log('formData before sending:', formData); // Check FormData contents
- 
-       const response = blog
-          ? await updateBlog(blog.id, formData)
-          : await createBlog(formData);
- 
-       console.log('Response from server:', response); // Check server response
-       
-       setMessage({ text: blog ? 'Blog updated successfully!' : 'Blog created successfully!', type: 'success' });
-       if (onBlogUpdated) onBlogUpdated(response.blog || response);
-       setTimeout(() => { onClose(); }, 1500);
+      const formData = new FormData();
+      Object.entries(blogData).forEach(([key, value]) => {
+        formData.append(key, value || '');
+      });
+      if (image) formData.append('blogimage', image);
+
+      console.log('formData before sending:', formData); // Check FormData contents
+
+      const response = blog
+        ? await updateBlog(blog.id, formData)
+        : await createBlog(formData);
+
+      console.log('Response from server:', response); // Check server response
+
+      setMessage({ text: blog ? 'Blog updated successfully!' : 'Blog created successfully!', type: 'success' });
+      if (onBlogUpdated) onBlogUpdated(response.blog || response);
+      setTimeout(() => { onClose(); }, 1500);
     } catch (error) {
-       console.log('Error:', error); // Log error details
-       setMessage({ text: error.response?.data?.message || 'Error saving blog', type: 'error' });
+      console.log('Error:', error); // Log error details
+      setMessage({ text: error.response?.data?.message || 'Error saving blog', type: 'error' });
     } finally {
-       setLoading(false);
+      setLoading(false);
     }
- };
+  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 overflow-y-auto">
@@ -131,7 +132,7 @@ const EditBlog = ({ blog, onClose, onBlogUpdated }) => {
           <h2 className="text-2xl font-bold">
             {blog ? 'Edit Blog' : 'Add Blog'}
           </h2>
-          <button 
+          <button
             onClick={onClose}
             className="text-gray-500 hover:text-gray-700"
           >
@@ -141,8 +142,8 @@ const EditBlog = ({ blog, onClose, onBlogUpdated }) => {
 
         {message.text && (
           <div className={`p-4 mb-4 rounded ${
-            message.type === 'success' 
-              ? 'bg-green-100 text-green-700' 
+            message.type === 'success'
+              ? 'bg-green-100 text-green-700'
               : 'bg-red-100 text-red-700'
           }`}>
             {message.text}
@@ -245,9 +246,7 @@ const EditBlog = ({ blog, onClose, onBlogUpdated }) => {
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
               />
             </div>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Slug*
@@ -264,23 +263,10 @@ const EditBlog = ({ blog, onClose, onBlogUpdated }) => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Excerpt
-              </label>
-              <textarea
-                name="excerpt"
-                value={blogData.excerpt}
-                onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
                 Meta Description
               </label>
-              <textarea
+              <input
+                type="text"
                 name="meta_description"
                 value={blogData.meta_description}
                 onChange={handleChange}
@@ -300,47 +286,70 @@ const EditBlog = ({ blog, onClose, onBlogUpdated }) => {
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
               />
             </div>
-          </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Image
-            </label>
-            <input
-              type="file"
-              onChange={handleFileChange}
-              accept="image/*"
-              className="mt-1 block w-full border border-gray-300 rounded-md"
-            />
-            {imagePreview && (
-              <img
-                src={imagePreview}
-                alt="Preview"
-                className="mt-2 w-32 h-32 object-cover rounded-md"
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Focus Keyword
+              </label>
+              <input
+                type="text"
+                name="focus_keyword"
+                value={blogData.focus_keyword}
+                onChange={handleChange}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
               />
-            )}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Image Alt Text
+              </label>
+              <input
+                type="text"
+                name="image_alt_text"
+                value={blogData.image_alt_text}
+                onChange={handleChange}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              />
+            </div>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Image Alt Text
+              Excerpt
             </label>
-            <input
-              type="text"
-              name="image_alt_text"
-              value={blogData.image_alt_text}
+            <textarea
+              name="excerpt"
+              value={blogData.excerpt}
               onChange={handleChange}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
             />
           </div>
 
-          <div className="flex justify-end">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Upload Image
+            </label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+            />
+            {imagePreview && (
+              <div className="mt-2">
+                <img src={imagePreview} alt="Preview" className="h-48 object-cover rounded" />
+              </div>
+            )}
+          </div>
+
+          <div className="flex justify-end mt-4">
             <button
               type="submit"
               disabled={loading}
-              className="mt-4 bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow hover:bg-blue-700 disabled:opacity-50"
+              className={`bg-blue-500 text-white px-4 py-2 rounded-md ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
-              {loading ? 'Saving...' : (blog ? 'Update Blog' : 'Add Blog')}
+              {loading ? 'Saving...' : 'Save'}
             </button>
           </div>
         </form>

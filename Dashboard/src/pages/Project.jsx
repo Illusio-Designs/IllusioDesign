@@ -13,10 +13,13 @@ const Project = () => {
     services: '',
     industry: '',
     website: '',
-    projectImage: null,
-    seoTitle: '',
-    seoDescription: '',
-    seoUrl: ''
+    slug: '',
+    projectimage: null,
+    meta_description: '',
+    meta_keywords: '',
+    canonical_url: '',
+    focus_keyword: '',
+    image_alt_text: ''
   }); // State for new project form
   const [showForm, setShowForm] = useState(false); // State to toggle the form visibility
   const [isEditing, setIsEditing] = useState(false); // State to check if we are in editing mode
@@ -49,7 +52,7 @@ const Project = () => {
 
   // Handle file input change for image upload
   const handleFileChange = (e) => {
-    setNewProject((prev) => ({ ...prev, projectImage: e.target.files[0] })); // Store the file object
+    setNewProject((prev) => ({ ...prev, projectimage: e.target.files[0] })); // Store the file object
   };
 
   // Handle form submission to create or update a project
@@ -59,14 +62,14 @@ const Project = () => {
 
     // Append project data to FormData except for the image if it hasn't been changed
     for (const key in newProject) {
-      if (key !== 'projectImage') {
+      if (key !== 'projectimage') {
         formData.append(key, newProject[key]);
       }
     }
 
     // Only append the image if it's present (i.e., the user has uploaded a new one)
-    if (newProject.projectImage) {
-      formData.append('projectImage', newProject.projectImage); // Append the image file
+    if (newProject.projectimage) {
+      formData.append('projectimage', newProject.projectimage); // Append the image file
     }
 
     try {
@@ -92,10 +95,13 @@ const Project = () => {
         services: '',
         industry: '',
         website: '',
-        projectImage: null,
-        seoTitle: '',
-        seoDescription: '',
-        seoUrl: ''
+        slug: '',
+        projectimage: null,
+        meta_description: '',
+        meta_keywords: '',
+        canonical_url: '',
+        focus_keyword: '',
+        image_alt_text: ''
       });
       setShowForm(false); // Hide the form after submission
     } catch (error) {
@@ -105,6 +111,7 @@ const Project = () => {
 
   // Handle edit button click
   const handleEdit = (project) => {
+    console.log('Editing project:', project);
     setIsEditing(true);
     setEditProjectId(project.id); // Set project ID for editing
     setNewProject({
@@ -115,10 +122,13 @@ const Project = () => {
       services: project.services,
       industry: project.industry,
       website: project.website,
-      projectImage: project.projectImage,
-      seoTitle: project.seo?.title || '',
-      seoDescription: project.seo?.description || '',
-      seoUrl: project.seo?.url || ''
+      slug: project.slug,
+      projectimage: null, // Reset the image for editing
+      meta_description: project.meta_description || '',
+      meta_keywords: project.meta_keywords || '',
+      canonical_url: project.canonical_url || '',
+      focus_keyword: project.focus_keyword || '',
+      image_alt_text: project.image_alt_text || ''
     });
     setShowForm(true); // Show the form in edit mode
   };
@@ -181,6 +191,14 @@ const Project = () => {
           />
           <input
             type="text"
+            name="slug"
+            placeholder="Slug"
+            value={newProject.slug}
+            onChange={handleInputChange}
+            required
+          />
+          <input
+            type="text"
             name="industry"
             placeholder="Industry"
             value={newProject.industry}
@@ -199,7 +217,7 @@ const Project = () => {
           {/* Image Upload */}
           <input
             type="file"
-            name="projectImage"
+            name="projectimage"
             onChange={handleFileChange}
             accept="image/*"
           />
@@ -207,23 +225,37 @@ const Project = () => {
           {/* SEO Fields */}
           <input
             type="text"
-            name="seoTitle"
-            placeholder="SEO Title"
-            value={newProject.seoTitle}
+            name="meta_description"
+            placeholder="Meta Description"
+            value={newProject.meta_description}
             onChange={handleInputChange}
           />
           <input
             type="text"
-            name="seoDescription"
-            placeholder="SEO Description"
-            value={newProject.seoDescription}
+            name="meta_keywords"
+            placeholder="Meta Keywords"
+            value={newProject.meta_keywords}
             onChange={handleInputChange}
           />
           <input
             type="text"
-            name="seoUrl"
-            placeholder="SEO URL"
-            value={newProject.seoUrl}
+            name="canonical_url"
+            placeholder="Canonical URL"
+            value={newProject.canonical_url}
+            onChange={handleInputChange}
+          />
+          <input
+            type="text"
+            name="focus_keyword"
+            placeholder="Focus Keyword"
+            value={newProject.focus_keyword}
+            onChange={handleInputChange}
+          />
+          <input
+            type="text"
+            name="image_alt_text"
+            placeholder="Image Alt Text"
+            value={newProject.image_alt_text}
             onChange={handleInputChange}
           />
 

@@ -5,7 +5,7 @@ const upload = require('../../middleware/upload'); // Import the multer upload m
 const authenticate = require('../../middleware/auth'); // JWT middleware for protected routes
 
 // Create project with image upload
-router.post('/', authenticate, upload.single('projectImage'), projectController.createProject); // Ensure 'projectImage' matches the form input name
+router.post('/', authenticate, upload.single('projectimage'), projectController.createProject); // Ensure 'projectimage' matches the form input name
 
 // Get all projects (Protected route)
 router.get('/', authenticate, projectController.getAllProjects);
@@ -14,7 +14,7 @@ router.get('/', authenticate, projectController.getAllProjects);
 router.get('/:id', authenticate, projectController.getProjectById);
 
 // Update project by ID (Protected route)
-router.put('/:id', authenticate, upload.single('projectImage'), projectController.updateProjectById);
+router.put('/:id', authenticate, upload.single('projectimage'), projectController.updateProjectById);
 
 // Delete project by ID (Protected route)
 router.delete('/:id', authenticate, projectController.deleteProjectById);

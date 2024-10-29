@@ -1,3 +1,6 @@
+const fs = require('fs'); // Import fs to handle file system operations
+const path = require('path'); // Import path for handling file paths
+
 const Blog = require('../../models/Blog'); // Adjust the path to your Blog model
 const upload = require('../../middleware/upload'); // Adjust the path to your multer config
 
@@ -51,6 +54,16 @@ const updateBlogById = async (req, res) => {
         console.log('Update Blog - Image Filename to Save:', image);
         console.log('Update Blog - Request Body:', req.body);
 
+        // Delete the existing image if a new image is uploaded
+        if (req.file && blog.image) {
+            const imagePath = path.join(__dirname, '../../uploads/blog', blog.image); // Adjust path according to your directory structure
+            fs.unlink(imagePath, (err) => {
+                if (err) {
+                    console.error('Error deleting old image:', err);
+                }
+            });
+        }
+
         await blog.update({
             title,
             meta_description,
@@ -74,9 +87,8 @@ const updateBlogById = async (req, res) => {
     }
 };
 
-// Other CRUD operations remain the same
-// Get blog by ID
-const getBlogById = async (req, res) => {
+// Delete blog by ID
+const deleteBlogById = async (req, res) => {
     const { id } = req.params;
     try {
         const blog = await Blog.findByPk(id);
@@ -84,28 +96,37 @@ const getBlogById = async (req, res) => {
             return res.status(404).json({ message: 'Blog not found' });
         }
 
-        return res.status(200).json(blog);
-    } catch (error) {
-        return res.status(500).json({ message: 'Error retrieving blog', error: error.message });
-    }
-};
-
-// Delete blog by ID
-const deleteBlogById = async (req, res) => {
-    const { id } = req.params;
-    try {
-        const deletedCount = await Blog.destroy({ where: { id } });
-        if (!deletedCount) {
-            return res.status(404).json({ message: 'Blog not found' });
+        // Delete the blog image if it exists
+        if (blog.image) {
+            const imagePath = path.join(__dirname, '../../uploads/blog', blog.image); // Adjust path according to your directory structure
+            fs.unlink(imagePath, (err) => {
+                if (err) {
+                    console.error('Error deleting blog image:', err);
+                }
+            });
         }
 
+        const deletedCount = await Blog.destroy({ where: { id } });
         return res.status(200).json({ message: 'Blog deleted successfully!' });
     } catch (error) {
         return res.status(500).json({ message: 'Error deleting blog', error: error.message });
     }
 };
 
-// Get all blogs
+// Other CRUD operations remain the same
+const getBlogById = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const blog = await Blog.findByPk(id);
+        if (!blog) {
+            return res.status(404).json({ message: 'Blog not found' });
+        }
+        return res.status(200).json(blog);
+    } catch (error) {
+        return res.status(500).json({ message: 'Error retrieving blog', error: error.message });
+    }
+};
+
 const getAllBlogs = async (req, res) => {
     try {
         const blogs = await Blog.findAll();
