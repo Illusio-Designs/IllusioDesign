@@ -1,63 +1,85 @@
+// models/project.js
 const { Model, DataTypes } = require('sequelize');
-const sequelize = require('../config/database'); // Adjust the path as necessary
+const sequelize = require('../config/database');
 
-module.exports = (sequelize, DataTypes) => {
-  class Project extends Model {
-    static associate(models) {
-      // Define association with SEO
-      Project.belongsTo(models.SEO, {
-        foreignKey: 'seoId', // This should match the field in the Project model
-        as: 'seo' // Alias for the association
-      });
-    }
+class Project extends Model {
+  static associate(models) {
+    // Define associations here if needed
   }
+}
 
-  Project.init({
-    title: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    content: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-    },
-    year: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    timeline: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    services: {
-      type: DataTypes.STRING, // Comma-separated
-      allowNull: true,
-    },
-    industry: {
-      type: DataTypes.STRING, // Comma-separated
-      allowNull: true,
-    },
-    website: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    image: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    seoId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: 'SEOs',
-        key: 'id',
-      },
-      allowNull: false,
-    },
-  }, {
-    sequelize,
-    modelName: 'Project',
-    tableName: 'projects', // Specify the exact table name if different
+Project.init({
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  content: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  year: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  timeline: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  services: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  industry: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  website: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  image: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  // SEO fields
+  meta_description: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  meta_keywords: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  slug: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  canonical_url: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  focus_keyword: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  image_alt_text: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+}, {
+  sequelize,
+  modelName: 'Project',
+  tableName: 'projects',
+});
+
+// Sync model to create or update table
+sequelize.sync()
+  .then(() => {
+    console.log("Project table has been created or updated!");
+  })
+  .catch((error) => {
+    console.error("Error syncing the Project model:", error);
   });
 
-  return Project;
-};
+module.exports = Project;

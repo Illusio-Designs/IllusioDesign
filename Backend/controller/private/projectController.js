@@ -1,4 +1,4 @@
-const { Project, SEO } = require('../../models'); // Adjust path if necessary
+const Project = require('../../models/project'); // Adjust path if necessary
 const multer = require('multer');
 const fs = require('fs');
 const path = require('path');

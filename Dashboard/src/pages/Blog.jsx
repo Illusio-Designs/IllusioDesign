@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getAllBlogs, deleteBlog } from '../services/blogApi'; // Use getAllBlogs instead of listBlogs
+import { getAllBlogs, deleteBlog } from '../services/blogApi'; // Adjust the path if necessary
 import EditBlog from '../components/EditBlog'; // Modal component for adding/editing blogs
 
 const BlogPage = () => {
@@ -10,7 +10,7 @@ const BlogPage = () => {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const fetchedBlogs = await getAllBlogs(); // Updated to use getAllBlogs
+        const fetchedBlogs = await getAllBlogs();
         setBlogs(fetchedBlogs);
       } catch (error) {
         console.error('Error fetching blogs:', error);
@@ -33,7 +33,7 @@ const BlogPage = () => {
     const confirmDelete = window.confirm('Are you sure you want to delete this blog?');
     if (confirmDelete && id) {
       try {
-        await deleteBlog(id); // Call to backend to delete the blog and associated SEO data
+        await deleteBlog(id); // Call to backend to delete the blog
         setBlogs(blogs.filter(blog => blog.id !== id)); // Remove the blog from the state
         console.log(`Blog with ID ${id} deleted successfully.`);
       } catch (error) {
@@ -44,8 +44,6 @@ const BlogPage = () => {
       console.error('Invalid blog ID:', id);
     }
   };
-  
-
 
   return (
     <div className="container mx-auto p-4">
@@ -82,19 +80,18 @@ const BlogPage = () => {
                 </button>
                 <button
                   className="bg-red-500 text-white px-2 py-1 rounded"
-                  onClick={() => handleDeleteBlog(blog.id)} // Ensure blog.id is used here
+                  onClick={() => handleDeleteBlog(blog.id)}
                 >
                   Delete
                 </button>
               </td>
             </tr>
           ))}
-
         </tbody>
       </table>
       {showModal && (
         <EditBlog
-          blog={selectedBlog} // Pass the selected blog for editing or null for adding
+          blog={selectedBlog}
           onClose={() => setShowModal(false)}
           onBlogUpdated={(updatedBlog) => {
             if (selectedBlog) {

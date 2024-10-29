@@ -1,4 +1,3 @@
-// dashboard/src/pages/AddUser.jsx
 import React, { useState } from 'react';
 import { registerUser } from '../services/loginApi';
 
@@ -89,13 +88,13 @@ const AddUser = () => {
             Profile Image:
             <input
               type="file"
-              name="image"
               onChange={handleFileChange}
-              accept="image/*" // Accept only image files
+              accept="image/*"
+              required
             />
           </label>
         </div>
-        <button type="submit">Create User</button>
+        <button type="submit">Add User</button>
       </form>
     </div>
   );

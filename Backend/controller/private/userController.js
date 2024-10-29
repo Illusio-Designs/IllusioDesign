@@ -1,4 +1,5 @@
-const { User } = require('../../models'); // Assuming you have an index.js in your models folder
+
+const User = require('../../models/user');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
@@ -16,104 +17,40 @@ exports.register = async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
-    // Validate required fields
     if (!username || !email || !password) {
-      return res.status(400).json({ 
-        message: 'Please provide all required fields: username, email, and password' 
-      });
+      return res.status(400).json({ message: 'Please provide all required fields: username, email, and password' });
     }
 
-    // Check for existing user
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
       return res.status(400).json({ message: 'Email already in use' });
     }
 
-    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Prepare user data
     const userData = {
       username,
       email,
       password: hashedPassword,
+      image: req.file ? req.file.filename : null, // Store image filename
     };
 
-    // Add image if it exists
-    if (req.file) {
-      userData.image = req.file.filename;
-    }
-
-    // Create a new user
     const newUser = await User.create(userData);
-
-    // Remove password from response
-    const userResponse = {
-      id: newUser.id,
-      username: newUser.username,
-      email: newUser.email,
-      image: newUser.image
-    };
-
-    // Generate a token
     const token = generateToken(newUser.id);
 
     res.status(201).json({
       message: 'User created successfully',
       token,
-      user: userResponse
+      user: {
+        id: newUser.id,
+        username: newUser.username,
+        email: newUser.email,
+        image: newUser.image,
+      },
     });
   } catch (error) {
     console.error('Error creating user:', error);
-    return res.status(500).json({ 
-      message: 'Server error', 
-      error: error.message 
-    });
-  }
-};
-
-// Other controller methods remain the same...
-// Login user
-exports.login = async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    const user = await User.findOne({ where: { email } }); // Ensure User is defined
-    if (!user) {
-      return res.status(400).json({ message: 'Invalid email or password.' });
-    }
-
-    // Compare passwords
-    const validPassword = await bcrypt.compare(password, user.password);
-    if (!validPassword) {
-      return res.status(400).json({ message: 'Invalid email or password.' });
-    }
-
-    // Create JWT token
-    const token = generateToken(user.id); // Use the generateToken function
-    const expiresIn = 3600; // 1 hour in seconds
-    res.json({ message: 'Login successful', token, expiresIn });
-  } catch (error) {
-    console.error('Login error:', error);
-    res.status(500).json({ message: 'Something went wrong' });
-  }
-};
-
-// Logout user (if using JWT-based authentication)
-exports.logout = (req, res) => {
-  res.json({ message: 'Logout successful. Token should be deleted on client side.' });
-};
-
-// Get list of all users (excluding password)
-exports.listUsers = async (req, res) => {
-  try {
-    const users = await User.findAll({
-      attributes: ['id', 'username', 'email', 'image'] // Exclude password
-    });
-    res.json(users);
-  } catch (error) {
-    console.error('Failed to fetch users:', error);
-    res.status(500).json({ message: 'Failed to fetch users' });
+    return res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
 
@@ -128,11 +65,10 @@ exports.updateUserById = async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Delete the old image if a new one is uploaded
     if (req.file) {
-      const oldImagePath = path.join(__dirname, '../../uploads', user.image);
-      if (fs.existsSync(oldImagePath)) {
-        fs.unlinkSync(oldImagePath); // Delete the old image
+      const oldImagePath = path.join(__dirname, '../../uploads/user', user.image);
+      if (user.image && fs.existsSync(oldImagePath)) {
+        fs.unlinkSync(oldImagePath); // Delete old image
       }
       user.image = req.file.filename; // Update with new image
     }
@@ -149,6 +85,54 @@ exports.updateUserById = async (req, res) => {
   }
 };
 
+// Login user
+exports.login = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await User.findOne({ where: { email } });
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid email or password.' });
+    }
+
+    // Compare passwords
+    const validPassword = await bcrypt.compare(password, user.password);
+    if (!validPassword) {
+      return res.status(400).json({ message: 'Invalid email or password.' });
+    }
+
+    // Generate JWT token
+    const token = generateToken(user.id);
+
+    res.json({
+      message: 'Login successful',
+      token,
+      expiresIn: 3600, // 1 hour in seconds
+    });
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ message: 'Something went wrong' });
+  }
+};
+
+// Logout user
+exports.logout = (req, res) => {
+  res.json({ message: 'Logout successful. Token should be deleted on client side.' });
+};
+
+// Get list of all users (excluding password)
+exports.listUsers = async (req, res) => {
+  try {
+    const users = await User.findAll({
+      attributes: ['id', 'username', 'email', 'image'], // Exclude password
+    });
+    res.json(users);
+  } catch (error) {
+    console.error('Failed to fetch users:', error);
+    res.status(500).json({ message: 'Failed to fetch users', error: error.message });
+  }
+};
+
 
 // Delete user by ID
 exports.deleteUserById = async (req, res) => {
@@ -162,7 +146,7 @@ exports.deleteUserById = async (req, res) => {
 
     // Delete user image if it exists
     if (user.image) {
-      const imagePath = path.join(__dirname, '../../uploads', user.image);
+      const imagePath = path.join(__dirname, '../../uploads/user', user.image);
       if (fs.existsSync(imagePath)) {
         fs.unlinkSync(imagePath); // Delete the image
       }
@@ -175,7 +159,6 @@ exports.deleteUserById = async (req, res) => {
     res.status(500).json({ message: 'Failed to delete user', error: error.message });
   }
 };
-
 
 // Get user by ID
 exports.getUserById = async (req, res) => {
@@ -193,6 +176,6 @@ exports.getUserById = async (req, res) => {
     res.json(user);
   } catch (error) {
     console.error('Error fetching user by ID:', error);
-    res.status(500).json({ message: 'Failed to fetch user' });
+    res.status(500).json({ message: 'Failed to fetch user', error: error.message });
   }
 };

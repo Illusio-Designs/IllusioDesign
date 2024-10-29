@@ -1,5 +1,5 @@
 // Backend/controller/public/projectPublicController.js
-const { Project } = require('../../models'); // Adjust the path as necessary
+const Project = require('../../models/project'); // Adjust the path as necessary
 
 // Get all projects
 exports.getAllPublicProjects = async (req, res) => {

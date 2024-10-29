@@ -1,6 +1,6 @@
 // controllers/blogController.js
 
-const { Blog } = require('../../models'); // Adjust the path to your models
+const Blog = require('../../models/blog'); // Adjust the path to your models
 
 // Function to get all blogs
 const getAllPublicBlogs = async (req, res) => {

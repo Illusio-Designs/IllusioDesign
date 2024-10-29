@@ -1,58 +1,60 @@
+// models/blog.js
 const { Model, DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
 
-module.exports = (sequelize) => {
-  class Blog extends Model {
-    static associate(models) {
-      Blog.belongsTo(models.SEO, {
-        foreignKey: 'seoId',
-        as: 'seo'
-      });
-    }
+class Blog extends Model {
+  static associate(models) {
+    // Define associations here if needed
   }
+}
 
-  Blog.init({
-    title: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    category: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    publish_date: {
-      type: DataTypes.DATE,
-      allowNull: false
-    },
-    content: {
-      type: DataTypes.TEXT,
-      allowNull: false
-    },
-    tags: {
-      type: DataTypes.STRING,
-      allowNull: true,
-      defaultValue: ''
-    },
-    image: {
-      type: DataTypes.STRING,
-      allowNull: true
-    },
-    author: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    seoId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'SEOs',
-        key: 'id'
-      }
-    }
-  }, {
-    sequelize,
-    modelName: 'Blog',
-    tableName: 'blogs'
+Blog.init({
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  meta_description: {
+    type: DataTypes.TEXT,
+  },
+  keywords: {
+    type: DataTypes.STRING,
+  },
+  slug: {
+    type: DataTypes.STRING,
+    unique: true,
+    allowNull: false,
+  },
+  canonical_url: {
+    type: DataTypes.STRING,
+  },
+  content: {
+    type: DataTypes.TEXT,
+  },
+  tags: {
+    type: DataTypes.STRING,
+  },
+  image: {
+    type: DataTypes.STRING,
+  },
+  image_alt_text: {
+    type: DataTypes.STRING,
+  },
+  focus_keyword: {
+    type: DataTypes.STRING,
+  },
+}, {
+  sequelize,
+  modelName: 'Blog',
+  tableName: 'blogs',
+});
+
+// Sync model to create or update table
+sequelize.sync()
+  .then(() => {
+    console.log("Blog table has been created or updated!");
+  })
+  .catch((error) => {
+    console.error("Error syncing the Blog model:", error);
   });
 
-  return Blog;
-};
+module.exports = Blog;

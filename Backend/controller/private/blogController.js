@@ -1,158 +1,115 @@
-const { Blog, SEO } = require('../../models'); // Adjust the path as necessary
+const Blog = require('../../models/Blog'); // Adjust the path to your Blog model
+const upload = require('../../middleware/upload'); // Adjust the path to your multer config
 
+// Create a new blog
 const createBlog = async (req, res) => {
-  try {
-    const { title, category, publish_date, content, tags, author } = req.body;
+    try {
+        const { title, meta_description, keywords, slug, canonical_url, author, publish_date, content, tags, image_alt_text, focus_keyword, category, excerpt } = req.body;
+        const image = req.file ? req.file.filename : null; // Get the uploaded image filename
 
-    // Check if seo is a string, parse it if it is, otherwise use it as is
-    const seo = req.body.seo ? (typeof req.body.seo === 'string' ? JSON.parse(req.body.seo) : req.body.seo) : null;
-    
-    const imageFileName = req.file ? req.file.filename : null;
+        const newBlog = await Blog.create({
+            title,
+            meta_description,
+            keywords,
+            slug,
+            canonical_url,
+            author,
+            publish_date,
+            content,
+            tags,
+            image,
+            image_alt_text,
+            focus_keyword,
+            category,
+            excerpt
+        });
 
-    // Validate required fields
-    if (!title || !category || !publish_date || !content || !author || !seo) {
-      return res.status(400).json({ message: 'All required fields must be filled' });
+        return res.status(201).json({ message: 'Blog created successfully!', blog: newBlog });
+    } catch (error) {
+        return res.status(500).json({ message: 'Error creating blog', error: error.message });
     }
-
-    // Create SEO entry
-    const seoEntry = await SEO.create({
-      title: seo.title,
-      description: seo.description,
-      url: seo.url,
-    });
-
-    // Create blog with SEO reference
-    const newBlog = await Blog.create({
-      title,
-      category,
-      publish_date,
-      content,
-      tags: tags || '',
-      image: imageFileName,
-      seoId: seoEntry.id,
-      author,
-    });
-
-    // Fetch the created blog with SEO data
-    const blogWithSeo = await Blog.findByPk(newBlog.id, {
-      include: [{ model: SEO, as: 'seo' }],
-    });
-
-    res.status(201).json({ 
-      message: 'Blog created successfully', 
-      blog: blogWithSeo,
-    });
-  } catch (error) {
-    console.error('Error creating blog:', error);
-    res.status(500).json({ 
-      message: 'Error creating blog', 
-      error: error.message,
-    });
-  }
 };
 
-
-// Update a blog by ID
+// Update blog by ID
 const updateBlogById = async (req, res) => {
-  try {
     const { id } = req.params;
-    const { title, category, publish_date, content, tags, seo, author } = req.body;
-    const imageFileName = req.file ? req.file.filename : null;
+    try {
+        const blog = await Blog.findByPk(id);
+        if (!blog) {
+            return res.status(404).json({ message: 'Blog not found' });
+        }
 
-    const blog = await Blog.findByPk(id); 
-    if (!blog) {
-      return res.status(404).json({ message: 'Blog not found' });
+        const { title, meta_description, keywords, slug, canonical_url, author, publish_date, content, tags, image_alt_text, focus_keyword, category, excerpt } = req.body;
+        const image = req.file ? req.file.filename : blog.image; // Use uploaded image if provided, otherwise keep the existing one
+
+        await blog.update({
+            title,
+            meta_description,
+            keywords,
+            slug,
+            canonical_url,
+            author,
+            publish_date,
+            content,
+            tags,
+            image,
+            image_alt_text,
+            focus_keyword,
+            category,
+            excerpt
+        });
+
+        return res.status(200).json({ message: 'Blog updated successfully!', blog });
+    } catch (error) {
+        return res.status(500).json({ message: 'Error updating blog', error: error.message });
     }
-
-    // Update fields
-    blog.title = title || blog.title;
-    blog.category = category || blog.category;
-    blog.publish_date = publish_date || blog.publish_date;
-    blog.content = content || blog.content;
-    blog.tags = tags || blog.tags;
-    blog.image = imageFileName || blog.image; // Only update if a new image is provided
-    blog.author = author || blog.author; // Update author field if provided
-
-    if (seo) {
-      let seoEntry = await SEO.findOne({ where: { id: blog.seoId } });
-      if (seoEntry) {
-        await seoEntry.update(seo); // Update existing SEO entry
-      } else {
-        seoEntry = await SEO.create(seo); // Create new SEO if it doesn't exist
-        blog.seoId = seoEntry.id; // Link to new SEO entry
-      }
-    }
-
-    await blog.save();
-    res.status(200).json({ message: 'Blog updated successfully', blog });
-  } catch (error) {
-    console.error('Error updating blog:', error);
-    res.status(500).json({ message: 'Error updating blog', error: error.message });
-  }
 };
 
-// Get a blog by ID
+// Get blog by ID
 const getBlogById = async (req, res) => {
-  try {
     const { id } = req.params;
-    const blog = await Blog.findByPk(id, {
-      include: [{ model: SEO, as: 'seo' }], // Include SEO details
-    });
+    try {
+        const blog = await Blog.findByPk(id);
+        if (!blog) {
+            return res.status(404).json({ message: 'Blog not found' });
+        }
 
-    if (!blog) {
-      return res.status(404).json({ message: 'Blog not found' });
+        return res.status(200).json(blog);
+    } catch (error) {
+        return res.status(500).json({ message: 'Error retrieving blog', error: error.message });
     }
-
-    res.status(200).json(blog);
-  } catch (error) {
-    console.error('Error fetching blog:', error);
-    res.status(500).json({ message: 'Error fetching blog', error: error.message });
-  }
 };
 
-// Delete a blog by ID
-// Delete a blog by ID
+// Delete blog by ID
 const deleteBlogById = async (req, res) => {
-  try {
     const { id } = req.params;
-    const blog = await Blog.findByPk(id, { include: [{ model: SEO, as: 'seo' }] }); // Include the SEO model
+    try {
+        const deletedCount = await Blog.destroy({ where: { id } });
+        if (!deletedCount) {
+            return res.status(404).json({ message: 'Blog not found' });
+        }
 
-    if (!blog) {
-      return res.status(404).json({ message: 'Blog not found' });
+        return res.status(200).json({ message: 'Blog deleted successfully!' });
+    } catch (error) {
+        return res.status(500).json({ message: 'Error deleting blog', error: error.message });
     }
-
-    // Delete associated SEO data if it exists
-    if (blog.seoId) {
-      await SEO.destroy({ where: { id: blog.seoId } });
-    }
-
-    await blog.destroy();
-    res.status(200).json({ message: 'Blog deleted successfully' });
-  } catch (error) {
-    console.error('Error deleting blog:', error);
-    res.status(500).json({ message: 'Error deleting blog', error: error.message });
-  }
 };
-
 
 // Get all blogs
 const getAllBlogs = async (req, res) => {
-  try {
-    const blogs = await Blog.findAll({
-      include: [{ model: SEO, as: 'seo' }], // Include SEO details
-    });
-    res.status(200).json(blogs);
-  } catch (error) {
-    console.error('Error fetching blogs:', error);
-    res.status(500).json({ message: 'Error fetching blogs', error: error.message });
-  }
+    try {
+        const blogs = await Blog.findAll();
+        return res.status(200).json(blogs);
+    } catch (error) {
+        return res.status(500).json({ message: 'Error retrieving blogs', error: error.message });
+    }
 };
 
-// Export the controller methods
+// Export controller functions
 module.exports = {
-  createBlog,
-  updateBlogById,
-  getBlogById,
-  deleteBlogById,
-  getAllBlogs,
+    createBlog,
+    updateBlogById,
+    getBlogById,
+    deleteBlogById,
+    getAllBlogs,
 };

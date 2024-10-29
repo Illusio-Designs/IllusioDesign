@@ -1,222 +1,158 @@
 import React, { useState, useEffect } from 'react';
-import { createBlog, updateBlog, getBlogById } from '../services/blogApi';
-import QuillEditor from './QuillEditor';
+import { useParams, useNavigate } from 'react-router-dom';
+import { updateUser, getUserById } from '../services/loginApi';
+import apiUrl from '../config';
 
-const EditBlog = ({ blog, onClose, onBlogUpdated }) => {
-  const [blogData, setBlogData] = useState({
-    title: '',
-    category: '',
-    publish_date: new Date().toISOString().split('T')[0],
-    content: '',
-    tags: '',
-    author: '',
-    seo: {
-      title: '',
-      description: '',
-      url: ''
-    }
+const EditUser = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '', // Optional for update
   });
   const [image, setImage] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [successMessage, setSuccessMessage] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [currentImage, setCurrentImage] = useState('');
 
+  // Fetch current user data
   useEffect(() => {
-    if (blog) {
-      setBlogData({
-        ...blog,
-        publish_date: new Date(blog.publish_date).toISOString().split('T')[0]
-      });
-    }
-  }, [blog]);
+    const fetchUserData = async () => {
+      try {
+        const user = await getUserById(id); // Use the new function here
+        setFormData({
+          username: user.username,
+          email: user.email,
+          password: '', // Leave password empty
+        });
+        setCurrentImage(user.image);
+      } catch (err) {
+        console.error('Error fetching user:', err);
+        setError('Failed to load user data');
+      }
+    };
+
+    fetchUserData();
+  }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name.startsWith('seo.')) {
-      const seoField = name.split('.')[1];
-      setBlogData(prev => ({
-        ...prev,
-        seo: { ...prev.seo, [seoField]: value }
-      }));
-    } else {
-      setBlogData(prev => ({
-        ...prev,
-        [name]: value
-      }));
-    }
-  };
-
-  const handleFileChange = (e) => {
-    setImage(e.target.files[0]);
-  };
-
-  const handleQuillChange = (content) => {
-    setBlogData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      content
+      [name]: value
     }));
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) { // 5MB limit
+        setError('File size should be less than 5MB');
+        return;
+      }
+      if (!file.type.match('image.*')) {
+        setError('Please upload an image file');
+        return;
+      }
+      setImage(file);
+      setError('');
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setErrorMessage('');
-    setSuccessMessage('');
-  
+    setIsLoading(true);
+    setError('');
+
+    // Create FormData object
+    const updateFormData = new FormData();
+
+    // Only append fields that have values
+    if (formData.username) updateFormData.append('username', formData.username);
+    if (formData.email) updateFormData.append('email', formData.email);
+    if (formData.password) updateFormData.append('password', formData.password);
+    if (image) updateFormData.append('image', image);
+
     try {
-      const formData = new FormData();
-      
-      // Append basic fields
-      Object.entries(blogData).forEach(([key, value]) => {
-        if (key === 'seo') {
-          // Serialize the SEO object
-          Object.entries(value).forEach(([seoKey, seoValue]) => {
-            formData.append(`seo[${seoKey}]`, seoValue);
-          });
-        } else {
-          formData.append(key, value);
-        }
-      });
-  
-      // Append image if exists
-      if (image) {
-        formData.append('image', image);
-      }
-  
-      if (blog) {
-        // If editing, call updateBlog
-        await updateBlog(blog.id, formData);
-        setSuccessMessage('Blog updated successfully!');
-        onBlogUpdated({ ...blogData, id: blog.id });
-      } else {
-        // If adding, call createBlog
-        const newBlog = await createBlog(formData);
-        setSuccessMessage('Blog created successfully!');
-        onBlogUpdated(newBlog);
-      }
-    } catch (error) {
-      setErrorMessage(error.response?.data?.message || 'Error saving blog');
+      await updateUser(id, updateFormData);
+      navigate('/user'); // Redirect to users list after successful update
+    } catch (err) {
+      console.error('Update error:', err);
+      setError(err.response?.data?.message || 'Update failed. Please try again.');
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
-  
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50">
-      <div className="bg-white p-4 rounded shadow-lg w-full max-w-4xl">
-        <h2 className="text-xl font-bold">{blog ? 'Edit Blog' : 'Add Blog'}</h2>
-        {successMessage && (
-          <div className="bg-green-100 text-green-700 p-3 rounded">{successMessage}</div>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8">
+        <div>
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+            Edit User
+          </h2>
+        </div>
+        
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <span className="block sm:inline">{error}</span>
+          </div>
         )}
-        {errorMessage && (
-          <div className="bg-red-100 text-red-700 p-3 rounded">{errorMessage}</div>
-        )}
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="text"
-            name="title"
-            value={blogData.title}
-            onChange={handleChange}
-            placeholder="Blog Title"
-            className="w-full p-2 border rounded"
-            required
-          />
 
-          <input
-            type="text"
-            name="category"
-            value={blogData.category}
-            onChange={handleChange}
-            placeholder="Category"
-            className="w-full p-2 border rounded"
-            required
-          />
-
-          <input
-            type="date"
-            name="publish_date"
-            value={blogData.publish_date}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-            required
-          />
-
-          <QuillEditor
-            value={blogData.content}
-            onChange={handleQuillChange}
-            className="h-64"
-          />
-
-          <input
-            type="text"
-            name="tags"
-            value={blogData.tags}
-            onChange={handleChange}
-            placeholder="Tags (comma separated)"
-            className="w-full p-2 border rounded"
-          />
-
-          <input
-            type="text"
-            name="author"
-            value={blogData.author}
-            onChange={handleChange}
-            placeholder="Author"
-            className="w-full p-2 border rounded"
-            required
-          />
-
-          <input
-            type="file"
-            name="image"
-            onChange={handleFileChange}
-            className="w-full p-2 border rounded"
-            accept="image/*"
-          />
-
-          <div className="space-y-4">
-            <h3 className="font-semibold">SEO Information</h3>
-            <input
-              type="text"
-              name="seo.title"
-              value={blogData.seo.title}
-              onChange={handleChange}
-              placeholder="SEO Title"
-              className="w-full p-2 border rounded"
-            />
-            <input
-              type="text"
-              name="seo.description"
-              value={blogData.seo.description}
-              onChange={handleChange}
-              placeholder="SEO Description"
-              className="w-full p-2 border rounded"
-            />
-            <input
-              type="text"
-              name="seo.url"
-              value={blogData.seo.url}
-              onChange={handleChange}
-              placeholder="SEO URL"
-              className="w-full p-2 border rounded"
-            />
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          <div className="rounded-md shadow-sm -space-y-px">
+            <div>
+              <input
+                name="username"
+                type="text"
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                placeholder="Username"
+                value={formData.username}
+                onChange={handleChange}
+              />
+            </div>
+            <div>
+              <input
+                name="email"
+                type="email"
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                placeholder="Email"
+                value={formData.email}
+                onChange={handleChange}
+              />
+            </div>
+            <div>
+              <input
+                name="password"
+                type="password"
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                placeholder="New Password (leave empty if unchanged)"
+                value={formData.password}
+                onChange={handleChange}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Image
+              </label>
+              {currentImage && <img src={`${apiUrl}/uploads/user/${currentImage}`} alt="Current" className="h-20 w-20 object-cover" />}
+              <input
+                type="file"
+                onChange={handleImageChange}
+                accept="image/*"
+                required // Ensure image is required
+              />
+            </div>
           </div>
 
-          <div className="flex justify-end space-x-2">
-            <button
-              type="button"
-              onClick={onClose}
-              className="bg-gray-500 text-white px-4 py-2 rounded"
-            >
-              Cancel
-            </button>
+          <div>
             <button
               type="submit"
-              className={`bg-blue-500 text-white px-4 py-2 rounded ${loading ? 'opacity-50' : ''}`}
-              disabled={loading}
+              className={`group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={isLoading}
             >
-              {loading ? 'Saving...' : 'Save'}
+              {isLoading ? 'Updating...' : 'Update User'}
             </button>
           </div>
         </form>
@@ -225,4 +161,4 @@ const EditBlog = ({ blog, onClose, onBlogUpdated }) => {
   );
 };
 
-export default EditBlog;
+export default EditUser;
