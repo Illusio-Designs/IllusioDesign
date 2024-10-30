@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Header from '../components/Header';
+import Header from './Header';
 import { getProjectByTitle } from '../utils/api';
 import { useParams } from 'react-router-dom';
 import { API_IMAGE_BASE_URL } from '../config';

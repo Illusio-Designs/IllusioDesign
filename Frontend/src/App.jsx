@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, useNavigationType } from 'react-router-dom';
 import Home from './pages/Home';
 import Project from './pages/Project';
-import ProjectInside from './pages/ProjectInside';
+import ProjectInside from './components/ProjectInside';
 import Blog from './pages/Blog';
-import BlogInside from './pages/BlogInside';
+import BlogInside from './components/BlogInside';
 
 function App() {
   const action = useNavigationType();

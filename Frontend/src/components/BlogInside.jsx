@@ -1,39 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import Header from '../components/Header';
+import Header from './Header';
 import DOMPurify from 'dompurify';
+import { Helmet } from 'react-helmet';
 import { getPublicBlogByTitle } from '../utils/api';
 import { API_IMAGE_BASE_URL } from '../config';
 
 const BlogInside = () => {
-    const { title } = useParams(); // Get blog title from URL
+    const { title } = useParams();
     const navigate = useNavigate();
     const [blog, setBlog] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // Helper function to construct full image URL
     const getFullImageUrl = (imageName) => {
         if (!imageName) return '';
         if (imageName.startsWith('http')) return imageName;
         return `${API_IMAGE_BASE_URL}/blog/${imageName}`;
     };
 
-    // Helper function to decode URL-safe title
-    const decodeBlogTitle = (encodedTitle) => {
-        return decodeURIComponent(encodedTitle.replace(/-/g, ' '));
-    };
+    const decodeBlogTitle = (encodedTitle) => decodeURIComponent(encodedTitle.replace(/-/g, ' '));
 
     useEffect(() => {
         const fetchBlog = async () => {
             try {
                 const decodedTitle = decodeBlogTitle(title);
                 const data = await getPublicBlogByTitle(decodedTitle);
-
-                if (!data) {
-                    throw new Error('Blog not found');
-                }
-
+                if (!data) throw new Error('Blog not found');
+                
+                console.log("Fetched blog data:", data); // Log the data to check if publish_date is present
                 setBlog(data);
             } catch (err) {
                 console.error('Error fetching blog:', err);
@@ -42,10 +37,8 @@ const BlogInside = () => {
                 setLoading(false);
             }
         };
-
-        if (title) {
-            fetchBlog();
-        }
+    
+        if (title) fetchBlog();
     }, [title]);
 
     if (loading) {
@@ -99,39 +92,51 @@ const BlogInside = () => {
         );
     }
 
+    const formattedDate = blog.publish_date && !isNaN(Date.parse(blog.publish_date))
+    ? new Date(blog.publish_date).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+      })
+    : 'Date unavailable';
     return (
         <>
+            <Helmet>
+                <title>{blog.title} | My Blog</title>
+                <meta name="description" content={blog.meta_description} />
+                <meta name="keywords" content={blog.keywords} />
+                <link rel="canonical" href={blog.canonical_url || window.location.href} />
+                <meta property="og:title" content={blog.title} />
+                <meta property="og:description" content={blog.meta_description} />
+                <meta property="og:image" content={getFullImageUrl(blog.image)} />
+                <meta property="og:url" content={window.location.href} />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content={blog.title} />
+                <meta name="twitter:description" content={blog.meta_description} />
+                <meta name="twitter:image" content={getFullImageUrl(blog.image)} />
+            </Helmet>
+
             <Header />
             <article className="max-w-4xl mx-auto px-4 py-12">
-                {/* Blog Header */}
                 <header className="mb-8">
                     <h1 className="text-4xl font-bold mb-4">{blog.title}</h1>
                     <div className="flex items-center space-x-4 text-gray-600">
-                        <time dateTime={blog.publish_date}>
-                            {new Date(blog.publish_date).toLocaleDateString('en-US', {
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric'
-                            })}
-                        </time>
-                        {blog.author && (
-                            <span>by {blog.author}</span>
-                        )}
+                        <time dateTime={blog.publish_date}>{formattedDate}</time>
+                        {blog.author && <span>by {blog.author}</span>}
+                        {blog.category && <span>in {blog.category}</span>}
                     </div>
                 </header>
 
-                {/* Featured Image */}
                 {blog.image && (
                     <div className="mb-8">
                         <img
                             src={getFullImageUrl(blog.image)}
-                            alt={blog.title}
+                            alt={blog.image_alt_text || blog.title}
                             className="w-full h-auto rounded-lg shadow-lg"
                         />
                     </div>
                 )}
 
-                {/* Blog Content */}
                 <div
                     className="prose prose-lg max-w-none"
                     dangerouslySetInnerHTML={{
@@ -139,7 +144,6 @@ const BlogInside = () => {
                     }}
                 />
 
-                {/* Tags Section */}
                 {Array.isArray(blog.tags) && blog.tags.length > 0 && (
                     <div className="mt-8 pt-4 border-t">
                         <h2 className="text-xl font-semibold mb-2">Tags:</h2>
