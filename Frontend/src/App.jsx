@@ -5,6 +5,7 @@ import Project from './pages/Project';
 import ProjectInside from './components/ProjectInside';
 import Blog from './pages/Blog';
 import BlogInside from './components/BlogInside';
+import ContactUs from './pages/ContactUs';
 
 function App() {
   const action = useNavigationType();
@@ -34,6 +35,7 @@ function App() {
       <Route path="/project-inside/:title" element={<ProjectInside />} />
       <Route path="/blog" element={<Blog />} />
       <Route path="/blog-inside/:title" element={<BlogInside />} />
+      <Route path="/contactus" element={<ContactUs/>} />
     </Routes>
   );
 }

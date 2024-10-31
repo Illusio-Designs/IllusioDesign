@@ -77,7 +77,7 @@ const Header = () => {
             initial="initial"
             whileHover="hovered"
             transition="duration"
-            className="text-md text-[#fff] bg-[#ec691f] rounded-full uppercase tracking-wider py-3 px-5 relative whitespace-nowrap overflow-hidden flex items-center gap-3 contact-btn" href="#">
+            className="text-md text-[#fff] bg-[#ec691f] rounded-full uppercase tracking-wider py-3 px-5 relative whitespace-nowrap overflow-hidden flex items-center gap-3 contact-btn" href="/contactus  ">
               <motion.div variants={{initial: {y: 0}, hovered: {y: "-195%"}, duration: 0.5 }}>Contact Us </motion.div>
               <motion.div className='absolute inset-y-6 inset-x-5' variants={{initial: {y: "195%"}, hovered: {y: 0}, duration: 0.5}}>Contact Us</motion.div>
               <div className='bg-white p-3 rounded-full border-2 border-white'>
