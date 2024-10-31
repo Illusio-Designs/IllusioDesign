@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { getAllPublicProjects } from '../utils/api'; // Updated import to use getAllPublicProjects
 import { motion } from 'framer-motion';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 import bgcard from "../assets/bg-card.png";
 import { API_IMAGE_BASE_URL } from '../config';
 import { Link } from 'react-router-dom'; // Import Link from react-router-dom for client-side routing
@@ -175,6 +176,7 @@ const Project = () => {
                     </div>
                 </div>
             </section>
+            <Footer/>
         </>
     );
 };

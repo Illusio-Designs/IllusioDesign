@@ -11,10 +11,12 @@ const sequelize = require('./config/database');
 const userRoutes = require('./routes/private/userRoutes');
 const projectRoutes = require('./routes/private/projectRoutes');
 const blogRoutes = require('./routes/private/blogRoutes');
+const seoRoutes = require('./routes/private/seoRoutes');
 
 // Public Routes
 const projectPublicRoutes = require('./routes/public/projectPublicRoutes');
 const blogPublicRoutes = require('./routes/public/blogPublicRoutes');
+const seoPublicRoutes = require('./routes/public/seoPublicRoutes');
 
 // Load environment variables early
 dotenv.config();
@@ -93,10 +95,12 @@ app.use('/uploads', (req, res, next) => {
 app.use('/users', userRoutes);
 app.use('/projects', projectRoutes);
 app.use('/blogs', blogRoutes);
+app.use('/seo', seoRoutes)
 
 // Public routes
 app.use('/api/public/projects', projectPublicRoutes);
 app.use('/api/public/blogs', blogPublicRoutes);
+app.use('/api/public/seo', seoPublicRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
@@ -135,13 +139,13 @@ const PORT = process.env.PORT || 3000;
 const connectWithRetry = async (retries = 5, interval = 5000) => {
   for (let i = 0; i < retries; i++) {
     try {
-      await sequelize.sync();
+      await sequelize.sync(); // This is where tables are created/updated
       console.log('Database connection established successfully');
       return true;
     } catch (err) {
       console.error(`Database connection attempt ${i + 1} failed:`, err);
-      if (i === retries - 1) throw err;
-      await new Promise(resolve => setTimeout(resolve, interval));
+      if (i === retries - 1) throw err; // If all retries fail, throw the error
+      await new Promise(resolve => setTimeout(resolve, interval)); // Wait before retrying
     }
   }
   return false;
