@@ -56,23 +56,24 @@ export const getPublicBlogByTitle = async (title) => {
 // Function to get all public SEO entries
 export const getAllPublicSeo = async () => {
     try {
-        const response = await api.get('/public/seo'); // Adjust the endpoint as necessary
+        const response = await api.get('/public/seo'); // Ensure the endpoint is correct
         return response.data; // Return the response data
     } catch (error) {
-        console.error('Error fetching public SEO entries:', error); // Log the error for debugging
-        throw error.response?.data?.error || 'Failed to fetch public SEO entries'; // Throw the error message
+        console.error('Error fetching public SEO entries:', error);
+        throw error.response?.data?.error || 'Failed to fetch public SEO entries';
     }
 };
 
 // Function to get a single SEO entry by ID
-export const getPublicSeoById = async (id) => {
+export const getPublicSeoByUrl = async (pageUrl) => {
     try {
-        const response = await api.get(`/public/seo/${id}`); // Adjust the endpoint as necessary
+        const response = await api.get(`/public/seo${pageUrl}`); // Update endpoint to use pageUrl
         return response.data; // Return the response data
     } catch (error) {
-        console.error('Error fetching SEO entry by ID:', error); // Log the error for debugging
-        throw error.response?.data?.error || 'Failed to fetch SEO entry by ID'; // Throw the error message
+        console.error('Error fetching SEO entry by page URL:', error);
+        throw error.response?.data?.error || 'Failed to fetch SEO entry by page URL';
     }
 };
+
 
 export default api;

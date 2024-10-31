@@ -1,31 +1,35 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
+import { getPublicSeoByUrl } from '../utils/api'; // Update import to the new API function
 
 const SeoWrapper = ({ pageId }) => {
     const [seoData, setSeoData] = useState({
-        page_title: 'Default Title',       // Default Title
-        meta_description: 'Default description', // Default description
-        focus_keyword: 'default, keywords',    // Default keywords
-        canonical_url: 'http://example.com/default-url',    // Default canonical URL
-        image_alt_tags: '',   // Default image alt tags
+        page_title: 'Default Title',
+        meta_description: 'Default description',
+        focus_keyword: 'default, keywords',
+        canonical_url: 'http://example.com/default-url',
+        image_alt_tags: '',
     });
 
     useEffect(() => {
         const fetchSeoData = async () => {
+            if (!pageId) {
+                console.error('Page ID is required to fetch SEO data');
+                return;
+            }
             try {
-                const response = await fetch(`/api/seo/${pageId}`); // Adjust the API endpoint as necessary
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                const response = await getPublicSeoByUrl(pageId);
+                if (response) {
+                    setSeoData(response);
+                } else {
+                    console.warn('No SEO data found, using default values.');
                 }
-                const data = await response.json();
-                setSeoData(data);
             } catch (error) {
                 console.error('Error fetching SEO data:', error);
-                // If fetching fails, default values are already set in state
             }
         };
 
-        fetchSeoData();
+        fetchSeoData(); // Call the function to fetch SEO data
     }, [pageId]);
 
     return (

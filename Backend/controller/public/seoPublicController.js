@@ -1,13 +1,16 @@
-const Seo = require('../../models/seo');
+const SeoModel = require('../../models/seo'); // Adjust the import based on your project structure
 const defaultSeoData = require('../../constants/defaultSeoData'); // Adjust the path to where you saved defaultSeoData.js
 
+// Initialize default SEO data
 exports.initializeDefaultSeo = async (req, res) => {
   try {
+    console.log('Initializing default SEO data...');
     for (const seo of defaultSeoData) {
       const existingSeo = await SeoModel.findOne({ page_url: seo.page_url });
       if (!existingSeo) {
         const newSeo = new SeoModel(seo);
         await newSeo.save();
+        console.log(`Added SEO entry for URL: ${seo.page_url}`);
       }
     }
     res.status(200).json({ message: 'Default SEO data initialized.' });
@@ -16,26 +19,44 @@ exports.initializeDefaultSeo = async (req, res) => {
     res.status(500).json({ message: 'Error initializing SEO data.' });
   }
 };
+
 // Get all SEO entries
 exports.getAllPublicSeo = async (req, res) => {
   try {
-    const seoEntries = await Seo.findAll();
+    console.log('Fetching all public SEO entries...');
+    const seoEntries = await SeoModel.findAll(); // Ensure you're using the correct ORM method
+    console.log(`Retrieved ${seoEntries.length} SEO entries.`);
     res.status(200).json(seoEntries);
   } catch (error) {
+    console.error('Error retrieving SEO entries:', error);
     res.status(500).json({ message: "Error retrieving SEO entries", error });
   }
 };
 
-// Get a single SEO entry by ID
-exports.getPublicSeoById = async (req, res) => {
+// Get a single SEO entry by page URL
+exports.getPublicSeoByPageUrl = async (req, res) => {
+  const pageUrl = req.params.pageUrl;
+  console.log(`Fetching SEO entry for page URL: ${pageUrl}`);
+  
   try {
-    const seoEntry = await Seo.findByPk(req.params.id);
+    const seoEntry = await SeoModel.findOne({ where: { page_url: pageUrl } });
     if (!seoEntry) {
+      console.log(`SEO entry not found for URL: ${pageUrl}`);
+
+      // Check for default SEO data
+      const defaultEntry = defaultSeoData.find(entry => entry.page_url === pageUrl);
+      if (defaultEntry) {
+        console.log(`Default SEO data found for URL: ${pageUrl}`);
+        return res.status(200).json(defaultEntry); // Return default entry if found
+      }
+
       return res.status(404).json({ message: "SEO entry not found" });
     }
+
     res.status(200).json(seoEntry);
   } catch (error) {
-    res.status(500).json({ message: "Error retrieving SEO entry", error });
+    console.error('Error retrieving SEO entry:', error);
+    res.status(500).json({ message: "Error retrieving SEO entry", error: error.message });
   }
 };
 
