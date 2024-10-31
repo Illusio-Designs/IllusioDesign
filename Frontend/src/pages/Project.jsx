@@ -152,7 +152,7 @@ const Project = () => {
                                     return (
                                         <div className='mx-3 max-lg:mb-3' key={project.id || index}>
                                             <Link 
-                                                to={`/project/${project.id}`} 
+                                                to={`/project-inside/${encodeURIComponent(featuredProject.title)}`} 
                                                 className='scale-100' 
                                             >
                                                 <div className='project-img overflow-hidden relative'>
