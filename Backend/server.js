@@ -7,6 +7,9 @@ const cors = require('cors');
 const helmet = require('helmet');
 const sequelize = require('./config/database');
 
+// Load environment variables early
+dotenv.config();
+
 // Private routes
 const userRoutes = require('./routes/private/userRoutes');
 const projectRoutes = require('./routes/private/projectRoutes');
@@ -17,9 +20,6 @@ const seoRoutes = require('./routes/private/seoRoutes');
 const projectPublicRoutes = require('./routes/public/projectPublicRoutes');
 const blogPublicRoutes = require('./routes/public/blogPublicRoutes');
 const seoPublicRoutes = require('./routes/public/seoPublicRoutes');
-
-// Load environment variables early
-dotenv.config();
 
 // Create an instance of the express app
 const app = express();

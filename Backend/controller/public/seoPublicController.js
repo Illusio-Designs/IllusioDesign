@@ -6,11 +6,13 @@ exports.initializeDefaultSeo = async (req, res) => {
   try {
     console.log('Initializing default SEO data...');
     for (const seo of defaultSeoData) {
-      const existingSeo = await SeoModel.findOne({ page_url: seo.page_url });
+      const existingSeo = await SeoModel.findOne({ where: { page_url: seo.page_url } });
       if (!existingSeo) {
         const newSeo = new SeoModel(seo);
         await newSeo.save();
         console.log(`Added SEO entry for URL: ${seo.page_url}`);
+      } else {
+        console.log(`SEO entry already exists for URL: ${seo.page_url}`);
       }
     }
     res.status(200).json({ message: 'Default SEO data initialized.' });
@@ -42,21 +44,32 @@ exports.getPublicSeoByPageUrl = async (req, res) => {
     const seoEntry = await SeoModel.findOne({ where: { page_url: pageUrl } });
     if (!seoEntry) {
       console.log(`SEO entry not found for URL: ${pageUrl}`);
-
-      // Check for default SEO data
-      const defaultEntry = defaultSeoData.find(entry => entry.page_url === pageUrl);
-      if (defaultEntry) {
-        console.log(`Default SEO data found for URL: ${pageUrl}`);
-        return res.status(200).json(defaultEntry); // Return default entry if found
-      }
-
       return res.status(404).json({ message: "SEO entry not found" });
     }
-
+    console.log(`SEO entry found for URL: ${pageUrl}`, seoEntry);
     res.status(200).json(seoEntry);
   } catch (error) {
     console.error('Error retrieving SEO entry:', error);
     res.status(500).json({ message: "Error retrieving SEO entry", error: error.message });
   }
+};
+
+// Fetch a single SEO entry by page title
+exports.getPublicSeoByTitle = async (req, res) => {
+    const pageTitle = req.params.pageTitle; // Capture the page title from the request parameters
+    console.log(`Fetching SEO entry for page title: ${pageTitle}`); // Log the page title being fetched
+    
+    try {
+        const seoEntry = await SeoModel.findOne({ where: { page_title: pageTitle } });
+        if (!seoEntry) {
+            console.log(`SEO entry not found for title: ${pageTitle}`);
+            return res.status(404).json({ message: "SEO entry not found" });
+        }
+        console.log(`SEO entry found for title: ${pageTitle}`, seoEntry); // Log the found entry
+        res.status(200).json(seoEntry);
+    } catch (error) {
+        console.error('Error retrieving SEO entry:', error);
+        res.status(500).json({ message: "Error retrieving SEO entry", error: error.message });
+    }
 };
 

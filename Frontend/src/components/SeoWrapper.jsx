@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
-import { getPublicSeoByUrl } from '../utils/api'; // Update import to the new API function
+import { getPublicSeoByUrl } from '../utils/api'; // Ensure this import is correct
 
 const SeoWrapper = ({ pageId }) => {
     const [seoData, setSeoData] = useState({
@@ -17,9 +17,11 @@ const SeoWrapper = ({ pageId }) => {
                 console.error('Page ID is required to fetch SEO data');
                 return;
             }
+            console.log(`Fetching SEO data for pageId: ${pageId}`);
             try {
-                const response = await getPublicSeoByUrl(pageId);
+                const response = await getPublicSeoByUrl(pageId); // Ensure pageId is passed correctly
                 if (response) {
+                    console.log('SEO data fetched successfully:', response);
                     setSeoData(response);
                 } else {
                     console.warn('No SEO data found, using default values.');

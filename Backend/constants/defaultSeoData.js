@@ -31,6 +31,14 @@ const defaultSeoData = [
     canonical_url: 'http://example.com/contact', // The canonical URL for the page
     image_alt_tags: 'default image for contact page', // Alt text for images
   },
+  {
+    page_url: '/blog', // The URL path for the blog page
+    page_title: 'Blog', // The title to be displayed in search results
+    meta_description: 'Read our latest blog posts.', // The meta description for search engines
+    focus_keyword: 'blog, articles', // Keywords to optimize for
+    canonical_url: 'http://example.com/blog', // The canonical URL for the page
+    image_alt_tags: 'default image for blog page', // Alt text for images
+  },
   // Add more entries for other pages as needed
 ];
 
