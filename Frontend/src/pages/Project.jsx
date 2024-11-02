@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { getAllPublicProjects } from '../utils/api';
 import { motion } from 'framer-motion';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 import bgcard from "../assets/bg-card.png";
 import { API_IMAGE_BASE_URL } from '../config';
 import { Link } from 'react-router-dom';
@@ -169,18 +170,25 @@ const Project = () => {
                                 We've helped over {projects.length} firms reach their full potential, and we're happy to do the same for you! Find out how our skills can contribute to your success.
                             </motion.h1>
                             <div className='grid grid-cols-2 max-lg:grid-cols-1 pt-12'>
-                                {projects.map((project, index) => (
-                                <div className='mx-3 max-lg:mb-3' key={project.id || index}>
-                                    <Link 
-                                        to={`/project/${project.id}`} 
-                                        className='scale-100' 
-                                    >
-                                        <div className='project-img overflow-hidden relative'>
-                                            <img
-                                                className='duration-1000 hover:scale-110 block w-full h-full object-cover'
-                                                src={getFullImageUrl(project.image)}
-                                                alt={project.title || 'Project Image'}
-                                            />
+                                {projects.map((project, index) => {
+                                    return (
+                                        <div className='mx-3 max-lg:mb-3' key={project.id || index}>
+                                            <Link 
+                                                to={`/project-inside/${encodeURIComponent(featuredProject.title)}`} 
+                                                className='scale-100' 
+                                            >
+                                                <div className='project-img overflow-hidden relative'>
+                                                    <img
+                                                        className='duration-1000 hover:scale-110 block w-full h-full object-cover'
+                                                        src={getFullImageUrl(project.image)}
+                                                        alt={project.title || 'Project Image'}
+                                                    />
+                                                </div>
+                                            </Link>
+                                            <div className='py-[30px] grid gap-4'>
+                                                <div className='uppercase text-lg'>{project.industry}</div>
+                                                <div className='quantify-font text-3xl'>{project.title}</div>
+                                            </div>
                                         </div>
                                     </Link>
                                     <div className='py-[30px] grid gap-4'>
@@ -212,6 +220,7 @@ const Project = () => {
                     </div>
                 </div>
             </section>
+            <Footer/>
         </>
     );
 };

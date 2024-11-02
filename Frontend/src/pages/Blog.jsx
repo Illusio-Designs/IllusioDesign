@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 import { getAllPublicBlogs } from '../utils/api'; // Adjust the import path as needed
 import DOMPurify from 'dompurify'; // Import DOMPurify for sanitizing HTML
 import { API_IMAGE_BASE_URL } from '../config';
@@ -82,6 +83,7 @@ const Blog = () => {
                     )}
                 </div>
             </div>
+            <Footer />
         </>
     );
 };
