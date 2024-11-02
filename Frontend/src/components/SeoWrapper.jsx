@@ -22,7 +22,7 @@ const SeoWrapper = ({ pageId }) => {
                 const response = await getPublicSeoByUrl(pageId); // Ensure pageId is passed correctly
                 if (response) {
                     console.log('SEO data fetched successfully:', response);
-                    setSeoData(response);
+                    setSeoData(response); // Set the state with the fetched SEO data
                 } else {
                     console.warn('No SEO data found, using default values.');
                 }
