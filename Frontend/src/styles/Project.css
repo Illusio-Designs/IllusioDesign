@@ -1,67 +1,13 @@
-/* styles.css */
-
-.project-list {
-    padding: 40px;
-    background-color: #f4f4f4;
+.slider, .project-post .project-img {
+    mask-image: url(/src/assets/img-bg-card.png);
+    mask-size: 100% 100%;
+    mask-repeat: no-repeat;
 }
-
-.project-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 30px;
+.project-post .project-img {
+    height: 300px;
 }
-
-.project-card {
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    transition: transform 0.3s;
-}
-
-.project-card:hover {
-    transform: translateY(-5px);
-}
-
-.project-image {
-    width: 100%;
-    height: 200px; /* Fixed height for uniformity */
-    object-fit: cover; /* Ensures the image covers the area */
-}
-
-.project-info {
-    padding: 20px;
-}
-
-.project-info h3 {
-    font-size: 1.5em;
-    margin: 10px 0;
-}
-
-.project-year,
-.project-industry,
-.project-services,
-.project-timeline {
-    font-size: 0.9em;
-    color: #666;
-    margin: 5px 0;
-}
-
-.project-content {
-    margin: 10px 0;
-}
-
-.view-assets {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 10px 15px;
-    background-color: #007bff;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-}
-
-.view-assets:hover {
-    background-color: #0056b3;
+@media (min-width: 1024px) and (max-width: 1279px) {
+    .project-slider h1 {
+        font-size: 100px;
+    }
 }

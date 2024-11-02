@@ -1,11 +1,12 @@
 // Project.jsx
 import React, { useEffect, useState } from 'react';
-import { getAllPublicProjects } from '../utils/api'; // Updated import to use getAllPublicProjects
+import { getAllPublicProjects } from '../utils/api';
 import { motion } from 'framer-motion';
 import Header from '../components/Header';
 import bgcard from "../assets/bg-card.png";
 import { API_IMAGE_BASE_URL } from '../config';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom for client-side routing
+import { Link } from 'react-router-dom';
+import '../styles/project.css';
 
 const Project = () => {
     const [projects, setProjects] = useState([]);
@@ -18,14 +19,13 @@ const Project = () => {
         if (!imageName) return '';
         if (imageName.startsWith('http')) return imageName; // Return if it's already a full URL
 
-        const fullUrl = `${API_IMAGE_BASE_URL}/project/${imageName}`;
-        return fullUrl;
+        return `${API_IMAGE_BASE_URL}/project/${imageName}`;
     };
 
     useEffect(() => {
         const fetchPublicProjects = async () => {
             try {
-                const projectData = await getAllPublicProjects(); // Updated to use getAllPublicProjects
+                const projectData = await getAllPublicProjects();
 
                 if (Array.isArray(projectData)) {
                     setProjects(projectData);
@@ -62,7 +62,7 @@ const Project = () => {
             </div>
         );
     }
-
+   
     return (
         <>
             <Header />
@@ -79,7 +79,7 @@ const Project = () => {
                                 }}
                             >
                                 <div>
-                                    <h1 className='tracking-wider uppercase text-9xl font-medium text-[#ec691f] quantify-font leading-[.9]'>
+                                    <h1 className='tracking-wider uppercase text-9xl font-medium text-[#ec691f] quantify-font leading-[.9] '>
                                         Our <br /> Best <br /> Works
                                     </h1>
                                 </div>
@@ -117,12 +117,12 @@ const Project = () => {
                             </div>
                         </div>
                         {featuredProject && (
-                            <div className='mx-3'>
+                            <div className='mx-3 grid h-full'>
                                 <Link 
-                                    to={`/project-inside/${encodeURIComponent(featuredProject.title)}`} // Use title for the link
-                                    className='slider scale-100' 
+                                    to={`/project-inside/${encodeURIComponent(featuredProject.title)}`} 
+                                    className='slider scale-100 grid' 
                                 >
-                                    <div className='project-img overflow-hidden relative'>
+                                    <div className='project-img overflow-hidden relative max-h-[475px]'>
                                         <img 
                                             className='duration-1000 hover:scale-110 block w-full h-full object-cover' 
                                             src={getFullImageUrl(featuredProject.image)} 
@@ -142,34 +142,71 @@ const Project = () => {
             <section className='project-post py-20'>
                 <div className='container mx-auto'>
                     <div className='grid grid-cols-3 max-lg:grid-cols-1'>
-                        <div className='mx-3 max-lg:mb-3'>1</div>
+                        <div className='mx-3 relative max-lg:mb-3'>
+                            <div className='sticky top-8 border-[#ec691f] border-2 rounded-lg p-8 me-20'>
+                                <form>
+                                <div className="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Industries
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                        <li><a class="dropdown-item" href="#">Action</a></li>
+                                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                    </ul>
+                                </div>
+                                    <select className='form-select w-full' id="cars" name="cars">
+                                        <option value="volvo">Volvo</option>
+                                        <option value="saab">Saab</option>
+                                        <option value="fiat">Fiat</option>
+                                        <option value="audi">Audi</option>
+                                    </select>
+                                </form>
+                            </div>
+                        </div>
                         <div className='mx-3 col-span-2'>
                             <motion.h1 className='quantify-font text-5xl'>
                                 We've helped over {projects.length} firms reach their full potential, and we're happy to do the same for you! Find out how our skills can contribute to your success.
                             </motion.h1>
                             <div className='grid grid-cols-2 max-lg:grid-cols-1 pt-12'>
-                                {projects.map((project, index) => {
-                                    return (
-                                        <div className='mx-3 max-lg:mb-3' key={project.id || index}>
-                                            <Link 
-                                                to={`/project/${project.id}`} 
-                                                className='scale-100' 
-                                            >
-                                                <div className='project-img overflow-hidden relative'>
-                                                    <img
-                                                        className='duration-1000 hover:scale-110 block w-full h-full object-cover'
-                                                        src={getFullImageUrl(project.image)}
-                                                        alt={project.title || 'Project Image'}
-                                                    />
-                                                </div>
-                                            </Link>
-                                            <div className='py-[30px] grid gap-4'>
-                                                <div className='uppercase text-lg'>{project.industry}</div>
-                                                <div className='quantify-font text-3xl'>{project.title}</div>
-                                            </div>
+                                {projects.map((project, index) => (
+                                <div className='mx-3 max-lg:mb-3' key={project.id || index}>
+                                    <Link 
+                                        to={`/project/${project.id}`} 
+                                        className='scale-100' 
+                                    >
+                                        <div className='project-img overflow-hidden relative'>
+                                            <img
+                                                className='duration-1000 hover:scale-110 block w-full h-full object-cover'
+                                                src={getFullImageUrl(project.image)}
+                                                alt={project.title || 'Project Image'}
+                                            />
                                         </div>
-                                    );
-                                })}
+                                    </Link>
+                                    <div className='py-[30px] grid gap-4'>
+                                        <div className='uppercase text-lg'>{project.industry}</div>
+                                        <div className='quantify-font text-3xl'>{project.title}</div>
+                                    </div>
+                                </div>
+                            ))}
+                                <div className='mx-3 max-lg:mb-3'>
+                                        <Link 
+                                            to='#' 
+                                            className='scale-100' 
+                                        >
+                                            <div className='project-img overflow-hidden relative'>
+                                                <img
+                                                    className='duration-1000 hover:scale-110 block w-full h-full object-cover'
+                                                    src='../src/project1.jpg'
+                                                    alt='image'
+                                                />
+                                            </div>
+                                        </Link>
+                                        <div className='py-[30px] grid gap-4'>
+                                            <div className='uppercase text-lg'>hello</div>
+                                            <div className='quantify-font text-3xl'>hello</div>
+                                        </div>
+                                    </div>
                             </div>
                         </div>
                     </div>
