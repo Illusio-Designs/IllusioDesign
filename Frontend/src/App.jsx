@@ -9,6 +9,10 @@ import ContactUs from './pages/ContactUs';
 import Services from './pages/Services';
 import SeoWrapper from './components/SeoWrapper'; // Import your SeoWrapper
 import AboutUs from './pages/AboutUs';
+import Privacy from './pages/Privacy';
+import Design from './pages/Design';
+import Development from './pages/Development';
+import Marketing from './pages/Marketing';
 
 function App() {
   const action = useNavigationType();
@@ -28,7 +32,11 @@ function App() {
       <Route path="/blog-inside/:title" element={<BlogInside />} />
       <Route path="/contactus" element={<><SeoWrapper pageId="/contactus" /><ContactUs /></>} />
       <Route path="/services" element={<><SeoWrapper pageId="/services" /><Services /></>} />
+      <Route path="/services/design" element={<><SeoWrapper pageId="/services/design" /><Design /></>} />
+      <Route path="/services/development" element={<><SeoWrapper pageId="/services/development" /><Development /></>} />
+      <Route path="/services/marketing" element={<><SeoWrapper pageId="/services/marketing" /><Marketing /></>} />
       <Route path="/aboutus" element={<><SeoWrapper pageId="/aboutus" /><AboutUs /></>} />
+      <Route path="/privacy" element={<><SeoWrapper pageId="/privacy" /><Privacy /></>} />
     </Routes>
   );
 }
@@ -40,4 +48,3 @@ const AppWrapper = () => (
 );
 
 export default AppWrapper;
-
