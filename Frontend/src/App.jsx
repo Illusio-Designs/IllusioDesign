@@ -13,6 +13,7 @@ import Privacy from './pages/Privacy';
 import Design from './pages/Design';
 import Development from './pages/Development';
 import Marketing from './pages/Marketing';
+import ThemeManager from './components/ThemeManager'; // Import the ThemeManager
 
 function App() {
   const action = useNavigationType();
@@ -24,20 +25,23 @@ function App() {
   }, [action]);
 
   return (
-    <Routes>
-      <Route path="/" element={<><SeoWrapper pageId="/" /><Home /></>} />
-      <Route path="/project" element={<><SeoWrapper pageId="/project" /><Project /></>} />
-      <Route path="/project-inside/:title" element={<ProjectInside />} />
-      <Route path="/blog" element={<><SeoWrapper pageId="/blog" /><Blog /></>} />
-      <Route path="/blog-inside/:title" element={<BlogInside />} />
-      <Route path="/contactus" element={<><SeoWrapper pageId="/contactus" /><ContactUs /></>} />
-      <Route path="/services" element={<><SeoWrapper pageId="/services" /><Services /></>} />
-      <Route path="/services/design" element={<><SeoWrapper pageId="/services/design" /><Design /></>} />
-      <Route path="/services/development" element={<><SeoWrapper pageId="/services/development" /><Development /></>} />
-      <Route path="/services/marketing" element={<><SeoWrapper pageId="/services/marketing" /><Marketing /></>} />
-      <Route path="/aboutus" element={<><SeoWrapper pageId="/aboutus" /><AboutUs /></>} />
-      <Route path="/privacy" element={<><SeoWrapper pageId="/privacy" /><Privacy /></>} />
-    </Routes>
+    <>
+      <ThemeManager /> {/* Include the ThemeManager here */}
+      <Routes>
+        <Route path="/" element={<><SeoWrapper pageId="/" /><Home /></>} />
+        <Route path="/project" element={<><SeoWrapper pageId="/project" /><Project /></>} />
+        <Route path="/project-inside/:title" element={<ProjectInside />} />
+        <Route path="/blog" element={<><SeoWrapper pageId="/blog" /><Blog /></>} />
+        <Route path="/blog-inside/:title" element={<BlogInside />} />
+        <Route path="/contactus" element={<><SeoWrapper pageId="/contactus" /><ContactUs /></>} />
+        <Route path="/services" element={<><SeoWrapper pageId="/services" /><Services /></>} />
+        <Route path="/services/design" element={<><SeoWrapper pageId="/services/design" /><Design /></>} />
+        <Route path="/services/development" element={<><SeoWrapper pageId="/services/development" /><Development /></>} />
+        <Route path="/services/marketing" element={<><SeoWrapper pageId="/services/marketing" /><Marketing /></>} />
+        <Route path="/aboutus" element={<><SeoWrapper pageId="/aboutus" /><AboutUs /></>} />
+        <Route path="/privacy" element={<><SeoWrapper pageId="/privacy" /><Privacy /></>} />
+      </Routes>
+    </>
   );
 }
 

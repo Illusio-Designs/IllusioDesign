@@ -48,3 +48,18 @@ p {
   display: block;
   transition: all 3s linear;
 }
+
+
+/* Light Mode Styles */
+body {
+  background-color: white;
+  color: black;
+}
+
+/* Dark Mode Styles */
+body.dark-mode {
+  background-color: black;
+  color: white;
+}
+
+/* Additional styles for buttons, links, etc. */
