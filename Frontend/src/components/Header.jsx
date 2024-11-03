@@ -2,6 +2,7 @@ import React from 'react';
 import { color, motion } from 'framer-motion';
 import '../styles/Header.css'; // Import custom CSS for additional styling
 import Logo from '../assets/logo.png'
+import MegaMenu from './MegaMenu'; // Import MegaMenu component
 
 const Header = () => {
   const navLinks = document.querySelector('.nav-links');
@@ -38,6 +39,7 @@ const Header = () => {
                 <motion.div variants={{initial: {y: 0}, hovered: {y: "-120%"}, duration: 0.5 }}>Services</motion.div>
                 <motion.div className='absolute inset-y-2 inset-x-4 hover:text-[#ec691f]' variants={{initial: {y: "120%"}, hovered: {y: 0}, duration: 0.5}}>Services</motion.div>
               </motion.a>
+              <MegaMenu /> {/* Add MegaMenu component */}
             </li>
             <li>
               <motion.a 

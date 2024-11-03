@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { getAllSeo, createSeo, updateSeo, deleteSeo } from '../services/seoApi'; // Adjust the path if necessary
-import EditSeo from '../components/EditSeo'; // Modal component for adding/editing SEO entries
+import { getAllSeo, createSeo, updateSeo, deleteSeo } from '../services/seoApi';
+import EditSeo from '../components/EditSeo';
 
-const SeoPage = () => {
+const Seo = () => {
   const [seoEntries, setSeoEntries] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [selectedSeo, setSelectedSeo] = useState(null); // SEO entry selected for editing
+  const [selectedSeo, setSelectedSeo] = useState(null);
 
   useEffect(() => {
     const fetchSeoEntries = async () => {
@@ -20,76 +20,77 @@ const SeoPage = () => {
   }, []);
 
   const handleAddSeo = () => {
-    setSelectedSeo(null); // Clear the selected SEO for adding a new one
-    setShowModal(true); // Show modal
+    setSelectedSeo(null);
+    setShowModal(true);
   };
 
   const handleEditSeo = (seo) => {
-    setSelectedSeo(seo); // Set the SEO to be edited
-    setShowModal(true); // Show modal
+    setSelectedSeo(seo);
+    setShowModal(true);
   };
 
   const handleDeleteSeo = async (id) => {
     const confirmDelete = window.confirm('Are you sure you want to delete this SEO entry?');
-    if (confirmDelete && id) {
+    if (confirmDelete) {
       try {
-        await deleteSeo(id); // Call to backend to delete the SEO entry
-        setSeoEntries(seoEntries.filter(seo => seo.id !== id)); // Remove the SEO from the state
+        await deleteSeo(id);
+        setSeoEntries(seoEntries.filter(seo => seo.id !== id));
         console.log(`SEO entry with ID ${id} deleted successfully.`);
       } catch (error) {
         console.error('Error deleting SEO entry:', error);
         alert('Failed to delete SEO entry. Please try again.');
       }
-    } else {
-      console.error('Invalid SEO ID:', id);
+    }
+  };
+
+  const handleSeoUpdate = async (updatedSeo) => {
+    try {
+      if (selectedSeo) {
+        const response = await updateSeo(updatedSeo);
+        setSeoEntries(seoEntries.map(seo => (seo.id === response.id ? response : seo)));
+        console.log(`SEO entry with ID ${response.id} updated successfully.`);
+      } else {
+        const newSeo = await createSeo(updatedSeo);
+        setSeoEntries([...seoEntries, newSeo]);
+        console.log(`New SEO entry added successfully.`);
+      }
+      setShowModal(false);
+    } catch (error) {
+      console.error('Error updating SEO entry:', error);
+      alert('Failed to update SEO entry. Please try again.');
     }
   };
 
   return (
     <div className="container mx-auto p-4">
-      <div className="flex justify-between mb-4">
-        <h2 className="text-xl font-bold">SEO Entries</h2>
-        <button
-          className="bg-green-500 text-white px-4 py-2 rounded"
-          onClick={handleAddSeo}
-        >
-          Add SEO Entry
-        </button>
-      </div>
+      <h2 className="text-xl font-bold">SEO Entries</h2>
+      <button className="bg-green-500 text-white px-4 py-2 rounded" onClick={handleAddSeo}>
+        Add SEO Entry
+      </button>
       <table className="min-w-full bg-white">
         <thead>
           <tr>
-            <th className="py-2">Page URL</th>
-            <th className="py-2">Page Title</th>
-            <th className="py-2">Meta Description</th>
-            <th className="py-2">Focus Keyword</th>
-            <th className="py-2">Canonical URL</th>
-            <th className="py-2">Image Alt Tags</th>
-            <th className="py-2">Actions</th>
+            <th>Page URL</th>
+            <th>Page Title</th>
+            <th>Meta Description</th>
+            <th>Focus Keyword</th>
+            <th>Canonical URL</th>
+            <th>Image Alt Tags</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {seoEntries.map(seo => (
-            <tr key={seo.id} className="border-t">
-              <td className="py-2">{seo.page_url}</td>
-              <td className="py-2">{seo.page_title}</td>
-              <td className="py-2">{seo.meta_description}</td>
-              <td className="py-2">{seo.focus_keyword}</td>
-              <td className="py-2">{seo.canonical_url}</td>
-              <td className="py-2">{seo.image_alt_tags}</td>
-              <td className="py-2 flex space-x-2">
-                <button
-                  className="bg-blue-500 text-white px-2 py-1 rounded"
-                  onClick={() => handleEditSeo(seo)}
-                >
-                  Edit
-                </button>
-                <button
-                  className="bg-red-500 text-white px-2 py-1 rounded"
-                  onClick={() => handleDeleteSeo(seo.id)}
-                >
-                  Delete
-                </button>
+            <tr key={seo.id}>
+              <td>{seo.page_url}</td>
+              <td>{seo.page_title}</td>
+              <td>{seo.meta_description}</td>
+              <td>{seo.focus_keyword}</td>
+              <td>{seo.canonical_url}</td>
+              <td>{seo.image_alt_tags}</td>
+              <td>
+                <button onClick={() => handleEditSeo(seo)}>Edit</button>
+                <button onClick={() => handleDeleteSeo(seo.id)}>Delete</button>
               </td>
             </tr>
           ))}
@@ -99,18 +100,11 @@ const SeoPage = () => {
         <EditSeo
           seo={selectedSeo}
           onClose={() => setShowModal(false)}
-          onSeoUpdated={(updatedSeo) => {
-            if (selectedSeo) {
-              setSeoEntries(seoEntries.map(s => (s.id === updatedSeo.id ? updatedSeo : s)));
-            } else {
-              setSeoEntries([...seoEntries, updatedSeo]);
-            }
-            setShowModal(false);
-          }}
+          onSeoUpdated={handleSeoUpdate}
         />
       )}
     </div>
   );
 };
 
-export default SeoPage;
+export default Seo; 

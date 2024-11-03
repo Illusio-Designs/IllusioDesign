@@ -22,16 +22,20 @@ exports.initializeDefaultSeo = async (req, res) => {
   }
 };
 
-// Get all SEO entries
+// Get all SEO entries (only for homepage)
 exports.getAllPublicSeo = async (req, res) => {
   try {
-    console.log('Fetching all public SEO entries...');
-    const seoEntries = await SeoModel.findAll(); // Ensure you're using the correct ORM method
-    console.log(`Retrieved ${seoEntries.length} SEO entries.`);
-    res.status(200).json(seoEntries);
+    console.log('Fetching SEO entry for homepage...');
+    const seoEntry = await SeoModel.findOne({ where: { page_url: '/' } }); // Fetch only the homepage entry
+    if (!seoEntry) {
+      console.log('SEO entry not found for homepage.');
+      return res.status(404).json({ message: "SEO entry not found for homepage" });
+    }
+    console.log('Retrieved SEO entry for homepage:', seoEntry);
+    res.status(200).json(seoEntry); // Return the single homepage entry
   } catch (error) {
-    console.error('Error retrieving SEO entries:', error);
-    res.status(500).json({ message: "Error retrieving SEO entries", error });
+    console.error('Error retrieving SEO entry:', error);
+    res.status(500).json({ message: "Error retrieving SEO entry", error });
   }
 };
 
@@ -58,22 +62,5 @@ exports.getPublicSeoByPageUrl = async (req, res) => {
     }
 };
 
-// Fetch a single SEO entry by page title
-exports.getPublicSeoByTitle = async (req, res) => {
-    const pageTitle = req.params.pageTitle; // Capture the page title from the request parameters
-    console.log(`Fetching SEO entry for page title: ${pageTitle}`); // Log the page title being fetched
-    
-    try {
-        const seoEntry = await SeoModel.findOne({ where: { page_title: pageTitle } });
-        if (!seoEntry) {
-            console.log(`SEO entry not found for title: ${pageTitle}`);
-            return res.status(404).json({ message: "SEO entry not found" });
-        }
-        console.log(`SEO entry found for title: ${pageTitle}`, seoEntry); // Log the found entry
-        res.status(200).json(seoEntry);
-    } catch (error) {
-        console.error('Error retrieving SEO entry:', error);
-        res.status(500).json({ message: "Error retrieving SEO entry", error: error.message });
-    }
-};
+
 

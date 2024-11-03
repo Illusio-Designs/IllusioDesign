@@ -51,12 +51,23 @@ export const createSeo = async (formData) => {
 };
 
 // Update an existing SEO entry
-export const updateSeo = async (id, formData) => {
+export const updateSeo = async (updatedSeo) => {
   try {
-    const response = await api.put(`/seo/${id}`, formData); // Adjust the endpoint as necessary
-    return response.data;
+    const response = await api.put(`/seo/${updatedSeo.id}`, updatedSeo); // Ensure updatedSeo.id is defined
+    return response.data; // This should return the updated data
   } catch (error) {
     console.error('Error updating SEO entry:', error);
+    throw error;
+  }
+};
+
+// Update an existing SEO entry by URL
+export const updateSeoByUrl = async (url, formData) => {
+  try {
+    const response = await api.put(`/seo/url/${encodeURIComponent(url)}`, formData); // Adjust the endpoint as necessary
+    return response.data;
+  } catch (error) {
+    console.error('Error updating SEO entry by URL:', error);
     throw error;
   }
 };
