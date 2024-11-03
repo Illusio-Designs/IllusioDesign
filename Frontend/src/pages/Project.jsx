@@ -63,7 +63,7 @@ const Project = () => {
     return (
         <>
             <Header />
-            <section className='project-slider py-20'>
+            <section className='project-slider py-20 quantify-font'>
                 <div className='container mx-auto'>
                     <div className='grid grid-cols-2 items-center max-lg:grid-cols-1'>
                         <div className='mx-3 max-lg:mb-3'>
@@ -86,9 +86,9 @@ const Project = () => {
                                                 Projects <br /> Done
                                             </div>
                                         </div>
-                                        <a href='#' className='flex items-center'>
-                                            <div className='bg-[#ec691f] p-4 rounded-full'>
-                                                <svg width="16" height="16" fill="currentColor" className="text-white" viewBox="0 0 16 16">
+                                        <a href='#' className='flex items-center all-cases-btn'>
+                                            <div className='bg-[#ec691f] p-4 rounded-full arrow-1'>
+                                                <svg width="16" height="16" fill="currentColor" className="bi bi-arrow-down stroke-[#fff]" viewBox="0 0 16 16">
                                                     <path fillRule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1" />
                                                 </svg>
                                             </div>
@@ -96,30 +96,35 @@ const Project = () => {
                                                 initial="initial"
                                                 whileHover="hovered"
                                                 transition={{ duration: 0.3 }}
-                                                className="text-md text-white bg-[#ec691f] rounded-full uppercase tracking-wider py-3 px-5"
+                                                className="text-md text-white bg-[#ec691f] rounded-full uppercase tracking-wider py-3 px-5 relative whitespace-nowrap overflow-hidden"
                                             >
                                                 <motion.div variants={{ initial: { y: 0 }, hovered: { y: "-195%" } }}>All Cases</motion.div>
                                                 <motion.div className='absolute inset-y-3 inset-x-5' variants={{ initial: { y: "195%" }, hovered: { y: 0 } }}>All Cases</motion.div>
                                             </motion.div>
+                                            <div className='bg-[#ec691f] p-4 rounded-full arrow-2'>
+                                                <svg width="16" height="16" fill="currentColor" className="bi bi-arrow-down stroke-[#fff]" viewBox="0 0 16 16">
+                                                    <path fillRule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1" />
+                                                </svg>
+                                            </div>
                                         </a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         {featuredProject && (
-                            <div className='mx-3'>
+                            <div className='mx-3 grid h-full'>
                                 <Link 
                                     to={`/project-inside/${encodeURIComponent(featuredProject.title)}`} 
-                                    className='slider'
+                                    className='slider scale-100 grid'
                                 >
                                     <div className='project-img overflow-hidden relative max-h-[475px]'>
                                         <img 
-                                            className='duration-1000 hover:scale-110 w-full h-full object-cover' 
+                                            className='duration-1000 hover:scale-110 block w-full h-full object-cover' 
                                             src={getFullImageUrl(featuredProject.image)} 
                                             alt={featuredProject.title}
                                         />
                                     </div>
-                                    <div className='pt-[30px] pb-[70px] px-[50px] bg-[#ec691f] text-white'>
+                                    <div className='pt-[30px] pb-[70px] px-[50px] bg-[#ec691f] text-white grid gap-4'>
                                         <div className='uppercase text-lg'>{featuredProject.industry}</div>
                                         <div className='text-3xl'>{featuredProject.title}</div>
                                     </div>
