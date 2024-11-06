@@ -4,6 +4,7 @@ import Hero from '../components/Hero';
 import Footer from '../components/Footer';
 import { motion, useTransform, useScroll } from "framer-motion";
 import React from "react";
+import Appointment from '../components/Appointment';
 
 const ScrollAnimation = ({ children }) => {
     return (
@@ -39,6 +40,7 @@ const Home = () => {
                     </motion.div>
                 </ScrollAnimation>
             </div>
+            <Appointment />
             <Footer />
         </>
     );

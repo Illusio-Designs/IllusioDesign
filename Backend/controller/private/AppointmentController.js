@@ -1,7 +1,5 @@
 const Appointment = require('../../models/Appointment');
 
-
-
 // Get all appointments (private)
 exports.getAllAppointments = async (req, res) => {
     try {
@@ -41,5 +39,20 @@ exports.updateAppointmentStatus = async (req, res) => {
     } catch (error) {
         console.error('Error updating appointment status:', error);
         res.status(500).json({ message: 'Error updating appointment status', error });
+    }
+};
+
+// Delete an appointment (private)
+exports.deleteAppointment = async (req, res) => {
+    try {
+        const appointment = await Appointment.findByPk(req.params.id);
+        if (!appointment) {
+            return res.status(404).json({ message: 'Appointment not found' });
+        }
+        await appointment.destroy(); // Delete the appointment
+        res.status(204).send(); // No content response
+    } catch (error) {
+        console.error('Error deleting appointment:', error);
+        res.status(500).json({ message: 'Error deleting appointment', error });
     }
 }; 

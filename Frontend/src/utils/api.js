@@ -3,7 +3,7 @@ import { API_BASE_URL } from '../config'; // Ensure you have a config file with 
 
 // Create an Axios instance with the base URL
 const api = axios.create({
-    baseURL: API_BASE_URL,
+    baseURL: API_BASE_URL, // Ensure this is correct
     headers: {
         'Content-Type': 'application/json',
     },
@@ -89,5 +89,16 @@ export const initializeDefaultSeo = async () => {
     } catch (error) {
         console.error('Error initializing default SEO data:', error);
         throw error.response?.data?.error || 'Failed to initialize default SEO data';
+    }
+};
+
+// Create a new appointment
+export const createPublicAppointment = async (formData) => {
+    try {
+        const response = await api.post('/public/appointment', formData); // Ensure this matches your backend route
+        return response.data;
+    } catch (error) {
+        console.error('Error creating appointment:', error);
+        throw error; // Rethrow the error for handling in the calling function
     }
 };

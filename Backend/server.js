@@ -10,18 +10,22 @@ const sequelize = require('./config/database');
 // Load environment variables early
 dotenv.config();
 
-// Private routes
+
+
+// private routes
 const userRoutes = require('./routes/private/userRoutes');
 const projectRoutes = require('./routes/private/projectRoutes');
 const blogRoutes = require('./routes/private/blogRoutes');
 const seoRoutes = require('./routes/private/seoRoutes');
+const appointmentRoutes = require('./routes/private/appointmentRoutes');
 
 // Public Routes
 const projectPublicRoutes = require('./routes/public/projectPublicRoutes');
 const blogPublicRoutes = require('./routes/public/blogPublicRoutes');
 const seoPublicRoutes = require('./routes/public/seoPublicRoutes');
+const appointmentPublicRoutes = require('./routes/public/appointmentPublicRoutes');
 
-// Create an instance of the express app
+// Create express app
 const app = express();
 
 // Security middleware with customized Helmet configuration
@@ -41,7 +45,6 @@ app.use(helmet({
 
 // CORS setup
 const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174'];
-
 const corsOptions = {
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.indexOf(origin) !== -1) {
@@ -59,10 +62,10 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(cookieParser());
-app.use(express.json({ limit: '50mb' })); // Increased limit for larger payloads
+app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
-// Set up session
+// Session setup
 app.use(session({
   secret: process.env.SESSION_SECRET || 'your-fallback-secret-key-here',
   resave: false,
@@ -75,7 +78,7 @@ app.use(session({
   }
 }));
 
-// Custom middleware to handle static file requests
+// Static files middleware
 app.use('/uploads', (req, res, next) => {
   res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
   res.setHeader('Access-Control-Allow-Origin', allowedOrigins.join(', '));
@@ -83,31 +86,30 @@ app.use('/uploads', (req, res, next) => {
   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   
-  // Handle OPTIONS requests
   if (req.method === 'OPTIONS') {
     return res.sendStatus(204);
   }
-  
   next();
 }, express.static(path.join(__dirname, 'uploads')));
 
-// Private routes
+// Routes
 app.use('/users', userRoutes);
 app.use('/projects', projectRoutes);
 app.use('/blogs', blogRoutes);
-app.use('/seo', seoRoutes)
+app.use('/seo', seoRoutes);
+app.use('/appointment', appointmentRoutes);
 
-// Public routes
 app.use('/api/public/projects', projectPublicRoutes);
 app.use('/api/public/blogs', blogPublicRoutes);
 app.use('/api/public/seo', seoPublicRoutes);
+app.use('/api/public/appointment', appointmentPublicRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// Error handling for unknown routes (404)
+// 404 handler
 app.use((req, res) => {
   res.status(404).json({ 
     status: 'error',
@@ -116,10 +118,8 @@ app.use((req, res) => {
   });
 });
 
-// General error handling middleware
+// Error handler
 app.use((err, req, res, next) => {
-  console.error(`[${new Date().toISOString()}] Error:`, err);
-  
   const status = err.status || 500;
   const message = process.env.NODE_ENV === 'production' 
     ? 'An internal server error occurred'
@@ -132,39 +132,40 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Define the port
-const PORT = process.env.PORT || 3000;
+// Database connection and sync function
+const initializeDatabase = async () => {
+  try {
+    // Test connection
+    await sequelize.authenticate();
 
-// Database connection with retry logic
-const connectWithRetry = async (retries = 5, interval = 5000) => {
-  for (let i = 0; i < retries; i++) {
-    try {
-      await sequelize.sync(); // This is where tables are created/updated
-      console.log('Database connection established successfully');
-      return true;
-    } catch (err) {
-      console.error(`Database connection attempt ${i + 1} failed:`, err);
-      if (i === retries - 1) throw err; // If all retries fail, throw the error
-      await new Promise(resolve => setTimeout(resolve, interval)); // Wait before retrying
+    // Sync all models
+    if (process.env.NODE_ENV === 'development') {
+      await sequelize.sync({ alter: true });
+    } else {
+      await sequelize.sync();
     }
+
+    return true;
+  } catch (error) {
+    throw error;
   }
-  return false;
 };
 
 // Start server
+const PORT = process.env.PORT || 3000;
+
 const startServer = async () => {
   try {
-    await connectWithRetry();
+    await initializeDatabase();
     
     app.listen(PORT, () => {
       console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
     });
-  } catch (err) {
-    console.error('Failed to start server:', err);
+  } catch (error) {
     process.exit(1);
   }
 };
 
 startServer();
 
-module.exports = app; // Export for testing
+module.exports = app;

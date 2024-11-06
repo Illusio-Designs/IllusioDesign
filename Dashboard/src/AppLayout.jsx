@@ -17,6 +17,7 @@ import AddUser from './components/AddUser'; // Import the new AddUser component
 import Blog from './pages/Blog';
 import Seo from './pages/Seo';
 import EditSeo from './components/EditSeo';
+import Appointment from './pages/Appointment';
 
 const AppLayout = () => {
   const { isAuthenticated } = useAuth();
@@ -71,7 +72,11 @@ const AppLayout = () => {
               path="/seo/edit/:id" 
               element={<ProtectedRoute element={<EditSeo />} />} 
             />
-            <Route path="/login" element={isAuthenticated ? <Navigate to="/home" /> : <Login />} />
+            <Route 
+              path="/appointment" 
+              element={<ProtectedRoute element={<Appointment />} />} 
+            />
+            <Route path="/login" element={isAuthenticated ? <Navigate to={location.pathname} /> : <Login />} />
           </Routes>
         </div>
       </div>

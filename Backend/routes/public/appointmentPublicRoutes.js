@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const appointmentController = require('../controller/AppointmentController');
+const appointmentPublicController = require('../../controller/public/appointmentPublicController');
 
 // Public route to create an appointment
-router.post('/', appointmentController.createAppointment);
+router.post('/', appointmentPublicController.createPublicAppointment);
+
+module.exports = router;

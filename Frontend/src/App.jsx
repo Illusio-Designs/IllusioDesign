@@ -40,6 +40,7 @@ function App() {
         <Route path="/services/marketing" element={<><SeoWrapper pageId="/services/marketing" /><Marketing /></>} />
         <Route path="/aboutus" element={<><SeoWrapper pageId="/aboutus" /><AboutUs /></>} />
         <Route path="/privacy" element={<><SeoWrapper pageId="/privacy" /><Privacy /></>} />
+
       </Routes>
     </>
   );
