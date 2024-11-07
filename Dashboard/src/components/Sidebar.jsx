@@ -24,6 +24,9 @@ const Sidebar = () => {
         <li>
           <Link to="/appointment">Appointment</Link>
         </li>
+        <li>
+          <Link to="/review">Review</Link>
+        </li>
       </ul>
     </nav>
   );

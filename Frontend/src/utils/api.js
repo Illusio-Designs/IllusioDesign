@@ -102,3 +102,25 @@ export const createPublicAppointment = async (formData) => {
         throw error; // Rethrow the error for handling in the calling function
     }
 };
+
+// Function to create a new review
+export const createPublicReview = async (formData) => {
+    try {
+        const response = await api.post('/public/review', formData); // Ensure this matches your backend route
+        return response.data;
+    } catch (error) {
+        console.error('Error creating review:', error);
+        throw error; // Rethrow the error for handling in the calling function
+    }
+};
+
+// Function to get all public reviews
+export const getAllPublicReviews = async () => {
+    try {
+        const response = await api.get('/public/review'); // Ensure this matches your backend route
+        return response.data; // Return the response data
+    } catch (error) {
+        console.error('Error fetching public reviews:', error);
+        throw error.response?.data?.error || 'Failed to fetch public reviews'; // Throw the error message
+    }
+};

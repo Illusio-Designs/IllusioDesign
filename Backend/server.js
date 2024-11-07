@@ -18,12 +18,15 @@ const projectRoutes = require('./routes/private/projectRoutes');
 const blogRoutes = require('./routes/private/blogRoutes');
 const seoRoutes = require('./routes/private/seoRoutes');
 const appointmentRoutes = require('./routes/private/appointmentRoutes');
+const reviewRoutes = require('./routes/private/reviewRoutes');
 
 // Public Routes
 const projectPublicRoutes = require('./routes/public/projectPublicRoutes');
 const blogPublicRoutes = require('./routes/public/blogPublicRoutes');
 const seoPublicRoutes = require('./routes/public/seoPublicRoutes');
 const appointmentPublicRoutes = require('./routes/public/appointmentPublicRoutes');
+const reviewPublicRoutes = require('./routes/public/reviewPublicRoutes');
+
 
 // Create express app
 const app = express();
@@ -98,11 +101,14 @@ app.use('/projects', projectRoutes);
 app.use('/blogs', blogRoutes);
 app.use('/seo', seoRoutes);
 app.use('/appointment', appointmentRoutes);
+app.use('/review', reviewRoutes);
+
 
 app.use('/api/public/projects', projectPublicRoutes);
 app.use('/api/public/blogs', blogPublicRoutes);
 app.use('/api/public/seo', seoPublicRoutes);
 app.use('/api/public/appointment', appointmentPublicRoutes);
+app.use('/api/public/review', reviewPublicRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {

@@ -1,71 +1,15 @@
 import React, { useState } from 'react';
 import { createPublicAppointment } from '../utils/api';
-import '../styles/Appointment.css';
-
-const countries = [
-    { name: 'India', code: 'in', dialCode: '+91' },
-    { name: 'United States', code: 'us', dialCode: '+1' },
-    { name: 'United Kingdom', code: 'gb', dialCode: '+44' },
-    { name: 'Australia', code: 'au', dialCode: '+61' },
-    { name: 'Canada', code: 'ca', dialCode: '+1' },
-    { name: 'Germany', code: 'de', dialCode: '+49' },
-    { name: 'France', code: 'fr', dialCode: '+33' },
-    { name: 'Japan', code: 'jp', dialCode: '+81' },
-    { name: 'China', code: 'cn', dialCode: '+86' },
-    { name: 'Brazil', code: 'br', dialCode: '+55' },
-    { name: 'South Africa', code: 'za', dialCode: '+27' },
-    { name: 'New Zealand', code: 'nz', dialCode: '+64' },
-    { name: 'Singapore', code: 'sg', dialCode: '+65' },
-    { name: 'United Arab Emirates', code: 'ae', dialCode: '+971' },
-    { name: 'Russia', code: 'ru', dialCode: '+7' },
-    // Add more countries as needed
-];
-
-const CombinedCountryPhoneInput = ({ phoneValue, selectedCountry, onChange }) => {
-    const handleCountryChange = (e) => {
-        const countryCode = e.target.value;
-        const country = countries.find((c) => c.code === countryCode);
-        if (country) {
-            onChange(`${country.dialCode}${phoneValue}`, country.code);
-        }
-    };
-
-    const handlePhoneChange = (e) => {
-        const newPhoneValue = e.target.value;
-        onChange(newPhoneValue, selectedCountry);
-    };
-
-    return (
-        <div className="country-phone-input">
-            <select
-                value={selectedCountry}
-                onChange={handleCountryChange}
-                className="country-dropdown"
-            >
-                {countries.map((country) => (
-                    <option key={country.code} value={country.code}>
-                        {country.name} ({country.dialCode})
-                    </option>
-                ))}
-            </select>
-            <input
-                type="text"
-                value={phoneValue}
-                onChange={handlePhoneChange}
-                placeholder="Enter mobile number with dial code"
-                required
-                className="input is--phone w-input"
-            />
-        </div>
-    );
-};
+import './Appointment.css';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 
 const Appointment = () => {
     const [formData, setFormData] = useState({
         fullName: '',
         email: '',
-        phone: '',
-        countryCode: 'in',
+        mobileNo: '',
+        country: 'in', // Default country code
         budget: '',
         message: '',
         appointmentDate: new Date().toISOString().slice(0, 10),
@@ -76,29 +20,34 @@ const Appointment = () => {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleCombinedInputChange = (phone, countryCode) => {
+    const handlePhoneChange = (phone, countryData) => {
+        console.log('Phone:', phone); // Log the phone number
+        console.log('Country Data:', countryData); // Log country data to check values
+        console.log('Country ISO2:', countryData.iso2); // Log the ISO2 code specifically
         setFormData((prev) => ({
             ...prev,
-            phone,
-            countryCode,
+            mobileNo: phone,
+            country: countryData.iso2 || 'in', // Capture the country code (ISO 3166-1 alpha-2), default to 'in' if undefined
         }));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log('Form Data:', formData); // Log the form data to check values
         try {
-            await createPublicAppointment(formData);
+            await createPublicAppointment(formData); // Ensure formData includes country
             alert('Appointment created successfully!');
             setFormData({
                 fullName: '',
                 email: '',
-                phone: '',
-                countryCode: 'in',
+                mobileNo: '',
+                country: 'in', // Reset to default country code
                 budget: '',
                 message: '',
                 appointmentDate: new Date().toISOString().slice(0, 10),
             });
         } catch (error) {
+            console.error('Error creating appointment:', error);
             alert('Failed to create appointment. Please try again.');
         }
     };
@@ -123,10 +72,12 @@ const Appointment = () => {
                     placeholder="Email"
                     required
                 />
-                <CombinedCountryPhoneInput
-                    phoneValue={formData.phone}
-                    selectedCountry={formData.countryCode}
-                    onChange={handleCombinedInputChange}
+                <PhoneInput
+                    country={formData.country}
+                    value={formData.mobileNo}
+                    onChange={(phone, countryData) => handlePhoneChange(phone, countryData)}
+                    placeholder="Mobile Number"
+                    required
                 />
                 <input
                     type="number"

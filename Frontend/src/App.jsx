@@ -14,6 +14,7 @@ import Design from './pages/Design';
 import Development from './pages/Development';
 import Marketing from './pages/Marketing';
 import ThemeManager from './components/ThemeManager'; // Import the ThemeManager
+import ReviewPage from './pages/ReviewPage';
 
 function App() {
   const action = useNavigationType();
@@ -40,6 +41,7 @@ function App() {
         <Route path="/services/marketing" element={<><SeoWrapper pageId="/services/marketing" /><Marketing /></>} />
         <Route path="/aboutus" element={<><SeoWrapper pageId="/aboutus" /><AboutUs /></>} />
         <Route path="/privacy" element={<><SeoWrapper pageId="/privacy" /><Privacy /></>} />
+        <Route path="/reviews" element={<ReviewPage/>} />
 
       </Routes>
     </>

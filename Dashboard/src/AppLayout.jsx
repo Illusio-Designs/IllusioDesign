@@ -18,6 +18,7 @@ import Blog from './pages/Blog';
 import Seo from './pages/Seo';
 import EditSeo from './components/EditSeo';
 import Appointment from './pages/Appointment';
+import Review from './pages/Review';
 
 const AppLayout = () => {
   const { isAuthenticated } = useAuth();
@@ -75,6 +76,10 @@ const AppLayout = () => {
             <Route 
               path="/appointment" 
               element={<ProtectedRoute element={<Appointment />} />} 
+            />
+            <Route 
+              path="/review" 
+              element={<ProtectedRoute element={<Review />} />} 
             />
             <Route path="/login" element={isAuthenticated ? <Navigate to={location.pathname} /> : <Login />} />
           </Routes>
