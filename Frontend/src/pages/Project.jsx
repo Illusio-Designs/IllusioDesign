@@ -173,6 +173,8 @@ const Project = () => {
                                                 </ul>
                                             }
                                         </div>
+                                    </form>
+                                    <form>
                                         <div className="dropdown relative" id='servicesToggleButton'>
                                             <div className='uppercase text-[22px] w-full text-left flex justify-between items-center cursor-pointer' onClick={() => setIsOpen((prev) => !prev) }>Services 
                                                 {!isOpen ? (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
