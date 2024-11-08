@@ -13,6 +13,7 @@ const Project = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [featuredProject, setFeaturedProject] = useState(null);
+    const [isOpen, setIsOpen] = useState(false);
 
     // Helper function to construct full image URL
     const getFullImageUrl = (imageName) => {
@@ -59,6 +60,16 @@ const Project = () => {
             </div>
         );
     }
+
+    function toggleDownfunction() {
+        let dropdown = document.querySelector('#industriesToggleButton #industriesDropdown');
+        dropdown.classList.toggle("hidden");
+    }
+    function toggleDownfunction() {
+        let dropdown = document.querySelector('#servicesToggleButton #servicesDropdown');
+        dropdown.classList.toggle("hidden");
+    }
+
 
     return (
         <>
@@ -134,33 +145,85 @@ const Project = () => {
                     </div>
                 </div>
             </section>
-            <section className='project-post py-20'>
+            <section className='project-post py-20 quantify-font'>
                 <div className='container mx-auto'>
                     <div className='grid grid-cols-3 max-lg:grid-cols-1'>
                         <div className='mx-3 max-lg:mb-3'>
-                            <div className='sticky top-8 border-[#ec691f] border-2 rounded-lg p-8'>
-                                <form>
-                                    <div className="relative">
-                                        <button
-                                            type="button"
-                                            className="w-full px-4 py-2 text-left bg-white border rounded-md focus:outline-none"
-                                        >
-                                            Industries
-                                        </button>
-                                        <ul className="absolute left-0 w-full mt-2 bg-white border rounded-md shadow-lg">
-                                            <li className="px-4 py-2 hover:bg-gray-200">Action</li>
-                                            <li className="px-4 py-2 hover:bg-gray-200">Another action</li>
-                                            <li className="px-4 py-2 hover:bg-gray-200">Something else here</li>
-                                        </ul>
+                            <div className='sticky top-8 me-12'>
+                                <div className='border-[#ec691f] border-2 rounded-lg p-8 mb-8'>
+                                    <form className='grid gap-4'>                                    
+                                        <div className="dropdown relative" id='industriesToggleButton'>
+                                            <div className='uppercase text-[22px] w-full text-left flex justify-between items-center mb-4 cursor-pointer' onClick={() => setIsOpen((prev) => !prev) }>Industries 
+                                                {!isOpen ? (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                                                    <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+                                                </svg>) :
+                                                (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-up" viewBox="0 0 16 16">
+                                                    <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"/>
+                                                </svg>)
+                                                }
+                                            </div>
+                                            {isOpen &&
+                                                <ul className='re top-[50px]' id='industriesDropdown'>
+                                                    <li className='mb-2'>
+                                                        <a href='#'>All Industries</a>
+                                                    </li>
+                                                    <li className='mb-2'>
+                                                        <a href='#'>{featuredProject.industry}</a>
+                                                    </li>
+                                                </ul>
+                                            }
+                                        </div>
+                                    </form>
+                                    <form>
+                                        <div className="dropdown relative" id='servicesToggleButton'>
+                                            <div className='uppercase text-[22px] w-full text-left flex justify-between items-center cursor-pointer' onClick={() => setIsOpen((prev) => !prev) }>Services 
+                                                {!isOpen ? (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                                                    <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+                                                </svg>) :
+                                                (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-up" viewBox="0 0 16 16">
+                                                    <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"/>
+                                                </svg>)
+                                                }
+                                            </div>
+                                            {isOpen &&
+                                                <ul className='re top-[50px]' id='servicesDropdown'>
+                                                    <li className='mb-2'>
+                                                        <a href='#'>All Services</a>
+                                                    </li>
+                                                    <li className='mb-2'>
+                                                        <a href='#'>{featuredProject.services}</a>
+                                                    </li>
+                                                </ul>
+                                            }
+                                        </div>
+                                    </form>
+                                </div>
+                                <motion.div 
+                                    initial="initial"
+                                    whileHover="hovered"
+                                    transition={{ duration: 0.3 }}
+                                    className='flex justify-between items-center text-white bg-[#ec691f] relative rounded-full uppercase tracking-wider py-3 px-5 cursor-pointer'>
+                                    <div                                        
+                                        className="text-md whitespace-nowrap overflow-hidden"
+                                    >
+                                        <motion.div variants={{ initial: { y: 0 }, hovered: { y: "-185%" } }}>Have a Project?</motion.div>
+                                        <motion.div className='absolute inset-y-6 inset-x-5' variants={{ initial: { y: "185%" }, hovered: { y: 0 } }}>Let's Connect</motion.div>
                                     </div>
-                                    <select className='form-select w-full mt-4' id="cars" name="cars">
-                                        <option value="volvo">Volvo</option>
-                                        <option value="saab">Saab</option>
-                                        <option value="fiat">Fiat</option>
-                                        <option value="audi">Audi</option>
-                                    </select>
-                                </form>
-                            </div>
+                                    <div className='whitespace-nowrap w-[45px] h-[45px] grid justify-center content-center overflow-hidden bg-white rounded-[100%]'>
+                                        <motion.div className='text-black' variants={{initial: {x: 0}, hovered: {x: "120%"}}}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-right-dots-fill" viewBox="0 0 16 16">
+                                                <path d="M16 2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h9.586a1 1 0 0 1 .707.293l2.853 2.853a.5.5 0 0 0 .854-.353zM5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m3 1a1 1 0 1 1 0-2 1 1 0 0 1 0 2"/>
+                                            </svg>
+                                        </motion.div>
+                                        <motion.div className='text-black inset-y-3 inset-y-5' variants={{initial: {x: "-120%"}, hovered: {x: 0}}}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-right-dots-fill" viewBox="0 0 16 16">
+                                                <path d="M16 2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h9.586a1 1 0 0 1 .707.293l2.853 2.853a.5.5 0 0 0 .854-.353zM5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m3 1a1 1 0 1 1 0-2 1 1 0 0 1 0 2"/>
+                                            </svg>
+                                        </motion.div>
+                                    </div>
+                                </motion.div>
+                                
+                            </div>                            
                         </div>
                         <div className='mx-3 col-span-2'>
                             <motion.h1 className='text-5xl'>
@@ -177,7 +240,7 @@ const Project = () => {
                                                     alt={project.title || 'Project Image'}
                                                 />
                                             </div>
-                                            <div className='py-[30px]'>
+                                            <div className='py-[30px] grid gap-4'>
                                                 <div className='uppercase text-lg'>{project.industry}</div>
                                                 <div className='text-3xl'>{project.title}</div>
                                             </div>

@@ -51,15 +51,15 @@ p {
 
 
 /* Light Mode Styles */
-body {
+/* body {
   background-color: white;
   color: black;
-}
+} */
 
 /* Dark Mode Styles */
-body.dark-mode {
+/* body.dark-mode {
   background-color: black;
   color: white;
-}
+} */
 
 /* Additional styles for buttons, links, etc. */
