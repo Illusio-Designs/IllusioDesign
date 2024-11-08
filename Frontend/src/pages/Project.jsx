@@ -13,7 +13,8 @@ const Project = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [featuredProject, setFeaturedProject] = useState(null);
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpenIndustries, setIsOpenIndustries] = useState(false);
+    const [isOpenServices, setIsOpenServices] = useState(false);
 
     // Helper function to construct full image URL
     const getFullImageUrl = (imageName) => {
@@ -64,12 +65,24 @@ const Project = () => {
     function toggleDownfunction() {
         let dropdown = document.querySelector('#industriesToggleButton #industriesDropdown');
         dropdown.classList.toggle("hidden");
+        setIsOpenIndustries((prev) => !prev);
+        if (isOpenServices) {
+            let servicesDropdown = document.querySelector('#servicesToggleButton #servicesDropdown');
+            servicesDropdown.classList.add("hidden");
+            setIsOpenServices(false);
+        }
     }
+
     function toggleDownfunction() {
         let dropdown = document.querySelector('#servicesToggleButton #servicesDropdown');
         dropdown.classList.toggle("hidden");
+        setIsOpenServices((prev) => !prev);
+        if (isOpenIndustries) {
+            let industriesDropdown = document.querySelector('#industriesToggleButton #industriesDropdown');
+            industriesDropdown.classList.add("hidden");
+            setIsOpenIndustries(false);
+        }
     }
-
 
     return (
         <>
@@ -153,8 +166,8 @@ const Project = () => {
                                 <div className='border-[#ec691f] border-2 rounded-lg p-8 mb-8'>
                                     <form className='grid gap-4'>                                    
                                         <div className="dropdown relative" id='industriesToggleButton'>
-                                            <div className='uppercase text-[22px] w-full text-left flex justify-between items-center mb-4 cursor-pointer' onClick={() => setIsOpen((prev) => !prev) }>Industries 
-                                                {!isOpen ? (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                                            <div className='uppercase text-[22px] w-full text-left flex justify-between items-center mb-4 cursor-pointer' onClick={toggleDownfunction}>Industries 
+                                                {!isOpenIndustries ? (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
                                                     <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
                                                 </svg>) :
                                                 (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-up" viewBox="0 0 16 16">
@@ -162,7 +175,7 @@ const Project = () => {
                                                 </svg>)
                                                 }
                                             </div>
-                                            {isOpen &&
+                                            {isOpenIndustries &&
                                                 <ul className='re top-[50px]' id='industriesDropdown'>
                                                     <li className='mb-2'>
                                                         <a href='#'>All Industries</a>
@@ -176,8 +189,8 @@ const Project = () => {
                                     </form>
                                     <form>
                                         <div className="dropdown relative" id='servicesToggleButton'>
-                                            <div className='uppercase text-[22px] w-full text-left flex justify-between items-center cursor-pointer' onClick={() => setIsOpen((prev) => !prev) }>Services 
-                                                {!isOpen ? (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                                            <div className='uppercase text-[22px] w-full text-left flex justify-between items-center cursor-pointer' onClick={toggleDownfunction}>Services 
+                                                {!isOpenServices ? (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
                                                     <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
                                                 </svg>) :
                                                 (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-up" viewBox="0 0 16 16">
@@ -185,7 +198,7 @@ const Project = () => {
                                                 </svg>)
                                                 }
                                             </div>
-                                            {isOpen &&
+                                            {isOpenServices &&
                                                 <ul className='re top-[50px]' id='servicesDropdown'>
                                                     <li className='mb-2'>
                                                         <a href='#'>All Services</a>
