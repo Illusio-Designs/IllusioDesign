@@ -17,6 +17,7 @@ const ReviewPage = () => {
         }
     };
 
+    
     useEffect(() => {
         fetchReviews();
     }, []);
