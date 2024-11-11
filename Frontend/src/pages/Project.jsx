@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { getAllPublicProjects } from '../utils/api';
 import { motion } from 'framer-motion';
 import Header from '../components/Header';
@@ -7,6 +7,7 @@ import bgcard from "../assets/bg-card.png";
 import { API_IMAGE_BASE_URL } from '../config';
 import { Link } from 'react-router-dom';
 import '../styles/project.css';
+import { ChevronDownIcon } from '@heroicons/react/24/solid';
 
 const Project = () => {
     const [projects, setProjects] = useState([]);
@@ -15,36 +16,142 @@ const Project = () => {
     const [featuredProject, setFeaturedProject] = useState(null);
     const [isOpenIndustries, setIsOpenIndustries] = useState(false);
     const [isOpenServices, setIsOpenServices] = useState(false);
+    const [selectedIndustry, setSelectedIndustry] = useState('All Industries');
+    const [selectedService, setSelectedService] = useState('All Services');
+    const [filteredProjects, setFilteredProjects] = useState([]);
+    const [industries, setIndustries] = useState([]);
+    const [services, setServices] = useState([]);
 
-    // Helper function to construct full image URL
     const getFullImageUrl = (imageName) => {
         if (!imageName) return '';
         if (imageName.startsWith('http')) return imageName;
         return `${API_IMAGE_BASE_URL}/project/${imageName}`;
     };
 
-    useEffect(() => {
-        const fetchPublicProjects = async () => {
-            try {
-                const projectData = await getAllPublicProjects();
-                if (Array.isArray(projectData)) {
-                    setProjects(projectData);
-                    if (projectData.length > 0) {
-                        setFeaturedProject(projectData[0]);
-                    }
-                } else {
-                    console.warn("Unexpected project data format:", projectData);
-                    setProjects([]);
+    const getUniqueIndustries = () => {
+        const industries = projects.map(project => project.industry);
+        return ['All Industries', ...new Set(industries)].filter(Boolean);
+    };
+
+    const getUniqueServices = () => {
+        const services = projects.map(project => project.services);
+        return ['All Services', ...new Set(services)].filter(Boolean);
+    };
+
+    const filterProjects = useCallback(() => {
+        let filtered = [...projects];
+        
+        if (selectedIndustry !== 'All Industries') {
+            filtered = filtered.filter(project => 
+                project.industries.some(ind => ind.name === selectedIndustry)
+            );
+        }
+        
+        if (selectedService !== 'All Services') {
+            filtered = filtered.filter(project => 
+                project.services.some(serv => serv.name === selectedService)
+            );
+        }
+        
+        setFilteredProjects(filtered);
+    }, [projects, selectedIndustry, selectedService]);
+
+    const fetchPublicProjects = async () => {
+        try {
+            const projectData = await getAllPublicProjects();
+            if (Array.isArray(projectData)) {
+                setProjects(projectData);
+                setFilteredProjects(projectData);
+                if (projectData.length > 0) {
+                    setFeaturedProject(projectData[0]);
                 }
+            } else {
+                console.warn("Unexpected project data format:", projectData);
+                setProjects([]);
+                setFilteredProjects([]);
+            }
+        } catch (err) {
+            console.error('Error fetching public projects:', err);
+            setError(err);
+        }
+    };
+
+    useEffect(() => {
+        const fetchAllData = async () => {
+            try {
+                setLoading(true);
+                await Promise.all([
+                    fetchIndustries(),
+                    fetchServices(),
+                    fetchPublicProjects()
+                ]);
             } catch (err) {
-                console.error('Error fetching public projects:', err);
+                console.error('Error fetching data:', err);
                 setError(err);
             } finally {
                 setLoading(false);
             }
         };
-        fetchPublicProjects();
+        fetchAllData();
     }, []);
+
+    useEffect(() => {
+        filterProjects();
+    }, [selectedIndustry, selectedService, projects]);
+
+    const toggleIndustriesDropdown = () => {
+        setIsOpenIndustries(!isOpenIndustries);
+        if (isOpenServices) {
+            setIsOpenServices(false); // Close the Services dropdown if it's open
+        }
+    };
+
+    const toggleServicesDropdown = () => {
+        setIsOpenServices(!isOpenServices);
+        if (isOpenIndustries) {
+            setIsOpenIndustries(false); // Close the Industries dropdown if it's open
+        }
+    };
+
+    const fetchIndustries = async () => {
+        try {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/industries`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const text = await response.text();
+            try {
+                const data = JSON.parse(text);
+                setIndustries(['All Industries', ...data]);
+            } catch (e) {
+                console.error('Invalid JSON response:', text);
+                throw new Error('Invalid JSON response from server');
+            }
+        } catch (error) {
+            console.error('Error fetching industries:', error);
+            setIndustries(['All Industries']); // Fallback to default
+        }
+    };
+
+    const fetchServices = async () => {
+        try {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/services`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const text = await response.text();
+            try {
+                const data = JSON.parse(text);
+                setServices(['All Services', ...data]);
+            } catch (e) {
+                console.error('Invalid JSON response:', text);
+                throw new Error('Invalid JSON response from server');
+            }
+        } catch (error) {
+            console.error('Error fetching services:', error);
+            setServices(['All Services']); // Fallback to default
+        }
+    };
 
     if (loading) {
         return (
@@ -60,28 +167,6 @@ const Project = () => {
                 <div className="text-red-500 text-xl">Error fetching public projects: {error.message || error.toString()}</div>
             </div>
         );
-    }
-
-    function toggleDownfunction() {
-        let dropdown = document.querySelector('#industriesToggleButton #industriesDropdown');
-        dropdown.classList.toggle("hidden");
-        setIsOpenIndustries((prev) => !prev);
-        if (isOpenServices) {
-            let servicesDropdown = document.querySelector('#servicesToggleButton #servicesDropdown');
-            servicesDropdown.classList.add("hidden");
-            setIsOpenServices(false);
-        }
-    }
-
-    function toggleDownfunction() {
-        let dropdown = document.querySelector('#servicesToggleButton #servicesDropdown');
-        dropdown.classList.toggle("hidden");
-        setIsOpenServices((prev) => !prev);
-        if (isOpenIndustries) {
-            let industriesDropdown = document.querySelector('#industriesToggleButton #industriesDropdown');
-            industriesDropdown.classList.add("hidden");
-            setIsOpenIndustries(false);
-        }
     }
 
     return (
@@ -164,88 +249,86 @@ const Project = () => {
                         <div className='mx-3 max-lg:mb-3'>
                             <div className='sticky top-8 me-12'>
                                 <div className='border-[#ec691f] border-2 rounded-lg p-8 mb-8'>
-                                    <form className='grid gap-4'>                                    
-                                        <div className="dropdown relative" id='industriesToggleButton'>
-                                            <div className='uppercase text-[22px] w-full text-left flex justify-between items-center mb-4 cursor-pointer' onClick={toggleDownfunction}>Industries 
-                                                {!isOpenIndustries ? (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
-                                                    <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
-                                                </svg>) :
-                                                (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-up" viewBox="0 0 16 16">
-                                                    <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"/>
-                                                </svg>)
-                                                }
-                                            </div>
-                                            {isOpenIndustries &&
-                                                <ul className='re top-[50px]' id='industriesDropdown'>
-                                                    <li className='mb-2'>
-                                                        <a href='#'>All Industries</a>
-                                                    </li>
-                                                    <li className='mb-2'>
-                                                        <a href='#'>{featuredProject.industry}</a>
-                                                    </li>
-                                                </ul>
-                                            }
+                                    <div className="dropdown relative mb-4" id='industriesToggleButton'>
+                                        <div 
+                                            className='uppercase text-[22px] w-full text-left flex justify-between items-center cursor-pointer' 
+                                            onClick={toggleIndustriesDropdown}
+                                        >
+                                            {selectedIndustry}
+                                            <ChevronDownIcon className={`w-6 h-6 transition-transform ${isOpenIndustries ? 'rotate-180' : ''}`} />
                                         </div>
-                                    </form>
-                                    <form>
-                                        <div className="dropdown relative" id='servicesToggleButton'>
-                                            <div className='uppercase text-[22px] w-full text-left flex justify-between items-center cursor-pointer' onClick={toggleDownfunction}>Services 
-                                                {!isOpenServices ? (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
-                                                    <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
-                                                </svg>) :
-                                                (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-up" viewBox="0 0 16 16">
-                                                    <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"/>
-                                                </svg>)
-                                                }
-                                            </div>
-                                            {isOpenServices &&
-                                                <ul className='re top-[50px]' id='servicesDropdown'>
-                                                    <li className='mb-2'>
-                                                        <a href='#'>All Services</a>
+                                        {isOpenIndustries && (
+                                            <ul>
+                                                {industries.map((industry, index) => (
+                                                    <li key={index}>
+                                                        <button 
+                                                            onClick={() => {
+                                                                setSelectedIndustry(industry);
+                                                                setIsOpenIndustries(false);
+                                                            }}
+                                                            className={`w-full text-[17px] text-left hover:text-[#ec691f] ${
+                                                                selectedIndustry === industry ? 'text-[#000]' : ''
+                                                            }`}
+                                                        >
+                                                            {industry}
+                                                        </button>
                                                     </li>
-                                                    <li className='mb-2'>
-                                                        <a href='#'>{featuredProject.services}</a>
-                                                    </li>
-                                                </ul>
-                                            }
+                                                ))}
+                                            </ul>
+                                        )}
+                                    </div>
+                                    <div className="dropdown relative" id='servicesToggleButton'>
+                                        <div 
+                                            className='uppercase text-[22px] w-full text-left flex justify-between items-center cursor-pointer' 
+                                            onClick={toggleServicesDropdown}
+                                        >
+                                            {selectedService}
+                                            <ChevronDownIcon className={`w-6 h-6 transition-transform ${isOpenServices ? 'rotate-180' : ''}`} />
                                         </div>
-                                    </form>
+                                        {isOpenServices && (
+                                            <ul>
+                                                {services.map((service, index) => (
+                                                    <li key={index}>
+                                                        <button 
+                                                            onClick={() => {
+                                                                setSelectedService(service);
+                                                                setIsOpenServices(false);
+                                                            }}
+                                                            className={`w-full text-[17px] text-left hover:text-[#ec691f] ${
+                                                                selectedService === service ? 'text-[#ec691f]' : ''
+                                                            }`}
+                                                        >
+                                                            {service}
+                                                        </button>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        )}
+                                    </div>
                                 </div>
                                 <motion.div 
-                                    initial="initial"
-                                    whileHover="hovered"
-                                    transition={{ duration: 0.3 }}
-                                    className='flex justify-between items-center text-white bg-[#ec691f] relative rounded-full uppercase tracking-wider py-3 px-5 cursor-pointer'>
-                                    <div                                        
-                                        className="text-md whitespace-nowrap overflow-hidden"
-                                    >
-                                        <motion.div variants={{ initial: { y: 0 }, hovered: { y: "-185%" } }}>Have a Project?</motion.div>
-                                        <motion.div className='absolute inset-y-6 inset-x-5' variants={{ initial: { y: "185%" }, hovered: { y: 0 } }}>Let's Connect</motion.div>
-                                    </div>
-                                    <div className='whitespace-nowrap w-[45px] h-[45px] grid justify-center content-center overflow-hidden bg-white rounded-[100%]'>
-                                        <motion.div className='text-black' variants={{initial: {x: 0}, hovered: {x: "120%"}}}>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-right-dots-fill" viewBox="0 0 16 16">
-                                                <path d="M16 2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h9.586a1 1 0 0 1 .707.293l2.853 2.853a.5.5 0 0 0 .854-.353zM5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m3 1a1 1 0 1 1 0-2 1 1 0 0 1 0 2"/>
-                                            </svg>
-                                        </motion.div>
-                                        <motion.div className='text-black inset-y-3 inset-y-5' variants={{initial: {x: "-120%"}, hovered: {x: 0}}}>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-right-dots-fill" viewBox="0 0 16 16">
-                                                <path d="M16 2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h9.586a1 1 0 0 1 .707.293l2.853 2.853a.5.5 0 0 0 .854-.353zM5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m3 1a1 1 0 1 1 0-2 1 1 0 0 1 0 2"/>
-                                            </svg>
-                                        </motion.div>
+                                initial="initial"
+                                whileHover="hovered"
+                                transition="duration"
+                                className="text-md text-[#fff] bg-[#ec691f] rounded-full uppercase tracking-wider py-3 px-5 relative whitespace-nowrap overflow-hidden flex items-center cursor-pointer justify-between">
+                                    <motion.div variants={{initial: {y: 0}, hovered: {y: "-175%"}, duration: 0.5 }}>Contact Us </motion.div>
+                                    <motion.div className='absolute inset-y-6 inset-x-5' variants={{initial: {y: "175%"}, hovered: {y: 0}, duration: 0.5}}>Contact Us</motion.div>
+                                    <div className='border-[1px] w-[50px] h-[50px] rounded-full flex items-center justify-center'>
+                                        <motion.svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-square-fill" viewBox="0 0 16 16">
+                                            <path d="M2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
+                                        </motion.svg>                                        
                                     </div>
                                 </motion.div>
-                                
-                            </div>                            
+                            </div>
                         </div>
-                        <div className='mx-3 col-span-2'>
+                        <div className='col-span-2 mx-3'>
                             <motion.h1 className='text-5xl'>
                                 We've helped over {projects.length} firms reach their full potential, and we're happy to do the same for you!
                             </motion.h1>
-                            <div className='grid grid-cols-2 pt-12 max-lg:grid-cols-1'>
-                                {projects.map((project) => (
+                            <div className='grid grid-cols-2 pt-12 max-lg:grid-cols-1 gap-4'>
+                                {filteredProjects.map((project) => (
                                     <div key={project.id} className='mx-3 max-lg:mb-3'>
-                                        <Link to={`/project-inside/${encodeURIComponent(project.title)}`} className='block'>
+                                        <Link to={`/project-inside/${encodeURIComponent(featuredProject.title)}`} className='block'>
                                             <div className='project-img overflow-hidden relative'>
                                                 <img
                                                     className='duration-1000 hover:scale-110 w-full h-full object-cover'
@@ -261,11 +344,31 @@ const Project = () => {
                                     </div>
                                 ))}
                             </div>
+                            <div className='pagination justify-center flex text-center gap-6 items-center'>
+                                <motion.a 
+                                    whileHover={{ ease: "easeIn", duration: .3, backgroundColor: "#ec691f", borderColor: "#ec691f", color: "#fff" }}
+                                    transition={{ ease: "easeOut", duration: .3 }}
+                                    href="#" className='w-[50px] h-[50px] leading-[50px] text-[20px] border-[1px] border-[#000] rounded-full '>
+                                        <span>&laquo;</span>
+                                </motion.a>
+                                <motion.a 
+                                    whileHover={{ ease: "easeIn", duration: .3, backgroundColor: "#ec691f", borderColor: "#ec691f", color: "#fff" }}
+                                    transition={{ ease: "easeOut", duration: .3 }}
+                                    href="#" className='w-[50px] h-[50px] leading-[50px] text-[20px] border-[1px] border-[#000] rounded-full '>
+                                        <span>1</span>
+                                </motion.a>
+                                <motion.a 
+                                    whileHover={{ ease: "easeIn", duration: .3, backgroundColor: "#ec691f", borderColor: "#ec691f", color: "#fff" }}
+                                    transition={{ ease: "easeOut", duration: .3 }}
+                                    href="#" className='w-[50px] h-[50px] leading-[50px] text-[20px] border-[1px] border-[#000] rounded-full '>
+                                        <span>&raquo;</span>
+                                </motion.a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
-            <Footer/>
+            <Footer />
         </>
     );
 };
