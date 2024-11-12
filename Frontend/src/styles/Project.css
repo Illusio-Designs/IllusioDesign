@@ -1,10 +1,18 @@
-.slider, .project-post .project-img {
+.slider, .project-post .project-img, .project-postdetails .project-img {
     mask-image: url(/src/assets/img-bg-card.png);
     mask-size: 100% 100%;
     mask-repeat: no-repeat;
 }
 .project-post .project-img {
     height: 300px;
+}
+.project-postdetails .project-img {
+    height: 700px;
+}
+.project-content p {
+    font-family: "Poppins", sans-serif;
+    font-size: 17px;
+    margin-bottom: 10px;
 }
 @media (min-width: 1024px) and (max-width: 1279px) {
     .project-slider h1 {

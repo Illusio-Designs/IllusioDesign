@@ -5,6 +5,8 @@ import { useParams } from 'react-router-dom';
 import { API_IMAGE_BASE_URL } from '../config';
 import DOMPurify from 'dompurify';
 import { Helmet } from 'react-helmet'; // Import Helmet
+import '../styles/project.css';
+import Footer from './Footer';
 
 const ProjectInside = () => {
     const { title } = useParams();
@@ -66,31 +68,43 @@ const ProjectInside = () => {
             </Helmet>
 
             <Header />
-            <div className="container mx-auto py-10">
-                <img
-                    className='duration-1000 hover:scale-110 block w-full h-full object-cover'
-                    src={getFullImageUrl(project.image)}
-                    alt={project.title || 'Project Image'}
-                />
-                <h1 className="text-3xl font-bold mb-4">{project.title}</h1>
-                <div className="mb-6" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(project.content) }} />
-                
-                <div className="text-lg">
-                    <strong>Year:</strong> {project.year || 'Not available'}
+            <div className="container mx-auto py-20 project-postdetails">
+                <div className='project-img'>
+                    <img
+                        className='block w-full h-full object-cover'
+                        src={getFullImageUrl(project.image)}
+                        alt={project.title || 'Project Image'}
+                    />
                 </div>
-                <div className="text-lg">
-                    <strong>Timeline:</strong> {project.timeline || 'Not available'}
-                </div>
-                <div className="text-lg">
-                    <strong>Services:</strong> {project.services ? project.services.split(',').join(', ') : 'Not available'}
-                </div>
-                <div className="text-lg">
-                    <strong>Industry:</strong> {project.industry ? project.industry.split(',').join(', ') : 'Not available'}
-                </div>
-                <div className="text-lg">
-                    <strong>Website:</strong> {project.website ? <a href={project.website} target="_blank" rel="noopener noreferrer">Visit Website</a> : 'Not available'}
+                <div className='project-content pt-10'>
+                    <div className='grid grid-cols-3 max-lg:grid-cols-1'>
+                        <div className='col-span-2 mx-3'>
+                            <h1 className="text-5xl font-bold mb-4 quantify-font">{project.title}</h1>
+                            <div className="mb-6" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(project.content) }} />
+                        </div>
+                        <div className='mx-3 max-lg:mb-3'>
+                            <div className='sticky top-8 text-right'>
+                                <div className="year mb-3">
+                                    <strong className='quantify-font text-xl'>Year:</strong><br></br> <p>{project.year || 'Not available'}</p>
+                                </div>
+                                <div className='timeline mb-3'>
+                                    <strong className='quantify-font text-xl'>Timeline:</strong> <p>{project.timeline || 'Not available'}</p>
+                                </div>
+                                <div className='services mb-3'>
+                                    <strong className='quantify-font text-xl'>Services:</strong> <p>{project.services ? project.services.split(',').join(', ') : 'Not available'}</p>
+                                </div>
+                                <div className='industry mb-3'>
+                                    <strong className='quantify-font text-xl'>Industry:</strong> <p>{project.industry ? project.industry.split(',').join(', ') : 'Not available'}</p>
+                                </div>
+                                <div className='website mb-3'>
+                                    <strong className='quantify-font text-xl'>Website:</strong> <p>{project.website ? <a href={project.website} target="_blank" rel="noopener noreferrer">Visit Website</a> : 'Not available'}</p>
+                                </div>
+                            </div>                            
+                        </div>                        
+                    </div>
                 </div>
             </div>
+            <Footer />
         </>
     );
 };
