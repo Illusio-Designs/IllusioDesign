@@ -184,14 +184,14 @@ const Project = () => {
                                     backgroundRepeat: 'no-repeat' 
                                 }}
                             >
-                                <h1 className='tracking-wider uppercase text-9xl font-medium text-[#ec691f] leading-[.9]'>
+                                <h1 className='tracking-wider uppercase text-9xl font-medium text-[#fff] leading-[.9]'>
                                     Our <br /> Best <br /> Works
                                 </h1>
                                 <div className='category-info border-t-2 mt-[50px] pt-[40px]'>
                                     <div className='flex items-center justify-between'>
                                         <div className='flex items-center gap-6'>
-                                            <div className='text-[56px]'>{projects.length}+</div>
-                                            <div className='uppercase text-2xl font-normal'>
+                                            <div className='text-[56px] text-[#fff]'>{projects.length}+</div>
+                                            <div className='uppercase text-2xl font-normal text-[#fff]'>
                                                 Projects <br /> Done
                                             </div>
                                         </div>
@@ -251,7 +251,7 @@ const Project = () => {
                                 <div className='border-[#ec691f] border-2 rounded-lg p-8 mb-8'>
                                     <div className="dropdown relative mb-4" id='industriesToggleButton'>
                                         <div 
-                                            className='uppercase text-[22px] w-full text-left flex justify-between items-center cursor-pointer' 
+                                            className='uppercase text-[22px] text-[#fff] w-full text-left flex justify-between items-center cursor-pointer' 
                                             onClick={toggleIndustriesDropdown}
                                         >
                                             {selectedIndustry}
@@ -266,7 +266,7 @@ const Project = () => {
                                                                 setSelectedIndustry(industry);
                                                                 setIsOpenIndustries(false);
                                                             }}
-                                                            className={`w-full text-[17px] text-left hover:text-[#ec691f] ${
+                                                            className={`w-full text-[#fff] text-[17px] text-left hover:text-[#ec691f] ${
                                                                 selectedIndustry === industry ? 'text-[#000]' : ''
                                                             }`}
                                                         >
@@ -279,7 +279,7 @@ const Project = () => {
                                     </div>
                                     <div className="dropdown relative" id='servicesToggleButton'>
                                         <div 
-                                            className='uppercase text-[22px] w-full text-left flex justify-between items-center cursor-pointer' 
+                                            className='uppercase text-[22px] text-[#fff] w-full text-left flex justify-between items-center cursor-pointer' 
                                             onClick={toggleServicesDropdown}
                                         >
                                             {selectedService}
@@ -294,7 +294,7 @@ const Project = () => {
                                                                 setSelectedService(service);
                                                                 setIsOpenServices(false);
                                                             }}
-                                                            className={`w-full text-[17px] text-left hover:text-[#ec691f] ${
+                                                            className={`w-full text-[#fff] text-[17px] text-left hover:text-[#ec691f] ${
                                                                 selectedService === service ? 'text-[#ec691f]' : ''
                                                             }`}
                                                         >
@@ -322,7 +322,7 @@ const Project = () => {
                             </div>
                         </div>
                         <div className='col-span-2 mx-3'>
-                            <motion.h1 className='text-5xl'>
+                            <motion.h1 className='text-5xl text-[#fff]'>
                                 We've helped over {projects.length} firms reach their full potential, and we're happy to do the same for you!
                             </motion.h1>
                             <div className='grid grid-cols-2 pt-12 max-lg:grid-cols-1 gap-4'>
@@ -337,8 +337,8 @@ const Project = () => {
                                                 />
                                             </div>
                                             <div className='py-[30px] grid gap-4'>
-                                                <div className='uppercase text-lg'>{project.industry}</div>
-                                                <div className='text-3xl'>{project.title}</div>
+                                                <div className='uppercase text-lg text-[#fff]'>{project.industry}</div>
+                                                <div className='text-3xl text-[#fff]'>{project.title}</div>
                                             </div>
                                         </Link>
                                     </div>

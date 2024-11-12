@@ -68,22 +68,33 @@ const ProjectInside = () => {
             </Helmet>
 
             <Header />
-            <div className="container mx-auto py-20 project-postdetails">
-                <div className='project-img'>
+            <div className="project-postdetails w-full">
+                <div className='container mx-auto relative z-[9]'>
+                    <ul className='pt-[50px]'>
+                        <li>
+                            <a href="/project" className='text-[#fff]'>All Projects</a>
+                        </li>
+                        <li></li>
+                    </ul>
+                    <h1 className="text-5xl font-bold mb-4 quantify-font text-[#fff] py-[120px]">{project.title}</h1>
+                </div>
+                <div className='project-img absolute top-0'>
                     <img
                         className='block w-full h-full object-cover'
                         src={getFullImageUrl(project.image)}
                         alt={project.title || 'Project Image'}
-                    />
+                    />                    
                 </div>
+            </div>
+            <div className='container mx-auto py-20'>
                 <div className='project-content pt-10'>
                     <div className='grid grid-cols-3 max-lg:grid-cols-1'>
                         <div className='col-span-2 mx-3'>
-                            <h1 className="text-5xl font-bold mb-4 quantify-font">{project.title}</h1>
+                            <h1 className="text-5xl font-bold mb-4 quantify-font text-[#fff]">{project.title}</h1>
                             <div className="mb-6" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(project.content) }} />
                         </div>
                         <div className='mx-3 max-lg:mb-3'>
-                            <div className='sticky top-8 text-right'>
+                            <div className='sticky top-8 text-right text-[#fff]'>
                                 <div className="year mb-3">
                                     <strong className='quantify-font text-xl'>Year:</strong><br></br> <p>{project.year || 'Not available'}</p>
                                 </div>
