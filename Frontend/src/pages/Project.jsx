@@ -172,7 +172,7 @@ const Project = () => {
     return (
         <>
             <Header />
-            <section className='project-slider py-20 quantify-font'>
+            <section className='project-slider pt-[180px] pb-20 quantify-font'>
                 <div className='container mx-auto'>
                     <div className='grid grid-cols-2 items-center max-lg:grid-cols-1'>
                         <div className='mx-3 max-lg:mb-3'>

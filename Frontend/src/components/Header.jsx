@@ -12,7 +12,7 @@ const Header = () => {
       }
   return (
     <>
-    <header className='pt-4 relative z-[9]'>
+    <header className='pt-4 absolute inset-x-0 z-[9]'>
       <div className='container m-auto py-4 border-[#ec691f] border-t-2 border-b-2'>
         <nav className='flex justify-between items-center'>
         <motion.a
