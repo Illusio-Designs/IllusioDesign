@@ -4,7 +4,7 @@ import { loginUser, registerUser } from '../services/loginApi'; // Ensure this p
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   useEffect(() => {
     const token = localStorage.getItem('token');

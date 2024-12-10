@@ -53,7 +53,7 @@ const Appointment = () => {
     };
 
     return (
-        <div>
+        <div className='component-wrapper'>
             <h2>Create Appointment</h2>
             <form onSubmit={handleSubmit}>
                 <input

@@ -49,6 +49,29 @@ p {
   display: block;
   transition: all 3s linear;
 }
+/* Global rule for all components */
+.component-wrapper {
+  background-color: #FFF;
+}
+
+@media (max-width: 768px) {
+  /* Adjust for tablets and below */
+  .left-section, .right-section {
+    width: 100%;
+    height: auto;
+    margin-top: 20px;
+  }
+}
+@media (max-width: 480px) {
+  /* Adjust for mobile screens */
+  .left-section, .right-section {
+    width: 100%;
+    height: auto;
+  }
+  .text-section {
+    font-size: 2rem;
+  }
+}
 
 
 /* Light Mode Styles */
