@@ -1,12 +1,22 @@
 header {
-  background-color: transparent;
-  
+  background-color: transparent; 
+}
+nav{
+  justify-content: space-around !important;
+  border-top: 2px solid #ec691f;
+  border-bottom: 2px solid #ec691f;
+  padding: 10px 0;
+  width: 90%;
+  margin: 0 auto;
 }
 nav img {
   width: 200px;
 }
 nav a {
   font-family: 'Quantify';
+}
+.contact-btn{
+  padding: 5px 10px !important;
 }
 .contact-btn:hover .rounded-full {
   background-color: transparent;

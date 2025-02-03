@@ -25,12 +25,10 @@ const LetsBuild = () => {
   const pageContainerStyle = {
     display: "flex",
     flexDirection: "row",
-    justifyContent: "space-between", 
     alignItems: "center",
     height: "100vh",
-    width: "100vw",
+    width: "100%",
     background: "#FFF",
-    position: "absolute",
     top: "0",
     left: "0",
     transform: "translate(0, 0)",
@@ -70,13 +68,13 @@ const LetsBuild = () => {
   };
 
   const textSectionStyle = {
-    fontSize: "clamp(2rem, 5vw, 5rem)",
+    fontSize: "clamp(2rem, 7vw, 6rem)",
     fontWeight: "bold",
     textAlign: "left",
-    marginLeft: "8%",
+    marginLeft: "15%",
     marginBottom: "4%",
     textTransform: "uppercase",
-    lineHeight: "0.9",
+    lineHeight: "100px",
     color: "#FFF",
     zIndex: 2,
   };
@@ -92,7 +90,6 @@ const LetsBuild = () => {
     display: "inline-block",
     position: "relative",
     color: "#FFF",
-    background: "#3E4C59",
     animation: `slideIn 0.5s ease forwards, fadeIn 0.5s ease forwards`,
     animationDelay: `${index * 0.1}s`,
     zIndex: 9999,
@@ -103,8 +100,8 @@ const LetsBuild = () => {
     height: "auto",
     objectFit: "cover",
     position: "absolute",
-    top: "50%",
-    left: "50%",
+    top: "45%",
+    left: "70%",
     transform: "translate(-50%, -50%)",
     zIndex: 1,
     animation: `imageGrow 2s ease-in-out infinite alternate`,
@@ -161,15 +158,6 @@ const LetsBuild = () => {
 
       {/* Right Section */}
       <div style={rightSectionStyle}></div>
-
-      <hr
-        style={{
-          borderColor: "gray",
-          borderWidth: "2px",
-          marginLeft: "10px",
-          marginRight: "10px",
-        }}
-      />
     </div>
   );
 };

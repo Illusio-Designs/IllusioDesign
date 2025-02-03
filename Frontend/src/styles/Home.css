@@ -1,0 +1,460 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.overview {
+  display: flex;
+  color: #000000;
+  background-color: #ffff;
+  justify-content: space-around;
+  padding: 5%;
+}
+.people img {
+  width: 50%;
+}
+.pg {
+  flex-grow: 1;
+  max-width: 800px;
+  padding: 10px;
+  font-size: 20px;
+}
+.pg p {
+  font-size: 40px;
+}
+/* Container for the awards section */
+.awards-container {
+  padding: 40px 0;
+  background-color: #ffffff; /* Light background for contrast */
+}
+
+/* Swiper wrapper styling */
+.swiper {
+  width: 100%;
+  padding-bottom: 40px;
+}
+
+.swiper-wrapper.mod--awards {
+  display: flex;
+  justify-content: space-around;
+  margin: 0 2%;
+}
+
+/* Ensure each slide centers its content */
+.swiper-slide.mod--awards {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Wrapper for the circular award item */
+.circles__block-wrap {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  margin: 0 auto;
+  cursor: pointer;
+}
+
+/* The main circular block */
+.circles__block {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  padding: 22px;
+  background: #ec691f;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+}
+
+.circles__block:hover {
+  transform: scale(1.05);
+}
+
+/* The award logo image */
+.circles__logo {
+  max-width: 50%;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+/* Border element for the circular animation effect */
+.circles__border {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* The animated border effect */
+.circles__border-anim {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80%;
+  height: 80%;
+  border: 2px solid #ffffff; /* Change to your preferred color */
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Reveal animation on hover */
+.circles__block:hover .circles__border-anim {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+/* Award text styling */
+.circles__text {
+  margin-top: 15px;
+  font-size: 20px;
+  text-align: center;
+  color: #fff;
+  font-weight: 500;
+}
+
+/* Services Section Styles */
+.services-section {
+  background-image: linear-gradient(180deg, transparent 19%, #ec691f 100%),
+    url(https://cdn.prod.website-files.com/63f38a8c92397a024fcb9ae8/66daf908208ea822dd3760b1_card-works_laptop.avif);
+  opacity: 1;
+  transform-origin: 50% 0;
+  color: var(--blue-dark);
+  background-position: 0 0, 0 0;
+  background-repeat: repeat, no-repeat;
+  background-size: auto, 100%;
+  border-bottom-right-radius: 2.5rem;
+  border-bottom-left-radius: 2.5rem;
+  padding: 2.5rem;
+  transition: transform 0.8s, opacity 0.4s;
+  overflow: hidden;
+  transform: rotate(0) perspective(800px);
+  width: 90%;
+  margin: 2% 5%;
+}
+
+.services-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.services-header {
+  margin: 60px 0;
+}
+
+.services-title h2 {
+  font-size: 4rem;
+  text-align: center;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.services-mobile-image {
+  display: none;
+  width: 100%;
+  height: auto;
+}
+
+.services-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 30px;
+  align-items: center;
+  list-style: none;
+  padding: 0;
+}
+
+.services-item {
+  transition: transform 0.3s ease;
+}
+
+.services-item:hover {
+  transform: translateY(-24px);
+}
+
+.service-link {
+  display: block;
+  padding: 24px;
+  background-color: #fff;
+  border-radius: 12px;
+  text-decoration: none;
+  color: inherit;
+  transition: background-color 0.3s ease;
+}
+
+.service-link:hover {
+  background-color: #f8f8f8;
+}
+
+.service-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.service-icon {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.service-button {
+  width: 32px;
+  height: 32px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.service-link:hover .service-button {
+  opacity: 1;
+}
+
+.button-icon {
+  width: 100%;
+  height: 100%;
+}
+
+.service-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.service-text {
+  color: #666;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .services-header {
+    flex-direction: column;
+  }
+
+  .services-title {
+    margin-bottom: 30px;
+  }
+
+  .services-title h2 {
+    font-size: 3rem;
+  }
+
+  .services-video {
+    width: 100%;
+  }
+
+  .services-video-element {
+    display: none;
+  }
+
+  .services-mobile-image {
+    display: block;
+  }
+
+  .services-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Clients Section Styles */
+.section {
+  padding: 80px 0;
+}
+
+.container {
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.clients-block-wrap {
+  position: relative;
+  padding: 20px;
+}
+
+.clients-block {
+  position: relative;
+  padding: 24px;
+  border-radius: 12px;
+  transition: transform 0.3s ease;
+  opacity: 0;
+  animation: fadeIn 0.5s ease forwards;
+}
+
+.clients-block:hover {
+  transform: translateY(-40px);
+}
+
+.clients-logo {
+  width: 100%;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.clients-text-wrap {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.clients-text-wrap.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.clients-text {
+  font-size: 18px;
+  line-height: 1.5;
+  color: #ffffff;
+}
+
+.mod-globus {
+  color: #ffffff;
+  text-align: center;
+  padding: 40px;
+}
+
+.clients-video {
+  width: 100%;
+  height: 200px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+}
+.line1{
+    top: 45%;
+}
+.line2{
+    left: 24%;
+}
+.line3{
+    left: 50%;
+}
+.line4{
+    left: 75%;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-20px);
+  }
+}
+
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Reviews Section */
+.reviews__label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .reviews__label-logo {
+    width: 100px;
+    height: auto;
+    margin-right: 10px;
+  }
+  
+  .reviews__man-wrap {
+    text-align: center;
+  }
+  
+  .reviews__man {
+    width: 100%;
+    max-width: 380px;
+  }
+  
+  .reviews__desc {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .reviews__rate {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .rating {
+    display: flex;
+  }
+  
+  .rating img {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .reviews__card {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .author {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+  .author__ava {
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
+  .text-size-20 {
+    font-size: 20px;
+  }
+  
+  .text-size-14 {
+    font-size: 14px;
+  }
+  
+  .text-weight-medium {
+    font-weight: 500;
+  }
+  
+  .opacity-60 {
+    opacity: 0.6;
+  }
