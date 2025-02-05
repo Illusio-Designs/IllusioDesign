@@ -28,7 +28,7 @@ const LetsBuild = () => {
     alignItems: "center",
     height: "100vh",
     width: "100%",
-    background: "#FFF",
+    background: "#000",
     top: "0",
     left: "0",
     transform: "translate(0, 0)",

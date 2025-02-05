@@ -32,7 +32,7 @@ const Header = () => {
                   initial="initial"
                   whileHover="hovered"
                   transition={{ duration: 0.5 }}
-                  className="text-md text-[#000000] uppercase tracking-wider font-medium py-2 px-4 relative block whitespace-nowrap overflow-hidden"
+                  className="text-md text-[#ffffff] uppercase tracking-wider font-medium py-2 px-4 relative block whitespace-nowrap overflow-hidden"
                   href="/services"
                 >
                   <motion.div variants={{ initial: { y: 0 }, hovered: { y: "-120%" } }}>Services</motion.div>
@@ -59,7 +59,7 @@ const Header = () => {
                     initial="initial"
                     whileHover="hovered"
                     transition={{ duration: 0.5 }}
-                    className="text-md text-[#000000] uppercase tracking-wider font-medium py-2 px-4 relative block whitespace-nowrap overflow-hidden" 
+                    className="text-md text-[#ffffff] uppercase tracking-wider font-medium py-2 px-4 relative block whitespace-nowrap overflow-hidden" 
                     href={`/${item.toLowerCase().replace(' ', '')}`}
                   >
                     <motion.div variants={{initial: {y: 0}, hovered: {y: "-120%"}}}>{item}</motion.div>
