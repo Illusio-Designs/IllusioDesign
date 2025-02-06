@@ -132,6 +132,8 @@ const Home = () => {
     <>
       <Header />
       <LetsBuild />
+
+      <section className="gradient">
       <div className="overview">
         <div className="people">
           <img
@@ -260,7 +262,8 @@ const Home = () => {
         </div>
       </div>
 
-      <section className="services-section">
+      <section className="service">
+      <div className="services-section">
         <div className="services-container">
           <div className="services-header">
             <div className="services-title">
@@ -304,9 +307,11 @@ const Home = () => {
             ))}
           </ul>
         </div>
+      </div>
+      </section>
       </section>
 
-      <section className="section">
+      <section className="client-section">
         <div className="container overflow-hidden">
           <div className="grid grid-cols-4 gap-6 relative items-center">
             {clients.map((client) => (
@@ -349,7 +354,7 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="section overflow-hidden text-white">
+      <section className="clutch-section overflow-hidden text-white">
         <div className="container">
           <div className="columns is-heading is-invert-mobile clutch-container">
             <div className="columns__col mod--heading is-1 info-content">
@@ -367,7 +372,7 @@ const Home = () => {
             </div>
             <div className="columns__col mod--heading w-clearfix">
               <p className="heading-4">
-                We’ve helped hundreds of partners, ranging from startups to
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We’ve helped hundreds of partners, ranging from startups to
                 medium-sized businesses to achieve their goals. And stellar
                 feedback — is our reward!
               </p>
@@ -796,76 +801,85 @@ const Home = () => {
 
       <section className="section overflow-hidden text-white">
         <div className="post-container mod--post-big">
-        <div className="columns is-heading">
-      <div className="columns__col mod--heading is-1">
-        <div data-hover="" className="button is-white w-inline-block">
-          <div className="button__overflow">
-            <motion.a
-              initial="initial"
-              whileHover="hovered"
-              transition={{ duration: 0.5 }}
-              className="text-md text-[#ffffff] uppercase tracking-wider font-medium relative block whitespace-nowrap overflow-hidden"
-              href="/services"
-            >
-              {/* Text animation */}
-              <motion.div
-                variants={{
-                  initial: { y: 0 },
-                  hovered: { y: "-120%" },
-                }}
-              >
-                HOT ARTICLES
-              </motion.div>
-              <motion.div
-                className="absolute inset-y-2 hover:text-[#ec691f]"
-                variants={{ initial: { y: "120%" }, hovered: { y: 0 } }}
-              >
-                HOT ARTICLES
-              </motion.div>
-
-              {/* Icon animation */}
-              <motion.div
-                className="button__icons"
-                initial={{ x: 0 }}
-                whileHover={{ x: "-120%" }}
-                transition={{ duration: 0.1 }}
-              >
-                <div className="icon-small w-embed">
-                  <motion.svg
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    stroke="currentcolor"
-                    width="15%"
+          <div className="columns is-heading">
+            <div className="columns__col mod--heading is-1">
+              <div data-hover="" className="button is-white w-inline-block">
+                <div className="button__overflow">
+                  <motion.a
+                    initial="initial"
+                    whileHover="hovered"
+                    transition={{ duration: 0.5 }}
+                    className="rounded-full uppercase tracking-wider py-3 px-5 relative whitespace-nowrap overflow-hidden flex items-center gap-3"
+                    href="/contactus"
                   >
-                    <path
-                      d="M14.6667 2H10.6667C9.95942 2 9.28115 2.28095 8.78105 2.78105C8.28095 3.28115 8 3.95942 8 4.66667V14C8 13.4696 8.21071 12.9609 8.58579 12.5858C8.96086 12.2107 9.46957 12 10 12H14.6667V2Z"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    ></path>
-                    <path
-                      d="M1.33398 2H5.33398C6.04123 2 6.71951 2.28095 7.2196 2.78105C7.7197 3.28115 8.00065 3.95942 8.00065 4.66667V14C8.00065 13.4696 7.78994 12.9609 7.41486 12.5858C7.03979 12.2107 6.53108 12 6.00065 12H1.33398V2Z"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    ></path>
-                  </motion.svg>
-                </div>
-              </motion.div>
-            </motion.a>
-          </div>
-        </div>
-      </div>
+                    {/* Normal Text */}
+                    <motion.div
+                      variants={{ initial: { y: 0 }, hovered: { y: "-195%" } }}
+                    >
+                      Hot articles
+                    </motion.div>
 
-      <div className="columns__col mod--heading w-clearfix">
-        <div className="space-heading-4"></div>
-        <p className="heading-4">
-          The Illusio Designs blog is a treasure trove of our best technical
-          tips and expert knowledge. Here you will discover all the valuable
-          secrets and trends of the IT industry.
-        </p>
-      </div>
-    </div>
+                    {/* Hover Text */}
+                    <motion.div
+                      className="btn absolute inset-y-1 left-[-15px]"
+                      variants={{ initial: { y: "195%" }, hovered: { y: 0 } }}
+                    >
+                      Hot articles
+                    </motion.div>
+
+                    {/* Icon with Fixed Border */}
+                    <div className="p-3 rounded-full border-2 border-white flex items-center justify-center relative overflow-hidden w-[40px] h-[40px]">
+                      {/* Normal Icon */}
+                      <motion.div
+                        className="absolute bg-white flex items-center justify-center w-full h-full"
+                        variants={{ initial: { x: 0 }, hovered: { x: "195%" } }}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                          fill="current-color"
+                          className="bi bi-calendar4"
+                          viewBox="0 0 16 16"
+                        >
+                          <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M2 2a1 1 0 0 0-1 1v1h14V3a1 1 0 0 0-1-1zm13 3H1v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z" />
+                        </svg>
+                      </motion.div>
+
+                      {/* Hover Icon */}
+                      <motion.div
+                        className="absolute bg-transparent flex items-center justify-center w-full h-full"
+                        variants={{
+                          initial: { x: "-190%" },
+                          hovered: { x: 0 },
+                        }}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                          fill="#ffffff"
+                          className="bi bi-calendar4"
+                          viewBox="0 0 16 16"
+                        >
+                          <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M2 2a1 1 0 0 0-1 1v1h14V3a1 1 0 0 0-1-1zm13 3H1v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z" />
+                        </svg>
+                      </motion.div>
+                    </div>
+                  </motion.a>
+                </div>
+              </div>
+            </div>
+
+            <div className="columns__col mod--heading w-clearfix">
+              <div className="space-heading-4"></div>
+              <p className="heading-4">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The Illusio Designs blog is a treasure trove of our best
+                technical tips and expert knowledge. Here you will discover all
+                the valuable secrets and trends of the IT industry.
+              </p>
+            </div>
+          </div>
           <div
             data-anim-trigger=""
             data-swiper="posts-big"
@@ -900,10 +914,9 @@ const Home = () => {
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 760 655"
-                          width="760"
-                          height="655"
+                          width="60%"
+                          height="60%"
                           preserveAspectRatio="xMidYMid meet"
-                          style={{ width: "100%", height: "100%" }}
                         >
                           <defs>
                             <clipPath id="__lottie_element_6">
@@ -1100,10 +1113,9 @@ const Home = () => {
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 760 655"
-                          width="760"
-                          height="655"
+                          width="60%"
+                          height="60%"
                           preserveAspectRatio="xMidYMid meet"
-                          style={{ width: "100%", height: "100%" }}
                         >
                           <defs>
                             <clipPath id="__lottie_element_6">

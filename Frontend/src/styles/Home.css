@@ -3,6 +3,9 @@
   padding: 0;
   box-sizing: border-box;
 }
+.gradient{
+  background: linear-gradient(50deg, #000000 50%, #ec691f);
+}
 .overview {
   display: flex;
   color: #ffffff;
@@ -35,7 +38,7 @@
 .swiper-wrapper.mod--awards {
   display: flex;
   justify-content: space-around;
-  margin: 0 2%;
+  margin: 0 0 0 2%;
 }
 
 /* Ensure each slide centers its content */
@@ -124,6 +127,9 @@
 }
 
 /* Services Section Styles */
+.service{
+  padding: 50px 0 150px;
+}
 .services-section {
   background-image: linear-gradient(180deg, transparent 19%, #ec691f 100%),
     url(https://cdn.prod.website-files.com/63f38a8c92397a024fcb9ae8/66daf908208ea822dd3760b1_card-works_laptop.avif);
@@ -140,7 +146,7 @@
   overflow: hidden;
   transform: rotate(0) perspective(800px);
   width: 90%;
-  margin: 2% 5%;
+  margin: 0% 5%;
 }
 
 .services-container {
@@ -186,7 +192,8 @@
 .service-link {
   display: block;
   padding: 24px;
-  background-color: #fff;
+  background: #ffffff;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
   border-radius: 12px;
   text-decoration: none;
   color: inherit;
@@ -268,11 +275,7 @@
 }
 
 /* Clients Section Styles */
-.section {
-  padding: 80px 0;
-}
-
-.container {
+.client-section .container {
   margin: 0 auto;
   padding: 0 20px;
 }
@@ -381,6 +384,9 @@
 }
 
 /* Reviews Section */
+.clutch-section{
+  padding-top: 10%;
+}
 .reviews__label {
   display: flex;
   align-items: center;
@@ -408,7 +414,7 @@
 }
 .w-clearfix p {
   font-size: 45px;
-  max-width: 800px;
+  max-width: 900px;
 }
 
 .reviews-container {
@@ -536,7 +542,7 @@
 /*benefits*/
 .benefits-section {
   padding: 0px 5% 80px;
-  background: linear-gradient(135deg, #000, #ec691f);
+  background: linear-gradient(to top left, #ec691f,#000000 80%);
   border-bottom-left-radius: 80px;
   border-bottom-right-radius: 80px;
 }
@@ -602,10 +608,16 @@
   margin-bottom: 20px;
 }
 
+.post-container .w-clearfix p {
+  font-size: 45px;
+  max-width: 890px;
+  padding-bottom: 30px;
+}
+
 /* Button Styles */
 .post-container .button {
   display: flex;
-  padding: 0px 20px;
+  padding: 5px 30px;
   border: 2px solid ;
   border-radius: 50px;
   align-items: center;
@@ -645,6 +657,10 @@
   display: flex;
 }
 
+.post-card.is-big svg{
+  margin-left: 20%;
+}
+
 .post-container .post-card__img-link {
   display: block;
   text-decoration: none;
@@ -655,14 +671,6 @@
   overflow: hidden;
 }
 
-.post-container .post-card__img {
-  width: 100%;
-  height: auto;
-}
-
-.post-container .post-big__bottom {
-  padding: 20px;
-}
 
 .post-container .post-card .heading-6 {
   font-size: 30px;
