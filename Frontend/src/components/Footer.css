@@ -352,7 +352,7 @@
     pointer-events: auto;
   }
   
-  /* Dropdown Styles */
+  /* sociallinks Styles */
   .dropdown-inter.mod--footer-nav {
     position: relative;
   }
@@ -437,4 +437,109 @@
       padding: 8px 0;
     }
   }
+
+/*Dropdown styles*/
+.dropdown__toggle.mod--footer {
+  color: #fff;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.4;
+  transition: all .2s;
+}
+.dropdown__title-wrap {
+  grid-column-gap: 2rem;
+  flex: 1;
+  align-items: center;
+  height: 100%;
+  display: flex
+;
+}
+.dropdown__icon-wrap {
+  pointer-events: auto;
+  cursor: pointer;
+  border-radius: 50%;
+  flex: none;
+  justify-content: center;
+  align-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-top: -.3rem;
+  margin-bottom: -.3rem;
+  display: flex
+;
+  position: relative;
+  overflow: hidden;
+  transform: translate(0);
+}
+.dropdown__icons {
+  z-index: 2;
+  flex: none;
+  justify-content: center;
+  align-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex
+;
+  position: relative;
+}
+.dropdown__icon.is-close {
+  justify-content: center;
+  align-items: center;
+  display: none;
+}
+.dropdown__list.is-inter {
+  height: auto;
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+.dropdown__list {
+  background-color: #0000;
+  border: 1px solid #ec691f;
+  width: 100%;
+  overflow: hidden;
+}
+.dropdown__content.mod--footer-serv {
+  grid-row-gap: 3.5rem;
+  flex-direction: column;
+  padding-top: 1.5rem;
+  padding-bottom: 5rem;
+  display: flex
+;
+}
+.footer-serv__block {
+  grid-row-gap: 2rem;
+  border-bottom: 0 solid #ffffff26;
+  flex-direction: column;
+  display: flex
+;
+}
+.footer-serv__list {
+  grid-row-gap: .5rem;
+  flex-wrap: wrap;
+  margin-right: -1rem;
+  display: flex
+;
+}
+.footer-serv__list-item {
+  align-items: center;
+  width: 25%;
+  margin-bottom: 0;
+  padding-right: 1rem;
+  display: flex
+;
+}
+.overflow-hidden {
+  z-index: 1;
+  position: relative;
+  overflow: hidden;
+  transform: translate(0);
+}
+.button__texts {
+  transition: transform .4scubic-bezier(.215,.61,.355,1);
+  position: relative;
+  transform: translate(0);
+}
   

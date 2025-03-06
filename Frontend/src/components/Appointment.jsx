@@ -72,7 +72,7 @@ const Appointment = () => {
                 initial="initial"
                 whileHover="hovered"
                 transition={{ duration: 0.5 }}
-                className="text-md text-[#FFF] bg-[#ec691f] rounded-full uppercase tracking-wider py-3 px-5 relative whitespace-nowrap overflow-hidden flex items-center gap-3 contact-btn"
+                className="text-md text-[#FFF] bg-[#ec691f] rounded-full uppercase tracking-wider py-3 px-5 relative whitespace-nowrap overflow-hidden flex items-center gap-3 app contact-btn"
                 href="/contactus"
               >
                 {/* Normal Text */}
