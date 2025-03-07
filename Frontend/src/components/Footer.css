@@ -234,7 +234,6 @@
   
   /* Footer Terms */
   .footer-terms__links {
-    margin-top: 60px;
     padding-top: 20px;
     border-top: 1px solid rgba(255, 255, 255, 0.2);
     display: flex;
@@ -272,7 +271,7 @@
     transition: transform 0.3s;
   }
   
-  .button__text {
+  .footer .button__text {
     display: block;
   }
   
@@ -440,6 +439,7 @@
 
 /*Dropdown styles*/
 .dropdown__toggle.mod--footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
   color: #fff;
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
@@ -494,6 +494,7 @@
   display: block;
   position: relative;
   overflow: hidden;
+  margin-bottom: 20px;
 }
 .dropdown__list {
   background-color: #0000;

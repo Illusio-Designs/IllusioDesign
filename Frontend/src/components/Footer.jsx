@@ -256,7 +256,7 @@ const Footer = () => {
                   <p>Open Source</p>
                   <p>Referral Program</p>
                   <p>Contacts</p>
-                  <p>Blog</p>
+                  <p onClick={() => window.location.href='/blog'}>Blog</p>
                 </div>
               </div>
             </div>
@@ -417,8 +417,8 @@ const Footer = () => {
               >
                 <div className="dropdown__content mod--footer-serv">
                   <div className="footer-serv__block">
-                    <div className="text-size-14 letter-spacing-005 text-style-allcaps">
-                      DESIGN
+                    <div className="text-2xl letter-spacing-005 text-style-allcaps">
+                      Design
                     </div>
                     <ul
                       role="list"
@@ -601,7 +601,7 @@ const Footer = () => {
                     </ul>
                   </div>
                   <div className="footer-serv__block">
-                    <div className="text-size-14 letter-spacing-005 text-style-allcaps">
+                    <div className="text-2xl letter-spacing-005 text-style-allcaps">
                       Development
                     </div>
                     <ul
@@ -791,7 +791,7 @@ const Footer = () => {
                     </ul>
                   </div>
                   <div className="footer-serv__block">
-                    <div className="text-size-14 letter-spacing-005 text-style-allcaps">
+                    <div className="text-2xl letter-spacing-005 text-style-allcaps">
                       Marketing
                     </div>
                     <ul
@@ -1014,7 +1014,7 @@ const Footer = () => {
                   </div>
                 </div>
               </nav>
-            </div>
+            </div>          
             <div
               data-hover="false"
               data-delay="0"
@@ -1099,7 +1099,7 @@ const Footer = () => {
               >
                 <div className="dropdown__content mod--footer-serv">
                   <div className="footer-serv__block">
-                    <div className="text-size-14 letter-spacing-005 text-style-allcaps">
+                    <div className="text-2xl letter-spacing-005 text-style-allcaps">
                       Back-end/Front-end
                     </div>
                     <ul
@@ -1199,7 +1199,7 @@ const Footer = () => {
                     </ul>
                   </div>
                   <div className="footer-serv__block">
-                    <div className="text-size-14 letter-spacing-005 text-style-allcaps">
+                    <div className="text-2xl letter-spacing-005 text-style-allcaps">
                       cms
                     </div>
                     <ul
@@ -1263,7 +1263,7 @@ const Footer = () => {
                     </ul>
                   </div>
                   <div className="footer-serv__block">
-                    <div className="text-size-14 letter-spacing-005 text-style-allcaps">
+                    <div className="text-2xl letter-spacing-005 text-style-allcaps">
                       Cloud
                     </div>
                     <ul
@@ -1311,7 +1311,7 @@ const Footer = () => {
                     </ul>
                   </div>
                   <div className="footer-serv__block">
-                    <div className="text-size-14 letter-spacing-005 text-style-allcaps">
+                    <div className="text-2xl letter-spacing-005 text-style-allcaps">
                       Mobile Development
                     </div>
                     <ul
@@ -1358,7 +1358,7 @@ const Footer = () => {
                   </div>
                 </div>
               </nav>
-            </div>
+            </div>          
             <div
               data-hover="false"
               data-delay="0"
@@ -1445,7 +1445,7 @@ const Footer = () => {
               >
                 <div className="dropdown__content mod--footer-serv">
                   <div className="footer-serv__block">
-                    <div className="text-size-14 letter-spacing-005 text-style-allcaps">
+                    <div className="text-2xl letter-spacing-005 text-style-allcaps">
                       Healthcare
                     </div>
                     <ul
@@ -1615,7 +1615,7 @@ const Footer = () => {
                     </ul>
                   </div>
                   <div className="footer-serv__block">
-                    <div className="text-size-14 letter-spacing-005 text-style-allcaps">
+                    <div className="text-2xl letter-spacing-005 text-style-allcaps">
                       Education
                     </div>
                     <ul
@@ -1765,7 +1765,7 @@ const Footer = () => {
                     </ul>
                   </div>
                   <div className="footer-serv__block">
-                    <div className="text-size-14 letter-spacing-005 text-style-allcaps">
+                    <div className="text-2xl letter-spacing-005 text-style-allcaps">
                       Finance
                     </div>
                     <ul
@@ -1895,7 +1895,7 @@ const Footer = () => {
                     </ul>
                   </div>
                   <div className="footer-serv__block">
-                    <div className="text-size-14 letter-spacing-005 text-style-allcaps">
+                    <div className="text-2xl letter-spacing-005 text-style-allcaps">
                       Transportation and Logistics
                     </div>
                     <ul
@@ -2005,7 +2005,7 @@ const Footer = () => {
                     </ul>
                   </div>
                   <div className="footer-serv__block">
-                    <div className="text-size-14 letter-spacing-005 text-style-allcaps">
+                    <div className="text-2xl letter-spacing-005 text-style-allcaps">
                       Machine Learning &amp; AI
                     </div>
                     <ul

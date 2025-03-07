@@ -26,7 +26,7 @@ const Blog = () => {
                                         <form method="get" name="wf-form-Blog-catalog" data-name="Blog catalog" data-success-hide="" target="form-subs" id="wf-form-Blog-catalog" className="form" data-wf-page-id="65e02e1378aeac8c4c4d9b84" data-wf-element-id="280af6a1-58ae-1332-482b-1d09236bc546" aria-label="Blog catalog" data-gtm-vis-recent-on-screen58928213_185="447" data-gtm-vis-first-on-screen58928213_185="447" data-gtm-vis-total-visible-time58928213_185="100" data-gtm-vis-has-fired58928213_185="1" data-hs-cf-bound="true">
                                             <div className="form-subs__content">
                                                 <div className="input-wrap">
-                                                    <input className="input mod--catalog-subs w-input" maxlength="256" name="Email" data-name="Email" placeholder="Join us, share your email" type="email" id="subs-email" required="" />
+                                                    <input className="input mod--catalog-subs w-input" maxLength="256" name="Email" data-name="Email" placeholder="Join us, share your email" type="email" id="subs-email" required="" />
                                                     <div data-submit-anim="" className="form__submit-result pointer-events-off anim">
                                                         <div className="form__submit-result-text mod--blog">Thank you for subscribing!</div>
                                                     </div>
@@ -58,10 +58,10 @@ const Blog = () => {
                                             <input type="hidden" name="Referrer" id="input-06-0" value="https://www.google.com/" />
                                             <input type="hidden" name="Initial Source" id="input-07-0" value="https://www.halo-lab.com/opensource-categories/react" />
                                         </form>
-                                        <div className="form-success w-form-done" tabindex="-1" role="region" aria-label="Blog catalog success">
+                                        <div className="form-success w-form-done" tabIndex="-1" role="region" aria-label="Blog catalog success">
                                             <div>Thank you for subscribing!</div>
                                         </div>
-                                        <div className="form-error w-form-fail" tabindex="-1" role="region" aria-label="Blog catalog failure">
+                                        <div className="form-error w-form-fail" tabIndex="-1" role="region" aria-label="Blog catalog failure">
                                             <div>Hmm...something went wrong.</div>
                                         </div>
                                     </div>
@@ -70,7 +70,7 @@ const Blog = () => {
                         </div>
                         <div data-anim-delay="100" className="columns__col mod--blog-hero">
                             <div data-swiper="catalog-hero" className="swiper mod--projects-hero w-dyn-list swiper-fade swiper-initialized swiper-horizontal swiper-pointer-events swiper-watch-progress swiper-backface-hidden">
-                                <div fs-cmsnest-element="list" role="list" className="swiper-wrapper mod--projects-hero w-dyn-items" id="swiper-wrapper-8ff5867b9b48b10cf" aria-live="off" style={{ transitionDuration: '0ms' }}>
+                                <div role="list" className="swiper-wrapper mod--projects-hero w-dyn-items" id="swiper-wrapper-8ff5867b9b48b10cf" aria-live="off" style={{ transitionDuration: '0ms' }}>
                                     <div role="group" className="swiper-slide mod--projects-hero2 w-dyn-item swiper-slide-duplicate swiper-slide-duplicate-next" data-swiper-slide-index="3" style={{ width: '676px', transitionDuration: '0ms', opacity: 1, transform: 'translate3d(0px, 0px, 0px)' }} aria-label="4 / 4">
                                         <a data-hover="" data-mask="projects-big-invert" href="/blog/full-guide-to-the-product-development-process" className="catalog-card-fill w-inline-block">
                                             <div className="catalog-card-fill__img-wrap">
