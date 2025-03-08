@@ -251,7 +251,7 @@ const Footer = () => {
                   <p>
                     Our Services <span>+</span>
                   </p>
-                  <p>Projects</p>
+                  <p onClick={() => window.location.href='/project'}>Projects</p>
                   <p>Dedicated team</p>
                   <p>Open Source</p>
                   <p>Referral Program</p>

@@ -1,4 +1,3 @@
-import React from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Appointment from "../components/Appointment";
@@ -7,7 +6,7 @@ const Project = () => {
     return (
         <>
             <Header />
-            <div className="main">
+            <div className="main project">
                 <div className="section mod--hero">
                     <div className="container">
                         <div data-anim-trigger="load" className="columns mod--blog-hero is-projects">
@@ -33,7 +32,6 @@ const Project = () => {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <img src="https://cdn.prod.website-files.com/63f38a8c92397a024fcb9ae8/644a822df3c2ce4b21e19455_icon-hero-project.svg" loading="eager" data-hover-elem="" alt="" className="icon-scale is-2" />
                                             </a>
                                         </div>
                                     </div>
@@ -41,7 +39,7 @@ const Project = () => {
                             </div>
                             <div data-anim-delay="100" className="columns__col mod--blog-hero">
                                 <div data-swiper="projects-hero" className="swiper mod--projects-hero w-dyn-list swiper-fade swiper-initialized swiper-horizontal swiper-pointer-events swiper-watch-progress swiper-backface-hidden">
-                                    <div fs-cmsnest-element="list" role="list" className="swiper-wrapper mod--projects-hero w-dyn-items" id="swiper-wrapper-e7cf8c561b259ba7" aria-live="off" style={{ transitionDuration: '0ms' }}>
+                                    <div role="list" className="swiper-wrapper mod--projects-hero w-dyn-items" id="swiper-wrapper-e7cf8c561b259ba7" aria-live="off" style={{ transitionDuration: '0ms' }}>
                                         <div role="group" className="swiper-slide mod--projects-hero2 w-dyn-item" style={{ width: '676px', transitionDuration: '0ms', opacity: 1, transform: 'translate3d(0px, 0px, 0px)' }} aria-label="1 / 3">
                                             <a data-hover="" data-mask="projects-big-invert" href="/project/bookclub24" className="catalog-card-fill mod--projects w-inline-block">
                                                 <div className="catalog-card-fill__img-wrap">
@@ -49,14 +47,14 @@ const Project = () => {
                                                 </div>
                                                 <div className="catalog-card-fill__content mod--projects">
                                                     <div data-anim-delay="500" className="post-card__param is--big">
-                                                        <div className="collection is-nest w-dyn-list" style={{}}>
-                                                            <div fs-cmsnest-collection="industries" fs-cmsnest-element="nest-source" role="list" className="collection__list is-nest w-dyn-items">
+                                                        <div className="collection is-nest w-dyn-list">
+                                                            <div role="list" className="collection__list is-nest w-dyn-items">
                                                                 <div data-slug-industry="other-industries" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                                    <div fs-cmsfilter-field="industries" className="post-card__tag w-condition-invisible">Other industries</div>
+                                                                    <div className="post-card__tag w-condition-invisible">Other industries</div>
                                                                     <a href="/project-industry/other-industries" className="hide w-inline-block"></a>
                                                                 </div>
                                                                 <div data-slug-industry="consumer-products-services" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                                    <div fs-cmsfilter-field="industries" className="post-card__tag">Consumer products &amp; services</div>
+                                                                    <div className="post-card__tag">Consumer products &amp; services</div>
                                                                     <a href="/project-industry/consumer-products-services" className="hide w-inline-block"></a>
                                                                 </div>
                                                             </div>
@@ -91,18 +89,18 @@ const Project = () => {
                                                 </div>
                                                 <div className="catalog-card-fill__content mod--projects">
                                                     <div data-anim-delay="500" className="post-card__param is--big">
-                                                        <div className="collection is-nest w-dyn-list" style={{}}>
-                                                            <div fs-cmsnest-collection="industries" fs-cmsnest-element="nest-source" role="list" className="collection__list is-nest w-dyn-items">
+                                                        <div className="collection is-nest w-dyn-list">
+                                                            <div role="list" className="collection__list is-nest w-dyn-items">
                                                                 <div data-slug-industry="other-industries" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                                    <div fs-cmsfilter-field="industries" className="post-card__tag w-condition-invisible">Other industries</div>
+                                                                    <div className="post-card__tag w-condition-invisible">Other industries</div>
                                                                     <a href="/project-industry/other-industries" className="hide w-inline-block"></a>
                                                                 </div>
                                                                 <div data-slug-industry="fashion" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                                    <div fs-cmsfilter-field="industries" className="post-card__tag">Fashion</div>
+                                                                    <div className="post-card__tag">Fashion</div>
                                                                     <a href="/project-industry/fashion" className="hide w-inline-block"></a>
                                                                 </div>
                                                                 <div data-slug-industry="e-commerce" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                                    <div fs-cmsfilter-field="industries" className="post-card__tag">E-commerce</div>
+                                                                    <div className="post-card__tag">E-commerce</div>
                                                                     <a href="/project-industry/e-commerce" className="hide w-inline-block"></a>
                                                                 </div>
                                                             </div>
@@ -137,18 +135,18 @@ const Project = () => {
                                                 </div>
                                                 <div className="catalog-card-fill__content mod--projects">
                                                     <div data-anim-delay="500" className="post-card__param is--big">
-                                                        <div className="collection is-nest w-dyn-list" style={{}}>
-                                                            <div fs-cmsnest-collection="industries" fs-cmsnest-element="nest-source" role="list" className="collection__list is-nest w-dyn-items">
+                                                        <div className="collection is-nest w-dyn-list">
+                                                            <div role="list" className="collection__list is-nest w-dyn-items">
                                                                 <div data-slug-industry="other-industries" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                                    <div fs-cmsfilter-field="industries" className="post-card__tag w-condition-invisible">Other industries</div>
+                                                                    <div className="post-card__tag w-condition-invisible">Other industries</div>
                                                                     <a href="/project-industry/other-industries" className="hide w-inline-block"></a>
                                                                 </div>
                                                                 <div data-slug-industry="manufacturing" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                                    <div fs-cmsfilter-field="industries" className="post-card__tag">Manufacturing</div>
+                                                                    <div className="post-card__tag">Manufacturing</div>
                                                                     <a href="/project-industry/manufacturing" className="hide w-inline-block"></a>
                                                                 </div>
                                                                 <div data-slug-industry="real-estate" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                                    <div fs-cmsfilter-field="industries" className="post-card__tag">Real estate</div>
+                                                                    <div className="post-card__tag">Real estate</div>
                                                                     <a href="/project-industry/real-estate" className="hide w-inline-block"></a>
                                                                 </div>
                                                             </div>
@@ -169,7 +167,8 @@ const Project = () => {
                                                             <img src="https://cdn.prod.website-files.com/63f38a8c92397a024fcb9ae8/66ab56714767af99cb4cdbb0_flag-Spain.avif" loading="lazy" alt="Spain Flag" className="project__flag w-condition-invisible" />
                                                             <img src="https://cdn.prod.website-files.com/63f38a8c92397a024fcb9ae8/66ab5671d3b5aa2c153e2e85_flag-Norway.avif" loading="lazy" alt="Norway Flag" className="project__flag w-condition-invisible" />
                                                             <img src="https://cdn.prod.website-files.com/63f38a8c92397a024fcb9ae8/66ab567137517ac50d28ad82_flag-Netherlands.avif" loading="lazy" alt="Netherlands Flag" className="project__flag w-condition-invisible" />
-                                                            <img src="https://cdn.prod.website-files.com/63f38a8c92397a024fcb9ae8/66e434381127b7b9084062ea_flag-Australia.avif" loading="lazy" alt="Australia Flag" className="project__flag w-condition-invisible" />
+                                                            <img src="https://cdn.prod.website-files.com/63f38a8c92397a024fcb9ae8/66e434381127b7b9084062ea_flag-UAE.avif" loading="lazy" alt="" className="project__flag w-condition-invisible" />
+                                                            <img src="https://cdn.prod.website-files.com/63f38a8c92397a024fcb9ae8/67c06382ce089ee9cac4fabf_flag-Portugal.avif" loading="lazy" alt="" className="project__flag w-condition-invisible" />
                                                         </div>
                                                     </div>
                                                     <h3 className="heading-6 text-style-2lines">Mighty Buildings — sustainable 3D printed houses of the future</h3>
@@ -194,7 +193,7 @@ const Project = () => {
                     <div className="columns mod--projects">
                         <div className="columns__col mod--projects is--1">
                             <div data-sidebar-sticky="" className="projects-sidebar">
-                                <div fs-cmsfilter-element="filters" className="form-wrapper mod--projects w-form">
+                                <div  className="form-wrapper mod--projects w-form">
                                     <form id="wf-form-sort" name="wf-form-sort" data-name="sort" method="get" className="form mod--projects-sort" aria-label="sort">
                                         <div className="projects-sort__dropdowns">
                                             <div data-delay="0" data-hover="false" data-dropdown-industries="" className="dropdown-inter-each mod--projects-sort active w-dropdown">
@@ -211,7 +210,7 @@ const Project = () => {
                                                 </div>
                                                 <div className="dropdown__list is-inter w-dropdown-list" style={{ height: 'auto' }} id="w-dropdown-list-3" aria-labelledby="w-dropdown-toggle-3">
                                                     <div className="dropdown__content mod--projects-sort">
-                                                        <div fs-cmsfilter-element="clear" fs-cmsfilter-clear="industries" className="projects-sort__btn active">
+                                                        <div className="projects-sort__btn active">
                                                             <div>All industries</div>
                                                             <div className="projects-sort__btn-active"></div>
                                                         </div>
@@ -220,7 +219,7 @@ const Project = () => {
                                                                 <div role="listitem" className="collection__item mod--projects-sort w-dyn-item">
                                                                     <label className="projects-sort__btn w-radio">
                                                                         <input type="radio" data-name="Radio 3" id="radio-3-0" name="radio" className="w-form-formradioinput hide w-radio-input" value="Radio" />
-                                                                        <span fs-cmsfilter-active="active" fs-cmsfilter-field="industries" className="margin-0 w-form-label" htmlFor="radio-3">SaaS</span>
+                                                                        <span  className="margin-0 w-form-label" htmlFor="radio-3">SaaS</span>
                                                                         <div className="projects-sort__btn-active"></div>
                                                                         <img src="https://cdn.prod.website-files.com/63f38a8c92397a024fcb9ae8/6647547e56d648deafecc88d_icon-checked-yellow.svg" loading="lazy" alt="" className="projects-sidebar__check" />
                                                                     </label>
@@ -228,7 +227,7 @@ const Project = () => {
                                                                 <div role="listitem" className="collection__item mod--projects-sort w-dyn-item">
                                                                     <label className="projects-sort__btn w-radio">
                                                                         <input type="radio" data-name="Radio 3" id="radio-3-1" name="radio" className="w-form-formradioinput hide w-radio-input" value="Radio" />
-                                                                        <span fs-cmsfilter-active="active" fs-cmsfilter-field="industries" className="margin-0 w-form-label" htmlFor="radio-3">Healthcare</span>
+                                                                        <span className="margin-0 w-form-label" htmlFor="radio-3">Healthcare</span>
                                                                         <div className="projects-sort__btn-active"></div>
                                                                         <img src="https://cdn.prod.website-files.com/63f38a8c92397a024fcb9ae8/6647547e56d648deafecc88d_icon-checked-yellow.svg" loading="lazy" alt="" className="projects-sidebar__check" />
                                                                     </label>
@@ -236,7 +235,7 @@ const Project = () => {
                                                                 <div role="listitem" className="collection__item mod--projects-sort w-dyn-item">
                                                                     <label className="projects-sort__btn w-radio">
                                                                         <input type="radio" data-name="Radio 3" id="radio-3-2" name="radio" className="w-form-formradioinput hide w-radio-input" value="Radio" />
-                                                                        <span fs-cmsfilter-active="active" fs-cmsfilter-field="industries" className="margin-0 w-form-label" htmlFor="radio-3">Finance</span>
+                                                                        <span className="margin-0 w-form-label" htmlFor="radio-3">Finance</span>
                                                                         <div className="projects-sort__btn-active"></div>
                                                                         <img src="https://cdn.prod.website-files.com/63f38a8c92397a024fcb9ae8/6647547e56d648deafecc88d_icon-checked-yellow.svg" loading="lazy" alt="" className="projects-sidebar__check" />
                                                                     </label>
@@ -244,7 +243,7 @@ const Project = () => {
                                                                 <div role="listitem" className="collection__item mod--projects-sort w-dyn-item">
                                                                     <label className="projects-sort__btn w-radio">
                                                                         <input type="radio" data-name="Radio 3" id="radio-3-3" name="radio" className="w-form-formradioinput hide w-radio-input" value="Radio" />
-                                                                        <span fs-cmsfilter-active="active" fs-cmsfilter-field="industries" className="margin-0 w-form-label" htmlFor="radio-3">Education</span>
+                                                                        <span className="margin-0 w-form-label" htmlFor="radio-3">Education</span>
                                                                         <div className="projects-sort__btn-active"></div>
                                                                         <img src="https://cdn.prod.website-files.com/63f38a8c92397a024fcb9ae8/6647547e56d648deafecc88d_icon-checked-yellow.svg" loading="lazy" alt="" className="projects-sidebar__check" />
                                                                     </label>
@@ -252,7 +251,7 @@ const Project = () => {
                                                                 <div role="listitem" className="collection__item mod--projects-sort w-dyn-item">
                                                                     <label className="projects-sort__btn w-radio">
                                                                         <input type="radio" data-name="Radio 3" id="radio-3-4" name="radio" className="w-form-formradioinput hide w-radio-input" value="Radio" />
-                                                                        <span fs-cmsfilter-active="active" fs-cmsfilter-field="industries" className="margin-0 w-form-label" htmlFor="radio-3">Other industries</span>
+                                                                        <span className="margin-0 w-form-label" htmlFor="radio-3">Other industries</span>
                                                                         <div className="projects-sort__btn-active"></div>
                                                                         <img src="https://cdn.prod.website-files.com/63f38a8c92397a024fcb9ae8/6647547e56d648deafecc88d_icon-checked-yellow.svg" loading="lazy" alt="" className="projects-sidebar__check" />
                                                                     </label>
@@ -276,7 +275,7 @@ const Project = () => {
                                                 </div>
                                                 <div className="dropdown__list is-inter w-dropdown-list" style={{ height: '0px' }} id="w-dropdown-list-4" aria-labelledby="w-dropdown-toggle-4">
                                                     <div className="dropdown__content mod--projects-sort">
-                                                        <div fs-cmsfilter-clear="services" fs-cmsfilter-element="clear" className="projects-sort__btn active">
+                                                        <div className="projects-sort__btn active">
                                                             <div>All services</div>
                                                             <div className="projects-sort__btn-active"></div>
                                                         </div>
@@ -285,7 +284,7 @@ const Project = () => {
                                                                 <div role="listitem" className="collection__item mod--projects-sort w-dyn-item">
                                                                     <label className="projects-sort__btn w-radio">
                                                                         <input type="radio" data-name="Radio 3" id="radio-3-5" name="radio" className="w-form-formradioinput hide w-radio-input" value="Radio" />
-                                                                        <span fs-cmsfilter-active="active" fs-cmsfilter-field="services" className="margin-0 w-form-label" htmlFor="radio-3">UX/UI design</span>
+                                                                        <span className="post-card__tag margin-0 w-form-label" htmlFor="radio-3">UX/UI design</span>
                                                                         <div className="projects-sort__btn-active"></div>
                                                                         <img src="https://cdn.prod.website-files.com/63f38a8c92397a024fcb9ae8/6647547e56d648deafecc88d_icon-checked-yellow.svg" loading="lazy" alt="" className="projects-sidebar__check" />
                                                                     </label>
@@ -293,7 +292,7 @@ const Project = () => {
                                                                 <div role="listitem" className="collection__item mod--projects-sort w-dyn-item">
                                                                     <label className="projects-sort__btn w-radio">
                                                                         <input type="radio" data-name="Radio 3" id="radio-3-6" name="radio" className="w-form-formradioinput hide w-radio-input" value="Radio" />
-                                                                        <span fs-cmsfilter-active="active" fs-cmsfilter-field="services" className="margin-0 w-form-label" htmlFor="radio-3">Web design</span>
+                                                                        <span className="post-card__tag margin-0 w-form-label" htmlFor="radio-3">Web design</span>
                                                                         <div className="projects-sort__btn-active"></div>
                                                                         <img src="https://cdn.prod.website-files.com/63f38a8c92397a024fcb9ae8/6647547e56d648deafecc88d_icon-checked-yellow.svg" loading="lazy" alt="" className="projects-sidebar__check" />
                                                                     </label>
@@ -301,7 +300,7 @@ const Project = () => {
                                                                 <div role="listitem" className="collection__item mod--projects-sort w-dyn-item">
                                                                     <label className="projects-sort__btn w-radio">
                                                                         <input type="radio" data-name="Radio 3" id="radio-3-7" name="radio" className="w-form-formradioinput hide w-radio-input" value="Radio" />
-                                                                        <span fs-cmsfilter-active="active" fs-cmsfilter-field="services" className="margin-0 w-form-label" htmlFor="radio-3">Branding</span>
+                                                                        <span className="post-card__tag margin-0 w-form-label" htmlFor="radio-3">Branding</span>
                                                                         <div className="projects-sort__btn-active"></div>
                                                                         <img src="https://cdn.prod.website-files.com/63f38a8c92397a024fcb9ae8/6647547e56d648deafecc88d_icon-checked-yellow.svg" loading="lazy" alt="" className="projects-sidebar__check" />
                                                                     </label>
@@ -309,7 +308,7 @@ const Project = () => {
                                                                 <div role="listitem" className="collection__item mod--projects-sort w-dyn-item">
                                                                     <label className="projects-sort__btn w-radio">
                                                                         <input type="radio" data-name="Radio 3" id="radio-3-8" name="radio" className="w-form-formradioinput hide w-radio-input" value="Radio" />
-                                                                        <span fs-cmsfilter-active="active" fs-cmsfilter-field="services" className="margin-0 w-form-label" htmlFor="radio-3">Product development</span>
+                                                                        <span className="post-card__tag margin-0 w-form-label" htmlFor="radio-3">Product development</span>
                                                                         <div className="projects-sort__btn-active"></div>
                                                                         <img src="https://cdn.prod.website-files.com/63f38a8c92397a024fcb9ae8/6647547e56d648deafecc88d_icon-checked-yellow.svg" loading="lazy" alt="" className="projects-sidebar__check" />
                                                                     </label>
@@ -317,7 +316,7 @@ const Project = () => {
                                                                 <div role="listitem" className="collection__item mod--projects-sort w-dyn-item">
                                                                     <label className="projects-sort__btn w-radio">
                                                                         <input type="radio" data-name="Radio 3" id="radio-3-9" name="radio" className="w-form-formradioinput hide w-radio-input" value="Radio" />
-                                                                        <span fs-cmsfilter-active="active" fs-cmsfilter-field="services" className="margin-0 w-form-label" htmlFor="radio-3">Webflow development</span>
+                                                                        <span className="post-card__tag margin-0 w-form-label" htmlFor="radio-3">Webflow development</span>
                                                                         <div className="projects-sort__btn-active"></div>
                                                                         <img src="https://cdn.prod.website-files.com/63f38a8c92397a024fcb9ae8/6647547e56d648deafecc88d_icon-checked-yellow.svg" loading="lazy" alt="" className="projects-sidebar__check" />
                                                                     </label>
@@ -325,7 +324,7 @@ const Project = () => {
                                                                 <div role="listitem" className="collection__item mod--projects-sort w-dyn-item">
                                                                     <label className="projects-sort__btn w-radio">
                                                                         <input type="radio" data-name="Radio 3" id="radio-3-10" name="radio" className="w-form-formradioinput hide w-radio-input" value="Radio" />
-                                                                        <span fs-cmsfilter-active="active" fs-cmsfilter-field="services" className="margin-0 w-form-label" htmlFor="radio-3">Web development</span>
+                                                                        <span className="post-card__tag margin-0 w-form-label" htmlFor="radio-3">Web development</span>
                                                                         <div className="projects-sort__btn-active"></div>
                                                                         <img src="https://cdn.prod.website-files.com/63f38a8c92397a024fcb9ae8/6647547e56d648deafecc88d_icon-checked-yellow.svg" loading="lazy" alt="" className="projects-sidebar__check" />
                                                                     </label>
@@ -343,10 +342,10 @@ const Project = () => {
                                         <input type="hidden" name="Referrer" id="input-06-0" value="https://www.google.com/" />
                                         <input type="hidden" name="Initial Source" id="input-07-0" value="https://www.halo-lab.com/opensource-categories/react" />
                                     </form>
-                                    <div className="w-form-done" tabindex="-1" role="region" aria-label="sort success">
+                                    <div tabIndex="-1" role="region" aria-label="sort success">
                                         <div>Thank you! Your submission has been received!</div>
                                     </div>
-                                    <div className="w-form-fail" tabindex="-1" role="region" aria-label="sort failure">
+                                    <div className="w-form-fail" tabIndex="-1" role="region" aria-label="sort failure">
                                         <div>Oops! Something went wrong while submitting the form.</div>
                                     </div>
                                 </div>
@@ -395,7 +394,7 @@ const Project = () => {
                                         </div>
                                         <div data-filter-icon="" className="button__icons mod--projects-filter">
                                             <div className="icon-small is--size-24-mobile w-embed">
-                                                <svg style={{ transition: 'all .1s;' }} aria-hidden="true" role="img" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width="100%" height="100%">
+                                                <svg style={{ transition: 'all .1s' }} aria-hidden="true" role="img" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width="100%" height="100%">
                                                     <path fillRule="evenodd" d="M.76 2.08a1 1 0 0 1 .908-.58h16.667a1 1 0 0 1 .763 1.646l-6.43 7.603V17.5a1 1 0 0 1-1.447.894l-3.334-1.666a1 1 0 0 1-.552-.895V10.75L.905 3.146A1 1 0 0 1 .76 2.079ZM3.824 3.5l5.275 6.238a1 1 0 0 1 .237.645v4.832l1.333.667v-5.499a1 1 0 0 1 .236-.645L16.18 3.5H3.823Z" clipRule="evenodd"></path>
                                                 </svg>
                                             </div>
@@ -422,33 +421,33 @@ const Project = () => {
                                 </div>
                             </div>
                             <div className="collection w-dyn-list">
-                                <div fs-cmsload-mode="pagination" className="collection__list is-posts w-dyn-items" fs-cmsload-showquery="true" fs-cmsfilter-element="list" fs-cmsnest-element="list" role="list" fs-cmsload-pageboundary="1,1,1,0" fs-cmsload-element="list" fs-cmsfilter-showquery="true">
+                                <div className="collection__list is-posts w-dyn-items" role="list">
                                     <div role="listitem" className="collection__item is-posts is-2col w-dyn-item" style={{ opacity: 1 }}>
                                         <div data-hover-parent="" className="post-card">
                                             <a data-hover="" data-mask="post" href="/project/zolve" className="post-card__img-link w-inline-block">
-                                                <img alt="UI/UX design and Web development for Zolve app by Halo Lab" loading="lazy" data-hover-elem="" src="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/67bf3632485ec93c9baec16f_preview.webp" sizes="(max-width: 479px) 91vw, (max-width: 767px) 46vw, (max-width: 991px) 43vw, 29vw" srcset="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/67bf3632485ec93c9baec16f_preview-p-500.webp 500w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/67bf3632485ec93c9baec16f_preview-p-800.webp 800w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/67bf3632485ec93c9baec16f_preview-p-1080.webp 1080w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/67bf3632485ec93c9baec16f_preview.webp 1280w" className="post-card__img is-full" />
+                                                <img alt="UI/UX design and Web development for Zolve app by Halo Lab" loading="lazy" data-hover-elem="" src="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/67bf3632485ec93c9baec16f_preview.webp" sizes="(max-width: 479px) 91vw, (max-width: 767px) 46vw, (max-width: 991px) 43vw, 29vw" srcSet="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/67bf3632485ec93c9baec16f_preview-p-500.webp 500w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/67bf3632485ec93c9baec16f_preview-p-800.webp 800w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/67bf3632485ec93c9baec16f_preview-p-1080.webp 1080w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/67bf3632485ec93c9baec16f_preview.webp 1280w" className="post-card__img is-full" />
                                             </a>
                                             <div className="post-card__param">
-                                                <div className="collection is-nest w-dyn-list" style="">
-                                                    <div fs-cmsnest-collection="industries" fs-cmsnest-element="nest-source" role="list" className="collection__list is-nest w-dyn-items">
+                                                <div className="collection is-nest w-dyn-list">
+                                                    <div role="list" className="collection__list is-nest w-dyn-items">
                                                         <div data-slug-industry="other-industries" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="industries" className="post-card__tag w-condition-invisible">Other industries</div>
+                                                            <div className="post-card__tag w-condition-invisible">Other industries</div>
                                                             <a href="/project-industry/other-industries" className="hide w-inline-block"></a>
                                                         </div>
                                                         <div data-slug-industry="agro" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="industries" className="post-card__tag">Agro</div>
+                                                            <div className="post-card__tag">Agro</div>
                                                             <a href="/project-industry/agro" className="hide w-inline-block"></a>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="collection is-nest hide w-dyn-list" style="">
-                                                    <div fs-cmsnest-collection="services" fs-cmsnest-element="nest-source" role="list" className="collection__list is-nest w-dyn-items">
+                                                <div className="collection is-nest hide w-dyn-list">
+                                                    <div role="list" className="collection__list is-nest w-dyn-items">
                                                         <div role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="services">Web development</div>
+                                                            <div className="post-card__tag">Web development</div>
                                                             <a href="/project-service/web-development" className="hide w-inline-block"></a>
                                                         </div>
                                                         <div role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="services">UX/UI design</div>
+                                                            <div className="post-card__tag">UX/UI design</div>
                                                             <a href="/project-service/ux-ui-design" className="hide w-inline-block"></a>
                                                         </div>
                                                     </div>
@@ -497,29 +496,29 @@ const Project = () => {
                                     <div role="listitem" className="collection__item is-posts is-2col w-dyn-item" style={{ opacity: 1 }}>
                                         <div data-hover-parent="" className="post-card">
                                             <a data-hover="" data-mask="post" href="/project/hospity" className="post-card__img-link w-inline-block">
-                                                <img alt="unique design and smart brand identity for medical SaaS platform" loading="lazy" data-hover-elem="" src="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/67978414b27439aa15d7c325_illustr-Hospity-preview%20(1).webp" sizes="(max-width: 479px) 91vw, (max-width: 767px) 46vw, (max-width: 991px) 43vw, 29vw" srcset="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/67978414b27439aa15d7c325_illustr-Hospity-preview%20(1)-p-500.webp 500w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/67978414b27439aa15d7c325_illustr-Hospity-preview%20(1)-p-800.webp 800w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/67978414b27439aa15d7c325_illustr-Hospity-preview%20(1)-p-1080.webp 1080w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/67978414b27439aa15d7c325_illustr-Hospity-preview%20(1).webp 1280w" className="post-card__img is-full" />
+                                                <img alt="unique design and smart brand identity for medical SaaS platform" loading="lazy" data-hover-elem="" src="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/67978414b27439aa15d7c325_illustr-Hospity-preview%20(1).webp" sizes="(max-width: 479px) 91vw, (max-width: 767px) 46vw, (max-width: 991px) 43vw, 29vw" srcSet="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/67978414b27439aa15d7c325_illustr-Hospity-preview%20(1)-p-500.webp 500w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/67978414b27439aa15d7c325_illustr-Hospity-preview%20(1)-p-800.webp 800w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/67978414b27439aa15d7c325_illustr-Hospity-preview%20(1)-p-1080.webp 1080w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/67978414b27439aa15d7c325_illustr-Hospity-preview%20(1).webp 1280w" className="post-card__img is-full" />
                                             </a>
                                             <div className="post-card__param">
-                                                <div className="collection is-nest w-dyn-list" style="">
-                                                    <div fs-cmsnest-collection="industries" fs-cmsnest-element="nest-source" role="list" className="collection__list is-nest w-dyn-items">
+                                                <div className="collection is-nest w-dyn-list" >
+                                                    <div role="list" className="collection__list is-nest w-dyn-items">
                                                         <div data-slug-industry="saas" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="industries" className="post-card__tag">SaaS</div>
+                                                            <div className="post-card__tag">SaaS</div>
                                                             <a href="/project-industry/saas" className="hide w-inline-block"></a>
                                                         </div>
                                                         <div data-slug-industry="healthcare" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="industries" className="post-card__tag">Healthcare</div>
+                                                            <div className="post-card__tag">Healthcare</div>
                                                             <a href="/project-industry/healthcare" className="hide w-inline-block"></a>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="collection is-nest hide w-dyn-list" style="">
-                                                    <div fs-cmsnest-collection="services" fs-cmsnest-element="nest-source" role="list" className="collection__list is-nest w-dyn-items">
+                                                <div className="collection is-nest hide w-dyn-list">
+                                                    <div role="list" className="collection__list is-nest w-dyn-items">
                                                         <div role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="services">Branding</div>
+                                                            <div className="post-card__tag">Branding</div>
                                                             <a href="/project-service/branding" className="hide w-inline-block"></a>
                                                         </div>
                                                         <div role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="services">UX/UI design</div>
+                                                            <div className="post-card__tag">UX/UI design</div>
                                                             <a href="/project-service/ux-ui-design" className="hide w-inline-block"></a>
                                                         </div>
                                                     </div>
@@ -568,33 +567,33 @@ const Project = () => {
                                     <div role="listitem" className="collection__item is-posts is-2col w-dyn-item" style={{ opacity: 1 }}>
                                         <div data-hover-parent="" className="post-card">
                                             <a data-hover="" data-mask="post" href="/project/relocate-now" className="post-card__img-link w-inline-block">
-                                                <img alt="Branding and web design services by Halo Lab for a Relocate Now" loading="lazy" data-hover-elem="" src="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/6790f55d7a81980a40d0e976_preview.webp" sizes="(max-width: 479px) 91vw, (max-width: 767px) 46vw, (max-width: 991px) 43vw, 29vw" srcset="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/6790f55d7a81980a40d0e976_preview-p-500.webp 500w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/6790f55d7a81980a40d0e976_preview-p-800.webp 800w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/6790f55d7a81980a40d0e976_preview-p-1080.webp 1080w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/6790f55d7a81980a40d0e976_preview.webp 1280w" className="post-card__img is-full" />
+                                                <img alt="Branding and web design services by Halo Lab for a Relocate Now" loading="lazy" data-hover-elem="" src="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/6790f55d7a81980a40d0e976_preview.webp" sizes="(max-width: 479px) 91vw, (max-width: 767px) 46vw, (max-width: 991px) 43vw, 29vw" srcSet="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/6790f55d7a81980a40d0e976_preview-p-500.webp 500w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/6790f55d7a81980a40d0e976_preview-p-800.webp 800w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/6790f55d7a81980a40d0e976_preview-p-1080.webp 1080w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/6790f55d7a81980a40d0e976_preview.webp 1280w" className="post-card__img is-full" />
                                             </a>
                                             <div className="post-card__param">
-                                                <div className="collection is-nest w-dyn-list" style="">
-                                                    <div fs-cmsnest-collection="industries" fs-cmsnest-element="nest-source" role="list" className="collection__list is-nest w-dyn-items">
+                                                <div className="collection is-nest w-dyn-list">
+                                                    <div role="list" className="collection__list is-nest w-dyn-items">
                                                         <div data-slug-industry="other-industries" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="industries" className="post-card__tag w-condition-invisible">Other industries</div>
+                                                            <div className="post-card__tag w-condition-invisible">Other industries</div>
                                                             <a href="/project-industry/other-industries" className="hide w-inline-block"></a>
                                                         </div>
                                                         <div data-slug-industry="real-estate" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="industries" className="post-card__tag">Real estate</div>
+                                                            <div className="post-card__tag">Real estate</div>
                                                             <a href="/project-industry/real-estate" className="hide w-inline-block"></a>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="collection is-nest hide w-dyn-list" style="">
-                                                    <div fs-cmsnest-collection="services" fs-cmsnest-element="nest-source" role="list" className="collection__list is-nest w-dyn-items">
+                                                <div className="collection is-nest hide w-dyn-list">
+                                                    <div role="list" className="collection__list is-nest w-dyn-items">
                                                         <div role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="services">Webflow development</div>
+                                                            <div className="post-card__tag">Webflow development</div>
                                                             <a href="/project-service/webflow" className="hide w-inline-block"></a>
                                                         </div>
                                                         <div role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="services">Branding</div>
+                                                            <div className="post-card__tag">Branding</div>
                                                             <a href="/project-service/branding" className="hide w-inline-block"></a>
                                                         </div>
                                                         <div role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="services">Web design</div>
+                                                            <div className="post-card__tag">Web design</div>
                                                             <a href="/project-service/web-design" className="hide w-inline-block"></a>
                                                         </div>
                                                     </div>
@@ -643,21 +642,21 @@ const Project = () => {
                                     <div role="listitem" className="collection__item is-posts is-2col w-dyn-item" style={{ opacity: 1 }}>
                                         <div data-hover-parent="" className="post-card">
                                             <a data-hover="" data-mask="post" href="/project/asi-app" className="post-card__img-link w-inline-block">
-                                                <img alt="UI/UX design for an AI-powered education app by Halo Lab" loading="lazy" data-hover-elem="" src="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/67b73ed97827c343eb5ef03c_preview.webp" sizes="(max-width: 479px) 91vw, (max-width: 767px) 46vw, (max-width: 991px) 43vw, 29vw" srcset="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/67b73ed97827c343eb5ef03c_preview-p-500.webp 500w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/67b73ed97827c343eb5ef03c_preview-p-800.webp 800w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/67b73ed97827c343eb5ef03c_preview-p-1080.webp 1080w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/67b73ed97827c343eb5ef03c_preview.webp 1280w" className="post-card__img is-full" />
+                                                <img alt="UI/UX design for an AI-powered education app by Halo Lab" loading="lazy" data-hover-elem="" src="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/67b73ed97827c343eb5ef03c_preview.webp" sizes="(max-width: 479px) 91vw, (max-width: 767px) 46vw, (max-width: 991px) 43vw, 29vw" srcSet="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/67b73ed97827c343eb5ef03c_preview-p-500.webp 500w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/67b73ed97827c343eb5ef03c_preview-p-800.webp 800w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/67b73ed97827c343eb5ef03c_preview-p-1080.webp 1080w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/67b73ed97827c343eb5ef03c_preview.webp 1280w" className="post-card__img is-full" />
                                             </a>
                                             <div className="post-card__param">
-                                                <div className="collection is-nest w-dyn-list" style="">
-                                                    <div fs-cmsnest-collection="industries" fs-cmsnest-element="nest-source" role="list" className="collection__list is-nest w-dyn-items">
+                                                <div className="collection is-nest w-dyn-list">
+                                                    <div role="list" className="collection__list is-nest w-dyn-items">
                                                         <div data-slug-industry="education" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="industries" className="post-card__tag">Education</div>
+                                                            <div className="post-card__tag">Education</div>
                                                             <a href="/project-industry/education" className="hide w-inline-block"></a>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="collection is-nest hide w-dyn-list" style="">
-                                                    <div fs-cmsnest-collection="services" fs-cmsnest-element="nest-source" role="list" className="collection__list is-nest w-dyn-items">
+                                                <div className="collection is-nest hide w-dyn-list">
+                                                    <div role="list" className="collection__list is-nest w-dyn-items">
                                                         <div role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="services">UX/UI design</div>
+                                                            <div className="post-card__tag">UX/UI design</div>
                                                             <a href="/project-service/ux-ui-design" className="hide w-inline-block"></a>
                                                         </div>
                                                     </div>
@@ -706,25 +705,25 @@ const Project = () => {
                                     <div role="listitem" className="collection__item is-posts is-2col w-dyn-item" style={{ opacity: 1 }}>
                                         <div data-hover-parent="" className="post-card">
                                             <a data-hover="" data-mask="post" href="/project/clawerly" className="post-card__img-link w-inline-block">
-                                                <img alt="a clever UI/UX design and branding for a Clawerly learning platform" loading="lazy" data-hover-elem="" src="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/677bd2cfd4f072402fa3a3e7_cover%20preview.webp" sizes="(max-width: 479px) 91vw, (max-width: 767px) 46vw, (max-width: 991px) 43vw, 29vw" srcset="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/677bd2cfd4f072402fa3a3e7_cover%20preview-p-500.webp 500w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/677bd2cfd4f072402fa3a3e7_cover%20preview-p-800.webp 800w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/677bd2cfd4f072402fa3a3e7_cover%20preview-p-1080.webp 1080w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/677bd2cfd4f072402fa3a3e7_cover%20preview.webp 1280w" className="post-card__img is-full" />
+                                                <img alt="a clever UI/UX design and branding for a Clawerly learning platform" loading="lazy" data-hover-elem="" src="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/677bd2cfd4f072402fa3a3e7_cover%20preview.webp" sizes="(max-width: 479px) 91vw, (max-width: 767px) 46vw, (max-width: 991px) 43vw, 29vw" srcSet="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/677bd2cfd4f072402fa3a3e7_cover%20preview-p-500.webp 500w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/677bd2cfd4f072402fa3a3e7_cover%20preview-p-800.webp 800w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/677bd2cfd4f072402fa3a3e7_cover%20preview-p-1080.webp 1080w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/677bd2cfd4f072402fa3a3e7_cover%20preview.webp 1280w" className="post-card__img is-full" />
                                             </a>
                                             <div className="post-card__param">
-                                                <div className="collection is-nest w-dyn-list" style="">
-                                                    <div fs-cmsnest-collection="industries" fs-cmsnest-element="nest-source" role="list" className="collection__list is-nest w-dyn-items">
+                                                <div className="collection is-nest w-dyn-list">
+                                                    <div role="list" className="collection__list is-nest w-dyn-items">
                                                         <div data-slug-industry="education" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="industries" className="post-card__tag">Education</div>
+                                                            <div className="post-card__tag">Education</div>
                                                             <a href="/project-industry/education" className="hide w-inline-block"></a>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="collection is-nest hide w-dyn-list" style="">
-                                                    <div fs-cmsnest-collection="services" fs-cmsnest-element="nest-source" role="list" className="collection__list is-nest w-dyn-items">
+                                                <div className="collection is-nest hide w-dyn-list">
+                                                    <div role="list" className="collection__list is-nest w-dyn-items">
                                                         <div role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="services">Branding</div>
+                                                            <div className="post-card__tag">Branding</div>
                                                             <a href="/project-service/branding" className="hide w-inline-block"></a>
                                                         </div>
                                                         <div role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="services">UX/UI design</div>
+                                                            <div className="post-card__tag">UX/UI design</div>
                                                             <a href="/project-service/ux-ui-design" className="hide w-inline-block"></a>
                                                         </div>
                                                     </div>
@@ -773,29 +772,29 @@ const Project = () => {
                                     <div role="listitem" className="collection__item is-posts is-2col w-dyn-item" style={{ opacity: 1 }}>
                                         <div data-hover-parent="" className="post-card">
                                             <a data-hover="" data-mask="post" href="/project/droney" className="post-card__img-link w-inline-block">
-                                                <img alt="UI/UX design and branding solution by Halo Lab for Droney's logistics" loading="lazy" data-hover-elem="" src="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/677bcdbe014b63744fa9c701_preview.webp" sizes="(max-width: 479px) 91vw, (max-width: 767px) 46vw, (max-width: 991px) 43vw, 29vw" srcset="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/677bcdbe014b63744fa9c701_preview-p-500.webp 500w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/677bcdbe014b63744fa9c701_preview-p-800.webp 800w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/677bcdbe014b63744fa9c701_preview-p-1080.webp 1080w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/677bcdbe014b63744fa9c701_preview.webp 1280w" className="post-card__img is-full" />
+                                                <img alt="UI/UX design and branding solution by Halo Lab for Droney's logistics" loading="lazy" data-hover-elem="" src="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/677bcdbe014b63744fa9c701_preview.webp" sizes="(max-width: 479px) 91vw, (max-width: 767px) 46vw, (max-width: 991px) 43vw, 29vw" srcSet="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/677bcdbe014b63744fa9c701_preview-p-500.webp 500w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/677bcdbe014b63744fa9c701_preview-p-800.webp 800w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/677bcdbe014b63744fa9c701_preview-p-1080.webp 1080w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/677bcdbe014b63744fa9c701_preview.webp 1280w" className="post-card__img is-full" />
                                             </a>
                                             <div className="post-card__param">
-                                                <div className="collection is-nest w-dyn-list" style="">
-                                                    <div fs-cmsnest-collection="industries" fs-cmsnest-element="nest-source" role="list" className="collection__list is-nest w-dyn-items">
+                                                <div className="collection is-nest w-dyn-list">
+                                                    <div role="list" className="collection__list is-nest w-dyn-items">
                                                         <div data-slug-industry="other-industries" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="industries" className="post-card__tag w-condition-invisible">Other industries</div>
+                                                            <div className="post-card__tag w-condition-invisible">Other industries</div>
                                                             <a href="/project-industry/other-industries" className="hide w-inline-block"></a>
                                                         </div>
                                                         <div data-slug-industry="transportation-logistics" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="industries" className="post-card__tag">Transportation &amp; Logistics</div>
+                                                            <div className="post-card__tag">Transportation &amp; Logistics</div>
                                                             <a href="/project-industry/transportation-logistics" className="hide w-inline-block"></a>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="collection is-nest hide w-dyn-list" style="">
-                                                    <div fs-cmsnest-collection="services" fs-cmsnest-element="nest-source" role="list" className="collection__list is-nest w-dyn-items">
+                                                <div className="collection is-nest hide w-dyn-list">
+                                                    <div role="list" className="collection__list is-nest w-dyn-items">
                                                         <div role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="services">Branding</div>
+                                                            <div className="post-card__tag">Branding</div>
                                                             <a href="/project-service/branding" className="hide w-inline-block"></a>
                                                         </div>
                                                         <div role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="services">UX/UI design</div>
+                                                            <div className="post-card__tag">UX/UI design</div>
                                                             <a href="/project-service/ux-ui-design" className="hide w-inline-block"></a>
                                                         </div>
                                                     </div>
@@ -844,33 +843,33 @@ const Project = () => {
                                     <div role="listitem" className="collection__item is-posts is-2col w-dyn-item" style={{ opacity: 1 }}>
                                         <div data-hover-parent="" className="post-card">
                                             <a data-hover="" data-mask="post" href="/project/stone" className="post-card__img-link w-inline-block">
-                                                <img alt="Strong web design solutions for a branding studio by Halo Lab" loading="lazy" data-hover-elem="" src="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/6703bbd71d1f4152504fcc2b_preview.webp" sizes="(max-width: 479px) 91vw, (max-width: 767px) 46vw, (max-width: 991px) 43vw, 29vw" srcset="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/6703bbd71d1f4152504fcc2b_preview-p-500.webp 500w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/6703bbd71d1f4152504fcc2b_preview-p-800.webp 800w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/6703bbd71d1f4152504fcc2b_preview-p-1080.webp 1080w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/6703bbd71d1f4152504fcc2b_preview.webp 1280w" className="post-card__img is-full" />
+                                                <img alt="Strong web design solutions for a branding studio by Halo Lab" loading="lazy" data-hover-elem="" src="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/6703bbd71d1f4152504fcc2b_preview.webp" sizes="(max-width: 479px) 91vw, (max-width: 767px) 46vw, (max-width: 991px) 43vw, 29vw" srcSet="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/6703bbd71d1f4152504fcc2b_preview-p-500.webp 500w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/6703bbd71d1f4152504fcc2b_preview-p-800.webp 800w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/6703bbd71d1f4152504fcc2b_preview-p-1080.webp 1080w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/6703bbd71d1f4152504fcc2b_preview.webp 1280w" className="post-card__img is-full" />
                                             </a>
                                             <div className="post-card__param">
-                                                <div className="collection is-nest w-dyn-list" style="">
-                                                    <div fs-cmsnest-collection="industries" fs-cmsnest-element="nest-source" role="list" className="collection__list is-nest w-dyn-items">
+                                                <div className="collection is-nest w-dyn-list">
+                                                    <div role="list" className="collection__list is-nest w-dyn-items">
                                                         <div data-slug-industry="other-industries" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="industries" className="post-card__tag w-condition-invisible">Other industries</div>
+                                                            <div className="post-card__tag w-condition-invisible">Other industries</div>
                                                             <a href="/project-industry/other-industries" className="hide w-inline-block"></a>
                                                         </div>
                                                         <div data-slug-industry="advertising-marketing" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="industries" className="post-card__tag">Advertising &amp; marketing</div>
+                                                            <div className="post-card__tag">Advertising &amp; marketing</div>
                                                             <a href="/project-industry/advertising-marketing" className="hide w-inline-block"></a>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="collection is-nest hide w-dyn-list" style="">
-                                                    <div fs-cmsnest-collection="services" fs-cmsnest-element="nest-source" role="list" className="collection__list is-nest w-dyn-items">
+                                                <div className="collection is-nest hide w-dyn-list">
+                                                    <div role="list" className="collection__list is-nest w-dyn-items">
                                                         <div role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="services">Webflow development</div>
+                                                            <div className="post-card__tag">Webflow development</div>
                                                             <a href="/project-service/webflow" className="hide w-inline-block"></a>
                                                         </div>
                                                         <div role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="services">Branding</div>
+                                                            <div className="post-card__tag">Branding</div>
                                                             <a href="/project-service/branding" className="hide w-inline-block"></a>
                                                         </div>
                                                         <div role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="services">Web design</div>
+                                                            <div className="post-card__tag">Web design</div>
                                                             <a href="/project-service/web-design" className="hide w-inline-block"></a>
                                                         </div>
                                                     </div>
@@ -919,29 +918,29 @@ const Project = () => {
                                     <div role="listitem" className="collection__item is-posts is-2col w-dyn-item" style={{ opacity: 1 }}>
                                         <div data-hover-parent="" className="post-card">
                                             <a data-hover="" data-mask="post" href="/project/agrinex" className="post-card__img-link w-inline-block">
-                                                <img alt="clear, modern brand design for the Agrinex farming platform" loading="lazy" data-hover-elem="" src="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66fa973d059fc3ae5014e01b_preview.webp" sizes="(max-width: 479px) 91vw, (max-width: 767px) 46vw, (max-width: 991px) 43vw, 29vw" srcset="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66fa973d059fc3ae5014e01b_preview-p-500.webp 500w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66fa973d059fc3ae5014e01b_preview-p-800.webp 800w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66fa973d059fc3ae5014e01b_preview-p-1080.webp 1080w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66fa973d059fc3ae5014e01b_preview.webp 1280w" className="post-card__img is-full" />
+                                                <img alt="clear, modern brand design for the Agrinex farming platform" loading="lazy" data-hover-elem="" src="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66fa973d059fc3ae5014e01b_preview.webp" sizes="(max-width: 479px) 91vw, (max-width: 767px) 46vw, (max-width: 991px) 43vw, 29vw" srcSet="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66fa973d059fc3ae5014e01b_preview-p-500.webp 500w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66fa973d059fc3ae5014e01b_preview-p-800.webp 800w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66fa973d059fc3ae5014e01b_preview-p-1080.webp 1080w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66fa973d059fc3ae5014e01b_preview.webp 1280w" className="post-card__img is-full" />
                                             </a>
                                             <div className="post-card__param">
-                                                <div className="collection is-nest w-dyn-list" style="">
-                                                    <div fs-cmsnest-collection="industries" fs-cmsnest-element="nest-source" role="list" className="collection__list is-nest w-dyn-items">
+                                                <div className="collection is-nest w-dyn-list">
+                                                    <div role="list" className="collection__list is-nest w-dyn-items">
                                                         <div data-slug-industry="other-industries" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="industries" className="post-card__tag w-condition-invisible">Other industries</div>
+                                                            <div className="post-card__tag w-condition-invisible">Other industries</div>
                                                             <a href="/project-industry/other-industries" className="hide w-inline-block"></a>
                                                         </div>
                                                         <div data-slug-industry="agtech" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="industries" className="post-card__tag">Agtech</div>
+                                                            <div className="post-card__tag">Agtech</div>
                                                             <a href="/project-industry/agtech" className="hide w-inline-block"></a>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="collection is-nest hide w-dyn-list" style="">
-                                                    <div fs-cmsnest-collection="services" fs-cmsnest-element="nest-source" role="list" className="collection__list is-nest w-dyn-items">
+                                                <div className="collection is-nest hide w-dyn-list">
+                                                    <div role="list" className="collection__list is-nest w-dyn-items">
                                                         <div role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="services">Branding</div>
+                                                            <div className="post-card__tag">Branding</div>
                                                             <a href="/project-service/branding" className="hide w-inline-block"></a>
                                                         </div>
                                                         <div role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="services">UX/UI design</div>
+                                                            <div className="post-card__tag">UX/UI design</div>
                                                             <a href="/project-service/ux-ui-design" className="hide w-inline-block"></a>
                                                         </div>
                                                     </div>
@@ -990,33 +989,33 @@ const Project = () => {
                                     <div role="listitem" className="collection__item is-posts is-2col w-dyn-item" style={{ opacity: 1 }}>
                                         <div data-hover-parent="" className="post-card">
                                             <a data-hover="" data-mask="post" href="/project/umano" className="post-card__img-link w-inline-block">
-                                                <img alt="design &amp; development for the analytics company Umano by Halo Lab" loading="lazy" data-hover-elem="" src="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66e186aa5697a2a26bec4fe8_preview.webp" sizes="(max-width: 479px) 91vw, (max-width: 767px) 46vw, (max-width: 991px) 43vw, 29vw" srcset="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66e186aa5697a2a26bec4fe8_preview-p-500.webp 500w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66e186aa5697a2a26bec4fe8_preview-p-800.webp 800w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66e186aa5697a2a26bec4fe8_preview-p-1080.webp 1080w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66e186aa5697a2a26bec4fe8_preview.webp 1280w" className="post-card__img is-full" />
+                                                <img alt="design &amp; development for the analytics company Umano by Halo Lab" loading="lazy" data-hover-elem="" src="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66e186aa5697a2a26bec4fe8_preview.webp" sizes="(max-width: 479px) 91vw, (max-width: 767px) 46vw, (max-width: 991px) 43vw, 29vw" srcSet="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66e186aa5697a2a26bec4fe8_preview-p-500.webp 500w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66e186aa5697a2a26bec4fe8_preview-p-800.webp 800w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66e186aa5697a2a26bec4fe8_preview-p-1080.webp 1080w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66e186aa5697a2a26bec4fe8_preview.webp 1280w" className="post-card__img is-full" />
                                             </a>
                                             <div className="post-card__param">
-                                                <div className="collection is-nest w-dyn-list" style="">
-                                                    <div fs-cmsnest-collection="industries" fs-cmsnest-element="nest-source" role="list" className="collection__list is-nest w-dyn-items">
+                                                <div className="collection is-nest w-dyn-list">
+                                                    <div role="list" className="collection__list is-nest w-dyn-items">
                                                         <div data-slug-industry="other-industries" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="industries" className="post-card__tag w-condition-invisible">Other industries</div>
+                                                            <div className="post-card__tag w-condition-invisible">Other industries</div>
                                                             <a href="/project-industry/other-industries" className="hide w-inline-block"></a>
                                                         </div>
                                                         <div data-slug-industry="saas" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="industries" className="post-card__tag">SaaS</div>
+                                                            <div className="post-card__tag">SaaS</div>
                                                             <a href="/project-industry/saas" className="hide w-inline-block"></a>
                                                         </div>
                                                         <div data-slug-industry="productivity" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="industries" className="post-card__tag">Productivity</div>
+                                                            <div className="post-card__tag">Productivity</div>
                                                             <a href="/project-industry/productivity" className="hide w-inline-block"></a>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="collection is-nest hide w-dyn-list" style="">
-                                                    <div fs-cmsnest-collection="services" fs-cmsnest-element="nest-source" role="list" className="collection__list is-nest w-dyn-items">
+                                                <div className="collection is-nest hide w-dyn-list">
+                                                    <div role="list" className="collection__list is-nest w-dyn-items">
                                                         <div role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="services">Product development</div>
+                                                            <div className="post-card__tag">Product development</div>
                                                             <a href="/project-service/product-development" className="hide w-inline-block"></a>
                                                         </div>
                                                         <div role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="services">UX/UI design</div>
+                                                            <div className="post-card__tag">UX/UI design</div>
                                                             <a href="/project-service/ux-ui-design" className="hide w-inline-block"></a>
                                                         </div>
                                                     </div>
@@ -1065,29 +1064,29 @@ const Project = () => {
                                     <div role="listitem" className="collection__item is-posts is-2col w-dyn-item" style={{ opacity: 1 }}>
                                         <div data-hover-parent="" className="post-card">
                                             <a data-hover="" data-mask="post" href="/project/versus" className="post-card__img-link w-inline-block">
-                                                <img alt="memorable branding for Versus platform by Halo Lab" loading="lazy" data-hover-elem="" src="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66bc83769af253c52bbc682e_Preview.webp" sizes="(max-width: 479px) 91vw, (max-width: 767px) 46vw, (max-width: 991px) 43vw, 29vw" srcset="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66bc83769af253c52bbc682e_Preview-p-500.webp 500w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66bc83769af253c52bbc682e_Preview-p-800.webp 800w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66bc83769af253c52bbc682e_Preview-p-1080.webp 1080w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66bc83769af253c52bbc682e_Preview.webp 1280w" className="post-card__img is-full" />
+                                                <img alt="memorable branding for Versus platform by Halo Lab" loading="lazy" data-hover-elem="" src="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66bc83769af253c52bbc682e_Preview.webp" sizes="(max-width: 479px) 91vw, (max-width: 767px) 46vw, (max-width: 991px) 43vw, 29vw" srcSet="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66bc83769af253c52bbc682e_Preview-p-500.webp 500w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66bc83769af253c52bbc682e_Preview-p-800.webp 800w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66bc83769af253c52bbc682e_Preview-p-1080.webp 1080w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66bc83769af253c52bbc682e_Preview.webp 1280w" className="post-card__img is-full" />
                                             </a>
                                             <div className="post-card__param">
-                                                <div className="collection is-nest w-dyn-list" style="">
-                                                    <div fs-cmsnest-collection="industries" fs-cmsnest-element="nest-source" role="list" className="collection__list is-nest w-dyn-items">
+                                                <div className="collection is-nest w-dyn-list">
+                                                    <div role="list" className="collection__list is-nest w-dyn-items">
                                                         <div data-slug-industry="other-industries" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="industries" className="post-card__tag w-condition-invisible">Other industries</div>
+                                                            <div className="post-card__tag w-condition-invisible">Other industries</div>
                                                             <a href="/project-industry/other-industries" className="hide w-inline-block"></a>
                                                         </div>
                                                         <div data-slug-industry="consumer-products-services" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="industries" className="post-card__tag">Consumer products &amp; services</div>
+                                                            <div className="post-card__tag">Consumer products &amp; services</div>
                                                             <a href="/project-industry/consumer-products-services" className="hide w-inline-block"></a>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="collection is-nest hide w-dyn-list" style="">
-                                                    <div fs-cmsnest-collection="services" fs-cmsnest-element="nest-source" role="list" className="collection__list is-nest w-dyn-items">
+                                                <div className="collection is-nest hide w-dyn-list">
+                                                    <div role="list" className="collection__list is-nest w-dyn-items">
                                                         <div role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="services">Branding</div>
+                                                            <div className="post-card__tag">Branding</div>
                                                             <a href="/project-service/branding" className="hide w-inline-block"></a>
                                                         </div>
                                                         <div role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="services">Web design</div>
+                                                            <div className="post-card__tag">Web design</div>
                                                             <a href="/project-service/web-design" className="hide w-inline-block"></a>
                                                         </div>
                                                     </div>
@@ -1136,33 +1135,33 @@ const Project = () => {
                                     <div role="listitem" className="collection__item is-posts is-2col w-dyn-item" style={{ opacity: 1 }}>
                                         <div data-hover-parent="" className="post-card">
                                             <a data-hover="" data-mask="post" href="/project/nettra-media" className="post-card__img-link w-inline-block">
-                                                <img alt="web services for digital marketing company by Halo Lab" loading="lazy" data-hover-elem="" src="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66bc7753deed2751e40cf535_Preview.webp" sizes="(max-width: 479px) 91vw, (max-width: 767px) 46vw, (max-width: 991px) 43vw, 29vw" srcset="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66bc7753deed2751e40cf535_Preview-p-500.webp 500w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66bc7753deed2751e40cf535_Preview-p-800.webp 800w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66bc7753deed2751e40cf535_Preview-p-1080.webp 1080w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66bc7753deed2751e40cf535_Preview.webp 1280w" className="post-card__img is-full" />
+                                                <img alt="web services for digital marketing company by Halo Lab" loading="lazy" data-hover-elem="" src="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66bc7753deed2751e40cf535_Preview.webp" sizes="(max-width: 479px) 91vw, (max-width: 767px) 46vw, (max-width: 991px) 43vw, 29vw" srcSet="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66bc7753deed2751e40cf535_Preview-p-500.webp 500w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66bc7753deed2751e40cf535_Preview-p-800.webp 800w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66bc7753deed2751e40cf535_Preview-p-1080.webp 1080w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66bc7753deed2751e40cf535_Preview.webp 1280w" className="post-card__img is-full" />
                                             </a>
                                             <div className="post-card__param">
-                                                <div className="collection is-nest w-dyn-list" style="">
-                                                    <div fs-cmsnest-collection="industries" fs-cmsnest-element="nest-source" role="list" className="collection__list is-nest w-dyn-items">
+                                                <div className="collection is-nest w-dyn-list">
+                                                    <div role="list" className="collection__list is-nest w-dyn-items">
                                                         <div data-slug-industry="other-industries" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="industries" className="post-card__tag w-condition-invisible">Other industries</div>
+                                                            <div className="post-card__tag w-condition-invisible">Other industries</div>
                                                             <a href="/project-industry/other-industries" className="hide w-inline-block"></a>
                                                         </div>
                                                         <div data-slug-industry="advertising-marketing" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="industries" className="post-card__tag">Advertising &amp; marketing</div>
+                                                            <div className="post-card__tag">Advertising &amp; marketing</div>
                                                             <a href="/project-industry/advertising-marketing" className="hide w-inline-block"></a>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="collection is-nest hide w-dyn-list" style="">
-                                                    <div fs-cmsnest-collection="services" fs-cmsnest-element="nest-source" role="list" className="collection__list is-nest w-dyn-items">
+                                                <div className="collection is-nest hide w-dyn-list">
+                                                    <div role="list" className="collection__list is-nest w-dyn-items">
                                                         <div role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="services">Webflow development</div>
+                                                            <div className="post-card__tag">Webflow development</div>
                                                             <a href="/project-service/webflow" className="hide w-inline-block"></a>
                                                         </div>
                                                         <div role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="services">Branding</div>
+                                                            <div className="post-card__tag">Branding</div>
                                                             <a href="/project-service/branding" className="hide w-inline-block"></a>
                                                         </div>
                                                         <div role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="services">Web design</div>
+                                                            <div className="post-card__tag">Web design</div>
                                                             <a href="/project-service/web-design" className="hide w-inline-block"></a>
                                                         </div>
                                                     </div>
@@ -1211,25 +1210,25 @@ const Project = () => {
                                     <div role="listitem" className="collection__item is-posts is-2col w-dyn-item" style={{ opacity: 1 }}>
                                         <div data-hover-parent="" className="post-card">
                                             <a data-hover="" data-mask="post" href="/project/nanocorp" className="post-card__img-link w-inline-block">
-                                                <img alt="branding service for NanoCorp's platform from Halo Lab" loading="lazy" data-hover-elem="" src="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66bc840ccac8935ab0e0ae9d_Preview.webp" sizes="(max-width: 479px) 91vw, (max-width: 767px) 46vw, (max-width: 991px) 43vw, 29vw" srcset="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66bc840ccac8935ab0e0ae9d_Preview-p-500.webp 500w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66bc840ccac8935ab0e0ae9d_Preview-p-800.webp 800w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66bc840ccac8935ab0e0ae9d_Preview-p-1080.webp 1080w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66bc840ccac8935ab0e0ae9d_Preview.webp 1280w" className="post-card__img is-full" />
+                                                <img alt="branding service for NanoCorp's platform from Halo Lab" loading="lazy" data-hover-elem="" src="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66bc840ccac8935ab0e0ae9d_Preview.webp" sizes="(max-width: 479px) 91vw, (max-width: 767px) 46vw, (max-width: 991px) 43vw, 29vw" srcSet="https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66bc840ccac8935ab0e0ae9d_Preview-p-500.webp 500w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66bc840ccac8935ab0e0ae9d_Preview-p-800.webp 800w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66bc840ccac8935ab0e0ae9d_Preview-p-1080.webp 1080w, https://cdn.prod.website-files.com/63fc977c14aaea404dce4439/66bc840ccac8935ab0e0ae9d_Preview.webp 1280w" className="post-card__img is-full" />
                                             </a>
                                             <div className="post-card__param">
-                                                <div className="collection is-nest w-dyn-list" style="">
-                                                    <div fs-cmsnest-collection="industries" fs-cmsnest-element="nest-source" role="list" className="collection__list is-nest w-dyn-items">
+                                                <div className="collection is-nest w-dyn-list">
+                                                    <div role="list" className="collection__list is-nest w-dyn-items">
                                                         <div data-slug-industry="finance" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="industries" className="post-card__tag">Finance</div>
+                                                            <div className="post-card__tag">Finance</div>
                                                             <a href="/project-industry/finance" className="hide w-inline-block"></a>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="collection is-nest hide w-dyn-list" style="">
-                                                    <div fs-cmsnest-collection="services" fs-cmsnest-element="nest-source" role="list" className="collection__list is-nest w-dyn-items">
+                                                <div className="collection is-nest hide w-dyn-list">
+                                                    <div role="list" className="collection__list is-nest w-dyn-items">
                                                         <div role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="services">Branding</div>
+                                                            <div className="post-card__tag">Branding</div>
                                                             <a href="/project-service/branding" className="hide w-inline-block"></a>
                                                         </div>
                                                         <div role="listitem" className="collection__item is-nest w-dyn-item">
-                                                            <div fs-cmsfilter-field="services">Web design</div>
+                                                            <div className="post-card__tag">Web design</div>
                                                             <a href="/project-service/web-design" className="hide w-inline-block"></a>
                                                         </div>
                                                     </div>
@@ -1276,7 +1275,7 @@ const Project = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div fs-cmsfilter-element="empty" style={{ display: 'none' }}>
+                                <div style={{ display: 'none' }}>
                                     <div className="projects-empty__content">
                                         <div className="projects-empty__text">Sorry, we don't have results yet. We are working hard on new cases. Try selecting other filters for now.</div>
                                     </div>
@@ -1298,12 +1297,12 @@ const Project = () => {
                                         <div className="button__bg bg-color-white"></div>
                                     </a>
                                     <div data-page-current="" className="posts-pagination__pages">
-                                        <a href="?be99beb4_page=1" fs-cmsload-element="page-button" className="posts-pagination__btn is-page w--current" aria-current="page">1</a>
-                                        <a href="?be99beb4_page=2" fs-cmsload-element="page-button" className="posts-pagination__btn is-page">2</a>
-                                        <a href="?be99beb4_page=3" fs-cmsload-element="page-button" className="posts-pagination__btn is-page">3</a>
-                                        <a href="?be99beb4_page=4" fs-cmsload-element="page-button" className="posts-pagination__btn is-page">4</a>
-                                        <a href="?be99beb4_page=5" fs-cmsload-element="page-button" className="posts-pagination__btn is-page">5</a>
-                                        <a href="?be99beb4_page=6" fs-cmsload-element="page-button" className="posts-pagination__btn is-page">6</a>
+                                        <a href="?be99beb4_page=1" className="posts-pagination__btn is-page w--current" aria-current="page">1</a>
+                                        <a href="?be99beb4_page=2" className="posts-pagination__btn is-page">2</a>
+                                        <a href="?be99beb4_page=3" className="posts-pagination__btn is-page">3</a>
+                                        <a href="?be99beb4_page=4" className="posts-pagination__btn is-page">4</a>
+                                        <a href="?be99beb4_page=5" className="posts-pagination__btn is-page">5</a>
+                                        <a href="?be99beb4_page=6" className="posts-pagination__btn is-page">6</a>
                                     </div>
                                     <a href="?be99beb4_page=2" aria-label="Next Page" className="w-pagination-next posts-pagination__btn">
                                         <div className="button__icon-anim">
@@ -1324,213 +1323,213 @@ const Project = () => {
                                 </div>
                                 <div className="hide">
                                     <div className="collection is-nest w-dyn-list" style={{ display: 'none' }}>
-                                        <div fs-cmsnest-collection="industries" fs-cmsnest-element="nest-source" role="list" className="collection__list is-nest w-dyn-items">
+                                        <div role="list" className="collection__list is-nest w-dyn-items">
                                             <div data-slug-industry="other-industries" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag w-condition-invisible">Other industries</div>
+                                                <div className="post-card__tag w-condition-invisible">Other industries</div>
                                                 <a href="/project-industry/other-industries" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="saas" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">SaaS</div>
+                                                <div className="post-card__tag">SaaS</div>
                                                 <a href="/project-industry/saas" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="healthcare" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Healthcare</div>
+                                                <div className="post-card__tag">Healthcare</div>
                                                 <a href="/project-industry/healthcare" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="finance" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Finance</div>
+                                                <div className="post-card__tag">Finance</div>
                                                 <a href="/project-industry/finance" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="education" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Education</div>
+                                                <div className="post-card__tag">Education</div>
                                                 <a href="/project-industry/education" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="information-technology" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Information technology</div>
+                                                <div className="post-card__tag">Information technology</div>
                                                 <a href="/project-industry/information-technology" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="web3" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Web3</div>
+                                                <div className="post-card__tag">Web3</div>
                                                 <a href="/project-industry/web3" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="entertainment" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Entertainment</div>
+                                                <div className="post-card__tag">Entertainment</div>
                                                 <a href="/project-industry/entertainment" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="charity-ecology" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Charity ecology</div>
+                                                <div className="post-card__tag">Charity ecology</div>
                                                 <a href="/project-industry/charity-ecology" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="cleaning" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Cleaning</div>
+                                                <div className="post-card__tag">Cleaning</div>
                                                 <a href="/project-industry/cleaning" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="nft" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">NFT</div>
+                                                <div className="post-card__tag">NFT</div>
                                                 <a href="/project-industry/nft" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="digital-agency" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Digital agency</div>
+                                                <div className="post-card__tag">Digital agency</div>
                                                 <a href="/project-industry/digital-agency" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="marketing-agency" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Marketing agency</div>
+                                                <div className="post-card__tag">Marketing agency</div>
                                                 <a href="/project-industry/marketing-agency" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="wellness-and-fitness" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Wellness and fitness</div>
+                                                <div className="post-card__tag">Wellness and fitness</div>
                                                 <a href="/project-industry/wellness-and-fitness" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="managment-platform" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Managment platform</div>
+                                                <div className="post-card__tag">Managment platform</div>
                                                 <a href="/project-industry/managment-platform" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="social-networks" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Social networks</div>
+                                                <div className="post-card__tag">Social networks</div>
                                                 <a href="/project-industry/social-networks" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="crypto" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Crypto</div>
+                                                <div className="post-card__tag">Crypto</div>
                                                 <a href="/project-industry/crypto" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="agtech" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Agtech</div>
+                                                <div className="post-card__tag">Agtech</div>
                                                 <a href="/project-industry/agtech" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="marketing-ads" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Marketing &amp; ads</div>
+                                                <div className="post-card__tag">Marketing &amp; ads</div>
                                                 <a href="/project-industry/marketing-ads" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="fashion" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Fashion</div>
+                                                <div className="post-card__tag">Fashion</div>
                                                 <a href="/project-industry/fashion" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="consulting" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Consulting</div>
+                                                <div className="post-card__tag">Consulting</div>
                                                 <a href="/project-industry/consulting" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="wellness" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Wellness</div>
+                                                <div className="post-card__tag">Wellness</div>
                                                 <a href="/project-industry/wellness" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="productivity" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Productivity</div>
+                                                <div className="post-card__tag">Productivity</div>
                                                 <a href="/project-industry/productivity" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="data-analytics" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Data analytics</div>
+                                                <div className="post-card__tag">Data analytics</div>
                                                 <a href="/project-industry/data-analytics" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="iot" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Iot</div>
+                                                <div className="post-card__tag">Iot</div>
                                                 <a href="/project-industry/iot" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="travel" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Travel</div>
+                                                <div className="post-card__tag">Travel</div>
                                                 <a href="/project-industry/travel" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="service-providers" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Service providers</div>
+                                                <div className="post-card__tag">Service providers</div>
                                                 <a href="/project-industry/service-providers" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="human-resources" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Human Resources</div>
+                                                <div className="post-card__tag">Human Resources</div>
                                                 <a href="/project-industry/human-resources" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="data-management" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Data management</div>
+                                                <div className="post-card__tag">Data management</div>
                                                 <a href="/project-industry/data-management" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="agro" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Agro</div>
+                                                <div className="post-card__tag">Agro</div>
                                                 <a href="/project-industry/agro" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="transportation-logistics" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Transportation &amp; Logistics</div>
+                                                <div className="post-card__tag">Transportation &amp; Logistics</div>
                                                 <a href="/project-industry/transportation-logistics" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="esports" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Esports</div>
+                                                <div className="post-card__tag">Esports</div>
                                                 <a href="/project-industry/esports" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="fintech" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Fintech</div>
+                                                <div className="post-card__tag">Fintech</div>
                                                 <a href="/project-industry/fintech" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="ai-ml" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">AI &amp; ML</div>
+                                                <div className="post-card__tag">AI &amp; ML</div>
                                                 <a href="/project-industry/ai-ml" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="manufacturing" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Manufacturing</div>
+                                                <div className="post-card__tag">Manufacturing</div>
                                                 <a href="/project-industry/manufacturing" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="non-profit" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Non-profit</div>
+                                                <div className="post-card__tag">Non-profit</div>
                                                 <a href="/project-industry/non-profit" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="beauty" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Beauty</div>
+                                                <div className="post-card__tag">Beauty</div>
                                                 <a href="/project-industry/beauty" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="b2b" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">B2B</div>
+                                                <div className="post-card__tag">B2B</div>
                                                 <a href="/project-industry/b2b" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="consumer-products-services" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Consumer products &amp; services</div>
+                                                <div className="post-card__tag">Consumer products &amp; services</div>
                                                 <a href="/project-industry/consumer-products-services" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="business-services" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Business services</div>
+                                                <div className="post-card__tag">Business services</div>
                                                 <a href="/project-industry/business-services" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="real-estate" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Real estate</div>
+                                                <div className="post-card__tag">Real estate</div>
                                                 <a href="/project-industry/real-estate" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="e-commerce" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">E-commerce</div>
+                                                <div className="post-card__tag">E-commerce</div>
                                                 <a href="/project-industry/e-commerce" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="social-media" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Social media</div>
+                                                <div className="post-card__tag">Social media</div>
                                                 <a href="/project-industry/social-media" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="advertising-marketing" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Advertising &amp; marketing</div>
+                                                <div className="post-card__tag">Advertising &amp; marketing</div>
                                                 <a href="/project-industry/advertising-marketing" className="hide w-inline-block"></a>
                                             </div>
                                             <div data-slug-industry="arts-entertainment-music" role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="industries" className="post-card__tag">Arts, entertainment &amp; music</div>
+                                                <div className="post-card__tag">Arts, entertainment &amp; music</div>
                                                 <a href="/project-industry/arts-entertainment-music" className="hide w-inline-block"></a>
                                             </div>
                                         </div>
                                     </div>
                                     <div className="collection is-nest hide w-dyn-list" style={{ display: 'none' }}>
-                                        <div fs-cmsnest-collection="services" fs-cmsnest-element="nest-source" role="list" className="collection__list is-nest w-dyn-items">
+                                        <div role="list" className="collection__list is-nest w-dyn-items">
                                             <div role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="services">Web development</div>
+                                                <div className="post-card__tag">Web development</div>
                                                 <a href="/project-service/web-development" className="hide w-inline-block"></a>
                                             </div>
                                             <div role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="services">Webflow development</div>
+                                                <div className="post-card__tag">Webflow development</div>
                                                 <a href="/project-service/webflow" className="hide w-inline-block"></a>
                                             </div>
                                             <div role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="services">Product development</div>
+                                                <div className="post-card__tag">Product development</div>
                                                 <a href="/project-service/product-development" className="hide w-inline-block"></a>
                                             </div>
                                             <div role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="services">Branding</div>
+                                                <div className="post-card__tag">Branding</div>
                                                 <a href="/project-service/branding" className="hide w-inline-block"></a>
                                             </div>
                                             <div role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="services">Web design</div>
+                                                <div className="post-card__tag">Web design</div>
                                                 <a href="/project-service/web-design" className="hide w-inline-block"></a>
                                             </div>
                                             <div role="listitem" className="collection__item is-nest w-dyn-item">
-                                                <div fs-cmsfilter-field="services">UX/UI design</div>
+                                                <div className="post-card__tag">UX/UI design</div>
                                                 <a href="/project-service/ux-ui-design" className="hide w-inline-block"></a>
                                             </div>
                                         </div>
@@ -1605,11 +1604,11 @@ const Project = () => {
                     </div>
                     <div className="dribble__bg-wrap">
                         <img src="https://cdn.prod.website-files.com/63f38a8c92397a024fcb9ae8/649d29798fa7ad5b02f10629_bg-onDribble_laptop.webp" loading="eager" sizes="100vw" srcSet="https://cdn.prod.website-files.com/63f38a8c92397a024fcb9ae8/649d29798fa7ad5b02f10629_bg-onDribble_laptop-p-500.webp 500w, https://cdn.prod.website-files.com/63f38a8c92397a024fcb9ae8/649d29798fa7ad5b02f10629_bg-onDribble_laptop-p-800.webp 800w, https://cdn.prod.website-files.com/63f38a8c92397a024fcb9ae8/649d29798fa7ad5b02f10629_bg-onDribble_laptop-p-1080.webp 1080w, https://cdn.prod.website-files.com/63f38a8c92397a024fcb9ae8/649d29798fa7ad5b02f10629_bg-onDribble_laptop-p-1600.webp 1600w, https://cdn.prod.website-files.com/63f38a8c92397a024fcb9ae8/649d29798fa7ad5b02f10629_bg-onDribble_laptop-p-2000.webp 2000w, https://cdn.prod.website-files.com/63f38a8c92397a024fcb9ae8/649d29798fa7ad5b02f10629_bg-onDribble_laptop-p-2600.webp 2600w, https://cdn.prod.website-files.com/63f38a8c92397a024fcb9ae8/649d29798fa7ad5b02f10629_bg-onDribble_laptop.webp 2880w" alt="" className="dribble__bg hide-mobile-portrait" />
-                        <img src="https://cdn.prod.website-files.com/63f38a8c92397a024fcb9ae8/649d2be2fa9613aa9585ccaf_bg-onDribble_mobile.webp" loading="eager" alt="" className="dribble__bg is-mobile" />
                         <div className="bg-blur"></div>
                     </div>
+                </div>
                 </div>         
-             <section id="awards" className="section">
+                <section id="awards" className="section">
                 <div className="container">
                     <div data-anim-trigger="load" className="columns is-heading">
                         <div data-award-heading-col="" data-anim-delay="" className="columns__col mod--heading is-1 hide-mobile-landscape">
@@ -1715,8 +1714,8 @@ const Project = () => {
                         </div>
                     </div>
                 </div>
-            </section>
-        </div>
+                </section> 
+            </div>
         <Appointment />
         <Footer />
     </>
