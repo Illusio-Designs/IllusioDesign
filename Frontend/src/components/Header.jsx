@@ -53,7 +53,7 @@ const Header = () => {
                 </motion.div>
               </li>
 
-              {['Project', 'Blog', 'About Us', 'Appointment'].map((item, index) => (
+              {['Project', 'Dedicated Team', 'About Us', 'Our Blog'].map((item, index) => (
                 <li key={index}>
                   <motion.a 
                     initial="initial"
