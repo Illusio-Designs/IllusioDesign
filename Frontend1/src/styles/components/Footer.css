@@ -43,7 +43,7 @@
 
 .footer-connect-btn {
   background: #fff;
-  color: #6a1b1b;
+  color: #EC691F;
   border: none;
   border-radius: 6px;
   padding: 12px 28px;
@@ -53,7 +53,8 @@
   transition: background 0.2s;
 }
 .footer-connect-btn:hover {
-  background: #f5e6e6;
+  background: #EC691F;
+  color: #ffffff;
 }
 
 .footer-main {
@@ -70,7 +71,7 @@
 }
 .footer-logo {
   width: 50%;
-  margin-bottom: 8px;
+  margin-bottom: 20px;
 }
 .footer-logo img {
   width: 100%;
@@ -94,7 +95,7 @@
   margin-bottom: 15px;
   color: #fff;
 }
-.footer-links ul {
+.footer-links-list {
   list-style: none;
   padding: 0;
   margin: 0 0 16px 0;
@@ -102,15 +103,16 @@
   flex-direction: column;
   gap: 10px;
 }
-.footer-links li {
+.footer-links-list a {
   font-size: 0.98rem;
   color: #ccc;
   margin-bottom: 6px;
   cursor: pointer;
   transition: color 0.2s;
   width: 100px;
+  text-decoration: none;
 }
-.footer-links li:hover {
+.footer-links-list a:hover {
   color: #fff;
 }
 .footer-contact-block {
@@ -118,12 +120,21 @@
   font-size: 0.98rem;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px;
 }
 .footer-contact-block address {
   font-style: normal;
   color: #ccc;
   margin-bottom: 4px;
+}
+
+.footer-contact-block a {
+  text-decoration: none;
+  color: #ccc;
+}
+
+.footer-contact-block a:hover {
+  color: #fff;
 }
 
 .footer-bottom {

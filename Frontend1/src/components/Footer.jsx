@@ -25,28 +25,28 @@ const Footer = () => {
         <div className="footer-links">
           <div>
             <h4>Services</h4>
-            <ul>
-              <li>Design</li>
-              <li>Development</li>
-              <li>Marketing</li>
-            </ul>
+            <div className="footer-links-list">
+              <a href="/services/design">Design</a>
+              <a href="/services/development">Development</a>
+              <a href="/services/marketing">Marketing</a>
+            </div>
           </div>
             <div>
               <h4>Resources</h4>
-              <ul>
-                <li>Case Studies</li>
-                <li>Blogs</li>
-                <li>About Us</li>
-                <li>Contact Us</li>
-            </ul>
+              <div className="footer-links-list">
+                <a href="/case-studies">Case Studies</a>
+                <a href="/blog">Blogs</a>
+                <a href="/about-us">About Us</a>
+                <a href="/contact-us">Contact Us</a>
+            </div>
           </div>
           <div>
             <h4>Contact Us</h4>
             <div className="footer-contact-block">
               <strong>India</strong>
               <address>212, 2nd Floor, Runway Heights, Ayodhya chowk, 150ft Ring Road Rajkot, 360001	</address>
-              <div>📞 +91 76000 46416</div>
-              <div>✉️ Info@illusiodesigns.agency</div>
+              <div><a href="tel:+917600046416">📞 +91 76000 46416</a></div>
+              <div><a href="mailto:info@illusiodesigns.agency">✉️ Info@illusiodesigns.agency</a></div>
             </div>
           </div>
         </div>
@@ -70,13 +70,13 @@ const Footer = () => {
         
         
         <div className="footer-social">
-          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+          <a href="https://www.linkedin.com/company/illusio-designs/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
             <FaLinkedin className="social-icon" />
           </a>
-          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+          <a href="https://www.instagram.com/illusio_designs/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
             <FaInstagram className="social-icon" />
           </a>
-          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+          <a href="https://www.facebook.com/IllusioDesigns/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
             <FaFacebookF className="social-icon" />
           </a>
         </div>

@@ -7,3 +7,33 @@ body{
     font-family: poppins, sans-serif;
 }
 
+/* Custom Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 0px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #ec691f;
+    border-radius: 0px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #d45d1b;
+}
+
+/* Hide scrollbar buttons */
+::-webkit-scrollbar-button {
+    display: none;
+}
+
+/* For Firefox */
+* {
+    scrollbar-width: 2px;
+    scrollbar-color: #ec691f;
+}
+
