@@ -12,6 +12,7 @@ import Marketing from './pages/Marketing';
 import CustomCursor from './components/CustomCursor';
 import WhatsAppButton from './components/WhatsAppButton';
 import ScrollToTop from './components/ScrollToTop';
+import ChatBot from './components/ChatBot';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         phoneNumber="7600046146"
         message="Hello! I'm interested in your services."
       />
+      <ChatBot />
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />

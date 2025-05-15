@@ -214,25 +214,31 @@
   color: #10131A;
   margin-bottom: 18px;
   line-height: 1.1;
-  transition: transform 0.3s ease-out;
   backface-visibility: hidden;
 }
 
-.service-card:hover h3 {
-  transform: translateX(10px);
+.service-card ul {
+  margin: 0 0 0 18px;
+  padding: 0;
+  list-style-type: disc;
 }
 
-.service-card p {
+.service-card li {
   font-size: 1.15rem;
-  color: #6B6B6B;
+  color: #23272F;
   font-weight: 400;
-  line-height: 1.5;
-  transition: transform 0.3s ease-out;
-  backface-visibility: hidden;
+  margin-bottom: 12px;
+  line-height: 1.6;
+  letter-spacing: 0.01em;
+  transition: color 0.2s;
 }
 
-.service-card:hover p {
-  transform: translateX(5px);
+.service-card li:last-child {
+  margin-bottom: 0;
+}
+
+.service-card:hover li {
+  color: #EC691F;
 }
 
 .impact-section {

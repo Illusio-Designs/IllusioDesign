@@ -50,14 +50,39 @@ const Home = () => {
 
   const servicesData = [
     {
-      icon: <FaPencilRuler />, title: 'Design', desc: 'Creative and user-focused UI/UX and graphic design solutions.'
+      icon: <FaPencilRuler />,
+      title: 'Design',
+      subServices: [
+        'Logo Design',
+        'Brand Identity',
+        'Packing Design',
+        'Social Design',
+        'UI & UX Design'
+      ]
     },
     {
-      icon: <FaCode />, title: 'Development', desc: 'Robust web and app development for seamless digital experiences.'
+      icon: <FaCode />,
+      title: 'Development',
+      subServices: [
+        'Web Design',
+        'Web Development',
+        'Hosting Services',
+        'Application Design',
+        'Application Development',
+        'Application Search Optimisation'
+      ]
     },
     {
-      icon: <FaBullhorn />, title: 'Marketing', desc: 'Strategic digital marketing to grow your brand and reach.'
-    },
+      icon: <FaBullhorn />,
+      title: 'Marketing',
+      subServices: [
+        'Social Media Management',
+        'Brand Strategy',
+        'Analytics & Optimization',
+        'Paid Advertisement',
+        'Search Engine Optimisation'
+      ]
+    }
   ];
 
   const impactStats = [
@@ -208,7 +233,11 @@ const Home = () => {
             <div className="service-card" ref={el => serviceCardsRef.current[idx] = el} key={service.title}>
               <div className="service-icon">{service.icon}</div>
               <h3>{service.title}</h3>
-              <p>{service.desc}</p>
+              <ul>
+                {service.subServices.map((item, i) => (
+                  <li key={i}>{item}</li>
+                ))}
+              </ul>
             </div>
           ))}
         </div>
