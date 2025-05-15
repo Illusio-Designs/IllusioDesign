@@ -43,8 +43,7 @@ const Footer = () => {
           <div>
             <h4>Contact Us</h4>
             <div className="footer-contact-block">
-              <strong>India</strong>
-              <address>212, 2nd Floor, Runway Heights, Ayodhya chowk, 150ft Ring Road Rajkot, 360001	</address>
+              <div className='address'><span className="location-icon">📍</span> <address> 211 - 212, 2nd Floor, Runway Heights, Ayodhya chowk, 150ft Ring Road Rajkot, 360001	</address></div>
               <div><a href="tel:+917600046416">📞 +91 76000 46416</a></div>
               <div><a href="mailto:info@illusiodesigns.agency">✉️ Info@illusiodesigns.agency</a></div>
             </div>

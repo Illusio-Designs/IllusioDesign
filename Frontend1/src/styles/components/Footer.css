@@ -122,6 +122,10 @@
   flex-direction: column;
   gap: 20px;
 }
+.footer-contact-block .address{
+  display: flex;
+  gap: 5px;
+}
 .footer-contact-block address {
   font-style: normal;
   color: #ccc;
