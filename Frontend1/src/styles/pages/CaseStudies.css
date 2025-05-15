@@ -60,3 +60,50 @@
     background-color: #EC691F;
     color: white;
   }
+
+/* SVG Animation Styles */
+.case-spiral-arrow {
+  position: absolute;
+  left: 45%;
+  top: 45%;
+  transform: translateY(-50%);
+}
+
+.case-spiral-arrow path {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  fill: #ec691f;
+  animation: drawAndFill 2s ease forwards infinite;
+}
+
+@keyframes drawAndFill {
+  0% {
+    stroke-dashoffset: 1000;
+    fill-opacity: 0;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    fill-opacity: 1;
+  }
+}
+
+/* Add delays for each path to create sequential animation */
+.case-spiral-arrow .path {
+  animation-delay: 0s;
+}
+
+.case-spiral-arrow .path2 {
+  animation-delay: 0.2s;
+}
+
+.case-spiral-arrow .path3 {
+  animation-delay: 0.4s;
+}
+
+.case-spiral-arrow .path4 {
+  animation-delay: 0.6s;
+}
+
+.case-spiral-arrow .path5 {
+  animation-delay: 0.8s;
+}

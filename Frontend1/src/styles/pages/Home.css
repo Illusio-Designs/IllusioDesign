@@ -123,10 +123,36 @@
   position: relative;
 }
 .services-icon {
-  font-size: 2.2rem;
-  color: #10131A;
-  margin-left: 10px;
+  display: inline-flex;
+  align-items: center;
+  margin-left: -4px;
   position: relative;
+  top: -9px;
+}
+.services-icon svg {
+  width: 34px;
+  height: 47px;
+}
+.charge-path {
+  stroke: #10131A;
+  stroke-width: 2;
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+  animation: drawCharge 5s linear infinite;
+}
+@keyframes drawCharge {
+  0% {
+    stroke-dashoffset: 200;
+  }
+  12.5% {
+    stroke-dashoffset: 0;
+  }
+  75% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -200;
+  }
 }
 .services-cards {
   display: grid;
@@ -368,6 +394,7 @@
   margin-bottom: 16px;
   text-align: center;
   letter-spacing: 1px;
+  position: relative;
 }
 .design-process-content {
   width: 100%;
@@ -622,6 +649,66 @@
 .blog-btn:hover {
   background: #EC691F;
   color: #fff;
+}
+
+.home-flov-sv {
+  position: absolute;
+  top: 32%;
+  transform: translateY(-50%);
+  left: 98%;
+}
+
+.home-flov-sv .path {
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+  animation: drawPath 3s linear infinite;
+}
+
+@keyframes drawPath {
+  0% {
+    stroke-dashoffset: 200;
+  }
+  50% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -200;
+  }
+}
+
+.position-relative {
+  position: relative;
+}
+
+.home-diamond-1 {
+  top: -15px;
+  right: -25px;
+}
+
+.home-diamond-2 {
+  top: 5px;
+  right: -15px;
+  position: absolute;
+}
+
+.stroke-path {
+  stroke: #000617;
+  stroke-width: 1;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: drawDiamond 3s linear infinite;
+}
+
+@keyframes drawDiamond {
+  0% {
+    stroke-dashoffset: 100;
+  }
+  50% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -100;
+  }
 }
 
 

@@ -15,6 +15,42 @@
     margin-bottom: 40px;
     position: relative;
   }
+  .faq-title svg {
+    margin-left: 8px;
+    vertical-align: middle;
+    top: 3px;
+    position: absolute;
+  }
+  .get-quick-path {
+    stroke: #000617;
+    stroke-width: 2;
+    stroke-dasharray: 200;
+    stroke-dashoffset: 200;
+    fill: transparent;
+    animation: drawAndFill 3s linear infinite;
+  }
+  @keyframes drawAndFill {
+    0% {
+      stroke-dashoffset: 200;
+      fill: transparent;
+    }
+    22% {
+      stroke-dashoffset: 0;
+      fill: transparent;
+    }
+    33% {
+      stroke-dashoffset: 0;
+      fill: #000617;
+    }
+    88% {
+      stroke-dashoffset: 0;
+      fill: #000617;
+    }
+    100% {
+      stroke-dashoffset: 200;
+      fill: transparent;
+    }
+  }
   .dot{
     font-size: 2.5rem;
     color: #EC691F;
