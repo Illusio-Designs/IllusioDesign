@@ -73,7 +73,7 @@
   stroke-dasharray: 1000;
   stroke-dashoffset: 1000;
   fill: transparent;
-  animation: drawSpiralFill 2s linear forwards infinite;
+  animation: drawSpiralFill 2s linear infinite;
 }
 
 @keyframes drawSpiralFill {
@@ -83,7 +83,7 @@
   }
   80% {
     stroke-dashoffset: 0;
-    fill: transparent;
+    fill: #EC691F;
   }
   100% {
     stroke-dashoffset: 0;
