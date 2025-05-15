@@ -8,6 +8,7 @@ import heroImage from '../assets/Animation - 1747050079135.gif';
 import { FaPencilRuler, FaCode, FaBullhorn } from 'react-icons/fa';
 import Footer from '../components/Footer';
 import { blogData, BlogCards } from './Blog';
+import { showcaseData } from './CaseStudies';
 
 const Home = () => {
   const statsRef = useRef(null);
@@ -64,13 +65,6 @@ const Home = () => {
     { number: '20+', label: 'User Interviews' },
     { number: '80+', label: 'MVPs Launched' },
     { number: '150+', label: 'Application Redesigns' },
-  ];
-
-  const showcaseData = [
-    { img: logo, title: 'Car Lease : An application that features car leasing model in India' },
-    { img: logo, title: 'Car Lease : An application that features car leasing model in India' },
-    { img: logo, title: 'Car Lease : An application that features car leasing model in India' },
-    { img: logo, title: 'Car Lease : An application that features car leasing model in India' },
   ];
 
   useEffect(() => {
@@ -299,7 +293,7 @@ const Home = () => {
       <div className="showcase-section">
         <h2 className="showcase-title">Showcasing our latest innovative solutions<span className="dot">.</span><span className="showcase-icon">✨</span></h2>
         <div className="showcase-cards">
-          {showcaseData.map((showcase, index) => (
+          {showcaseData.all.slice(0, 4).map((showcase, index) => (
             <div key={index} className="showcase-card" ref={el => showcaseCardsRef.current[index] = el}>
               <div className="showcase-card-inner">
                 <img src={showcase.img} alt={showcase.title} className="showcase-img" />

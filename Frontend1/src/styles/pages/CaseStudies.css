@@ -1,14 +1,62 @@
 .case-studies-main .hero-section {
-    background-color: #f0f0f0;
-    padding: 50px 0;
-    text-align: center;
+    background-color: #ffffff;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 83vh;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 50px 10%;
+    gap: 0;
+    padding-bottom: 30px;
 }
-.case-studies-main h1 {
-    font-size: 36px;
+.case-studies-main .hero-section .hero-section-text{
+    width: 50%;
+}
+.case-studies-main .hero-section .hero-section-image{
+    width: 30%;
+}
+.case-studies-main .hero-section h2 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: #10131A;
+    letter-spacing: 1px;
+    padding-top: 10px;
+} 
+.case-studies-main .hero-section p{
+    padding: 10px 0;
+    font-size: 20px;
+    line-height: 1.5;
 }
 
+
+
+/* Showcase Section */
+.showcase-section {
+    margin: 50px 0 0;
+    padding: 40px 10%;
+    background-color: #f3d3c127;
+  }
+  
+  .showcase-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+  
+  .tab-button {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: transparent;
+    border: 1px dashed #EC691F;
+    color: #000000;
+    transition: all 0.3s ease;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  .tab-button.active {
+    background-color: #EC691F;
+    color: white;
+  }

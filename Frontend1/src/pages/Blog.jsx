@@ -56,7 +56,7 @@ const Blog = () => {
       <Header />
       <div className="blog-main">
         <div className="hero-section">
-          <p>Blogs</p>
+          <p className='hero-title'>Blogs</p>
           <h2>Your Design Roadmap<span className="dot">.</span></h2>
         </div>
         <BlogCards blogs={blogData} />
