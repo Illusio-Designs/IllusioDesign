@@ -560,8 +560,10 @@
   align-items: flex-start;
   overflow: hidden;
   cursor: pointer;
+  border: 2px dashed #d3d3d3;
+  border-radius: 12px;
 }
-.blog-card:hover .blog-img {
+.blog-card:hover{
   box-shadow: 0 8px 32px rgba(236,105,31,0.13);
   border: 2px solid #EC691F;
 }
@@ -579,12 +581,14 @@
   font-weight: 700;
   color: #10131A;
   line-height: 1.2;
+  padding: 0 15px;
 }
 .blog-desc {
   font-size: 1.05rem;
   color: #6B6B6B;
   font-weight: 400;
   line-height: 1.5;
+  padding: 0 15px 15px;
 }
 .blog-btn {
   background: #fff;

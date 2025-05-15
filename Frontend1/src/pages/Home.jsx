@@ -250,7 +250,7 @@ const Home = () => {
         <div className="design-process-content">
           <div className="process-step empathise">
             <div className="process-icon">{/* head/gear icon */}
-              <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><path d="M24 6C15.1634 6 8 13.1634 8 22C8 30.8366 15.1634 38 24 38C32.8366 38 40 30.8366 40 22C40 13.1634 32.8366 6 24 6Z" stroke="#E60000" strokeWidth="2.5"/><circle cx="24" cy="22" r="4" stroke="#E60000" strokeWidth="2.5"/></svg>
+              <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><path d="M24 6C15.1634 6 8 13.1634 8 22C8 30.8366 15.1634 38 24 38C32.8366 38 40 30.8366 40 22C40 13.1634 32.8366 6 24 6Z" stroke="#EC691F" strokeWidth="2.5"/><circle cx="24" cy="22" r="4" stroke="#EC691F" strokeWidth="2.5"/></svg>
             </div>
             <h3>Empathise</h3>
             <h4>What are the users' needs?</h4>
@@ -258,7 +258,7 @@ const Home = () => {
           </div>
           <div className="process-step define">
             <div className="process-icon">{/* magnifier icon */}
-              <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="22" cy="22" r="10" stroke="#E60000" strokeWidth="2.5"/><line x1="32.0711" y1="32.4853" x2="40" y2="40.4142" stroke="#E60000" strokeWidth="2.5"/></svg>
+              <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="22" cy="22" r="10" stroke="#EC691F" strokeWidth="2.5"/><line x1="32.0711" y1="32.4853" x2="40" y2="40.4142" stroke="#EC691F" strokeWidth="2.5"/></svg>
             </div>
             <h3>Define</h3>
             <h4>Why does the problem matter?</h4>
@@ -269,7 +269,7 @@ const Home = () => {
           </div>
           <div className="process-step ideate">
             <div className="process-icon">{/* bulb icon */}
-              <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><ellipse cx="24" cy="20" rx="10" ry="12" stroke="#E60000" strokeWidth="2.5"/><rect x="20" y="32" width="8" height="8" rx="2" stroke="#E60000" strokeWidth="2.5"/></svg>
+              <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><ellipse cx="24" cy="20" rx="11" ry="12" stroke="#EC691F" strokeWidth="2.5"/><rect x="20" y="32" width="8" height="8" rx="2" stroke="#EC691F" strokeWidth="2.5"/></svg>
             </div>
             <h3>Ideate</h3>
             <h4>What are possible solutions?</h4>
@@ -277,7 +277,7 @@ const Home = () => {
           </div>
           <div className="process-step prototype">
             <div className="process-icon">{/* prototype icon */}
-              <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="12" cy="36" r="4" stroke="#E60000" strokeWidth="2.5"/><circle cx="36" cy="36" r="4" stroke="#E60000" strokeWidth="2.5"/><rect x="12" y="12" width="24" height="12" rx="6" stroke="#E60000" strokeWidth="2.5"/><line x1="24" y1="24" x2="24" y2="32" stroke="#E60000" strokeWidth="2.5"/></svg>
+              <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="12" cy="36" r="4" stroke="#EC691F" strokeWidth="2.5"/><circle cx="36" cy="36" r="4" stroke="#EC691F" strokeWidth="2.5"/><rect x="12" y="12" width="24" height="12" rx="6" stroke="#EC691F" strokeWidth="2.5"/><line x1="24" y1="24" x2="24" y2="32" stroke="#EC691F" strokeWidth="2.5"/></svg>
             </div>
             <h3>Prototype</h3>
             <h4>How might we bring it to life?</h4>
@@ -285,7 +285,7 @@ const Home = () => {
           </div>
           <div className="process-step test">
             <div className="process-icon">{/* test icon */}
-              <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect x="10" y="10" width="28" height="28" rx="6" stroke="#E60000" strokeWidth="2.5"/><rect x="18" y="18" width="12" height="8" rx="2" stroke="#E60000" strokeWidth="2.5"/></svg>
+              <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect x="10" y="10" width="28" height="28" rx="6" stroke="#EC691F" strokeWidth="2.5"/><rect x="18" y="18" width="12" height="8" rx="2" stroke="#EC691F" strokeWidth="2.5"/></svg>
             </div>
             <div>
             <h3>Test</h3>
