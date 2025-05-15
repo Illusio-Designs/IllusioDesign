@@ -6,6 +6,8 @@ import animationImg from '../assets/Animation - 1747050079135.gif';
 import { GiPaintBrush } from 'react-icons/gi';
 import { FaLaptopCode } from 'react-icons/fa';
 import { FaBullhorn } from 'react-icons/fa';
+import { FaPhoneAlt } from 'react-icons/fa';
+import { FaEnvelope } from 'react-icons/fa';
 
 const Header = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -71,8 +73,8 @@ const Header = () => {
           <Link className={isActive('/careers') ? 'active' : ''} to="/careers">Career Opportunities</Link>
         </nav>
         <div className="header-contact">
-          <span className="contact-item"><a href="tel:+917600046416"><span role="img" aria-label="in-flag">🇮🇳</span>+91 76000 46416</a></span>
-          <span className="contact-item"><a href="mailto:info@illusiodesigns.agency"><span role="img" aria-label="mail">✉️</span>Info@illusiodesigns.agency</a></span>
+          <span className="contact-item"><a href="tel:+917600046416"><FaPhoneAlt /> +91 76000 46416</a></span>
+          <span className="contact-item"><a href="mailto:info@illusiodesigns.agency"><FaEnvelope /> Info@illusiodesigns.agency</a></span>
         </div>
       </div>
       <div className={`header-bottom ${isFixed ? 'fixed' : ''}`}>

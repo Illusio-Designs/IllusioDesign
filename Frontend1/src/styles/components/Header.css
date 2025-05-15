@@ -59,6 +59,9 @@
 .header-contact a {
   text-decoration: none;
   color: #fff;
+  gap: 10px;
+  display: flex;
+  align-items: center;
 }
 
 .header-contact a:hover {
