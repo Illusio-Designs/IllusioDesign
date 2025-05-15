@@ -242,11 +242,25 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: linear-gradient(to right, #EC691F, #000000);
+  background: linear-gradient(45deg, #EC691F, #000000, #EC691F);
+  background-size: 200% 200%;
   color: #fff;
   padding: 70px 10% 70px 10%;
   position: relative;
   min-height: 340px;
+  animation: gradientRotate 15s ease infinite;
+}
+
+@keyframes gradientRotate {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .impact-left {
