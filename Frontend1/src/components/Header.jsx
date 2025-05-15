@@ -124,7 +124,7 @@ const Header = () => {
           <Link className={isActive('/about-us') ? 'active' : ''} to="/about-us">About Us</Link>
           <Link className={isActive('/contact-us') ? 'active' : ''} to="/contact-us">Contact Us</Link>
         </nav>
-        <button className="engage-btn">Let's Engage</button>
+        <button className="engage-btn" onClick={() => window.location.href = '/contact-us'}>Let's Engage</button>
       </div>
     </header>
   );

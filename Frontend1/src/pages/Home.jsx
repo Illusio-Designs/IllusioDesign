@@ -7,6 +7,7 @@ import infinity from "../assets/infinity.png";
 import heroImage from '../assets/Animation - 1747050079135.gif';
 import { FaPencilRuler, FaCode, FaBullhorn } from 'react-icons/fa';
 import Footer from '../components/Footer';
+import { blogData, BlogCards } from './Blog';
 
 const Home = () => {
   const statsRef = useRef(null);
@@ -70,24 +71,6 @@ const Home = () => {
     { img: logo, title: 'Car Lease : An application that features car leasing model in India' },
     { img: logo, title: 'Car Lease : An application that features car leasing model in India' },
     { img: logo, title: 'Car Lease : An application that features car leasing model in India' },
-  ];
-
-  const blogData = [
-    {
-      img: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=400&q=80',
-      title: "The End of UX Designers? AI's Rise to Dominate the Industry!",
-      desc: 'Explore the emerging trends transforming how users interact with digital platforms.'
-    },
-    {
-      img: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80',
-      title: "AI vs. UX Designers: Who's Really in Control of 2025?",
-      desc: 'Discover the Bold Trends Redefining UX Design in 2025!'
-    },
-    {
-      img: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80',
-      title: 'Designing for All: Essential Web Accessibility Guidelines from WCAG 2.2',
-      desc: 'Design for Everyone: Key Accessibility Tips for an Inclusive Web!'
-    },
   ];
 
   useEffect(() => {
@@ -195,8 +178,8 @@ const Home = () => {
           <h1>Crafting Visual Brilliance That Speaks</h1>
           <p>We blend creativity with code to deliver stunning web, UI/UX, and graphic experiences that captivate, convert, and inspire.</p>
           <div className="hero-btn">
-          <button className="engage-btn">Let's Engage</button>
-          <button className="engage-btn view-btn">View Our Works</button>
+          <button className="engage-btn" onClick={() => window.location.href = '/contact-us'}>Let's Engage</button>
+          <button className="engage-btn view-btn" onClick={() => window.location.href = '/case-studies'}>Explore Our Creations</button>
           </div>
         </div>
         <div className="hero-right">
@@ -242,7 +225,7 @@ const Home = () => {
           <p className="impact-description">
             As a global design firm, we partner with startups and established companies to deliver comprehensive services—from design to testing—enhancing user experiences and empowering businesses to thrive.
           </p>
-          <button className="impact-btn">
+          <button className="impact-btn" onClick={() => window.location.href = '/about-us'}>
             Read About Us
             <span className="impact-arrow">🡥</span>
           </button>
@@ -325,21 +308,13 @@ const Home = () => {
             </div>
           ))}
         </div>
-        <button className="showcase-btn">Check Our Works</button>
+        <button className="showcase-btn" onClick={() => window.location.href = '/case-studies'}>Explore Our Creations</button>
       </div>
       {/* Blog Section */}
       <div className="blog-section">
         <h2 className="blog-title">Fresh ideas from the <span className="blog-forefront">forefront</span> of design and tech<span className="dot">.</span></h2>
-        <div className="blog-cards">
-          {blogData.map((blog) => (
-            <div className="blog-card" key={blog.title}>
-              <img src={blog.img} alt="Blog" className="blog-img" />
-              <h3>{blog.title}</h3>
-              <p className="blog-desc">{blog.desc}</p>
-            </div>
-          ))}
-        </div>
-        <button className="blog-btn">View All Blogs</button>
+        <BlogCards blogs={blogData.slice(0, 3)} />
+        <button className="blog-btn" onClick={() => window.location.href = '/blog'}>View All Blogs</button>
       </div>
       {/* FAQ Section */}
       <div className="faq-section">

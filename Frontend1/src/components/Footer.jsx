@@ -12,7 +12,7 @@ const Footer = () => {
             <h2>Looking to collaborate?<br/>Let's get in touch! <span className="footer-smile">🙂</span></h2>
           </div></div>
           
-          <button className="footer-connect-btn">Let&apos;s Connect</button>
+          <button className="footer-connect-btn" onClick={() => window.location.href = '/contact-us'}>Let&apos;s Connect</button>
         </div>
       </div>
       <div className="footer-main">
