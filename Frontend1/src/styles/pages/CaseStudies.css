@@ -72,18 +72,22 @@
 .case-spiral-arrow path {
   stroke-dasharray: 1000;
   stroke-dashoffset: 1000;
-  fill: #ec691f;
-  animation: drawAndFill 2s ease forwards infinite;
+  fill: transparent;
+  animation: drawSpiralFill 2s linear forwards infinite;
 }
 
-@keyframes drawAndFill {
+@keyframes drawSpiralFill {
   0% {
     stroke-dashoffset: 1000;
-    fill-opacity: 0;
+    fill: transparent;
+  }
+  80% {
+    stroke-dashoffset: 0;
+    fill: transparent;
   }
   100% {
     stroke-dashoffset: 0;
-    fill-opacity: 1;
+    fill: #ec691f;
   }
 }
 
