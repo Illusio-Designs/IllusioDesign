@@ -1,15 +1,196 @@
 .about-us-main .hero-section {
-    background-color: #f0f0f0;
-    padding: 50px 0;
-    text-align: center;
+    background-color: #f3d3c127;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 83vh;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 50px 10%;
+    gap: 0;
+    padding-bottom: 30px;
+}
+.about-us-main .hero-section .hero-section-text{
+    width: 50%;
+}
+.about-us-main .hero-section .hero-section-image{
+    width: 30%;
+}
+.about-us-main .hero-title{
+  padding: 0;
+}
+.about-us-main .hero-section h2 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: #10131A;
+    letter-spacing: 1px;
+    padding-top: 10px;
+    position: relative;
+    display: inline-block;
+    z-index: -5;
+} 
+.about-us-main .hero-section p{
+    padding: 50px 0;
+    font-size: 20px;
+    line-height: 1.5;
 }
 
-.about-us-main h1 {
-    font-size: 36px;
-    margin-bottom: 20px;
-} 
+/* SVG Animation Styles */
+.animated-heading {
+    position: relative;
+}
+
+.about-arrow-cont {
+    position: absolute;
+    right: 55px;
+    top: 100%;
+    transform: translateY(-50%);
+    opacity: 0;
+    animation: drawArrow 5s ease-in-out infinite;
+    rotate: 5deg;
+}
+
+.about-arrow-cont path {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: drawPath 5s ease-in-out infinite;
+}
+
+.about-arrow-heart {
+    position: absolute;
+    right: 43px;
+    top: 70%;
+    transform: translateY(-50%);
+    opacity: 0;
+    animation: drawHeart 0.5s ease-in-out 1.5s forwards,
+               bounceHeart 1s ease-in-out 2s infinite;
+}
+
+@keyframes drawPath {
+    0%, 20% {
+        stroke-dashoffset: 1000;
+        fill: none;
+    }
+    40% {
+        stroke-dashoffset: 0;
+        fill: #ec691f;
+    }
+    100% {
+        stroke-dashoffset: 0;
+        fill: #ec691f;
+    }
+}
+
+@keyframes drawArrow {
+    0%, 20% {
+        opacity: 0;
+    }
+    40%, 100% {
+        opacity: 1;
+    }
+}
+
+@keyframes drawHeart {
+    0% {
+        opacity: 0;
+        transform: translateY(-50%) scale(0);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(-50%) scale(1);
+    }
+}
+
+@keyframes bounceHeart {
+    0%, 100% {
+        transform: translateY(-50%);
+    }
+    50% {
+        transform: translateY(-60%);
+    }
+}
+.about-us-content{
+    padding: 50px 10%;
+}
+.about-us-content-text{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border-left: 4px solid #ec691f;
+    padding-left: 20px;
+    font-size: 20px;
+    line-height: 1.5;
+}
+.stats-section-container{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.about-us-page .stats-section {
+  flex-direction: column;
+  text-align: center;
+  width: 100%;
+  padding: 40px 0;
+}
+
+.about-us-page .stats-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #000000;
+  margin-bottom: 40px;
+  position: relative;
+  display: inline-block;
+}
+
+.about-us-page .stats-row {
+  display: flex;
+  justify-content: center;
+  gap: 100px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.about-us-page .stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 180px;
+}
+
+.hero-image-collage {
+  display: grid;
+  grid-template-columns: 100px 100px 140px;
+  grid-template-rows: 100px 120px;
+  gap: 18px;
+  margin-left: 30px;
+  align-items: center;
+  justify-items: center;
+}
+
+.collage-img {
+  object-fit: cover;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 6px;
+  transition: transform 0.2s;
+}
+
+.collage-img.square {
+  width: 100px;
+  height: 100px;
+}
+
+.collage-img.rect-vert {
+  width: 100px;
+  height: 120px;
+}
+
+.collage-img.rect-horiz {
+  width: 140px;
+  height: 60px;
+  grid-column: span 2;
+}
+
+.collage-img:hover {
+  transform: scale(1.06) rotate(-2deg);
+}
+

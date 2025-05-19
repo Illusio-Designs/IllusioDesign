@@ -22,7 +22,7 @@
     position: absolute;
   }
   .get-quick-path {
-    stroke: #000617;
+    stroke: #EC691F;
     stroke-width: 2;
     stroke-dasharray: 200;
     stroke-dashoffset: 200;
@@ -40,11 +40,11 @@
     }
     33% {
       stroke-dashoffset: 0;
-      fill: #000617;
+      fill: #EC691F;
     }
     88% {
       stroke-dashoffset: 0;
-      fill: #000617;
+      fill: #EC691F;
     }
     100% {
       stroke-dashoffset: 200;
