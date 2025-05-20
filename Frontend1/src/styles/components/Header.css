@@ -115,9 +115,6 @@
   align-items: center;
   justify-content: space-between;
   padding: 0px;
-  border-radius: 50px;
-  backdrop-filter: blur(10px);
-  background-color: #fff;
 }
 
 /* Main navigation links */

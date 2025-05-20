@@ -661,10 +661,10 @@
 .home-flov-sv .path {
   stroke-dasharray: 200;
   stroke-dashoffset: 200;
-  animation: drawPath 3s linear infinite;
+  animation: drawsv 3s linear infinite;
 }
 
-@keyframes drawPath {
+@keyframes drawsv {
   0% {
     stroke-dashoffset: 200;
   }

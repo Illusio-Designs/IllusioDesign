@@ -95,11 +95,10 @@ const AboutUs = () => {
           </div>
           {/* Collage grid of images */}
           <div className="hero-image-collage">
-            <img src={img} alt="logo1" className="collage-img square" />
-            <img src={img} alt="logo2" className="collage-img rect-vert" />
-            <img src={img} alt="logo3" className="collage-img rect-horiz" />
-            <img src={img} alt="logo4" className="collage-img square" />
-            <img src={img} alt="logo5" className="collage-img rect-horiz" />
+            <img src={img} alt="logo1" className="collage-img rect-horiz" />
+            <img src={img} alt="logo2" className="collage-img square" />
+            <img src={img} alt="logo3" className="collage-img square" />
+            <img src={img} alt="logo4" className="collage-img rect-horiz down" />
           </div>
         </div>
       </div>
@@ -127,6 +126,120 @@ const AboutUs = () => {
           ))}
         </div>
       </div>
+
+      {/* Vision, Goals, Mission Section */}
+      <div className="vgm-section">
+        <h2 className="vgm-title">We are <span className="vgm-highlight">Illusio Designs.</span></h2>
+        <div className="vgm-cards">
+          <div className="vgm-card">
+            <div className="vgm-icon vgm-icon-vision">
+              <svg width="40" height="40" fill="none" stroke="#ec691f" strokeWidth="1.5" viewBox="0 0 24 24"><path d="M4 12s2.5-7 8-7 8 7 8 7-2.5 7-8 7-8-7-8-7z"/><circle cx="12" cy="12" r="3"/></svg>
+            </div>
+            <h3>Our Vision<span className="vgm-dot">.</span></h3>
+            <p>To be the leading UX design studio that sets new industry standards while continually pushing the boundaries of creativity and innovation.</p>
+          </div>
+          <div className="vgm-card">
+            <div className="vgm-icon vgm-icon-goals">
+              <svg width="40" height="40" fill="none" stroke="#ec691f" strokeWidth="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            </div>
+            <h3>Our Goals<span className="vgm-dot">.</span></h3>
+            <p>To foster trust, inclusivity, and growth. We welcome individuals from all backgrounds and offer support and encouragement to help them excel and build strong skills. We cultivate teamwork and celebrate individual strengths.</p>
+          </div>
+          <div className="vgm-card">
+            <div className="vgm-icon vgm-icon-mission">
+              <svg width="40" height="40" fill="none" stroke="#ec691f" strokeWidth="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="12" cy="12" r="3"/></svg>
+            </div>
+            <h3>Our Mission<span className="vgm-dot">.</span></h3>
+            <p>To seamlessly bridge industry solutions with user needs through design, creating intuitive experiences that drive innovation and growth.</p>
+          </div>
+        </div>
+      </div>
+
+     
+      {/* Meet the Team Section */}
+      <div className="team-section">
+        <h2 className="team-title">Meet the Team<span className="dot">.</span></h2>
+        <div className="team-row">
+          {/* Example team member card, repeat for each role */}
+          <div className="team-member">
+            <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=ceo" alt="CEO Avatar" className="team-avatar" />
+            <div className="team-info">
+              <h3>Founder</h3>
+              <p>Mr. Rushikesh Zinzuvadiya</p>
+            </div>
+          </div>
+          <div className="team-member">
+            <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=cfo" alt="CFO Avatar" className="team-avatar" />
+            <div className="team-info">
+              <h3>Co-Founder</h3>
+              <p>Mrs. Neha Zinzuvadiya</p>
+            </div>
+          </div>
+          <div className="team-member">
+            <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=backend" alt="Backend Developer Avatar" className="team-avatar" />
+            <div className="team-info">
+              <h3>Backend Developer</h3>
+              <p>Mr. Maharshi Bhogayata</p>
+            </div>
+          </div>
+          <div className="team-member">
+            <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=frontend" alt="Frontend Developer Avatar" className="team-avatar" />
+            <div className="team-info">
+              <h3>Frontend Developer</h3>
+              <p>Ms. Riya Lunagariya</p>
+            </div>
+          </div>
+          <div className="team-member">
+            <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=frontend" alt="Frontend Developer Avatar" className="team-avatar" />
+            <div className="team-info">
+              <h3>Junior Frontend Developer</h3>
+              <p>Ms. Mansi Fichadiya</p>
+            </div>
+          </div>
+          
+          <div className="team-member">
+            <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=uiux" alt="UI/UX Designer Avatar" className="team-avatar" />
+            <div className="team-info">
+              <h3>UI/UX Designer</h3>
+              <p>Ms. Mahek Gajipara</p>
+            </div>
+          </div>
+          <div className="team-member">
+            <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=appdev" alt="Application Developer Avatar" className="team-avatar" />
+            <div className="team-info">
+              <h3>Application Developer</h3>
+              <p>Ms. Amatullah Bharmal</p>
+            </div>
+          </div>
+          <div className="team-member">
+            <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=graphics" alt="Graphics Designer Avatar" className="team-avatar" />
+            <div className="team-info">
+              <h3>Graphics Designer</h3>
+              <p>Mr. Abhi Timbadiya</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Meet the Founder Section */}
+      <div className="founder-section">
+        <h2 className="founder-title">
+          Meet the Founder<span className="dot">.</span>
+        </h2>
+        <div className="founder-content">
+          <div className="founder-quote">
+            <span className="founder-quote-mark">“</span>
+            <p>
+              At Illusio Designs, we believe in the power of design to transform ideas into impactful experiences. Our team is dedicated to pushing boundaries and creating innovative solutions that resonate with users. Together, we're not just designing products; we're crafting stories that inspire and connect.
+            </p>
+            <span className="founder-name">— Rushikesh Zinzuvadiya.</span>
+          </div>
+          <div className="founder-image">
+            <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=ceo" alt="Founder" />
+          </div>
+        </div>
+      </div>
+
       <Footer />
     </div>
   );
