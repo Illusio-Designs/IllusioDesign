@@ -192,7 +192,7 @@ const AboutUs = () => {
           <div className="team-member">
             <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=frontend" alt="Frontend Developer Avatar" className="team-avatar" />
             <div className="team-info">
-              <h3>Junior Frontend Developer</h3>
+              <h3>Jr. Frontend Developer</h3>
               <p>Ms. Mansi Fichadiya</p>
             </div>
           </div>
