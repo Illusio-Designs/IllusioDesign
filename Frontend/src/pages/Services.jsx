@@ -1,103 +1,25 @@
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
-import '@/styles/pages/Services.css'
+import '@/styles/pages/Services.css';
 
-export default function Services() {
-  const services = [
-    {
-      id: 1,
-      name: "Web Development",
-      description: "Custom websites & web applications",
-      image: "/api/placeholder/300/200",
-      category: "Development"
-    },
-    {
-      id: 2,
-      name: "Mobile App Development",
-      description: "iOS & Android native apps",
-      image: "/api/placeholder/300/200",
-      category: "Development"
-    },
-    {
-      id: 3,
-      name: "UI/UX Design",
-      description: "User-centered design solutions",
-      image: "/api/placeholder/300/200",
-      category: "Design"
-    },
-    {
-      id: 4,
-      name: "E-Commerce Solutions",
-      description: "Online stores & marketplaces",
-      image: "/api/placeholder/300/200",
-      category: "Development"
-    },
-    {
-      id: 5,
-      name: "Digital Marketing",
-      description: "SEO, SEM & social media",
-      image: "/api/placeholder/300/200",
-      category: "Marketing"
-    },
-    {
-      id: 6,
-      name: "Brand Identity",
-      description: "Logo & visual identity design",
-      image: "/api/placeholder/300/200",
-      category: "Design"
-    }
-  ]
-
-  const categories = ["All", "Development", "Design", "Marketing"]
-
+export default function Services({ navigateTo }) {
   return (
-    <div className="services-page">
-      <Header />
-      
-      <main>
-        <section className="services-hero">
-          <div className="container">
-            <h1 className="page-title">Our Services</h1>
-            <p className="page-subtitle">Comprehensive digital solutions tailored to your business needs</p>
+    <section className="services-section" id="services">
+      <div className="services-container">
+        <h2>Our Services</h2>
+        <div className="services-grid">
+          <div className="service-card" onClick={() => navigateTo('service-detail', 'design')} style={{ cursor: 'pointer' }}>
+            <h3>Design</h3>
+            <p>Creative and user-centric design solutions that bring your vision to life.</p>
           </div>
-        </section>
-
-        <section className="services-content">
-          <div className="container">
-            <div className="filters">
-              <h3>Filter by Category</h3>
-              <div className="filter-buttons">
-                {categories.map(category => (
-                  <button key={category} className="filter-btn">
-                    {category}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="services-grid">
-              {services.map(service => (
-                <div key={service.id} className="service-card">
-                  <div className="service-image">
-                    <img src={service.image} alt={service.name} />
-                    <div className="service-overlay">
-                      <button className="learn-more-btn">Learn More</button>
-                      <button className="get-quote-btn">Get Quote</button>
-                    </div>
-                  </div>
-                  <div className="service-info">
-                    <span className="service-category">{service.category}</span>
-                    <h3 className="service-name">{service.name}</h3>
-                    <p className="service-description">{service.description}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
+          <div className="service-card" onClick={() => navigateTo('service-detail', 'development')} style={{ cursor: 'pointer' }}>
+            <h3>Development</h3>
+            <p>Robust and scalable web and mobile applications built with cutting-edge technology.</p>
           </div>
-        </section>
-      </main>
-
-      <Footer />
-    </div>
-  )
+          <div className="service-card" onClick={() => navigateTo('service-detail', 'marketing')} style={{ cursor: 'pointer' }}>
+            <h3>Marketing</h3>
+            <p>Strategic digital marketing campaigns that drive growth and engagement.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 }

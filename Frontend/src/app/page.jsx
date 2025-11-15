@@ -1,61 +1,61 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import Home from '@/pages/Home'
-import Services from '@/pages/Services'
-import About from '@/pages/About'
-import Contact from '@/pages/Contact'
+import { useState } from 'react';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import Home from '@/pages/Home';
+import Services from '@/pages/Services';
+import Portfolio from '@/pages/Portfolio';
+import AboutUs from '@/pages/AboutUs';
+import Career from '@/pages/Career';
+import Blog from '@/pages/Blog';
+import CaseStudy from '@/pages/CaseStudy';
+import ContactUs from '@/pages/ContactUs';
+import PrivacyPolicy from '@/pages/PrivacyPolicy';
+import TermsOfService from '@/pages/TermsOfService';
+import ServiceDetail from '@/pages/ServiceDetail';
+import CaseStudyDetail from '@/pages/CaseStudyDetail';
+import BlogDetail from '@/pages/BlogDetail';
 
 export default function Page() {
-  const [currentPath, setCurrentPath] = useState('/')
+  const [currentPage, setCurrentPage] = useState('home');
+  const [currentItem, setCurrentItem] = useState('');
 
-  useEffect(() => {
-    // Set initial path
-    setCurrentPath(window.location.pathname)
+  const navigateTo = (page, item = '') => {
+    setCurrentPage(page);
+    setCurrentItem(item);
+    window.scrollTo(0, 0);
+  };
 
-    // Handle browser navigation
-    const handleNavigation = () => {
-      setCurrentPath(window.location.pathname)
-    }
-
-    window.addEventListener('popstate', handleNavigation)
-    
-    // Custom navigation handler for links
-    const handleClick = (e) => {
-      const target = e.target.closest('a')
-      if (target && target.href.startsWith(window.location.origin)) {
-        e.preventDefault()
-        const newPath = new URL(target.href).pathname
-        window.history.pushState({}, '', newPath)
-        setCurrentPath(newPath)
-        window.scrollTo(0, 0)
-      }
-    }
-
-    document.addEventListener('click', handleClick)
-
-    return () => {
-      window.removeEventListener('popstate', handleNavigation)
-      document.removeEventListener('click', handleClick)
-    }
-  }, [])
-
-  // Route mapping
   const renderPage = () => {
-    switch (currentPath) {
-      case '/':
-        return <Home />
-      case '/services':
-        return <Services />
-      case '/about':
-        return <About />
-      case '/contact':
-        return <Contact />
+    switch (currentPage) {
+      case 'service-detail':
+        return <ServiceDetail serviceName={currentItem} navigateTo={navigateTo} />;
+      case 'case-study-detail':
+        return <CaseStudyDetail caseStudyName={currentItem} navigateTo={navigateTo} />;
+      case 'blog-detail':
+        return <BlogDetail blogName={currentItem} navigateTo={navigateTo} />;
       default:
-        // 404 - redirect to home
-        return <Home />
+        return (
+          <>
+            <Header navigateTo={navigateTo} />
+            <main>
+              <Home />
+              <Services navigateTo={navigateTo} />
+              <Portfolio />
+              <CaseStudy navigateTo={navigateTo} />
+              <AboutUs />
+              <Career />
+              <Blog navigateTo={navigateTo} />
+              <ContactUs />
+              <PrivacyPolicy />
+              <TermsOfService />
+            </main>
+            <Footer navigateTo={navigateTo} />
+          </>
+        );
     }
-  }
+  };
 
-  return renderPage()
+  return <>{renderPage()}</>;
 }

@@ -1,16 +1,12 @@
-import '@/styles/globals.css'
-
 export const metadata = {
-  title: 'Illusio Design - IT Company | Web & Mobile Development',
-  description: 'Innovate. Create. Transform. Leading IT company specializing in web development, mobile apps, UI/UX design, and digital solutions.',
-}
+  title: 'Next.js App',
+  description: 'Created with Next.js',
+};
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
-  )
+  );
 }
