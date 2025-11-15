@@ -5,8 +5,7 @@ export default function Header() {
     <header className="header">
       <div className="header-container">
         <div className="logo">
-          <span className="logo-icon">🎨</span>
-          <span className="logo-text">ILLUSIO DESIGNS</span>
+          <img src="/images/IllusioDesignfulllogo.png" alt="Illusio Designs" className="logo-image" />
         </div>
         <nav className="nav">
           <ul>

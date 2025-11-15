@@ -1,10 +1,9 @@
 .header {
-  background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
   z-index: 100;
-  border: 2px solid #f5f5f5;
+  border: 1.5px solid #EC691F;
   border-radius: 50px;
   margin: 1rem 2rem;
 }
@@ -24,14 +23,9 @@
   gap: 0.5rem;
 }
 
-.logo-icon {
-  font-size: 1.5rem;
-}
-
-.logo-text {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #333;
+.logo-image {
+  height: 40px;
+  width: auto;
 }
 
 .nav ul {
@@ -50,11 +44,11 @@
 }
 
 .nav a:hover {
-  color: #ff6b35;
+  color: #EC691F;
 }
 
 .engage-button {
-  background-color: #ff6b35;
+  background-color: #EC691F;
   color: white;
   border: none;
   padding: 0.75rem 2rem;

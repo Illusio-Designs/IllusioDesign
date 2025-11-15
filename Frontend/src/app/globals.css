@@ -4,15 +4,28 @@
   margin: 0;
 }
 
+:root {
+  --bg-color: #ffffff;
+  --text-color: #000000;
+  --accent-color: #EC691F;
+}
+
+.dark-theme {
+  --bg-color: #000000;
+  --text-color: #ffffff;
+  --accent-color: #EC691F;
+}
+
 html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 body {
-  color: #333;
-  background: #fff;
+  color: var(--text-color);
+  background: var(--bg-color);
 }
 
 a {

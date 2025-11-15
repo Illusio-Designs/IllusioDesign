@@ -127,3 +127,55 @@
     text-align: center;
   }
 }
+
+/* Dark Theme Support */
+body.dark-theme .footer {
+  background-color: #000000;
+  color: #ffffff;
+  border-top: 1px solid #EC691F;
+}
+
+body.dark-theme .footer-logo .logo-text {
+  color: #ffffff;
+}
+
+body.dark-theme .footer-section h3 {
+  color: #EC691F;
+}
+
+body.dark-theme .footer-section p {
+  color: #ffffff;
+}
+
+body.dark-theme .footer-section a {
+  color: #ffffff;
+}
+
+body.dark-theme .footer-section a:hover {
+  color: #EC691F;
+}
+
+body.dark-theme .social-icons a {
+  background-color: #EC691F;
+  color: #ffffff;
+}
+
+body.dark-theme .social-icons a:hover {
+  background-color: #d45a15;
+}
+
+body.dark-theme .footer-bottom {
+  border-top: 1px solid #EC691F;
+}
+
+body.dark-theme .footer-bottom p {
+  color: #ffffff;
+}
+
+body.dark-theme .footer-bottom a {
+  color: #ffffff;
+}
+
+body.dark-theme .footer-bottom a:hover {
+  color: #EC691F;
+}
