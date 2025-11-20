@@ -1,8 +1,12 @@
 import '@/styles/pages/PrivacyPolicy.css';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
-export default function PrivacyPolicy() {
+export default function PrivacyPolicy({ navigateTo }) {
   return (
-    <section className="privacy-section" id="privacy">
+    <>
+      <Header navigateTo={navigateTo} />
+      <section className="privacy-section" id="privacy">
       <div className="privacy-container">
         <h2>Privacy Policy</h2>
         <p className="last-updated">Last Updated: November 15, 2024</p>
@@ -84,5 +88,7 @@ export default function PrivacyPolicy() {
         </div>
       </div>
     </section>
+    <Footer navigateTo={navigateTo} />
+    </>
   );
 }

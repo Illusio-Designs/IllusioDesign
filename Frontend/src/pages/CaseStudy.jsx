@@ -1,8 +1,12 @@
 import '@/styles/pages/CaseStudy.css';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 export default function CaseStudy({ navigateTo }) {
   return (
-    <section className="case-study-section" id="case-study">
+    <>
+      <Header navigateTo={navigateTo} />
+      <section className="case-study-section" id="case-study">
       <div className="case-study-container">
         <h2>Case Studies</h2>
         <p className="case-study-intro">Real results from real clients. Explore our success stories.</p>
@@ -93,5 +97,7 @@ export default function CaseStudy({ navigateTo }) {
         </div>
       </div>
     </section>
+    <Footer navigateTo={navigateTo} />
+    </>
   );
 }

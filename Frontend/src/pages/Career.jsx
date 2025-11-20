@@ -1,8 +1,12 @@
 import '@/styles/pages/Career.css';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
-export default function Career() {
+export default function Career({ navigateTo }) {
   return (
-    <section className="career-section" id="career">
+    <>
+      <Header navigateTo={navigateTo} />
+      <section className="career-section" id="career">
       <div className="career-container">
         <h2>Join Our Team</h2>
         <p className="career-intro">Be part of something amazing. Explore career opportunities at Illusio Designs.</p>
@@ -28,5 +32,7 @@ export default function Career() {
         </div>
       </div>
     </section>
+    <Footer navigateTo={navigateTo} />
+    </>
   );
 }

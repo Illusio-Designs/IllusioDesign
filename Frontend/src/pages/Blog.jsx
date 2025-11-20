@@ -1,8 +1,12 @@
 import '@/styles/pages/Blog.css';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 export default function Blog({ navigateTo }) {
   return (
-    <section className="blog-section" id="blog">
+    <>
+      <Header navigateTo={navigateTo} />
+      <section className="blog-section" id="blog">
       <div className="blog-container">
         <h2>Our Blog</h2>
         <p className="blog-intro">Stay updated with the latest trends and insights</p>
@@ -37,5 +41,7 @@ export default function Blog({ navigateTo }) {
         </div>
       </div>
     </section>
+    <Footer navigateTo={navigateTo} />
+    </>
   );
 }

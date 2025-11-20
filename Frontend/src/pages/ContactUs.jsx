@@ -1,8 +1,12 @@
 import '@/styles/pages/ContactUs.css';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
-export default function ContactUs() {
+export default function ContactUs({ navigateTo }) {
   return (
-    <section className="contact-section" id="contact">
+    <>
+      <Header navigateTo={navigateTo} />
+      <section className="contact-section" id="contact">
       <div className="contact-container">
         <h2>Get In Touch</h2>
         <p className="contact-intro">Have a project in mind? Let's discuss how we can help you achieve your goals.</p>
@@ -74,5 +78,7 @@ export default function ContactUs() {
         </div>
       </div>
     </section>
+    <Footer navigateTo={navigateTo} />
+    </>
   );
 }

@@ -1,8 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 import Home from '@/pages/Home';
 import Services from '@/pages/Services';
 import Portfolio from '@/pages/Portfolio';
@@ -29,6 +27,26 @@ export default function Page() {
 
   const renderPage = () => {
     switch (currentPage) {
+      case 'home':
+        return <Home navigateTo={navigateTo} />;
+      case 'services':
+        return <Services navigateTo={navigateTo} />;
+      case 'portfolio':
+        return <Portfolio navigateTo={navigateTo} />;
+      case 'about':
+        return <AboutUs navigateTo={navigateTo} />;
+      case 'career':
+        return <Career navigateTo={navigateTo} />;
+      case 'blog':
+        return <Blog navigateTo={navigateTo} />;
+      case 'case-study':
+        return <CaseStudy navigateTo={navigateTo} />;
+      case 'contact':
+        return <ContactUs navigateTo={navigateTo} />;
+      case 'privacy':
+        return <PrivacyPolicy navigateTo={navigateTo} />;
+      case 'terms':
+        return <TermsOfService navigateTo={navigateTo} />;
       case 'service-detail':
         return <ServiceDetail serviceName={currentItem} navigateTo={navigateTo} />;
       case 'case-study-detail':
@@ -36,24 +54,7 @@ export default function Page() {
       case 'blog-detail':
         return <BlogDetail blogName={currentItem} navigateTo={navigateTo} />;
       default:
-        return (
-          <>
-            <Header navigateTo={navigateTo} />
-            <main>
-              <Home />
-              <Services navigateTo={navigateTo} />
-              <Portfolio />
-              <CaseStudy navigateTo={navigateTo} />
-              <AboutUs />
-              <Career />
-              <Blog navigateTo={navigateTo} />
-              <ContactUs />
-              <PrivacyPolicy />
-              <TermsOfService />
-            </main>
-            <Footer navigateTo={navigateTo} />
-          </>
-        );
+        return <Home navigateTo={navigateTo} />;
     }
   };
 

@@ -1,6 +1,6 @@
 .case-study-detail-section {
   padding: 3rem 2rem;
-  background-color: #f9f9f9;
+  
   min-height: 100vh;
 }
 
@@ -124,7 +124,7 @@
 }
 
 .result-card {
-  background: #f9f9f9;
+  
   padding: 2rem;
   border-radius: 10px;
   text-align: center;
@@ -145,7 +145,7 @@
 }
 
 blockquote {
-  background: #f9f9f9;
+  
   padding: 2rem;
   border-left: 4px solid #ff6b35;
   border-radius: 5px;

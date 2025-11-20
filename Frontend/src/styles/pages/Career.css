@@ -1,6 +1,6 @@
 .career-section {
   padding: 5rem 2rem;
-  background-color: white;
+  
 }
 
 .career-container {
@@ -29,7 +29,7 @@
 }
 
 .job-card {
-  background: #f9f9f9;
+  
   padding: 2rem;
   border-radius: 10px;
   border-left: 4px solid #ff6b35;

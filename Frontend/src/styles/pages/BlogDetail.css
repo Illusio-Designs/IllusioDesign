@@ -1,6 +1,6 @@
 .blog-detail-section {
   padding: 3rem 2rem;
-  background-color: #f9f9f9;
+  
   min-height: 100vh;
 }
 
@@ -165,7 +165,7 @@
 }
 
 .related-card {
-  background: #f9f9f9;
+  
   padding: 1.5rem;
   border-radius: 10px;
 }

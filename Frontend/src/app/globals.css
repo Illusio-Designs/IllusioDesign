@@ -8,12 +8,14 @@
   --bg-color: #ffffff;
   --text-color: #000000;
   --accent-color: #EC691F;
+  --accent-hover: #d45a15;
 }
 
 .dark-theme {
   --bg-color: #000000;
   --text-color: #ffffff;
   --accent-color: #EC691F;
+  --accent-hover: #d45a15;
 }
 
 html,
@@ -21,6 +23,11 @@ body {
   max-width: 100vw;
   overflow-x: hidden;
   transition: background-color 0.3s ease, color 0.3s ease;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
@@ -31,4 +38,12 @@ body {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+}
+
+main {
+  min-height: 100vh;
 }

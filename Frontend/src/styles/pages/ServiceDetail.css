@@ -1,6 +1,6 @@
 .service-detail-section {
   padding: 3rem 2rem;
-  background-color: #f9f9f9;
+  
   min-height: 100vh;
 }
 
@@ -73,7 +73,7 @@
 }
 
 .feature-card {
-  background: #f9f9f9;
+  
   padding: 2rem;
   border-radius: 10px;
   transition: transform 0.3s, box-shadow 0.3s;

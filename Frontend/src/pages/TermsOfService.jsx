@@ -1,8 +1,12 @@
 import '@/styles/pages/TermsOfService.css';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
-export default function TermsOfService() {
+export default function TermsOfService({ navigateTo }) {
   return (
-    <section className="terms-section" id="terms">
+    <>
+      <Header navigateTo={navigateTo} />
+      <section className="terms-section" id="terms">
       <div className="terms-container">
         <h2>Terms of Service</h2>
         <p className="last-updated">Last Updated: November 15, 2024</p>
@@ -121,5 +125,7 @@ export default function TermsOfService() {
         </div>
       </div>
     </section>
+    <Footer navigateTo={navigateTo} />
+    </>
   );
 }

@@ -7,8 +7,7 @@ export default function Footer() {
         <div className="footer-content">
           <div className="footer-section footer-brand">
             <div className="footer-logo">
-              <span className="logo-icon">🎨</span>
-              <span className="logo-text">ILLUSIO DESIGNS</span>
+              <img src="/images/IllusioDesignfulllogo.png" alt="Illusio Designs" className="footer-logo-image" />
             </div>
           </div>
           <div className="footer-section">
