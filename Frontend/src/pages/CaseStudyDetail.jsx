@@ -89,9 +89,9 @@ export default function CaseStudyDetail({ caseStudyName, navigateTo }) {
           <div className="content-section">
             <h2>Client Testimonial</h2>
             <blockquote>
-              "Working with Illusio Designs transformed our business. The new platform not only 
+              &quot;Working with Illusio Designs transformed our business. The new platform not only 
               looks amazing but has significantly improved our sales and customer satisfaction. 
-              Their team was professional, responsive, and delivered beyond our expectations."
+              Their team was professional, responsive, and delivered beyond our expectations.&quot;
               <cite>— CEO, Fashion Retail Brand</cite>
             </blockquote>
           </div>

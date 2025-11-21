@@ -71,7 +71,7 @@ export default function PrivacyPolicy({ navigateTo }) {
             <h3>7. Changes to This Policy</h3>
             <p>
               We may update this privacy policy from time to time. We will notify you of any changes 
-              by posting the new policy on this page and updating the "Last Updated" date.
+              by posting the new policy on this page and updating the &quot;Last Updated&quot; date.
             </p>
           </div>
           

@@ -9,7 +9,7 @@ export default function ContactUs({ navigateTo }) {
       <section className="contact-section" id="contact">
       <div className="contact-container">
         <h2>Get In Touch</h2>
-        <p className="contact-intro">Have a project in mind? Let's discuss how we can help you achieve your goals.</p>
+        <p className="contact-intro">Have a project in mind? Let&apos;s discuss how we can help you achieve your goals.</p>
         
         <div className="contact-content">
           <div className="contact-info">

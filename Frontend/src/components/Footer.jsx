@@ -7,7 +7,7 @@ export default function Footer({ navigateTo }) {
       <div className="footer-cta">
         <div className="footer-cta-content">
           <h2 className="footer-cta-title">Ready to Start?</h2>
-          <p className="footer-cta-subtitle">Let's craft your next digital success story.</p>
+          <p className="footer-cta-subtitle">Let&apos;s craft your next digital success story.</p>
           <button className="footer-cta-button" onClick={() => navigateTo && navigateTo('contact')}>
             Get a Free Consultation
           </button>
@@ -45,8 +45,6 @@ export default function Footer({ navigateTo }) {
               <li><a href="#" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('blog'); }}>Blogs</a></li>
               <li><a href="#" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('about'); }}>About Us</a></li>
               <li><a href="#" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('contact'); }}>Contact Us</a></li>
-              <li><a href="#" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('privacy'); }}>Privacy Policy</a></li>
-              <li><a href="#" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('terms'); }}>Terms of Service</a></li>
             </ul>
           </div>
         </div>

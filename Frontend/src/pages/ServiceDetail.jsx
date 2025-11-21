@@ -136,7 +136,7 @@ export default function ServiceDetail({ serviceName, navigateTo }) {
           
           <div className="cta-section">
             <h2>Ready to Start Your Project?</h2>
-            <p>Let's discuss how our design services can help you achieve your goals.</p>
+            <p>Let&apos;s discuss how our design services can help you achieve your goals.</p>
             <button className="cta-button">Get in Touch</button>
           </div>
         </div>

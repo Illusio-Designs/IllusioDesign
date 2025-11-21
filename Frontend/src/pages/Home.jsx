@@ -115,17 +115,17 @@ export default function Home({ navigateTo }) {
           <div className="testimonials-grid">
             <div className="testimonial-card">
               <div className="rating">⭐⭐⭐⭐⭐</div>
-              <p className="testimonial-text">"Excellent work and professional service. Highly recommended!"</p>
+              <p className="testimonial-text">&quot;Excellent work and professional service. Highly recommended!&quot;</p>
               <p className="client-name">- John Doe</p>
             </div>
             <div className="testimonial-card">
               <div className="rating">⭐⭐⭐⭐⭐</div>
-              <p className="testimonial-text">"They transformed our vision into reality. Amazing team!"</p>
+              <p className="testimonial-text">&quot;They transformed our vision into reality. Amazing team!&quot;</p>
               <p className="client-name">- Jane Smith</p>
             </div>
             <div className="testimonial-card">
               <div className="rating">⭐⭐⭐⭐⭐</div>
-              <p className="testimonial-text">"Outstanding results and great communication throughout."</p>
+              <p className="testimonial-text">&quot;Outstanding results and great communication throughout.&quot;</p>
               <p className="client-name">- Mike Johnson</p>
             </div>
           </div>

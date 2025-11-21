@@ -32,7 +32,7 @@ export default function BlogDetail({ blogName, navigateTo }) {
           <div className="article-content">
             <p className="lead">
               The design landscape is constantly evolving, and 2024 brings exciting new trends 
-              that are reshaping how we create digital experiences. Let's explore the top trends 
+              that are reshaping how we create digital experiences. Let&apos;s explore the top trends 
               that are defining this year.
             </p>
             
