@@ -2,15 +2,46 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  border: 2px solid #EC691F;
-  border-radius: 50px;
   margin: 1.5rem 6rem 0;
-  background: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   backdrop-filter: blur(10px);
-  border-radius: 6px 6px 0 6px;
-  -webkit-clip-path: polygon(0% 12px, 0px 0%, calc(100% - 0px) 0%, 100% 12px, 100% calc(100% - 55px), calc(100% - 50px) 100%, 12px 100%, 0% calc(100% - 0px));
-  clip-path: polygon(0% 12px, 0px 0%, calc(100% - 0px) 0%, 100% 12px, 100% calc(100% - 40px), calc(100% - 50px) 100%, 12px 100%, 0% calc(100% - 0px));
+  position: relative;
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 2px solid #EC691F;
+  border-radius: 12px;
+  clip-path: polygon(
+    0% 12px,
+    0px 0%,
+    calc(100% - 0px) 0%,
+    100% 12px,
+    100% calc(100% - 50px),
+    calc(100% - 50px) 100%,
+    12px 100%,
+    0% calc(100% - 0px)
+  );
+  pointer-events: none;
+}
+
+.header::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: 12px;
+  clip-path: polygon(
+    0% 12px,
+    0px 0%,
+    calc(100% - 0px) 0%,
+    100% 12px,
+    100% calc(100% - 50px),
+    calc(100% - 50px) 100%,
+    12px 100%,
+    0% calc(100% - 0px)
+  );
+  z-index: -1;
 }
 
 .header-container {
@@ -21,6 +52,8 @@
   justify-content: space-between;
   align-items: center;
   gap: 2rem;
+  position: relative;
+  z-index: 1;
 }
 
 .logo {
@@ -110,7 +143,6 @@
 
 /* Dark Theme Support */
 body.dark-theme .header {
-  background: rgba(30, 30, 30, 0.95);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 

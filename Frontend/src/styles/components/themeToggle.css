@@ -144,11 +144,6 @@ body.dark-theme {
   color: #ffffff;
 }
 
-body.dark-theme .header-container {
-  background-color: #000000;
-  border-color: #EC691F;
-}
-
 body.dark-theme .nav a {
   color: #ffffff;
 }
