@@ -1,19 +1,74 @@
 .footer {
   margin-top: auto;
-  border-top: 2px solid #EC691F;
+  background: var(--bg-color);
 }
 
+/* CTA Section */
+.footer-cta {
+  background: linear-gradient(135deg, #EC691F 0%, #f07a35 100%);
+  padding: 2rem;
+  margin: 4rem 21rem;
+  border-radius: 24px;
+  text-align: center;
+}
+
+
+.footer-cta-title {
+  font-family: var(--heading-font);
+  font-size: 3rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 1rem;
+  letter-spacing: 1px;
+}
+
+.footer-cta-subtitle {
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 2rem;
+  font-weight: 300;
+}
+
+.footer-cta-button {
+  background: #ffffff;
+  color: #EC691F;
+  padding: 1.2rem 3.5rem 1.2rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  position: relative;
+  border-radius: 6px 6px 0 6px;
+  clip-path: polygon(0% 12px,
+      0px 0%,
+      calc(100% - 0px) 0%,
+      100% 12px,
+      100% calc(100% - 55px),
+      calc(100% - 50px) 100%,
+      12px 100%,
+      0% calc(100% - 0px));
+}
+
+.footer-cta-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Main Footer Container */
 .footer-container {
   max-width: 1400px;
   margin: 0 auto;
   padding: 3rem 2rem 1rem;
+  background: var(--bg-color);
 }
 
 .footer-content {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 2rem;
-  margin-bottom: 2rem;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
 }
 
 .footer-brand {
@@ -27,21 +82,23 @@
 }
 
 .footer-logo-image {
-  height: 50px;
+  height: 60px;
   width: auto;
 }
 
 .footer-section h3 {
-  margin-bottom: 1rem;
-  font-size: 1.1rem;
+  font-family: var(--heading-font);
+  margin-bottom: 1.5rem;
+  font-size: 1.3rem;
   color: #EC691F;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
 
 .footer-section p {
   margin: 0.5rem 0;
   color: var(--text-color);
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   line-height: 1.6;
 }
 
@@ -52,18 +109,43 @@
 }
 
 .footer-section ul li {
-  margin: 0.5rem 0;
+  margin: 0.75rem 0;
 }
 
 .footer-section a {
   color: var(--text-color);
   text-decoration: none;
   transition: color 0.3s;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
 }
 
 .footer-section a:hover {
   color: #EC691F;
+}
+
+/* Footer Info Section */
+.footer-info {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  margin-bottom: 3rem;
+  padding-top: 2rem;
+}
+
+.footer-info-item h3 {
+  font-family: var(--heading-font);
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  color: #EC691F;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.footer-info-item p {
+  color: var(--text-color);
+  font-size: 0.9rem;
+  line-height: 1.8;
+  margin: 0;
 }
 
 .social-icons {
@@ -77,21 +159,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #EC691F;
-  color: #ffffff;
   border-radius: 8px;
   transition: all 0.3s;
-  font-weight: 600;
 }
 
 .social-icons a:hover {
-  background-color: #d45a15;
+  background-color: #EC691F;
+  color: #ffffff;
   transform: translateY(-3px);
   box-shadow: 0 5px 15px rgba(236, 105, 31, 0.3);
 }
 
+/* Footer Bottom */
 .footer-bottom {
-  border-top: 2px solid #EC691F;
+  border-top: 1px solid rgba(236, 105, 31, 0.3);
   padding-top: 1.5rem;
   margin-top: 2rem;
 }
@@ -108,6 +189,7 @@
   margin: 0;
   color: var(--text-color);
   font-size: 0.85rem;
+  opacity: 0.8;
 }
 
 .footer-bottom a {
@@ -121,15 +203,54 @@
   color: #EC691F;
 }
 
-@media (max-width: 768px) {
+/* Responsive Design */
+@media (max-width: 1024px) {
   .footer-content {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: 1.5fr 1fr 1fr;
   }
-  
+
+  .footer-info {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-cta {
+    margin: 2rem 1rem 0;
+    padding: 3rem 1.5rem;
+  }
+
+  .footer-cta-title {
+    font-size: 2rem;
+  }
+
+  .footer-cta-subtitle {
+    font-size: 1rem;
+  }
+
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .footer-info {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
   .footer-bottom-content {
     flex-direction: column;
     text-align: center;
   }
 }
 
-/* Dark Theme - No additional styles needed as CSS variables handle it */
+@media (max-width: 480px) {
+  .footer-cta-title {
+    font-size: 1.75rem;
+  }
+
+  .footer-cta-button {
+    padding: 0.875rem 2rem;
+    font-size: 1rem;
+  }
+}

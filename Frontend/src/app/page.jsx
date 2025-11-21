@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Home from '@/pages/Home';
 import Services from '@/pages/Services';
 import Portfolio from '@/pages/Portfolio';
@@ -19,9 +19,50 @@ export default function Page() {
   const [currentPage, setCurrentPage] = useState('home');
   const [currentItem, setCurrentItem] = useState('');
 
+  // Initialize from URL on mount
+  useEffect(() => {
+    const path = window.location.pathname;
+    const params = new URLSearchParams(window.location.search);
+    const item = params.get('item');
+    
+    if (path === '/' || path === '/home') {
+      setCurrentPage('home');
+    } else {
+      const page = path.substring(1); // Remove leading slash
+      setCurrentPage(page);
+      if (item) setCurrentItem(item);
+    }
+  }, []);
+
+  // Listen for browser back/forward buttons
+  useEffect(() => {
+    const handlePopState = () => {
+      const path = window.location.pathname;
+      const params = new URLSearchParams(window.location.search);
+      const item = params.get('item');
+      
+      if (path === '/' || path === '/home') {
+        setCurrentPage('home');
+        setCurrentItem('');
+      } else {
+        const page = path.substring(1);
+        setCurrentPage(page);
+        setCurrentItem(item || '');
+      }
+      window.scrollTo(0, 0);
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
   const navigateTo = (page, item = '') => {
     setCurrentPage(page);
     setCurrentItem(item);
+    
+    // Update URL
+    const url = page === 'home' ? '/' : `/${page}${item ? `?item=${encodeURIComponent(item)}` : ''}`;
+    window.history.pushState({}, '', url);
     window.scrollTo(0, 0);
   };
 

@@ -23,6 +23,7 @@ export default function Home({ navigateTo }) {
           <div className="floating-shapes">
             <Image src="/Icons/circle.png" alt="" className="shape shape-circle-1" width={70} height={70} />
             <Image src="/Icons/halfcircle.png" alt="" className="shape shape-half-1" width={60} height={60} />
+            <Image src="/Icons/halfcircle.png" alt="" className="shape shape-half-2" width={60} height={60} />
             <Image src="/Icons/circle.png" alt="" className="shape shape-circle-2" width={80} height={80} />
             <Image src="/Icons/square.png" alt="" className="shape shape-square-1" width={50} height={50} />
           </div>
@@ -148,17 +149,6 @@ export default function Home({ navigateTo }) {
               <div className="blog-placeholder"></div>
               <p>Digital Marketing Strategies</p>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Ready to Start CTA */}
-      <section className="cta-section">
-        <div className="container">
-          <div className="cta-box">
-            <h2>Ready to Start?</h2>
-            <p>Let's bring your ideas to life</p>
-            <button className="cta-button" onClick={() => navigateTo('contact')}>Get Started</button>
           </div>
         </div>
       </section>

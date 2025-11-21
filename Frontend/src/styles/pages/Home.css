@@ -1,18 +1,16 @@
 /* Hero Section */
 .hero-section {
-  min-height: 90vh;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  overflow: hidden;
 }
 
 .hero-container {
-  max-width: 1400px;
   width: 100%;
   margin: 0 auto;
-  padding: 4rem 2rem;
+  padding: 15rem 2rem;
   position: relative;
   z-index: 2;
 }
@@ -23,8 +21,8 @@
 }
 
 .hero-title {
-  font-size: 4.5rem;
-  font-weight: 700;
+  font-size: 70px;
+  font-weight: 400;
   color: #2d2d2d;
   line-height: 1.3;
   margin: 0;
@@ -48,7 +46,6 @@
 .highlight-box {
   background: #EC691F;
   color: #ffffff;
-  padding: 0.2rem 1.5rem;
   display: inline-block;
   position: relative;
 }
@@ -61,8 +58,8 @@
 }
 
 .section-title {
-  font-size: 2.5rem;
-  font-weight: 700;
+  font-size: 50px;
+  font-weight: 400;
   color: #EC691F;
   text-align: center;
   margin-bottom: 3rem;
@@ -85,7 +82,7 @@
 
 /* Circles */
 .shape-circle-1 {
-  top: 20%;
+  top: 15%;
   left: 15%;
 }
 
@@ -96,6 +93,12 @@
 
 /* Half Circles */
 .shape-half-1 {
+  top: 38.3%;
+  left: 26%;
+  rotate: 90deg;
+}
+
+.shape-half-2 {
   top: 25%;
   right: 18%;
 }
@@ -306,82 +309,6 @@
   font-weight: 600;
   color: #2d2d2d;
   margin: 0;
-}
-
-/* CTA Section */
-.cta-section {
-  padding: 4rem 0;
-}
-
-.cta-box {
-  background: #EC691F;
-  padding: 4rem;
-  border-radius: 20px;
-  text-align: center;
-  color: #fff;
-}
-
-.cta-box h2 {
-  font-size: 2.5rem;
-  margin: 0 0 1rem 0;
-}
-
-.cta-box p {
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
-}
-
-.cta-button {
-  background: #fff;
-  color: #EC691F;
-  border: none;
-  padding: 1rem 3rem;
-  font-size: 1.1rem;
-  font-weight: 600;
-  border-radius: 50px;
-  cursor: pointer;
-  transition: transform 0.3s;
-}
-
-.cta-button:hover {
-  transform: scale(1.05);
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .hero-title {
-    font-size: 2.5rem;
-  }
-  
-  .title-line {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  .title-icon {
-    width: 50px !important;
-    height: 50px !important;
-  }
-
-  .section-title {
-    font-size: 2rem;
-  }
-
-  .service-card {
-    padding: 2rem 3rem;
-  }
-
-  .stat-item h3 {
-    font-size: 2rem;
-  }
-
-  .cta-box {
-    padding: 2rem;
-  }
-
-  .cta-box h2 {
-    font-size: 1.8rem;
-  }
 }
 
 /* Dark Theme Support */

@@ -1,3 +1,4 @@
+import './globals.css';
 import ThemeToggle from '@/components/ThemeToggle';
 
 export const metadata = {
