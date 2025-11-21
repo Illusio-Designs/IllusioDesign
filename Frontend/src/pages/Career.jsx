@@ -14,7 +14,7 @@ export default function Career({ navigateTo }) {
           <div className="job-card">
             <h3>UI/UX Designer</h3>
             <p className="job-location">Remote / Rajkot</p>
-            <p>We're looking for a creative UI/UX designer to join our team.</p>
+            <p>We&apos;re looking for a creative UI/UX designer to join our team.</p>
             <button className="apply-button">Apply Now</button>
           </div>
           <div className="job-card">
