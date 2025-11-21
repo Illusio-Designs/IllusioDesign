@@ -152,35 +152,3 @@ body.dark-theme .nav a:hover {
   color: #EC691F;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .theme-toggle-wrapper {
-    bottom: 1.5rem;
-    right: 1.5rem;
-  }
-  
-  .theme-toggle-btn {
-    width: 75px;
-    height: 38px;
-  }
-  
-  .toggle-slider {
-    width: 32px;
-    height: 32px;
-  }
-  
-  .theme-toggle-btn.is-light .toggle-slider {
-    transform: translateX(37px);
-  }
-  
-  .slider-icon {
-    width: 18px;
-    height: 18px;
-  }
-  
-  .icon-moon,
-  .icon-sun {
-    width: 18px;
-    height: 18px;
-  }
-}
