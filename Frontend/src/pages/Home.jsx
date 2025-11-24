@@ -55,11 +55,12 @@ const stats = [
 ];
 
 const faqItems = [
-  'What services do you offer?',
+  'What industries do you specialize in?',
+  'Do you provide both design and development services?',
+  'Do you build custom CRM or B2B dashboards?',
   'How long does a typical project take?',
-  'What is your pricing structure?',
-  'Do you offer ongoing support?',
-  'Can you work with our existing team?',
+  "What's the process to get started?",
+  'Do you offer ongoing support after project delivery?',
 ];
 
 const testimonials = [
@@ -264,33 +265,30 @@ export default function Home({ navigateTo, currentPage }) {
       {/* Frequently Asked Topics */}
       <section className="faq-section">
         <div className="container">
-          <ScrollReveal as="div" animation="fadeUp" once={false}>
-            <SplitText
-              as="h2"
-              className="section-title"
-              splitBy="words"
-              animation="fadeUp"
-              delay={0.05}
-              trigger="onScroll"
-              once={false}
-            >
-              Frequently Asked Topics
-            </SplitText>
-          </ScrollReveal>
-          <div className="faq-content">
-            <div className="faq-list">
-              {faqItems.map((item, index) => (
-                <ScrollReveal
-                  key={item}
-                  as="div"
-                  className="faq-item"
-                  animation="slideLeft"
-                  delay={0.1 + index * 0.04}
-                  once={false}
-                >
-                  {item}
-                </ScrollReveal>
-              ))}
+          <div className="faq-wrapper">
+            <div className="faq-left">
+              <ScrollReveal as="div" animation="fadeUp" once={false}>
+                <h2 className="section-title faq-title">Frequently Asked Topics</h2>
+                <p className="faq-subtitle">
+                  We turn ideas into digital brilliance — here's everything you need to know.
+                </p>
+              </ScrollReveal>
+            </div>
+            <div className="faq-right">
+              <div className="faq-list">
+                {faqItems.map((item, index) => (
+                  <ScrollReveal
+                    key={item}
+                    as="div"
+                    className="faq-item"
+                    animation="fadeUp"
+                    delay={0.1 + index * 0.05}
+                    once={false}
+                  >
+                    {item}
+                  </ScrollReveal>
+                ))}
+              </div>
             </div>
           </div>
         </div>
