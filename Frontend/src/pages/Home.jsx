@@ -32,16 +32,49 @@ export default function Home({ navigateTo }) {
 
       {/* Services We Offer */}
       <section className="services-offer-section">
-        <div className="container">
-          <h2 className="section-title">Services We Offer</h2>
-          <div className="services-cards">
-            <div className="service-card">
-              <div className="service-icon">🎨</div>
-              <h3>Design</h3>
+        <div className="services-container">
+          <div className="services-title-wrapper">
+            <h2 className="section-title services-title">
+              <span className="services-title-line">Services</span>
+              <span className="services-title-line">We Offer</span>
+            </h2>
+          </div>
+          <div className="services-cards-wrapper">
+            <div className="service-card service-card-1">
+              <div className="service-icon">
+                <Image src="/Icons/Brandanddesign.png" alt="Branding & Design" width={60} height={60} />
+              </div>
+              <h3 className="service-name">
+                <span>Branding &</span>
+                <span>Design</span>
+              </h3>
             </div>
-            <div className="service-card">
-              <div className="service-icon">💻</div>
-              <h3>Development</h3>
+            <div className="service-card service-card-2">
+              <div className="service-icon">
+                <Image src="/Icons/Web&app.png" alt="Web & App Development" width={60} height={60} />
+              </div>
+              <h3 className="service-name">
+                <span>Web & App</span>
+                <span>Development</span>
+              </h3>
+            </div>
+            <div className="service-card service-card-3">
+              <div className="service-icon">
+                <Image src="/Icons/digitalmarketing.png" alt="Digital Marketing" width={60} height={60} />
+              </div>
+              <h3 className="service-name">
+                <span>Digital</span>
+                <span>Marketing</span>
+              </h3>
+            </div>
+            <div className="service-card service-card-4">
+              <div className="service-icon">
+                <Image src="/Icons/b2bsolution.png" alt="B2B & Custom Solutions" width={60} height={60} />
+              </div>
+              <h3 className="service-name">
+                <span>B2B & Custom</span>
+                <span>Solutions</span>
+              </h3>
             </div>
           </div>
         </div>

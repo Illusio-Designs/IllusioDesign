@@ -102,7 +102,7 @@
   position: relative;
   border-radius: 6px 6px 0 6px;
   -webkit-clip-path: polygon(0% 12px, 0px 0%, calc(100% - 0px) 0%, 100% 12px, 100% calc(100% - 55px), calc(100% - 50px) 100%, 12px 100%, 0% calc(100% - 0px));
-  clip-path: polygon(0% 12px, 0px 0%, calc(100% - 0px) 0%, 100% 12px, 100% calc(100% - 40px), calc(100% - 50px) 100%, 12px 100%, 0% calc(100% - 0px));
+  clip-path: polygon(0% 12px, 0px 0%, calc(100% - 0px) 0%, 100% 12px, 100% calc(100% - 46px), calc(100% - 50px) 100%, 12px 100%, 0% calc(100% - 0px));
 }
 
 .engage-button:hover {
