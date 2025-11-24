@@ -27,12 +27,6 @@
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 }
 
-.service-card h3 {
-  color: #ff6b35;
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-}
-
 .service-card p {
   color: #666;
   line-height: 1.6;
