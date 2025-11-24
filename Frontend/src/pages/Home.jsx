@@ -3,10 +3,10 @@ import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
-export default function Home({ navigateTo }) {
+export default function Home({ navigateTo, currentPage }) {
   return (
     <>
-      <Header navigateTo={navigateTo} />
+      <Header navigateTo={navigateTo} currentPage={currentPage} />
       
       {/* Hero Section */}
       <section className="hero-section">

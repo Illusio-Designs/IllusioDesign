@@ -2,10 +2,10 @@ import '@/styles/pages/Services.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
-export default function Services({ navigateTo }) {
+export default function Services({ navigateTo, currentPage }) {
   return (
     <>
-      <Header navigateTo={navigateTo} />
+      <Header navigateTo={navigateTo} currentPage={currentPage} />
       <section className="services-section" id="services">
         <div className="services-container">
           <h2>Our Services</h2>

@@ -2,10 +2,10 @@ import '@/styles/pages/Portfolio.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
-export default function Portfolio({ navigateTo }) {
+export default function Portfolio({ navigateTo, currentPage }) {
   return (
     <>
-      <Header navigateTo={navigateTo} />
+      <Header navigateTo={navigateTo} currentPage={currentPage} />
       <section className="portfolio-section" id="portfolio">
         <div className="portfolio-container">
           <h2>Our Portfolio</h2>

@@ -89,17 +89,24 @@
 }
 
 .nav a {
-  color: #666;
+  color: #2D2C2B;
   text-decoration: none;
   font-weight: 400;
-  font-size: 0.95rem;
+  font-size: 16px;
   transition: color 0.3s;
   position: relative;
   cursor: pointer;
 }
 
 .nav a:hover {
+  font-weight: 500;
   color: #EC691F;
+}
+
+.nav a.active {
+  font-weight: 600;
+  color: #EC691F;
+  position: relative;
 }
 
 .engage-button {
@@ -164,5 +171,9 @@ body.dark-theme .nav a {
 }
 
 body.dark-theme .nav a:hover {
+  color: #EC691F;
+}
+
+body.dark-theme .nav a.active {
   color: #EC691F;
 }

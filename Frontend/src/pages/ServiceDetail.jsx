@@ -2,10 +2,10 @@ import '@/styles/pages/ServiceDetail.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
-export default function ServiceDetail({ serviceName, navigateTo }) {
+export default function ServiceDetail({ serviceName, navigateTo, currentPage }) {
   return (
     <>
-      <Header navigateTo={navigateTo} />
+      <Header navigateTo={navigateTo} currentPage={currentPage} />
       <section className="service-detail-section">
         <div className="service-detail-container">
           <div className="breadcrumb">

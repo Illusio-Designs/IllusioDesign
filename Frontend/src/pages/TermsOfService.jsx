@@ -2,10 +2,10 @@ import '@/styles/pages/TermsOfService.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
-export default function TermsOfService({ navigateTo }) {
+export default function TermsOfService({ navigateTo, currentPage }) {
   return (
     <>
-      <Header navigateTo={navigateTo} />
+      <Header navigateTo={navigateTo} currentPage={currentPage} />
       <section className="terms-section" id="terms">
       <div className="terms-container">
         <h2>Terms of Service</h2>

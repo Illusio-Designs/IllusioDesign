@@ -2,10 +2,10 @@ import '@/styles/pages/CaseStudy.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
-export default function CaseStudy({ navigateTo }) {
+export default function CaseStudy({ navigateTo, currentPage }) {
   return (
     <>
-      <Header navigateTo={navigateTo} />
+      <Header navigateTo={navigateTo} currentPage={currentPage} />
       <section className="case-study-section" id="case-study">
       <div className="case-study-container">
         <h2>Case Studies</h2>

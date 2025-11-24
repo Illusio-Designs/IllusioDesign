@@ -2,10 +2,10 @@ import '@/styles/pages/ContactUs.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
-export default function ContactUs({ navigateTo }) {
+export default function ContactUs({ navigateTo, currentPage }) {
   return (
     <>
-      <Header navigateTo={navigateTo} />
+      <Header navigateTo={navigateTo} currentPage={currentPage} />
       <section className="contact-section" id="contact">
       <div className="contact-container">
         <h2>Get In Touch</h2>

@@ -69,33 +69,33 @@ export default function Page() {
   const renderPage = () => {
     switch (currentPage) {
       case 'home':
-        return <Home navigateTo={navigateTo} />;
+        return <Home navigateTo={navigateTo} currentPage={currentPage} />;
       case 'services':
-        return <Services navigateTo={navigateTo} />;
+        return <Services navigateTo={navigateTo} currentPage={currentPage} />;
       case 'portfolio':
-        return <Portfolio navigateTo={navigateTo} />;
+        return <Portfolio navigateTo={navigateTo} currentPage={currentPage} />;
       case 'about':
-        return <AboutUs navigateTo={navigateTo} />;
+        return <AboutUs navigateTo={navigateTo} currentPage={currentPage} />;
       case 'career':
-        return <Career navigateTo={navigateTo} />;
+        return <Career navigateTo={navigateTo} currentPage={currentPage} />;
       case 'blog':
-        return <Blog navigateTo={navigateTo} />;
+        return <Blog navigateTo={navigateTo} currentPage={currentPage} />;
       case 'case-study':
-        return <CaseStudy navigateTo={navigateTo} />;
+        return <CaseStudy navigateTo={navigateTo} currentPage={currentPage} />;
       case 'contact':
-        return <ContactUs navigateTo={navigateTo} />;
+        return <ContactUs navigateTo={navigateTo} currentPage={currentPage} />;
       case 'privacy':
-        return <PrivacyPolicy navigateTo={navigateTo} />;
+        return <PrivacyPolicy navigateTo={navigateTo} currentPage={currentPage} />;
       case 'terms':
-        return <TermsOfService navigateTo={navigateTo} />;
+        return <TermsOfService navigateTo={navigateTo} currentPage={currentPage} />;
       case 'service-detail':
-        return <ServiceDetail serviceName={currentItem} navigateTo={navigateTo} />;
+        return <ServiceDetail serviceName={currentItem} navigateTo={navigateTo} currentPage={currentPage} />;
       case 'case-study-detail':
-        return <CaseStudyDetail caseStudyName={currentItem} navigateTo={navigateTo} />;
+        return <CaseStudyDetail caseStudyName={currentItem} navigateTo={navigateTo} currentPage={currentPage} />;
       case 'blog-detail':
-        return <BlogDetail blogName={currentItem} navigateTo={navigateTo} />;
+        return <BlogDetail blogName={currentItem} navigateTo={navigateTo} currentPage={currentPage} />;
       default:
-        return <Home navigateTo={navigateTo} />;
+        return <Home navigateTo={navigateTo} currentPage={currentPage} />;
     }
   };
 

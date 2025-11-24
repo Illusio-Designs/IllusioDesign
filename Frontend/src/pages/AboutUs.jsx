@@ -2,10 +2,10 @@ import '@/styles/pages/AboutUs.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
-export default function AboutUs({ navigateTo }) {
+export default function AboutUs({ navigateTo, currentPage }) {
   return (
     <>
-      <Header navigateTo={navigateTo} />
+      <Header navigateTo={navigateTo} currentPage={currentPage} />
       <section className="about-section" id="about">
         <div className="about-container">
           <h2>About Us</h2>

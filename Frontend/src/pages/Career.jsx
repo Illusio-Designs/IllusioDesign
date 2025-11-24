@@ -2,10 +2,10 @@ import '@/styles/pages/Career.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
-export default function Career({ navigateTo }) {
+export default function Career({ navigateTo, currentPage }) {
   return (
     <>
-      <Header navigateTo={navigateTo} />
+      <Header navigateTo={navigateTo} currentPage={currentPage} />
       <section className="career-section" id="career">
       <div className="career-container">
         <h2>Join Our Team</h2>

@@ -2,10 +2,10 @@ import '@/styles/pages/Blog.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
-export default function Blog({ navigateTo }) {
+export default function Blog({ navigateTo, currentPage }) {
   return (
     <>
-      <Header navigateTo={navigateTo} />
+      <Header navigateTo={navigateTo} currentPage={currentPage} />
       <section className="blog-section" id="blog">
       <div className="blog-container">
         <h2>Our Blog</h2>

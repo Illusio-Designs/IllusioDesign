@@ -2,10 +2,10 @@ import '@/styles/pages/BlogDetail.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
-export default function BlogDetail({ blogName, navigateTo }) {
+export default function BlogDetail({ blogName, navigateTo, currentPage }) {
   return (
     <>
-      <Header navigateTo={navigateTo} />
+      <Header navigateTo={navigateTo} currentPage={currentPage} />
       <section className="blog-detail-section">
         <div className="blog-detail-container">
           <div className="breadcrumb">

@@ -2,10 +2,10 @@ import '@/styles/pages/PrivacyPolicy.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
-export default function PrivacyPolicy({ navigateTo }) {
+export default function PrivacyPolicy({ navigateTo, currentPage }) {
   return (
     <>
-      <Header navigateTo={navigateTo} />
+      <Header navigateTo={navigateTo} currentPage={currentPage} />
       <section className="privacy-section" id="privacy">
       <div className="privacy-container">
         <h2>Privacy Policy</h2>
