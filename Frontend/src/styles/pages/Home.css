@@ -203,23 +203,27 @@
   z-index: 1;
 }
 
-/* Hover state - spread into 2x2 grid */
-.services-cards-wrapper:hover .service-card-1 {
+/* Hover state and scroll-visible state - spread into 2x2 grid */
+.services-cards-wrapper:hover .service-card-1,
+.services-cards-wrapper.is-visible .service-card-1 {
   transform: translate(-150px, -150px) rotate(0deg) scale(1);
   z-index: 4;
 }
 
-.services-cards-wrapper:hover .service-card-2 {
+.services-cards-wrapper:hover .service-card-2,
+.services-cards-wrapper.is-visible .service-card-2 {
   transform: translate(150px, -150px) rotate(0deg) scale(1);
   z-index: 4;
 }
 
-.services-cards-wrapper:hover .service-card-3 {
+.services-cards-wrapper:hover .service-card-3,
+.services-cards-wrapper.is-visible .service-card-3 {
   transform: translate(-150px, 150px) rotate(0deg) scale(1);
   z-index: 4;
 }
 
-.services-cards-wrapper:hover .service-card-4 {
+.services-cards-wrapper:hover .service-card-4,
+.services-cards-wrapper.is-visible .service-card-4 {
   transform: translate(150px, 150px) rotate(0deg) scale(1);
   z-index: 4;
 }
@@ -276,19 +280,23 @@
     padding: 2rem 1.5rem;
   }
 
-  .services-cards-wrapper:hover .service-card-1 {
+  .services-cards-wrapper:hover .service-card-1,
+  .services-cards-wrapper.is-visible .service-card-1 {
     transform: translate(-120px, -120px) rotate(0deg) scale(1);
   }
 
-  .services-cards-wrapper:hover .service-card-2 {
+  .services-cards-wrapper:hover .service-card-2,
+  .services-cards-wrapper.is-visible .service-card-2 {
     transform: translate(120px, -120px) rotate(0deg) scale(1);
   }
 
-  .services-cards-wrapper:hover .service-card-3 {
+  .services-cards-wrapper:hover .service-card-3,
+  .services-cards-wrapper.is-visible .service-card-3 {
     transform: translate(-120px, 120px) rotate(0deg) scale(1);
   }
 
-  .services-cards-wrapper:hover .service-card-4 {
+  .services-cards-wrapper:hover .service-card-4,
+  .services-cards-wrapper.is-visible .service-card-4 {
     transform: translate(120px, 120px) rotate(0deg) scale(1);
   }
 }
@@ -323,20 +331,24 @@
     font-size: 1.1rem;
   }
 
-  /* Mobile: stack vertically on hover */
-  .services-cards-wrapper:hover .service-card-1 {
+  /* Mobile: stack vertically on hover or scroll-visible */
+  .services-cards-wrapper:hover .service-card-1,
+  .services-cards-wrapper.is-visible .service-card-1 {
     transform: translate(0, -180px) rotate(0deg) scale(1);
   }
 
-  .services-cards-wrapper:hover .service-card-2 {
+  .services-cards-wrapper:hover .service-card-2,
+  .services-cards-wrapper.is-visible .service-card-2 {
     transform: translate(0, -60px) rotate(0deg) scale(1);
   }
 
-  .services-cards-wrapper:hover .service-card-3 {
+  .services-cards-wrapper:hover .service-card-3,
+  .services-cards-wrapper.is-visible .service-card-3 {
     transform: translate(0, 60px) rotate(0deg) scale(1);
   }
 
-  .services-cards-wrapper:hover .service-card-4 {
+  .services-cards-wrapper:hover .service-card-4,
+  .services-cards-wrapper.is-visible .service-card-4 {
     transform: translate(0, 180px) rotate(0deg) scale(1);
   }
 }

@@ -12,6 +12,8 @@ const SplitText = ({
   className = '',
   as = 'span', // HTML element type
   trigger = 'onMount', // 'onMount' or 'onScroll'
+  once = true, // animate only once
+  threshold = 0.1, // observer threshold
   ...props
 }) => {
   const [isVisible, setIsVisible] = useState(trigger === 'onMount');
@@ -33,26 +35,30 @@ const SplitText = ({
   }, [children, splitBy]);
 
   useEffect(() => {
-    if (trigger === 'onScroll' && containerRef.current) {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              setIsVisible(true);
-              observer.disconnect();
+    if (trigger !== 'onScroll' || !containerRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible(true);
+            if (once) {
+              observer.unobserve(entry.target);
             }
-          });
-        },
-        { threshold: 0.1 }
-      );
+          } else if (!once) {
+            setIsVisible(false);
+          }
+        });
+      },
+      { threshold }
+    );
 
-      observer.observe(containerRef.current);
+    observer.observe(containerRef.current);
 
-      return () => {
-        observer.disconnect();
-      };
-    }
-  }, [trigger]);
+    return () => {
+      observer.disconnect();
+    };
+  }, [trigger, once, threshold]);
 
   const Component = as;
 
@@ -62,6 +68,7 @@ const SplitText = ({
       className={`split-text ${className}`}
       data-animation={animation}
       data-split-by={splitBy}
+      data-visible={isVisible}
       {...props}
     >
       {segments.map((segment, index) => {
@@ -74,7 +81,6 @@ const SplitText = ({
             style={{
               '--delay': `${index * delay}s`,
               '--duration': `${duration}s`,
-              animationPlayState: isVisible ? 'running' : 'paused',
             }}
           >
             {segment}

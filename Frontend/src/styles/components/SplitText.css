@@ -6,6 +6,11 @@
 .split-text-segment {
   display: inline-block;
   opacity: 0;
+  will-change: opacity, transform;
+}
+
+.split-text[data-visible='true'] .split-text-segment {
+  animation-fill-mode: forwards;
 }
 
 .split-text-segment.whitespace {
@@ -14,6 +19,10 @@
 
 /* Fade Up Animation */
 .split-text[data-animation='fadeUp'] .split-text-segment:not(.whitespace) {
+  transform: translateY(20px);
+}
+
+.split-text[data-animation='fadeUp'][data-visible='true'] .split-text-segment:not(.whitespace) {
   animation: fadeUp var(--duration, 0.6s) ease-out forwards;
   animation-delay: var(--delay, 0s);
 }
@@ -31,6 +40,10 @@
 
 /* Fade In Animation */
 .split-text[data-animation='fadeIn'] .split-text-segment:not(.whitespace) {
+  transform: translateZ(0);
+}
+
+.split-text[data-animation='fadeIn'][data-visible='true'] .split-text-segment:not(.whitespace) {
   animation: fadeIn var(--duration, 0.6s) ease-out forwards;
   animation-delay: var(--delay, 0s);
 }
@@ -46,6 +59,10 @@
 
 /* Slide Up Animation */
 .split-text[data-animation='slideUp'] .split-text-segment:not(.whitespace) {
+  transform: translateY(100%);
+}
+
+.split-text[data-animation='slideUp'][data-visible='true'] .split-text-segment:not(.whitespace) {
   animation: slideUp var(--duration, 0.6s) ease-out forwards;
   animation-delay: var(--delay, 0s);
 }
@@ -63,6 +80,10 @@
 
 /* Scale Animation */
 .split-text[data-animation='scale'] .split-text-segment:not(.whitespace) {
+  transform: scale(0.8);
+}
+
+.split-text[data-animation='scale'][data-visible='true'] .split-text-segment:not(.whitespace) {
   animation: scale var(--duration, 0.6s) ease-out forwards;
   animation-delay: var(--delay, 0s);
 }

@@ -54,7 +54,6 @@ const ScrollReveal = ({
         '--delay': `${delay}s`,
         '--duration': `${duration}s`,
         '--distance': `${distance}px`,
-        animationPlayState: isVisible ? 'running' : 'paused',
       }}
       data-visible={isVisible}
       {...props}
