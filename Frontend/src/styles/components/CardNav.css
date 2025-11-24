@@ -4,8 +4,6 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(4px);
   z-index: 1000;
   display: flex;
   align-items: flex-start;
@@ -28,10 +26,10 @@
   border-radius: 16px;
   padding: 2rem;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  max-width: 800px;
   width: 90%;
   max-height: 80vh;
   overflow-y: auto;
+  scrollbar-width: none;
   animation: slideDown 0.3s ease-out;
   position: relative;
 }
@@ -49,7 +47,7 @@
 
 .card-nav-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
   gap: 1.5rem;
 }
 
@@ -64,6 +62,25 @@
   position: relative;
   background: #FAF9F6;
   min-height: 150px;
+  opacity: 0;
+  transform: translateY(28px);
+  animation: cardNavItemIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.card-nav-item:nth-child(1) {
+  animation-delay: 0.05s;
+}
+
+.card-nav-item:nth-child(2) {
+  animation-delay: 0.12s;
+}
+
+.card-nav-item:nth-child(3) {
+  animation-delay: 0.19s;
+}
+
+.card-nav-item:nth-child(4) {
+  animation-delay: 0.26s;
 }
 
 .card-nav-item:hover {
@@ -74,7 +91,6 @@
 }
 
 .card-nav-icon {
-  font-size: 2.5rem;
   margin-bottom: 1rem;
   display: flex;
   align-items: center;
@@ -83,12 +99,25 @@
   height: 60px;
   background: linear-gradient(135deg, #EC691F 0%, #ff8c42 100%);
   border-radius: 12px;
-  color: #FAF9F6;
+  padding: 0.75rem;
   transition: transform 0.3s ease;
 }
 
 .card-nav-item:hover .card-nav-icon {
   transform: scale(1.1) rotate(5deg);
+}
+
+.card-nav-icon-mask {
+  width: 100%;
+  height: 100%;
+  display: block;
+  background-color: #FAF9F6;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
 }
 
 .card-nav-content {
@@ -130,19 +159,30 @@
   transform: translateX(0);
 }
 
+@keyframes cardNavItemIn {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Dark Theme Support */
 body.dark-theme .card-nav-container {
-  background: #1a1a1a;
-  border: 1px solid #333;
+  background: #000000;
+  border: 1px solid #EC691F;
 }
 
 body.dark-theme .card-nav-item {
-  background: #222;
+  background: #000000;
   border-color: #333;
 }
 
 body.dark-theme .card-nav-item:hover {
-  background: #2a2a2a;
+  background: #000000;
   border-color: #EC691F;
 }
 

@@ -24,26 +24,38 @@ export default function Header({ navigateTo, currentPage }) {
   const servicesItems = [
     {
       title: 'Branding & Design',
-      description: 'Creative and user-centric design solutions that bring your vision to life.',
-      icon: '🎨',
+      description: 'Brand identity, guidelines, and creative systems that feel ownable.',
+      icon: '/Icons/Brandanddesign.png',
+      accent: '#EC691F',
+      background: '#000000',
+      textColor: '#FAF9F6',
       path: 'service-detail'
     },
     {
       title: 'Web & App Development',
-      description: 'Robust and scalable web and mobile applications built with cutting-edge technology.',
-      icon: '💻',
+      description: 'Product-ready web, mobile, and immersive experiences built to scale.',
+      icon: '/Icons/Web&app.png',
+      accent: '#EC691F',
+      background: '#000000',
+      textColor: '#FAF9F6',
       path: 'service-detail'
     },
     {
       title: 'Digital Marketing',
-      description: 'Strategic digital marketing campaigns that drive growth and engagement.',
-      icon: '📱',
+      description: 'Lifecycle strategy across performance, content, and automation.',
+      icon: '/Icons/digitalmarketing.png',
+      accent: '#EC691F',
+      background: '#000000',
+      textColor: '#FAF9F6',
       path: 'service-detail'
     },
     {
       title: 'B2B & Custom Solutions',
-      description: 'Tailored business solutions designed to meet your specific needs.',
-      icon: '🚀',
+      description: 'Complex workflows, portals, and bespoke tools for ambitious teams.',
+      icon: '/Icons/b2bsolution.png',
+      accent: '#EC691F',
+      background: '#000000',
+      textColor: '#FAF9F6',
       path: 'service-detail'
     }
   ];

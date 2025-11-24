@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import '@/styles/components/CardNav.css';
 
 const CardNav = ({ items, onNavigate, isOpen, onClose }) => {
@@ -26,7 +26,7 @@ const CardNav = ({ items, onNavigate, isOpen, onClose }) => {
 
   return (
     <div className="card-nav-overlay" onClick={onClose}>
-      <div 
+      <div
         ref={cardRef}
         className="card-nav-container"
         onClick={(e) => e.stopPropagation()}
@@ -41,7 +41,16 @@ const CardNav = ({ items, onNavigate, isOpen, onClose }) => {
                 onClose();
               }}
             >
-              <div className="card-nav-icon">{item.icon}</div>
+              <div className="card-nav-icon">
+                <span
+                  className="card-nav-icon-mask"
+                  style={{
+                    WebkitMaskImage: `url(${item.icon})`,
+                    maskImage: `url(${item.icon})`
+                  }}
+                  aria-hidden="true"
+                />
+              </div>
               <div className="card-nav-content">
                 <h3 className="card-nav-title">{item.title}</h3>
                 <p className="card-nav-description">{item.description}</p>
@@ -56,4 +65,5 @@ const CardNav = ({ items, onNavigate, isOpen, onClose }) => {
 };
 
 export default CardNav;
+
 
