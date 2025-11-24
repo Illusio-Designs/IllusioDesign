@@ -18,8 +18,8 @@
     0px 0%,
     calc(100% - 0px) 0%,
     100% 12px,
-    100% calc(100% - 50px),
-    calc(100% - 50px) 100%,
+    100% calc(100% - 61px),
+    calc(100% - 63px) 100%,
     12px 100%,
     0% calc(100% - 0px)
   );
@@ -54,6 +54,19 @@
   gap: 2rem;
   position: relative;
   z-index: 1;
+}
+
+.header-container::after {
+  content: '';
+  position: absolute;
+  right: -85px;
+  top: 14px;
+  width: 86px;
+  height: 1.5px;
+  background-color: #EC691F;
+  transform: rotate(136deg);
+  transform-origin: left center;
+  z-index: 2;
 }
 
 .logo {
