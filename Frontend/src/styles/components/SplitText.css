@@ -1,0 +1,91 @@
+.split-text {
+  display: inline-block;
+  overflow: hidden;
+}
+
+.split-text-segment {
+  display: inline-block;
+  opacity: 0;
+}
+
+.split-text-segment.whitespace {
+  white-space: pre;
+}
+
+/* Fade Up Animation */
+.split-text[data-animation='fadeUp'] .split-text-segment:not(.whitespace) {
+  animation: fadeUp var(--duration, 0.6s) ease-out forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Fade In Animation */
+.split-text[data-animation='fadeIn'] .split-text-segment:not(.whitespace) {
+  animation: fadeIn var(--duration, 0.6s) ease-out forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Slide Up Animation */
+.split-text[data-animation='slideUp'] .split-text-segment:not(.whitespace) {
+  animation: slideUp var(--duration, 0.6s) ease-out forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Scale Animation */
+.split-text[data-animation='scale'] .split-text-segment:not(.whitespace) {
+  animation: scale var(--duration, 0.6s) ease-out forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes scale {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Character-specific animations (more dramatic) */
+.split-text[data-split-by='chars'] .split-text-segment:not(.whitespace) {
+  display: inline-block;
+}
+
+/* Word-specific styling */
+.split-text[data-split-by='words'] .split-text-segment:not(.whitespace) {
+  display: inline-block;
+  margin-right: 0.25em;
+}
+

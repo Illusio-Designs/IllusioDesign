@@ -1,6 +1,7 @@
 import '@/styles/pages/BlogDetail.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import SplitText from '@/components/SplitText';
 
 export default function BlogDetail({ blogName, navigateTo, currentPage }) {
   return (
@@ -17,7 +18,11 @@ export default function BlogDetail({ blogName, navigateTo, currentPage }) {
         <article className="blog-article">
           <div className="article-header">
             <span className="article-category">Design Trends</span>
-            <h1>Latest Design Trends in 2024</h1>
+            <h1>
+              <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
+                Latest Design Trends in 2024
+              </SplitText>
+            </h1>
             <div className="article-meta">
               <span className="author">By Illusio Designs Team</span>
               <span className="date">November 15, 2024</span>
@@ -36,41 +41,65 @@ export default function BlogDetail({ blogName, navigateTo, currentPage }) {
               that are defining this year.
             </p>
             
-            <h2>1. AI-Powered Design Tools</h2>
+            <h2>
+              <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
+                1. AI-Powered Design Tools
+              </SplitText>
+            </h2>
             <p>
               Artificial intelligence is revolutionizing the design process. From automated layout 
               suggestions to intelligent color palette generation, AI tools are becoming essential 
               companions for designers, helping them work faster and more efficiently.
             </p>
             
-            <h2>2. Immersive 3D Experiences</h2>
+            <h2>
+              <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
+                2. Immersive 3D Experiences
+              </SplitText>
+            </h2>
             <p>
               Three-dimensional design elements are no longer just for gaming. Websites and apps 
               are incorporating 3D graphics, animations, and interactive elements to create more 
               engaging and memorable user experiences.
             </p>
             
-            <h2>3. Sustainable Design Practices</h2>
+            <h2>
+              <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
+                3. Sustainable Design Practices
+              </SplitText>
+            </h2>
             <p>
               Environmental consciousness is influencing design decisions. Designers are focusing 
               on creating lightweight, energy-efficient websites and apps that minimize their 
               carbon footprint while maintaining excellent user experiences.
             </p>
             
-            <h2>4. Bold Typography</h2>
+            <h2>
+              <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
+                4. Bold Typography
+              </SplitText>
+            </h2>
             <p>
               Large, expressive typography is taking center stage. Designers are using oversized 
               fonts and creative text treatments to make strong visual statements and improve 
               content hierarchy.
             </p>
             
-            <h2>5. Micro-Interactions</h2>
+            <h2>
+              <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
+                5. Micro-Interactions
+              </SplitText>
+            </h2>
             <p>
               Small, delightful animations and interactions are enhancing user engagement. These 
               subtle details provide feedback, guide users, and add personality to digital products.
             </p>
             
-            <h2>Conclusion</h2>
+            <h2>
+              <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
+                Conclusion
+              </SplitText>
+            </h2>
             <p>
               Staying current with design trends is essential for creating modern, effective digital 
               experiences. At Illusio Designs, we combine these trends with timeless design principles 
@@ -87,7 +116,11 @@ export default function BlogDetail({ blogName, navigateTo, currentPage }) {
             </div>
             
             <div className="article-share">
-              <h3>Share this article</h3>
+              <h3>
+                <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
+                  Share this article
+                </SplitText>
+              </h3>
               <div className="share-buttons">
                 <button className="share-btn">LinkedIn</button>
                 <button className="share-btn">Twitter</button>
@@ -98,15 +131,27 @@ export default function BlogDetail({ blogName, navigateTo, currentPage }) {
         </article>
         
         <div className="related-posts">
-          <h2>Related Articles</h2>
+          <h2>
+            <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
+              Related Articles
+            </SplitText>
+          </h2>
           <div className="related-grid">
             <div className="related-card">
-              <h3>Building Scalable Web Applications</h3>
+              <h3>
+                <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
+                  Building Scalable Web Applications
+                </SplitText>
+              </h3>
               <p>Learn best practices for creating robust solutions.</p>
               <a href="#blog">Read More →</a>
             </div>
             <div className="related-card">
-              <h3>Digital Marketing Strategies</h3>
+              <h3>
+                <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
+                  Digital Marketing Strategies
+                </SplitText>
+              </h3>
               <p>Effective strategies to boost your online presence.</p>
               <a href="#blog">Read More →</a>
             </div>

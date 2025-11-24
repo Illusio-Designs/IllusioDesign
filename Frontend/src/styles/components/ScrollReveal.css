@@ -1,0 +1,161 @@
+.scroll-reveal {
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+
+/* Fade Up Animation */
+.scroll-reveal-fadeUp {
+  animation: fadeUpReveal var(--duration, 0.6s) ease-out forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes fadeUpReveal {
+  from {
+    opacity: 0;
+    transform: translateY(var(--distance, 50px));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Fade In Animation */
+.scroll-reveal-fadeIn {
+  animation: fadeInReveal var(--duration, 0.6s) ease-out forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes fadeInReveal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Fade Down Animation */
+.scroll-reveal-fadeDown {
+  animation: fadeDownReveal var(--duration, 0.6s) ease-out forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes fadeDownReveal {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--distance, 50px) * -1));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Slide Up Animation */
+.scroll-reveal-slideUp {
+  animation: slideUpReveal var(--duration, 0.6s) ease-out forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes slideUpReveal {
+  from {
+    opacity: 0;
+    transform: translateY(var(--distance, 50px));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Slide Down Animation */
+.scroll-reveal-slideDown {
+  animation: slideDownReveal var(--duration, 0.6s) ease-out forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes slideDownReveal {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--distance, 50px) * -1));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Slide Left Animation */
+.scroll-reveal-slideLeft {
+  animation: slideLeftReveal var(--duration, 0.6s) ease-out forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes slideLeftReveal {
+  from {
+    opacity: 0;
+    transform: translateX(var(--distance, 50px));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Slide Right Animation */
+.scroll-reveal-slideRight {
+  animation: slideRightReveal var(--duration, 0.6s) ease-out forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes slideRightReveal {
+  from {
+    opacity: 0;
+    transform: translateX(calc(var(--distance, 50px) * -1));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Scale Animation */
+.scroll-reveal-scale {
+  animation: scaleReveal var(--duration, 0.6s) ease-out forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes scaleReveal {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Rotate Animation */
+.scroll-reveal-rotate {
+  animation: rotateReveal var(--duration, 0.6s) ease-out forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes rotateReveal {
+  from {
+    opacity: 0;
+    transform: rotate(-10deg) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+/* When animation is paused, keep initial state */
+.scroll-reveal[style*="animation-play-state: paused"] {
+  opacity: 0;
+}
+

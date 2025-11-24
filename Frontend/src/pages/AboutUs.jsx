@@ -1,6 +1,7 @@
 import '@/styles/pages/AboutUs.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import SplitText from '@/components/SplitText';
 
 export default function AboutUs({ navigateTo, currentPage }) {
   return (
@@ -8,7 +9,11 @@ export default function AboutUs({ navigateTo, currentPage }) {
       <Header navigateTo={navigateTo} currentPage={currentPage} />
       <section className="about-section" id="about">
         <div className="about-container">
-          <h2>About Us</h2>
+          <h2>
+            <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
+              About Us
+            </SplitText>
+          </h2>
           <div className="about-content">
             <div className="about-text">
               <p>

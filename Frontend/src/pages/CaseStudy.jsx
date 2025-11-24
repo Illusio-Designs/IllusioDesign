@@ -1,6 +1,7 @@
 import '@/styles/pages/CaseStudy.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import SplitText from '@/components/SplitText';
 
 export default function CaseStudy({ navigateTo, currentPage }) {
   return (
@@ -8,13 +9,21 @@ export default function CaseStudy({ navigateTo, currentPage }) {
       <Header navigateTo={navigateTo} currentPage={currentPage} />
       <section className="case-study-section" id="case-study">
       <div className="case-study-container">
-        <h2>Case Studies</h2>
+        <h2>
+          <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
+            Case Studies
+          </SplitText>
+        </h2>
         <p className="case-study-intro">Real results from real clients. Explore our success stories.</p>
         <div className="case-study-grid">
           <div className="case-study-card" onClick={() => navigateTo('case-study-detail', 'boosting-online-sales-300')} style={{ cursor: 'pointer' }}>
             <div className="case-study-header">
               <span className="case-study-tag">E-Commerce</span>
-              <h3>Boosting Online Sales by 300%</h3>
+              <h3>
+                <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
+                  Boosting Online Sales by 300%
+                </SplitText>
+              </h3>
             </div>
             <div className="case-study-content">
               <p className="case-study-client">Client: Fashion Retail Brand</p>
@@ -42,7 +51,11 @@ export default function CaseStudy({ navigateTo, currentPage }) {
           <div className="case-study-card" onClick={() => navigateTo('case-study-detail', 'streamlining-business-operations')} style={{ cursor: 'pointer' }}>
             <div className="case-study-header">
               <span className="case-study-tag">SaaS Platform</span>
-              <h3>Streamlining Business Operations</h3>
+              <h3>
+                <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
+                  Streamlining Business Operations
+                </SplitText>
+              </h3>
             </div>
             <div className="case-study-content">
               <p className="case-study-client">Client: Tech Startup</p>
@@ -70,7 +83,11 @@ export default function CaseStudy({ navigateTo, currentPage }) {
           <div className="case-study-card" onClick={() => navigateTo('case-study-detail', 'growing-brand-awareness')} style={{ cursor: 'pointer' }}>
             <div className="case-study-header">
               <span className="case-study-tag">Digital Marketing</span>
-              <h3>Growing Brand Awareness</h3>
+              <h3>
+                <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
+                  Growing Brand Awareness
+                </SplitText>
+              </h3>
             </div>
             <div className="case-study-content">
               <p className="case-study-client">Client: Healthcare Provider</p>
