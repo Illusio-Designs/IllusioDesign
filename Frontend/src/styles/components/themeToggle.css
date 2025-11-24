@@ -31,7 +31,7 @@
   position: relative;
   width: 100%;
   height: 100%;
-  background-color: #ffffff;
+  background-color: #FAF9F6;
   border: 2px solid #EC691F;
   border-radius: 50px;
   display: flex;
@@ -76,7 +76,7 @@
 .slider-icon {
   width: 20px;
   height: 20px;
-  color: #ffffff;
+  color: #FAF9F6;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -137,14 +137,14 @@
 }
 
 .theme-toggle-btn.is-light .icon-sun {
-  color: #ffffff;
+  color: #FAF9F6;
   opacity: 1;
   z-index: 2;
 }
 
 /* Dark Mode Colors */
 .theme-toggle-btn.is-dark .icon-moon {
-  color: #ffffff;
+  color: #FAF9F6;
   opacity: 1;
   z-index: 2;
 }
@@ -161,11 +161,11 @@ body {
 
 body.dark-theme {
   background-color: #000000;
-  color: #ffffff;
+  color: #FAF9F6;
 }
 
 body.dark-theme .nav a {
-  color: #ffffff;
+  color: #FAF9F6;
 }
 
 body.dark-theme .nav a:hover {

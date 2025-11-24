@@ -24,7 +24,7 @@
 }
 
 .card-nav-container {
-  background: #ffffff;
+  background: #FAF9F6;
   border-radius: 16px;
   padding: 2rem;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
@@ -62,7 +62,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
-  background: #ffffff;
+  background: #FAF9F6;
   min-height: 150px;
 }
 
@@ -83,7 +83,7 @@
   height: 60px;
   background: linear-gradient(135deg, #EC691F 0%, #ff8c42 100%);
   border-radius: 12px;
-  color: #ffffff;
+  color: #FAF9F6;
   transition: transform 0.3s ease;
 }
 

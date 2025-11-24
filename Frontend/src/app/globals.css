@@ -14,7 +14,7 @@
 }
 
 :root {
-  --bg-color: #ffffff;
+  --bg-color: #FAF9F6;
   --text-color: #000000;
   --accent-color: #EC691F;
   --accent-hover: #d45a15;
@@ -23,7 +23,7 @@
 
 .dark-theme {
   --bg-color: #000000;
-  --text-color: #ffffff;
+  --text-color: #FAF9F6;
   --accent-color: #EC691F;
   --accent-hover: #d45a15;
 }

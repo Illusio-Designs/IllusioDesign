@@ -17,7 +17,7 @@
   font-family: var(--heading-font);
   font-size: 3rem;
   font-weight: 700;
-  color: #ffffff;
+  color: #FAF9F6;
   margin-bottom: 1rem;
   letter-spacing: 1px;
 }
@@ -30,7 +30,7 @@
 }
 
 .footer-cta-button {
-  background: #ffffff;
+  background: #FAF9F6;
   color: #EC691F;
   padding: 1.2rem 3.5rem 1.2rem 2.5rem;
   font-size: 1.1rem;
@@ -58,10 +58,7 @@
 
 /* Main Footer Container */
 .footer-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 3rem 2rem 1rem;
-  background: var(--bg-color);
+  padding: 2rem 5rem 1rem;
 }
 
 .footer-content {
@@ -165,7 +162,7 @@
 
 .social-icons a:hover {
   background-color: #EC691F;
-  color: #ffffff;
+  color: #FAF9F6;
   transform: translateY(-3px);
   box-shadow: 0 5px 15px rgba(236, 105, 31, 0.3);
 }

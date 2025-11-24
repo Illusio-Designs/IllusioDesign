@@ -45,7 +45,7 @@
 
 .highlight-box {
   background: #EC691F;
-  color: #ffffff;
+  color: #FAF9F6;
   display: inline-block;
   position: relative;
 }
@@ -505,7 +505,7 @@
 /* Dark Theme Support */
 
 body.dark-theme .hero-title {
-  color: #ffffff;
+  color: #FAF9F6;
 }
 
 body.dark-theme .service-card {
@@ -514,5 +514,5 @@ body.dark-theme .service-card {
 }
 
 body.dark-theme .service-name {
-  color: #ffffff;
+  color: #FAF9F6;
 }
