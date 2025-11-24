@@ -7,6 +7,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ScrollReveal from '@/components/ScrollReveal';
 import SplitText from '@/components/SplitText';
+import Counter from '@/components/Counter';
 
 const serviceCards = [
   {
@@ -40,16 +41,17 @@ const serviceCards = [
 ];
 
 const caseStudies = [
-  'BOOSTING ONLINE SALES BY 300%',
-  'STREAMLINING BUSINESS OPERATIONS',
-  'GROWING BRAND AWARENESS',
+  'Branding & Design',
+  'Web & App Development',
+  'Digital Marketing',
+  'B2B & Custom Solutions',
 ];
 
 const stats = [
-  { id: 'clients', value: '663', label: 'Happy Clients' },
-  { id: 'experience', value: '19+', label: 'Year Experience' },
-  { id: 'satisfaction', value: '98%', label: 'Client Satisfaction' },
-  { id: 'team', value: '7+', label: 'Team Members' },
+  { id: 'projects', value: 883, label: 'Project Completed', suffix: '' },
+  { id: 'services', value: 19, label: 'Total Top Services', suffix: '+' },
+  { id: 'feedback', value: 98, label: 'Positive Feedback', suffix: '%' },
+  { id: 'experience', value: 7, label: 'Years of Experience', suffix: '+' },
 ];
 
 const faqItems = [
@@ -229,7 +231,7 @@ export default function Home({ navigateTo, currentPage }) {
                 once={false}
               >
                 <div className="case-placeholder"></div>
-                <p>{study}</p>
+                <h3>{study}</h3>
               </ScrollReveal>
             ))}
           </div>
@@ -241,17 +243,19 @@ export default function Home({ navigateTo, currentPage }) {
         <div className="container">
           <div className="stats-grid">
             {stats.map((stat, index) => (
-              <ScrollReveal
-                key={stat.id}
-                as="div"
-                className="stat-item"
-                animation="scale"
-                delay={0.1 + index * 0.05}
-                once={false}
-              >
-                <h3>{stat.value}</h3>
-                <p>{stat.label}</p>
-              </ScrollReveal>
+              <div key={stat.id} className="stat-item">
+                <h3 className="stat-value">
+                  <Counter
+                    value={stat.value}
+                    fontSize={72}
+                    textColor="#EC691F"
+                    fontWeight={700}
+                    gap={4}
+                  />
+                  {stat.suffix && <span className="stat-suffix">{stat.suffix}</span>}
+                </h3>
+                <p className="stat-label">{stat.label}</p>
+              </div>
             ))}
           </div>
         </div>
