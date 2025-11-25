@@ -100,9 +100,21 @@ const topRowTestimonials = testimonials.slice(0, 3);
 const bottomRowTestimonials = testimonials.slice(3, 6);
 
 const blogPosts = [
-  'Latest Design Trends 2024',
-  'Building Scalable Applications',
-  'Digital Marketing Strategies',
+  {
+    id: 'blog-1',
+    date: 'July 14, 2025',
+    title: 'From Logo to Legacy: How Strong Branding Drives Business Growth',
+  },
+  {
+    id: 'blog-2',
+    date: 'July 14, 2025',
+    title: 'Why Your Website Isn\'t Converting And How Smart UI/UX Fixes That',
+  },
+  {
+    id: 'blog-3',
+    date: 'July 14, 2025',
+    title: 'Custom B2B Dashboards: A Game-Changer for Scaling',
+  },
 ];
 
 export default function Home({ navigateTo, currentPage }) {
@@ -404,7 +416,7 @@ export default function Home({ navigateTo, currentPage }) {
           <div className="blog-grid">
             {blogPosts.map((post, index) => (
               <ScrollReveal
-                key={post}
+                key={post.id}
                 as="div"
                 className="blog-card"
                 animation="slideUp"
@@ -412,7 +424,10 @@ export default function Home({ navigateTo, currentPage }) {
                 once={false}
               >
                 <div className="blog-placeholder"></div>
-                <p>{post}</p>
+                <div className="blog-content">
+                  <span className="blog-date">{post.date}</span>
+                  <p className="blog-title">{post.title}</p>
+                </div>
               </ScrollReveal>
             ))}
           </div>
