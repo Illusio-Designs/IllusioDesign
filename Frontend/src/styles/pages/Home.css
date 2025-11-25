@@ -595,6 +595,7 @@
 }
 
 .faq-title {
+  font-size: 70px;
   text-align: left;
 }
 
@@ -1152,7 +1153,7 @@ body.dark-theme .faq-answer p {
 }
 
 body.dark-theme .case-studies-section {
-  background: #1a1a1a;
+  background: #000000;
 }
 
 body.dark-theme .case-study-card {
@@ -1166,7 +1167,7 @@ body.dark-theme .case-study-card h3 {
 }
 
 body.dark-theme .growth-hub-section {
-  background: #1a1a1a;
+  background: #000000;
 }
 
 body.dark-theme .blog-card {
