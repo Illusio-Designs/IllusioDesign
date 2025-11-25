@@ -65,21 +65,39 @@ const faqItems = [
 
 const testimonials = [
   {
-    id: 'john',
-    text: 'Excellent work and professional service. Highly recommended!',
-    client: '- John Doe',
+    id: 'card-1',
+    quote: 'Illusio Designs transformed our brand identity and built a website that truly reflects who we are.',
+    client: 'Rajesh, Founder, Vivera Lights',
   },
   {
-    id: 'jane',
-    text: 'They transformed our vision into reality. Amazing team!',
-    client: '- Jane Smith',
+    id: 'card-2',
+    quote: 'From concept to launch, their team was supportive and creative. Highly recommended.',
+    client: 'Kunal, Director, Gold B2B Pvt.',
   },
   {
-    id: 'mike',
-    text: 'Outstanding results and great communication throughout.',
-    client: '- Mike Johnson',
+    id: 'card-3',
+    quote: 'From concept to launch, their team was supportive and creative. Highly recommended.',
+    client: 'Kunal, Director, Gold B2B Pvt.',
+  },
+  {
+    id: 'card-4',
+    quote: 'Illusio Designs transformed our brand identity and built a website that truly reflects who we are.',
+    client: 'Rajesh, Founder, Vivera Lights',
+  },
+  {
+    id: 'card-5',
+    quote: 'From concept to launch, their team was supportive and creative. Highly recommended.',
+    client: 'Kunal, Director, Gold B2B Pvt.',
+  },
+  {
+    id: 'card-6',
+    quote: 'Illusio Designs transformed our brand identity and built a website that truly reflects who we are.',
+    client: 'Rajesh, Founder, Vivera Lights',
   },
 ];
+
+const topRowTestimonials = testimonials.slice(0, 3);
+const bottomRowTestimonials = testimonials.slice(3, 6);
 
 const blogPosts = [
   'Latest Design Trends 2024',
@@ -89,6 +107,7 @@ const blogPosts = [
 
 export default function Home({ navigateTo, currentPage }) {
   const [isServicesVisible, setIsServicesVisible] = useState(false);
+  const [isTestimonialsHovered, setIsTestimonialsHovered] = useState(false);
   const servicesSectionRef = useRef(null);
 
   useEffect(() => {
@@ -268,7 +287,7 @@ export default function Home({ navigateTo, currentPage }) {
           <div className="faq-wrapper">
             <div className="faq-left">
               <ScrollReveal as="div" animation="fadeUp" once={false}>
-                <h2 className="section-title faq-title">Frequently Asked Topics</h2>
+                <h1 className="section-title faq-title">Frequently Asked Topics</h1>
                 <p className="faq-subtitle">
                   We turn ideas into digital brilliance — here's everything you need to know.
                 </p>
@@ -296,7 +315,11 @@ export default function Home({ navigateTo, currentPage }) {
 
       {/* What Our Clients Say */}
       <section className="testimonials-section">
-        <div className="container">
+        <div
+          className={`container testimonials-container ${isTestimonialsHovered ? 'is-hovered' : ''}`}
+          onMouseEnter={() => setIsTestimonialsHovered(true)}
+          onMouseLeave={() => setIsTestimonialsHovered(false)}
+        >
           <ScrollReveal as="div" animation="fadeUp" once={false}>
             <SplitText
               as="h2"
@@ -310,22 +333,55 @@ export default function Home({ navigateTo, currentPage }) {
               What Our Clients Say
             </SplitText>
           </ScrollReveal>
-          <div className="testimonials-grid">
-            {testimonials.map((testimonial, index) => (
-              <ScrollReveal
-                key={testimonial.id}
-                as="div"
-                className="testimonial-card"
-                animation="fadeUp"
-                delay={0.1 + index * 0.05}
-                once={false}
-              >
-                <div className="rating">⭐⭐⭐⭐⭐</div>
-                <p className="testimonial-text">&quot;{testimonial.text}&quot;</p>
-                <p className="client-name">{testimonial.client}</p>
-              </ScrollReveal>
-            ))}
-          </div>
+
+          {!isTestimonialsHovered ? (
+            <div
+              className="testimonial-static-grid"
+              onMouseEnter={() => setIsTestimonialsHovered(true)}
+            >
+              {testimonials.map((testimonial, index) => (
+                <article key={testimonial.id} className={`testimonial-card static-card-${index + 1}`}>
+                  <div className="rating">⭐⭐⭐⭐⭐</div>
+                  <p className="testimonial-text">&quot;{testimonial.quote}&quot;</p>
+                  <div className="testimonial-signature">
+                    <h1 className="client-name">{testimonial.client}</h1>
+                  </div>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <div
+              className="testimonial-marquee is-active"
+              onMouseLeave={() => setIsTestimonialsHovered(false)}
+            >
+              <div className="marquee-row marquee-row--top">
+                <div className="marquee-track">
+                  {[...topRowTestimonials, ...topRowTestimonials].map((testimonial, index) => (
+                    <article key={`${testimonial.id}-top-${index}`} className="testimonial-card">
+                      <div className="rating">⭐⭐⭐⭐⭐</div>
+                      <p className="testimonial-text">&quot;{testimonial.quote}&quot;</p>
+                      <div className="testimonial-signature">
+                        <h1 className="client-name">{testimonial.client}</h1>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </div>
+              <div className="marquee-row marquee-row--bottom">
+                <div className="marquee-track">
+                  {[...bottomRowTestimonials, ...bottomRowTestimonials].map((testimonial, index) => (
+                    <article key={`${testimonial.id}-bottom-${index}`} className="testimonial-card">
+                      <div className="rating">⭐⭐⭐⭐⭐</div>
+                      <p className="testimonial-text">&quot;{testimonial.quote}&quot;</p>
+                      <div className="testimonial-signature">
+                        <h1 className="client-name">{testimonial.client}</h1>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </section>
 

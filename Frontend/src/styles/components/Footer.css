@@ -145,6 +145,14 @@
   margin: 0;
 }
 
+.footer-info-item p:hover {
+  color: #EC691F;
+}
+
+.footer-info-item a:hover {
+  color: #EC691F;
+}
+
 .social-icons {
   display: flex;
   gap: 1rem;
