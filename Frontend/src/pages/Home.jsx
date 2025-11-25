@@ -55,12 +55,36 @@ const stats = [
 ];
 
 const faqItems = [
-  'What industries do you specialize in?',
-  'Do you provide both design and development services?',
-  'Do you build custom CRM or B2B dashboards?',
-  'How long does a typical project take?',
-  "What's the process to get started?",
-  'Do you offer ongoing support after project delivery?',
+  {
+    id: 'faq-1',
+    question: 'What industries do you specialize in?',
+    answer: 'We work across various industries including e-commerce, healthcare, technology, finance, and B2B services. Our expertise spans from startups to established enterprises, helping businesses of all sizes achieve their digital goals.',
+  },
+  {
+    id: 'faq-2',
+    question: 'Do you provide both design and development services?',
+    answer: 'Yes, we offer comprehensive design and development services under one roof. From initial brand identity and UI/UX design to full-stack development and deployment, we handle every aspect of your digital project.',
+  },
+  {
+    id: 'faq-3',
+    question: 'Do you build custom CRM or B2B dashboards?',
+    answer: 'Absolutely! We specialize in building custom B2B solutions including CRM systems, analytics dashboards, and enterprise applications tailored to your specific business needs and workflows.',
+  },
+  {
+    id: 'faq-4',
+    question: 'How long does a typical project take?',
+    answer: 'Project timelines vary based on scope and complexity. A simple website might take 4-6 weeks, while comprehensive projects with custom development can take 2-4 months. We provide detailed timelines during the initial consultation.',
+  },
+  {
+    id: 'faq-5',
+    question: "What's the process to get started?",
+    answer: 'Our process begins with a discovery call to understand your needs. We then provide a detailed proposal, timeline, and quote. Once approved, we move through design, development, testing, and launch phases with regular check-ins and updates.',
+  },
+  {
+    id: 'faq-6',
+    question: 'Do you offer ongoing support after project delivery?',
+    answer: 'Yes, we offer maintenance and support packages to ensure your digital assets continue to perform optimally. This includes updates, security patches, content changes, and technical support as needed.',
+  },
 ];
 
 const testimonials = [
@@ -120,6 +144,7 @@ const blogPosts = [
 export default function Home({ navigateTo, currentPage }) {
   const [isServicesVisible, setIsServicesVisible] = useState(false);
   const [isTestimonialsHovered, setIsTestimonialsHovered] = useState(false);
+  const [openFaqId, setOpenFaqId] = useState(null);
   const servicesSectionRef = useRef(null);
 
   useEffect(() => {
@@ -309,14 +334,27 @@ export default function Home({ navigateTo, currentPage }) {
               <div className="faq-list">
                 {faqItems.map((item, index) => (
                   <ScrollReveal
-                    key={item}
+                    key={item.id}
                     as="div"
-                    className="faq-item"
+                    className={`faq-item ${openFaqId === item.id ? 'is-open' : ''}`}
                     animation="fadeUp"
                     delay={0.1 + index * 0.05}
                     once={false}
                   >
-                    {item}
+                    <div 
+                      className="faq-question"
+                      onClick={() => setOpenFaqId(openFaqId === item.id ? null : item.id)}
+                    >
+                      <span className="faq-question-text">{item.question}</span>
+                      <span className="faq-icon">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </span>
+                    </div>
+                    <div className="faq-answer">
+                      <p>{item.answer}</p>
+                    </div>
                   </ScrollReveal>
                 ))}
               </div>

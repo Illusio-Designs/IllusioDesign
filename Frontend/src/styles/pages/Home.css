@@ -631,20 +631,72 @@
 
 .faq-item {
   background: #fff;
-  padding: 1rem;
   border: 2px solid #EC691F;
   border-radius: 13px;
-  font-size: 1.1rem;
-  color: #2D2C2B;
-  cursor: pointer;
+  overflow: hidden;
   transition: all 0.3s ease;
   font-weight: 400;
 }
 
 .faq-item:hover {
-  background: #fff8f0;
-  transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(236, 105, 31, 0.1);
+}
+
+.faq-question {
+  padding: 1rem 1.25rem;
+  color: #2D2C2B;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  transition: background-color 0.3s ease;
+  font-size: 1.1rem;
+}
+
+.faq-question:hover {
+  background: #fff8f0;
+}
+
+.faq-question-text {
+  flex: 1;
+  font-weight: 400;
+}
+
+.faq-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #EC691F;
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+}
+
+.faq-item.is-open .faq-icon {
+  transform: rotate(180deg);
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.4s ease;
+  padding: 0 1.25rem;
+  background: #fff;
+}
+
+.faq-item.is-open .faq-answer {
+  max-height: 500px;
+  padding: 0 1.25rem 1.25rem 1.25rem;
+}
+
+.faq-answer p {
+  margin: 0;
+  color: #666;
+  line-height: 1.6;
+  font-size: 1rem;
+  font-weight: 400;
 }
 
 /* Responsive Design */
@@ -672,9 +724,21 @@
     font-size: 1rem;
   }
 
-  .faq-item {
-    padding: 1.25rem 1.5rem;
+  .faq-question {
+    padding: 1rem 1.25rem;
     font-size: 1rem;
+  }
+
+  .faq-answer {
+    padding: 0 1.25rem;
+  }
+
+  .faq-item.is-open .faq-answer {
+    padding: 0 1.25rem 1rem 1.25rem;
+  }
+
+  .faq-answer p {
+    font-size: 0.95rem;
   }
 }
 
@@ -1069,7 +1133,22 @@ body.dark-theme .faq-subtitle {
 body.dark-theme .faq-item {
   background: #000000;
   border-color: #EC691F;
+}
+
+body.dark-theme .faq-question {
   color: #FAF9F6;
+}
+
+body.dark-theme .faq-question:hover {
+  background: rgba(236, 105, 31, 0.1);
+}
+
+body.dark-theme .faq-answer {
+  background: #000000;
+}
+
+body.dark-theme .faq-answer p {
+  color: #ccc;
 }
 
 body.dark-theme .case-studies-section {
