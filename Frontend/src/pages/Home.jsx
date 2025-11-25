@@ -326,7 +326,7 @@ export default function Home({ navigateTo, currentPage }) {
               <ScrollReveal as="div" animation="fadeUp" once={false}>
                 <h1 className="section-title faq-title">Frequently Asked Topics</h1>
                 <p className="faq-subtitle">
-                  We turn ideas into digital brilliance — here's everything you need to know.
+                  We turn ideas into digital brilliance — here&apos;s everything you need to know.
                 </p>
               </ScrollReveal>
             </div>
