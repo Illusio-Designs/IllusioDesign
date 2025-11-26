@@ -19,10 +19,17 @@ export const createContent = async (req, res) => {
       return res.status(400).json({ error: 'Title and body are required' });
     }
     
+    // Handle image if uploaded
+    const imageData = req.file ? {
+      image: req.file.webpPath || `/uploads/images/${req.file.filename}`,
+      imageUrl: `${req.protocol}://${req.get('host')}${req.file.webpPath || `/uploads/images/${req.file.filename}`}`
+    } : {};
+    
     const content = await Content.create({
       title,
       body,
-      published: published || false
+      published: published || false,
+      ...imageData
     });
     
     res.status(201).json({
@@ -38,6 +45,12 @@ export const updateContent = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     const updates = req.body;
+    
+    // Handle image if uploaded
+    if (req.file) {
+      updates.image = req.file.webpPath || `/uploads/images/${req.file.filename}`;
+      updates.imageUrl = `${req.protocol}://${req.get('host')}${req.file.webpPath || `/uploads/images/${req.file.filename}`}`;
+    }
     
     const content = await Content.updateById(id, updates);
     

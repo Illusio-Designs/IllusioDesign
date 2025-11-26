@@ -5,7 +5,7 @@ export const metadata = {
   title: 'Illusio Designs',
   description: 'Creative Design Solutions',
   icons: {
-    icon: '/images/IllusioDesignLogoicon.png',
+    icon: '/images/IllusioDesignLogoicon.webp',
   },
 };
 

@@ -12,28 +12,28 @@ import Counter from '@/components/Counter';
 const serviceCards = [
   {
     id: 'branding',
-    icon: '/Icons/Brandanddesign.png',
+    icon: '/Icons/Brandanddesign.webp',
     alt: 'Branding & Design',
     title: ['Branding &', 'Design'],
     className: 'service-card-1',
   },
   {
     id: 'web-app',
-    icon: '/Icons/Web&app.png',
+    icon: '/Icons/Web&app.webp',
     alt: 'Web & App Development',
     title: ['Web & App', 'Development'],
     className: 'service-card-2',
   },
   {
     id: 'marketing',
-    icon: '/Icons/digitalmarketing.png',
+    icon: '/Icons/digitalmarketing.webp',
     alt: 'Digital Marketing',
     title: ['Digital', 'Marketing'],
     className: 'service-card-3',
   },
   {
     id: 'b2b',
-    icon: '/Icons/b2bsolution.png',
+    icon: '/Icons/b2bsolution.webp',
     alt: 'B2B & Custom Solutions',
     title: ['B2B & Custom', 'Solutions'],
     className: 'service-card-4',
@@ -206,11 +206,11 @@ export default function Home({ navigateTo, currentPage }) {
           </div>
           
           <div className="floating-shapes">
-            <Image src="/Icons/circle.png" alt="" className="shape shape-circle-1" width={70} height={70} />
-            <Image src="/Icons/halfcircle.png" alt="" className="shape shape-half-1" width={60} height={60} />
-            <Image src="/Icons/halfcircle.png" alt="" className="shape shape-half-2" width={60} height={60} />
-            <Image src="/Icons/circle.png" alt="" className="shape shape-circle-2" width={70} height={70} />
-            <Image src="/Icons/square.png" alt="" className="shape shape-square-1" width={50} height={50} />
+            <Image src="/Icons/circle.webp" alt="" className="shape shape-circle-1" width={70} height={70} />
+            <Image src="/Icons/halfcircle.webp" alt="" className="shape shape-half-1" width={60} height={60} />
+            <Image src="/Icons/halfcircle.webp" alt="" className="shape shape-half-2" width={60} height={60} />
+            <Image src="/Icons/circle.webp" alt="" className="shape shape-circle-2" width={70} height={70} />
+            <Image src="/Icons/square.webp" alt="" className="shape shape-square-1" width={50} height={50} />
           </div>
         </ScrollReveal>
       </section>

@@ -25,7 +25,7 @@ export default function Header({ navigateTo, currentPage }) {
     {
       title: 'Branding & Design',
       description: 'Brand identity, guidelines, and creative systems that feel ownable.',
-      icon: '/Icons/Brandanddesign.png',
+      icon: '/Icons/Brandanddesign.webp',
       accent: '#EC691F',
       background: '#000000',
       textColor: '#FAF9F6',
@@ -34,7 +34,7 @@ export default function Header({ navigateTo, currentPage }) {
     {
       title: 'Web & App Development',
       description: 'Product-ready web, mobile, and immersive experiences built to scale.',
-      icon: '/Icons/Web&app.png',
+      icon: '/Icons/Web&app.webp',
       accent: '#EC691F',
       background: '#000000',
       textColor: '#FAF9F6',
@@ -43,7 +43,7 @@ export default function Header({ navigateTo, currentPage }) {
     {
       title: 'Digital Marketing',
       description: 'Lifecycle strategy across performance, content, and automation.',
-      icon: '/Icons/digitalmarketing.png',
+      icon: '/Icons/digitalmarketing.webp',
       accent: '#EC691F',
       background: '#000000',
       textColor: '#FAF9F6',
@@ -52,7 +52,7 @@ export default function Header({ navigateTo, currentPage }) {
     {
       title: 'B2B & Custom Solutions',
       description: 'Complex workflows, portals, and bespoke tools for ambitious teams.',
-      icon: '/Icons/b2bsolution.png',
+      icon: '/Icons/b2bsolution.webp',
       accent: '#EC691F',
       background: '#000000',
       textColor: '#FAF9F6',
@@ -64,7 +64,7 @@ export default function Header({ navigateTo, currentPage }) {
     <header className="header">
       <div className="header-container">
         <div className="logo" onClick={() => navigateTo('home')} style={{ cursor: 'pointer' }}>
-          <img src="/images/IllusioDesignfulllogo.png" alt="Illusio Designs" className="logo-image" />
+          <img src="/images/IllusioDesignfulllogo.webp" alt="Illusio Designs" className="logo-image" />
         </div>
         <nav className="nav">
           <ul>

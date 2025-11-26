@@ -22,7 +22,7 @@ export default function Footer({ navigateTo }) {
           <div className="footer-section footer-brand">
             <div className="footer-logo">
               <img 
-                src="/images/IllusioDesignfulllogo.png" 
+                src="/images/IllusioDesignfulllogo.webp" 
                 alt="Illusio Designs" 
                 className="footer-logo-image"
                 onClick={() => navigateTo && navigateTo('home')}

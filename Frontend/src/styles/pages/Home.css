@@ -888,16 +888,6 @@
   z-index: 2;
 }
 
-.testimonial-marquee::before {
-  left: 0;
-  background: linear-gradient(90deg, #a05a31 0%, rgba(255, 253, 248, 0) 100%);
-}
-
-.testimonial-marquee::after {
-  right: 0;
-  background: linear-gradient(-90deg, #a05a31 0%, rgba(255, 253, 248, 0) 100%);
-}
-
 .marquee-row {
   width: 100%;
   overflow: hidden;
