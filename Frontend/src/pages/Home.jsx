@@ -281,21 +281,23 @@ export default function Home({ navigateTo, currentPage }) {
               Case Studies
             </SplitText>
           </ScrollReveal>
-          <div className="case-studies-grid">
-            {caseStudies.map((study, index) => (
-              <ScrollReveal
-                key={study}
-                as="div"
-                className="case-study-card"
-                animation="slideUp"
-                delay={0.1 + index * 0.05}
-                duration={1.5}
-                once={false}
-              >
-                <div className="case-placeholder"></div>
-                <h3>{study}</h3>
-              </ScrollReveal>
-            ))}
+          <div className="case-studies-slider">
+            <div className="case-studies-track">
+              {/* First set of items */}
+              {caseStudies.map((study, index) => (
+                <div key={`${study}-1`} className="case-study-card">
+                  <div className="case-placeholder"></div>
+                  <h3>{study}</h3>
+                </div>
+              ))}
+              {/* Duplicate set for seamless loop */}
+              {caseStudies.map((study, index) => (
+                <div key={`${study}-2`} className="case-study-card">
+                  <div className="case-placeholder"></div>
+                  <h3>{study}</h3>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
