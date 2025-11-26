@@ -1,106 +1,168 @@
 .career-section {
-  padding: 5rem 2rem;
-  
+  padding: 6rem;
+  position: relative;
 }
 
-.career-container {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.career-container h2 {
-  text-align: center;
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
+.career-section .section-title {
+  font-size: 50px;
+  font-weight: 400;
   color: #EC691F;
-}
-
-.career-intro {
   text-align: center;
-  color: #666;
   margin-bottom: 3rem;
-  font-size: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .job-listings {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 2rem;
 }
 
 .job-card {
-  
+  background: #FAF9F6;
+  border: 2px solid #EC691F;
+  border-radius: 20px;
   padding: 2rem;
-  border-radius: 10px;
-  border-left: 4px solid #ff6b35;
-  transition: transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .job-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(236, 105, 31, 0.15);
 }
 
-.job-card h3 {
-  color: #000000;
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.job-location {
+.job-title {
   color: #EC691F;
-  font-size: 0.9rem;
-  margin-bottom: 1rem;
+  font-size: 40px;
+  font-weight: 400;
+  margin: 0;
 }
 
-.job-card p {
-  color: #666;
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
+.job-description {
+  color: #2D2C2B;
+  font-weight: 300;
+  line-height: 1.8;
+  margin: 0;
+  font-size: 1rem;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.job-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.job-info-button {
+  background: #EC691F;
+  color: #ffffff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: default;
 }
 
 .apply-button {
-  background-color: #ff6b35;
-  color: white;
-  border: none;
-  padding: 0.75rem 2rem;
-  border-radius: 5px;
-  cursor: pointer;
+  background: #ffffff;
+  color: #EC691F;
+  border: 2px solid #EC691F;
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
   font-size: 1rem;
-  transition: background-color 0.3s;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-left: auto;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.apply-button::after {
+  content: '→';
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
 }
 
 .apply-button:hover {
-  background-color: #e55a2b;
+  background: #EC691F;
+  color: #ffffff;
+  transform: translateX(5px);
+}
+
+.apply-button:hover::after {
+  transform: translateX(5px);
+}
+
+.apply-button:hover {
+  background: #d45a15;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(236, 105, 31, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .job-listings {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .career-section .section-title {
+    font-size: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .career-section {
+    padding: 4rem 1rem;
+  }
+
+  .job-listings {
+    grid-template-columns: 1fr;
+  }
+
+  .career-section .section-title {
+    font-size: 32px;
+  }
+
+  .job-card {
+    padding: 1.5rem;
+  }
 }
 
 /* Dark Theme Support */
 body.dark-theme .job-card {
-  background-color: #000000;
-}
-
-body.dark-theme .job-card:hover {
-  background-color: #000000;
+  background: #000000;
   border-color: #EC691F;
 }
 
-body.dark-theme .job-card h3 {
-  color: #FAF9F6;
-}
-
-body.dark-theme .job-location {
+body.dark-theme .job-title {
   color: #EC691F;
 }
 
-body.dark-theme .job-card p {
+body.dark-theme .job-description {
   color: #FAF9F6;
 }
 
 body.dark-theme .apply-button {
-  background-color: #EC691F;
-  color: #FAF9F6;
+  background: #EC691F;
+  color: #ffffff;
 }
 
 body.dark-theme .apply-button:hover {
-  background-color: #d45a15;
+  background: #d45a15;
 }

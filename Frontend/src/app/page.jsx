@@ -14,6 +14,7 @@ import TermsOfService from '@/pages/TermsOfService';
 import ServiceDetail from '@/pages/ServiceDetail';
 import CaseStudyDetail from '@/pages/CaseStudyDetail';
 import BlogDetail from '@/pages/BlogDetail';
+import PositionApply from '@/pages/PositionApply';
 
 export default function Page() {
   const [currentPage, setCurrentPage] = useState('home');
@@ -97,6 +98,8 @@ export default function Page() {
         return <CaseStudyDetail caseStudyName={currentItem} navigateTo={navigateTo} currentPage={currentPage} />;
       case 'blog-detail':
         return <BlogDetail blogName={currentItem} navigateTo={navigateTo} currentPage={currentPage} />;
+      case 'position-apply':
+        return <PositionApply positionId={currentItem} navigateTo={navigateTo} currentPage={currentPage} />;
       default:
         return <Home navigateTo={navigateTo} currentPage={currentPage} />;
     }
