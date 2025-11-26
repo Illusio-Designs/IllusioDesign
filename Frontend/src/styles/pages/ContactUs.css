@@ -1,124 +1,233 @@
 .contact-section {
-  padding: 5rem 2rem;
-  
+  padding: 6rem;
+  position: relative;
+  min-height: 100vh;
 }
 
 .contact-container {
   max-width: 1200px;
   margin: 0 auto;
+  position: relative;
+  z-index: 1;
 }
 
-.contact-container h2 {
-  text-align: center;
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
+.contact-section .section-title {
+  font-size: 50px;
+  font-weight: 400;
   color: #EC691F;
-}
-
-.contact-intro {
   text-align: center;
-  color: #666;
   margin-bottom: 3rem;
-  font-size: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .contact-content {
   display: grid;
-  grid-template-columns: 1fr 1.5fr;
+  grid-template-columns: 0.8fr 1.2fr;
   gap: 3rem;
+  margin-top: 3rem;
+  align-items: stretch;
 }
 
-.contact-info {
+/* Left Side - Orange Message Block */
+.contact-message-block {
+  background: #EC691F;
+  border-radius: 20px;
+  padding: 4rem 3rem;
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: 
+    linear-gradient(rgba(0, 0, 0, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+  background-position: 0 0;
+}
+
+.message-text {
+  position: relative;
+  z-index: 1;
+  color: #ffffff;
+  font-size: 2.5rem;
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: left;
+}
+
+.message-text p {
+  margin: 0;
+  padding: 0.5rem 0;
+}
+
+/* Right Side - Contact Form */
+.contact-form {
+  background: transparent;
+  padding: 0;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
 }
 
-.info-card {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.info-icon {
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
-}
-
-.info-card h3 {
-  color: #EC691F;
-  font-size: 1.2rem;
-  margin-bottom: 0.5rem;
-}
-
-.info-card p {
-  color: #666;
-  line-height: 1.6;
-  margin: 0.3rem 0;
-}
-
-.contact-form {
-  background: white;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+.contact-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  height: 100%;
+  justify-content: space-between;
 }
 
 .form-group {
-  margin-bottom: 1.5rem;
-}
-
-.form-group label {
-  display: block;
-  color: #333;
-  font-weight: 500;
-  margin-bottom: 0.5rem;
+  position: relative;
+  margin: 0;
 }
 
 .form-group input,
-.form-group select,
 .form-group textarea {
   width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 5px;
+  padding: 0.75rem 0;
+  border: none;
+  border-bottom: 2px solid rgba(236, 105, 31, 0.3);
+  background: transparent;
   font-size: 1rem;
   font-family: inherit;
-  transition: border-color 0.3s;
+  color: #2D2C2B;
+  transition: border-color 0.3s ease;
+  outline: none;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #666;
+  font-weight: 400;
 }
 
 .form-group input:focus,
-.form-group select:focus,
 .form-group textarea:focus {
-  outline: none;
-  border-color: #ff6b35;
+  border-bottom-color: #EC691F;
 }
 
 .form-group textarea {
   resize: vertical;
+  min-height: 120px;
+  line-height: 1.6;
 }
 
+/* Submit Button */
 .submit-button {
-  width: 100%;
-  background-color: #ff6b35;
-  color: white;
-  border: none;
-  padding: 1rem;
+  background: #ffffff;
+  color: #EC691F;
+  border: 2px solid #EC691F;
+  padding: 1rem 2rem;
   font-size: 1.1rem;
-  font-weight: 600;
-  border-radius: 5px;
+  font-weight: 500;
+  border-radius: 12px;
   cursor: pointer;
-  transition: background-color 0.3s, transform 0.3s;
+  transition: all 0.3s ease;
+  position: relative;
+  width: 100%;
+  margin-top: 1rem;
+  overflow: hidden;
+}
+
+.submit-button::after {
+  content: '';
+  position: absolute;
+  right: -15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 20px solid #EC691F;
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  z-index: -1;
 }
 
 .submit-button:hover {
-  background-color: #e55a2b;
-  transform: translateY(-2px);
+  background: #EC691F;
+  color: #ffffff;
 }
 
-@media (max-width: 968px) {
+.submit-button:hover::after {
+  border-left-color: #ffffff;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
   .contact-content {
     grid-template-columns: 1fr;
+    gap: 2rem;
   }
+
+  .contact-message-block {
+    min-height: 400px;
+    padding: 3rem 2rem;
+  }
+
+  .message-text {
+    font-size: 2rem;
+  }
+
+  .contact-section .section-title {
+    font-size: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-section {
+    padding: 4rem 1rem;
+  }
+
+  .contact-message-block {
+    min-height: 300px;
+    padding: 2rem 1.5rem;
+  }
+
+  .message-text {
+    font-size: 1.5rem;
+  }
+
+  .contact-form form {
+    gap: 1.5rem;
+  }
+
+  .contact-section .section-title {
+    font-size: 32px;
+  }
+}
+
+/* Dark Theme Support */
+body.dark-theme .contact-message-block {
+  background: #EC691F;
+  background-image: 
+    linear-gradient(rgba(0, 0, 0, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+  background-position: 0 0;
+}
+
+body.dark-theme .form-group input,
+body.dark-theme .form-group textarea {
+  color: #FAF9F6;
+  border-bottom-color: rgba(236, 105, 31, 0.5);
+}
+
+body.dark-theme .form-group input::placeholder,
+body.dark-theme .form-group textarea::placeholder {
+  color: #999;
+}
+
+body.dark-theme .submit-button {
+  background: #000000;
+  border-color: #EC691F;
+  color: #EC691F;
+}
+
+body.dark-theme .submit-button:hover {
+  background: #EC691F;
+  color: #000000;
 }
