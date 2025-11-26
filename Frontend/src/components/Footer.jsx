@@ -7,7 +7,7 @@ export default function Footer({ navigateTo }) {
       {/* CTA Section */}
       <ScrollReveal animation="fadeUp" delay={0.1} duration={1.5}>
         <div className="footer-cta">
-          <div className="footer-cta-content">
+          <div className="footer-cta-content" style={{ position: 'relative', zIndex: 1 }}>
             <h2 className="footer-cta-title">Ready to Start?</h2>
             <p className="footer-cta-subtitle">Let&apos;s craft your next digital success story.</p>
             <button className="footer-cta-button" onClick={() => navigateTo && navigateTo('contact')}>
@@ -21,8 +21,9 @@ export default function Footer({ navigateTo }) {
 
       {/* Main Footer Content */}
       <div className="footer-container">
-        <ScrollReveal animation="fadeUp" delay={0.15} duration={1.5}>
-          <div className="footer-content">
+        <div className="footer-grid-wrapper">
+          <ScrollReveal animation="fadeUp" delay={0.15} duration={1.5}>
+            <div className="footer-content">
             <div className="footer-section footer-brand">
               <div className="footer-logo">
                 <img 
@@ -90,6 +91,7 @@ export default function Footer({ navigateTo }) {
             </div>
           </div>
         </ScrollReveal>
+        </div>
 
         <ScrollReveal animation="fadeUp" delay={0.2} duration={1.0}>
           <div className="footer-bottom">

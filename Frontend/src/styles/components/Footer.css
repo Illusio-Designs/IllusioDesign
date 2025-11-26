@@ -14,6 +14,51 @@
   border-radius: 24px;
   text-align: center;
   box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Broken Grid Pattern Background for CTA */
+.footer-cta::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    /* Vertical lines - some with gaps */
+    linear-gradient(to right, rgba(0, 0, 0, 0.1) 1px, transparent 1px, transparent 50px, rgba(0, 0, 0, 0.1) 51px, transparent 51px, transparent 100px),
+    linear-gradient(to right, transparent 0px, transparent 50px, rgba(0, 0, 0, 0.1) 51px, transparent 51px, transparent 100px, rgba(0, 0, 0, 0.1) 101px, transparent 101px, transparent 150px),
+    linear-gradient(to right, rgba(0, 0, 0, 0.1) 1px, transparent 1px, transparent 50px, rgba(0, 0, 0, 0.1) 51px, transparent 51px, transparent 100px),
+    linear-gradient(to right, transparent 0px, transparent 50px, rgba(0, 0, 0, 0.1) 51px, transparent 51px, transparent 100px, rgba(0, 0, 0, 0.1) 101px, transparent 101px, transparent 150px),
+    /* Horizontal lines - some with gaps */
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 1px, transparent 1px, transparent 50px, rgba(0, 0, 0, 0.1) 51px, transparent 51px, transparent 100px),
+    linear-gradient(to bottom, transparent 0px, transparent 50px, rgba(0, 0, 0, 0.1) 51px, transparent 51px, transparent 100px, rgba(0, 0, 0, 0.1) 101px, transparent 101px, transparent 150px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 1px, transparent 1px, transparent 50px, rgba(0, 0, 0, 0.1) 51px, transparent 51px, transparent 100px),
+    linear-gradient(to bottom, transparent 0px, transparent 50px, rgba(0, 0, 0, 0.1) 51px, transparent 51px, transparent 100px, rgba(0, 0, 0, 0.1) 101px, transparent 101px, transparent 150px);
+  background-size: 
+    150px 100%,
+    150px 100%,
+    150px 100%,
+    150px 100%,
+    100% 150px,
+    100% 150px,
+    100% 150px,
+    100% 150px;
+  background-position: 
+    0 0,
+    150px 0,
+    300px 0,
+    450px 0,
+    0 0,
+    0 150px,
+    0 300px,
+    0 450px;
+  background-repeat: repeat;
+  pointer-events: none;
+  opacity: 0.3;
+  z-index: 0;
 }
 
 
@@ -24,6 +69,8 @@
   color: #FAF9F6;
   margin-bottom: 1rem;
   letter-spacing: 1px;
+  position: relative;
+  z-index: 1;
 }
 
 .footer-cta-subtitle {
@@ -31,6 +78,8 @@
   color: rgba(255, 255, 255, 0.9);
   margin-bottom: 2rem;
   font-weight: 300;
+  position: relative;
+  z-index: 1;
 }
 
 .footer-cta-button {
@@ -44,6 +93,7 @@
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   position: relative;
+  z-index: 1;
   border-radius: 6px 6px 0 6px;
   clip-path: polygon(0% 12px,
       0px 0%,
@@ -62,13 +112,65 @@
 
 /* Main Footer Container */
 .footer-container {
-  padding: 2rem 5rem 1rem;
+  padding: 0;
   max-width: 100%;
   overflow: hidden;
   box-sizing: border-box;
   width: 100%;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  position: relative;
+}
+
+/* Footer Grid Wrapper */
+.footer-grid-wrapper {
+  position: relative;
+  padding: 2rem 5rem 1rem;
+  margin: 0;
+  width: 100%;
+}
+
+/* Broken Grid Pattern Background */
+.footer-grid-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -5rem;
+  right: -5rem;
+  bottom: 0;
+  background-image: 
+    /* Vertical lines - some with gaps */
+    linear-gradient(to right, rgba(0, 0, 0, 0.02) 1px, transparent 1px, transparent 50px, rgba(0, 0, 0, 0.02) 51px, transparent 51px, transparent 100px),
+    linear-gradient(to right, transparent 0px, transparent 50px, rgba(0, 0, 0, 0.02) 51px, transparent 51px, transparent 100px, rgba(0, 0, 0, 0.02) 101px, transparent 101px, transparent 150px),
+    linear-gradient(to right, rgba(0, 0, 0, 0.02) 1px, transparent 1px, transparent 50px, rgba(0, 0, 0, 0.02) 51px, transparent 51px, transparent 100px),
+    linear-gradient(to right, transparent 0px, transparent 50px, rgba(0, 0, 0, 0.02) 51px, transparent 51px, transparent 100px, rgba(0, 0, 0, 0.02) 101px, transparent 101px, transparent 150px),
+    /* Horizontal lines - some with gaps */
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.02) 1px, transparent 1px, transparent 50px, rgba(0, 0, 0, 0.02) 51px, transparent 51px, transparent 100px),
+    linear-gradient(to bottom, transparent 0px, transparent 50px, rgba(0, 0, 0, 0.02) 51px, transparent 51px, transparent 100px, rgba(0, 0, 0, 0.02) 101px, transparent 101px, transparent 150px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.02) 1px, transparent 1px, transparent 50px, rgba(0, 0, 0, 0.02) 51px, transparent 51px, transparent 100px),
+    linear-gradient(to bottom, transparent 0px, transparent 50px, rgba(0, 0, 0, 0.02) 51px, transparent 51px, transparent 100px, rgba(0, 0, 0, 0.02) 101px, transparent 101px, transparent 150px);
+  background-size: 
+    150px 100%,
+    150px 100%,
+    150px 100%,
+    150px 100%,
+    100% 150px,
+    100% 150px,
+    100% 150px,
+    100% 150px;
+  background-position: 
+    0 0,
+    150px 0,
+    300px 0,
+    450px 0,
+    0 0,
+    0 150px,
+    0 300px,
+    0 450px;
+  background-repeat: repeat;
+  pointer-events: none;
+  opacity: 0.9;
+  z-index: 0;
 }
 
 /* Hide scrollbar for webkit browsers */
@@ -83,6 +185,8 @@
   margin-bottom: 3rem;
   width: 100%;
   min-width: 0;
+  position: relative;
+  z-index: 1;
 }
 
 .footer-brand {
@@ -153,6 +257,8 @@
   padding-top: 2rem;
   width: 100%;
   min-width: 0;
+  position: relative;
+  z-index: 1;
 }
 
 .footer-info-item {
@@ -211,8 +317,10 @@
 /* Footer Bottom */
 .footer-bottom {
   border-top: 1px solid rgba(236, 105, 31, 0.3);
-  padding-top: 1.5rem;
-  margin-top: 2rem;
+  padding: 1.5rem 5rem 1rem;
+  margin-top: 0;
+  position: relative;
+  z-index: 1;
 }
 
 .footer-bottom-content {
@@ -245,8 +353,17 @@
 
 /* Responsive Design */
 @media (max-width: 1024px) {
-  .footer-container {
+  .footer-grid-wrapper {
     padding: 2rem 3rem 1rem;
+  }
+
+  .footer-grid-wrapper::before {
+    left: -3rem;
+    right: -3rem;
+  }
+
+  .footer-bottom {
+    padding: 1.5rem 3rem 1rem;
   }
 
   .footer-cta {
@@ -264,8 +381,17 @@
 }
 
 @media (max-width: 768px) {
-  .footer-container {
+  .footer-grid-wrapper {
     padding: 2rem 2rem 1rem;
+  }
+
+  .footer-grid-wrapper::before {
+    left: -2rem;
+    right: -2rem;
+  }
+
+  .footer-bottom {
+    padding: 1.5rem 2rem 1rem;
   }
 
   .footer-cta {
@@ -299,8 +425,17 @@
 }
 
 @media (max-width: 480px) {
-  .footer-container {
+  .footer-grid-wrapper {
     padding: 2rem 1rem 1rem;
+  }
+
+  .footer-grid-wrapper::before {
+    left: -1rem;
+    right: -1rem;
+  }
+
+  .footer-bottom {
+    padding: 1.5rem 1rem 1rem;
   }
 }
 
@@ -313,4 +448,34 @@
     padding: 0.875rem 2rem;
     font-size: 1rem;
   }
+}
+
+/* Dark Theme Support for Grid */
+body.dark-theme .footer-grid-wrapper::before {
+  background-image: 
+    /* Vertical lines - some with gaps */
+    linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px, transparent 50px, rgba(255, 255, 255, 0.05) 51px, transparent 51px, transparent 100px),
+    linear-gradient(to right, transparent 0px, transparent 50px, rgba(255, 255, 255, 0.05) 51px, transparent 51px, transparent 100px, rgba(255, 255, 255, 0.05) 101px, transparent 101px, transparent 150px),
+    linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px, transparent 50px, rgba(255, 255, 255, 0.05) 51px, transparent 51px, transparent 100px),
+    linear-gradient(to right, transparent 0px, transparent 50px, rgba(255, 255, 255, 0.05) 51px, transparent 51px, transparent 100px, rgba(255, 255, 255, 0.05) 101px, transparent 101px, transparent 150px),
+    /* Horizontal lines - some with gaps */
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px, transparent 50px, rgba(255, 255, 255, 0.05) 51px, transparent 51px, transparent 100px),
+    linear-gradient(to bottom, transparent 0px, transparent 50px, rgba(255, 255, 255, 0.05) 51px, transparent 51px, transparent 100px, rgba(255, 255, 255, 0.05) 101px, transparent 101px, transparent 150px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px, transparent 50px, rgba(255, 255, 255, 0.05) 51px, transparent 51px, transparent 100px),
+    linear-gradient(to bottom, transparent 0px, transparent 50px, rgba(255, 255, 255, 0.05) 51px, transparent 51px, transparent 100px, rgba(255, 255, 255, 0.05) 101px, transparent 101px, transparent 150px);
+}
+
+/* Dark Theme Support for CTA Grid */
+body.dark-theme .footer-cta::before {
+  background-image: 
+    /* Vertical lines - some with gaps */
+    linear-gradient(to right, rgba(255, 255, 255, 0.15) 1px, transparent 1px, transparent 50px, rgba(255, 255, 255, 0.15) 51px, transparent 51px, transparent 100px),
+    linear-gradient(to right, transparent 0px, transparent 50px, rgba(255, 255, 255, 0.15) 51px, transparent 51px, transparent 100px, rgba(255, 255, 255, 0.15) 101px, transparent 101px, transparent 150px),
+    linear-gradient(to right, rgba(255, 255, 255, 0.15) 1px, transparent 1px, transparent 50px, rgba(255, 255, 255, 0.15) 51px, transparent 51px, transparent 100px),
+    linear-gradient(to right, transparent 0px, transparent 50px, rgba(255, 255, 255, 0.15) 51px, transparent 51px, transparent 100px, rgba(255, 255, 255, 0.15) 101px, transparent 101px, transparent 150px),
+    /* Horizontal lines - some with gaps */
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.15) 1px, transparent 1px, transparent 50px, rgba(255, 255, 255, 0.15) 51px, transparent 51px, transparent 100px),
+    linear-gradient(to bottom, transparent 0px, transparent 50px, rgba(255, 255, 255, 0.15) 51px, transparent 51px, transparent 100px, rgba(255, 255, 255, 0.15) 101px, transparent 101px, transparent 150px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.15) 1px, transparent 1px, transparent 50px, rgba(255, 255, 255, 0.15) 51px, transparent 51px, transparent 100px),
+    linear-gradient(to bottom, transparent 0px, transparent 50px, rgba(255, 255, 255, 0.15) 51px, transparent 51px, transparent 100px, rgba(255, 255, 255, 0.15) 101px, transparent 101px, transparent 150px);
 }
