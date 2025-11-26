@@ -5,7 +5,12 @@ export const metadata = {
   title: 'Illusio Designs',
   description: 'Creative Design Solutions',
   icons: {
-    icon: '/images/IllusioDesignLogoicon.webp',
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+    ],
+    apple: '/favicon.png',
   },
 };
 
