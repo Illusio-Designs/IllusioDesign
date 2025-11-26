@@ -4,167 +4,112 @@ import Footer from '@/components/Footer';
 import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
 
+const blogPosts = [
+  {
+    id: 'blog-1',
+    date: 'July 14, 2025',
+    title: 'From Logo to Legacy: How Strong Branding Drives Business Growth',
+    slug: 'from-logo-to-legacy-how-strong-branding-drives-business-growth',
+  },
+  {
+    id: 'blog-2',
+    date: 'July 14, 2025',
+    title: 'Why Your Website Isn\'t Converting And How Smart UI/UX Fixes That',
+    slug: 'why-your-website-isnt-converting-and-how-smart-ui-ux-fixes-that',
+  },
+  {
+    id: 'blog-3',
+    date: 'July 14, 2025',
+    title: 'Custom B2B Dashboards: A Game-Changer for Scaling',
+    slug: 'custom-b2b-dashboards-a-game-changer-for-scaling',
+  },
+  {
+    id: 'blog-4',
+    date: 'July 10, 2025',
+    title: 'The Future of Web Design: Trends to Watch in 2025',
+    slug: 'the-future-of-web-design-trends-to-watch-in-2025',
+  },
+  {
+    id: 'blog-5',
+    date: 'July 5, 2025',
+    title: 'Digital Marketing ROI: Measuring Success in the Modern Era',
+    slug: 'digital-marketing-roi-measuring-success-in-the-modern-era',
+  },
+  {
+    id: 'blog-6',
+    date: 'June 28, 2025',
+    title: 'Building Scalable Web Applications: Best Practices',
+    slug: 'building-scalable-web-applications-best-practices',
+  },
+];
+
 export default function BlogDetail({ blogName, navigateTo, currentPage }) {
+  // Find current blog post
+  const currentBlog = blogPosts.find(blog => blog.slug === blogName) || blogPosts[0];
+  
+  // Get related posts (exclude current one)
+  const relatedPosts = blogPosts.filter(blog => blog.slug !== blogName).slice(0, 5);
+
   return (
     <>
       <Header navigateTo={navigateTo} currentPage={currentPage} />
       <section className="blog-detail-section">
         <div className="blog-detail-container">
-          <div className="breadcrumb">
-            <a onClick={() => navigateTo('home')} style={{ cursor: 'pointer' }}>
-              ← Back to Blog
-            </a>
-          </div>
-        
-        <ScrollReveal animation="fadeUp" delay={0.1} duration={1.5}>
-          <article className="blog-article">
-            <div className="article-header">
-              <span className="article-category">Design Trends</span>
-              <h1>
-                <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
-                  Latest Design Trends in 2024
-                </SplitText>
-              </h1>
-              <div className="article-meta">
-                <span className="author">By Illusio Designs Team</span>
-                <span className="date">November 15, 2024</span>
-                <span className="read-time">5 min read</span>
-              </div>
-            </div>
-            
-            <div className="article-image">
-              <div className="placeholder-image">Featured Image</div>
-            </div>
-            
-            <div className="article-content">
-              <p className="lead">
-                The design landscape is constantly evolving, and 2024 brings exciting new trends 
-                that are reshaping how we create digital experiences. Let&apos;s explore the top trends 
-                that are defining this year.
-              </p>
-              
-              <h2>
-                <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
-                  1. AI-Powered Design Tools
-                </SplitText>
-              </h2>
-              <p>
-                Artificial intelligence is revolutionizing the design process. From automated layout 
-                suggestions to intelligent color palette generation, AI tools are becoming essential 
-                companions for designers, helping them work faster and more efficiently.
-              </p>
-              
-              <h2>
-                <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
-                  2. Immersive 3D Experiences
-                </SplitText>
-              </h2>
-              <p>
-                Three-dimensional design elements are no longer just for gaming. Websites and apps 
-                are incorporating 3D graphics, animations, and interactive elements to create more 
-                engaging and memorable user experiences.
-              </p>
-              
-              <h2>
-                <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
-                  3. Sustainable Design Practices
-                </SplitText>
-              </h2>
-              <p>
-                Environmental consciousness is influencing design decisions. Designers are focusing 
-                on creating lightweight, energy-efficient websites and apps that minimize their 
-                carbon footprint while maintaining excellent user experiences.
-              </p>
-              
-              <h2>
-                <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
-                  4. Bold Typography
-                </SplitText>
-              </h2>
-              <p>
-                Large, expressive typography is taking center stage. Designers are using oversized 
-                fonts and creative text treatments to make strong visual statements and improve 
-                content hierarchy.
-              </p>
-              
-              <h2>
-                <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
-                  5. Micro-Interactions
-                </SplitText>
-              </h2>
-              <p>
-                Small, delightful animations and interactions are enhancing user engagement. These 
-                subtle details provide feedback, guide users, and add personality to digital products.
-              </p>
-              
-              <h2>
-                <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
-                  Conclusion
-                </SplitText>
-              </h2>
-              <p>
-                Staying current with design trends is essential for creating modern, effective digital 
-                experiences. At Illusio Designs, we combine these trends with timeless design principles 
-                to create solutions that are both contemporary and enduring.
-              </p>
-            </div>
-            
-            <div className="article-footer">
-              <div className="article-tags">
-                <span className="tag">Design</span>
-                <span className="tag">Trends</span>
-                <span className="tag">2024</span>
-                <span className="tag">UX/UI</span>
-              </div>
-              
-              <div className="article-share">
-                <h3>
-                  <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
-                    Share this article
-                  </SplitText>
-                </h3>
-                <div className="share-buttons">
-                  <button className="share-btn">LinkedIn</button>
-                  <button className="share-btn">Twitter</button>
-                  <button className="share-btn">Facebook</button>
-                </div>
-              </div>
-            </div>
-          </article>
-        </ScrollReveal>
-        
-        <ScrollReveal animation="fadeUp" delay={0.15} duration={1.5}>
-          <div className="related-posts">
-            <h2>
-              <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
-                Related Articles
+          <ScrollReveal as="div" animation="fadeUp" duration={1.5} once={false}>
+            <h1 className="section-title">
+              <SplitText
+                as="span"
+                splitBy="words"
+                animation="fadeUp"
+                delay={0.05}
+                trigger="onScroll"
+                once={false}
+              >
+                {currentBlog.title.split(':')[0]}
               </SplitText>
-            </h2>
-            <div className="related-grid">
-              <div className="related-card">
-                <h3>
-                  <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
-                    Building Scalable Web Applications
-                  </SplitText>
-                </h3>
-                <p>Learn best practices for creating robust solutions.</p>
-                <a href="#blog">Read More →</a>
-              </div>
-              <div className="related-card">
-                <h3>
-                  <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
-                    Digital Marketing Strategies
-                  </SplitText>
-                </h3>
-                <p>Effective strategies to boost your online presence.</p>
-                <a href="#blog">Read More →</a>
-              </div>
+            </h1>
+          </ScrollReveal>
+
+          <div className="blog-detail-layout">
+            {/* Main Content Column */}
+            <div className="blog-main-content">
+              <ScrollReveal as="div" animation="fadeUp" delay={0.1} duration={1.5} once={false}>
+                <div className="blog-image-placeholder"></div>
+                <div className="blog-date">{currentBlog.date}</div>
+                <div className="blog-body-text">
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                  </p>
+                  <p>
+                    Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
+                  </p>
+                  <p>
+                    Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur.
+                  </p>
+                </div>
+              </ScrollReveal>
+            </div>
+
+            {/* Related Articles Column */}
+            <div className="blog-related-articles">
+              <ScrollReveal as="div" animation="fadeUp" delay={0.15} duration={1.5} once={false}>
+                {relatedPosts.map((post, index) => (
+                  <div 
+                    key={post.id} 
+                    className="related-article-card"
+                    onClick={() => navigateTo('blog-detail', post.slug)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <div className="related-article-image"></div>
+                    <div className="related-article-title">{post.title}</div>
+                  </div>
+                ))}
+              </ScrollReveal>
             </div>
           </div>
-        </ScrollReveal>
-      </div>
-    </section>
-    <Footer navigateTo={navigateTo} />
+        </div>
+      </section>
+      <Footer navigateTo={navigateTo} />
     </>
   );
 }

@@ -13,7 +13,7 @@ export default function Header({ navigateTo, currentPage }) {
     
     // Map detail pages to their parent pages
     if (currentPage === 'service-detail') return 'services';
-    if (currentPage === 'case-study-detail') return 'portfolio';
+    if (currentPage === 'case-study-detail') return '';
     if (currentPage === 'blog-detail') return 'blog';
     
     return currentPage;
