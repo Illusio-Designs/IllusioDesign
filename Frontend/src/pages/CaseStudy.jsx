@@ -2,6 +2,7 @@ import '@/styles/pages/CaseStudy.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SplitText from '@/components/SplitText';
+import ScrollReveal from '@/components/ScrollReveal';
 
 export default function CaseStudy({ navigateTo, currentPage }) {
   return (
@@ -9,14 +10,17 @@ export default function CaseStudy({ navigateTo, currentPage }) {
       <Header navigateTo={navigateTo} currentPage={currentPage} />
       <section className="case-study-section" id="case-study">
       <div className="case-study-container">
-        <h2>
-          <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
-            Case Studies
-          </SplitText>
-        </h2>
-        <p className="case-study-intro">Real results from real clients. Explore our success stories.</p>
+        <ScrollReveal animation="fadeUp" delay={0.1} duration={1.5}>
+          <h2>
+            <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
+              Case Studies
+            </SplitText>
+          </h2>
+          <p className="case-study-intro">Real results from real clients. Explore our success stories.</p>
+        </ScrollReveal>
         <div className="case-study-grid">
-          <div className="case-study-card" onClick={() => navigateTo('case-study-detail', 'boosting-online-sales-300')} style={{ cursor: 'pointer' }}>
+          <ScrollReveal animation="fadeUp" delay={0.15} duration={1.5}>
+            <div className="case-study-card" onClick={() => navigateTo('case-study-detail', 'boosting-online-sales-300')} style={{ cursor: 'pointer' }}>
             <div className="case-study-header">
               <span className="case-study-tag">E-Commerce</span>
               <h3>
@@ -47,8 +51,10 @@ export default function CaseStudy({ navigateTo, currentPage }) {
               </div>
             </div>
           </div>
+          </ScrollReveal>
 
-          <div className="case-study-card" onClick={() => navigateTo('case-study-detail', 'streamlining-business-operations')} style={{ cursor: 'pointer' }}>
+          <ScrollReveal animation="fadeUp" delay={0.2} duration={1.5}>
+            <div className="case-study-card" onClick={() => navigateTo('case-study-detail', 'streamlining-business-operations')} style={{ cursor: 'pointer' }}>
             <div className="case-study-header">
               <span className="case-study-tag">SaaS Platform</span>
               <h3>
@@ -79,8 +85,10 @@ export default function CaseStudy({ navigateTo, currentPage }) {
               </div>
             </div>
           </div>
+          </ScrollReveal>
 
-          <div className="case-study-card" onClick={() => navigateTo('case-study-detail', 'growing-brand-awareness')} style={{ cursor: 'pointer' }}>
+          <ScrollReveal animation="fadeUp" delay={0.25} duration={1.5}>
+            <div className="case-study-card" onClick={() => navigateTo('case-study-detail', 'growing-brand-awareness')} style={{ cursor: 'pointer' }}>
             <div className="case-study-header">
               <span className="case-study-tag">Digital Marketing</span>
               <h3>
@@ -111,6 +119,7 @@ export default function CaseStudy({ navigateTo, currentPage }) {
               </div>
             </div>
           </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>

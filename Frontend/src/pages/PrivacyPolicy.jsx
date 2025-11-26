@@ -15,12 +15,12 @@ export default function PrivacyPolicy({ navigateTo, currentPage }) {
             Privacy Policy
           </SplitText>
         </h1>
-        <ScrollReveal animation="fadeUp" delay={0.1} duration={2.0}>
+        <ScrollReveal animation="fadeUp" delay={0.1} duration={1.5}>
           <p className="last-updated">Last Updated: November 15, 2024</p>
         </ScrollReveal>
         
         <div className="privacy-content">
-          <ScrollReveal animation="fadeUp" delay={0.1} duration={2.0}>
+          <ScrollReveal animation="fadeUp" delay={0.1} duration={1.5}>
             <div className="privacy-block">
               <h3>
                 <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
@@ -39,7 +39,7 @@ export default function PrivacyPolicy({ navigateTo, currentPage }) {
             </div>
           </ScrollReveal>
           
-          <ScrollReveal animation="fadeUp" delay={0.15} duration={2.0}>
+          <ScrollReveal animation="fadeUp" delay={0.15} duration={1.5}>
             <div className="privacy-block">
               <h3>
                 <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
@@ -52,7 +52,7 @@ export default function PrivacyPolicy({ navigateTo, currentPage }) {
             </div>
           </ScrollReveal>
           
-          <ScrollReveal animation="fadeUp" delay={0.2} duration={2.0}>
+          <ScrollReveal animation="fadeUp" delay={0.2} duration={1.5}>
             <div className="privacy-block">
               <h3>
                 <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
@@ -65,7 +65,7 @@ export default function PrivacyPolicy({ navigateTo, currentPage }) {
             </div>
           </ScrollReveal>
           
-          <ScrollReveal animation="fadeUp" delay={0.25} duration={2.0}>
+          <ScrollReveal animation="fadeUp" delay={0.25} duration={1.5}>
             <div className="privacy-block">
               <h3>
                 <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">

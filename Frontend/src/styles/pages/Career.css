@@ -42,13 +42,13 @@
 }
 
 .job-card h3 {
-  color: #333;
+  color: #000000;
   font-size: 1.5rem;
   margin-bottom: 0.5rem;
 }
 
 .job-location {
-  color: #ff6b35;
+  color: #EC691F;
   font-size: 0.9rem;
   margin-bottom: 1rem;
 }
@@ -72,4 +72,35 @@
 
 .apply-button:hover {
   background-color: #e55a2b;
+}
+
+/* Dark Theme Support */
+body.dark-theme .job-card {
+  background-color: #000000;
+}
+
+body.dark-theme .job-card:hover {
+  background-color: #000000;
+  border-color: #EC691F;
+}
+
+body.dark-theme .job-card h3 {
+  color: #FAF9F6;
+}
+
+body.dark-theme .job-location {
+  color: #EC691F;
+}
+
+body.dark-theme .job-card p {
+  color: #FAF9F6;
+}
+
+body.dark-theme .apply-button {
+  background-color: #EC691F;
+  color: #FAF9F6;
+}
+
+body.dark-theme .apply-button:hover {
+  background-color: #d45a15;
 }

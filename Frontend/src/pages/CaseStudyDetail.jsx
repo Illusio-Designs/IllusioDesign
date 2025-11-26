@@ -2,6 +2,7 @@ import '@/styles/pages/CaseStudyDetail.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SplitText from '@/components/SplitText';
+import ScrollReveal from '@/components/ScrollReveal';
 
 export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage }) {
   return (
@@ -15,123 +16,135 @@ export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage
             </a>
           </div>
         
-        <div className="case-study-hero">
-          <span className="case-study-category">E-Commerce</span>
-          <h1>
-            <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
-              Boosting Online Sales by 300%
-            </SplitText>
-          </h1>
-          <p className="case-study-subtitle">Fashion Retail Brand</p>
-        </div>
+        <ScrollReveal animation="fadeUp" delay={0.1} duration={1.5}>
+          <div className="case-study-hero">
+            <span className="case-study-category">E-Commerce</span>
+            <h1>
+              <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
+                Boosting Online Sales by 300%
+              </SplitText>
+            </h1>
+            <p className="case-study-subtitle">Fashion Retail Brand</p>
+          </div>
+        </ScrollReveal>
         
-        <div className="case-study-overview">
-          <div className="overview-item">
-            <h3>
-              <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
-                Client
-              </SplitText>
-            </h3>
-            <p>Fashion Retail Brand</p>
-          </div>
-          <div className="overview-item">
-            <h3>
-              <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
-                Industry
-              </SplitText>
-            </h3>
-            <p>E-Commerce</p>
-          </div>
-          <div className="overview-item">
-            <h3>
-              <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
-                Duration
-              </SplitText>
-            </h3>
-            <p>6 Months</p>
-          </div>
-          <div className="overview-item">
-            <h3>
-              <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
-                Services
-              </SplitText>
-            </h3>
-            <p>Design, Development</p>
-          </div>
-        </div>
-        
-        <div className="case-study-content">
-          <div className="content-section">
-            <h2>
-              <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
-                The Challenge
-              </SplitText>
-            </h2>
-            <p>
-              The client was facing declining online sales and high cart abandonment rates. 
-              Their existing e-commerce platform had poor user experience, slow loading times, 
-              and a complicated checkout process that was driving customers away.
-            </p>
-          </div>
-          
-          <div className="content-section">
-            <h2>
-              <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
-                Our Solution
-              </SplitText>
-            </h2>
-            <p>
-              We conducted a comprehensive UX audit and redesigned the entire e-commerce platform 
-              with a focus on user experience and conversion optimization. Key improvements included:
-            </p>
-            <ul>
-              <li>Streamlined checkout process reducing steps from 5 to 2</li>
-              <li>Improved product discovery with advanced filtering and search</li>
-              <li>Mobile-first responsive design</li>
-              <li>Performance optimization reducing page load time by 60%</li>
-              <li>Personalized product recommendations</li>
-            </ul>
-          </div>
-          
-          <div className="content-section">
-            <h2>
-              <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
-                The Results
-              </SplitText>
-            </h2>
-            <div className="results-grid">
-              <div className="result-card">
-                <span className="result-number">300%</span>
-                <span className="result-label">Increase in Sales</span>
-              </div>
-              <div className="result-card">
-                <span className="result-number">45%</span>
-                <span className="result-label">Conversion Rate</span>
-              </div>
-              <div className="result-card">
-                <span className="result-number">2.5x</span>
-                <span className="result-label">User Engagement</span>
-              </div>
-              <div className="result-card">
-                <span className="result-number">60%</span>
-                <span className="result-label">Faster Load Time</span>
-              </div>
+        <ScrollReveal animation="fadeUp" delay={0.15} duration={1.5}>
+          <div className="case-study-overview">
+            <div className="overview-item">
+              <h3>
+                <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
+                  Client
+                </SplitText>
+              </h3>
+              <p>Fashion Retail Brand</p>
+            </div>
+            <div className="overview-item">
+              <h3>
+                <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
+                  Industry
+                </SplitText>
+              </h3>
+              <p>E-Commerce</p>
+            </div>
+            <div className="overview-item">
+              <h3>
+                <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
+                  Duration
+                </SplitText>
+              </h3>
+              <p>6 Months</p>
+            </div>
+            <div className="overview-item">
+              <h3>
+                <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
+                  Services
+                </SplitText>
+              </h3>
+              <p>Design, Development</p>
             </div>
           </div>
+        </ScrollReveal>
+        
+        <div className="case-study-content">
+          <ScrollReveal animation="fadeUp" delay={0.2} duration={1.5}>
+            <div className="content-section">
+              <h2>
+                <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
+                  The Challenge
+                </SplitText>
+              </h2>
+              <p>
+                The client was facing declining online sales and high cart abandonment rates. 
+                Their existing e-commerce platform had poor user experience, slow loading times, 
+                and a complicated checkout process that was driving customers away.
+              </p>
+            </div>
+          </ScrollReveal>
           
-          <div className="content-section">
-            <h2>
-              <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
-                Client Testimonial
-              </SplitText>
-            </h2>
-            <blockquote>
-              &quot;Working with Illusio Designs transformed our business. The new platform not only 
-              looks amazing but has significantly improved our sales and customer satisfaction. 
-              Their team was professional, responsive, and delivered beyond our expectations.&quot;
-              <cite>— CEO, Fashion Retail Brand</cite>
-            </blockquote>
-          </div>
+          <ScrollReveal animation="fadeUp" delay={0.25} duration={1.5}>
+            <div className="content-section">
+              <h2>
+                <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
+                  Our Solution
+                </SplitText>
+              </h2>
+              <p>
+                We conducted a comprehensive UX audit and redesigned the entire e-commerce platform 
+                with a focus on user experience and conversion optimization. Key improvements included:
+              </p>
+              <ul>
+                <li>Streamlined checkout process reducing steps from 5 to 2</li>
+                <li>Improved product discovery with advanced filtering and search</li>
+                <li>Mobile-first responsive design</li>
+                <li>Performance optimization reducing page load time by 60%</li>
+                <li>Personalized product recommendations</li>
+              </ul>
+            </div>
+          </ScrollReveal>
+          
+          <ScrollReveal animation="fadeUp" delay={0.3} duration={1.5}>
+            <div className="content-section">
+              <h2>
+                <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
+                  The Results
+                </SplitText>
+              </h2>
+              <div className="results-grid">
+                <div className="result-card">
+                  <span className="result-number">300%</span>
+                  <span className="result-label">Increase in Sales</span>
+                </div>
+                <div className="result-card">
+                  <span className="result-number">45%</span>
+                  <span className="result-label">Conversion Rate</span>
+                </div>
+                <div className="result-card">
+                  <span className="result-number">2.5x</span>
+                  <span className="result-label">User Engagement</span>
+                </div>
+                <div className="result-card">
+                  <span className="result-number">60%</span>
+                  <span className="result-label">Faster Load Time</span>
+                </div>
+              </div>
+            </div>
+          </ScrollReveal>
+          
+          <ScrollReveal animation="fadeUp" delay={0.35} duration={1.5}>
+            <div className="content-section">
+              <h2>
+                <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
+                  Client Testimonial
+                </SplitText>
+              </h2>
+              <blockquote>
+                &quot;Working with Illusio Designs transformed our business. The new platform not only 
+                looks amazing but has significantly improved our sales and customer satisfaction. 
+                Their team was professional, responsive, and delivered beyond our expectations.&quot;
+                <cite>— CEO, Fashion Retail Brand</cite>
+              </blockquote>
+            </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>

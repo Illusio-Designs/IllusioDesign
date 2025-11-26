@@ -1,15 +1,19 @@
 .footer {
   margin-top: auto;
   background: var(--bg-color);
+  overflow-x: hidden;
+  width: 100%;
 }
 
 /* CTA Section */
 .footer-cta {
   background: linear-gradient(135deg, #EC691F 0%, #f07a35 100%);
   padding: 2rem;
-  margin: 4rem 12rem;
+  margin: 4rem auto;
+  max-width: calc(100% - 24rem);
   border-radius: 24px;
   text-align: center;
+  box-sizing: border-box;
 }
 
 
@@ -59,6 +63,17 @@
 /* Main Footer Container */
 .footer-container {
   padding: 2rem 5rem 1rem;
+  max-width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  width: 100%;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+/* Hide scrollbar for webkit browsers */
+.footer-container::-webkit-scrollbar {
+  display: none;
 }
 
 .footer-content {
@@ -66,6 +81,8 @@
   grid-template-columns: 2fr 1fr 1fr;
   gap: 3rem;
   margin-bottom: 3rem;
+  width: 100%;
+  min-width: 0;
 }
 
 .footer-brand {
@@ -81,6 +98,11 @@
 .footer-logo-image {
   height: 60px;
   width: auto;
+}
+
+.footer-section {
+  min-width: 0;
+  overflow: hidden;
 }
 
 .footer-section h3 {
@@ -114,6 +136,8 @@
   text-decoration: none;
   transition: color 0.3s;
   font-size: 0.95rem;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .footer-section a:hover {
@@ -127,6 +151,13 @@
   gap: 2rem;
   margin-bottom: 3rem;
   padding-top: 2rem;
+  width: 100%;
+  min-width: 0;
+}
+
+.footer-info-item {
+  min-width: 0;
+  overflow: hidden;
 }
 
 .footer-info-item h3 {
@@ -143,6 +174,8 @@
   font-size: 0.9rem;
   line-height: 1.8;
   margin: 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .footer-info-item p:hover {
@@ -195,6 +228,8 @@
   color: var(--text-color);
   font-size: 0.85rem;
   opacity: 0.8;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .footer-bottom a {
@@ -210,6 +245,15 @@
 
 /* Responsive Design */
 @media (max-width: 1024px) {
+  .footer-container {
+    padding: 2rem 3rem 1rem;
+  }
+
+  .footer-cta {
+    max-width: calc(100% - 4rem);
+    margin: 4rem 2rem;
+  }
+
   .footer-content {
     grid-template-columns: 1.5fr 1fr 1fr;
   }
@@ -220,9 +264,14 @@
 }
 
 @media (max-width: 768px) {
+  .footer-container {
+    padding: 2rem 2rem 1rem;
+  }
+
   .footer-cta {
     margin: 2rem 1rem 0;
     padding: 3rem 1.5rem;
+    max-width: calc(100% - 2rem);
   }
 
   .footer-cta-title {
@@ -246,6 +295,12 @@
   .footer-bottom-content {
     flex-direction: column;
     text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-container {
+    padding: 2rem 1rem 1rem;
   }
 }
 

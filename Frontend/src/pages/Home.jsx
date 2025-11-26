@@ -8,6 +8,7 @@ import Footer from '@/components/Footer';
 import ScrollReveal from '@/components/ScrollReveal';
 import SplitText from '@/components/SplitText';
 import Counter from '@/components/Counter';
+import { BackgroundRippleEffect } from '@/components/ui/background-ripple-effect';
 
 const serviceCards = [
   {
@@ -171,11 +172,13 @@ export default function Home({ navigateTo, currentPage }) {
 
   return (
     <>
-      <Header navigateTo={navigateTo} currentPage={currentPage} />
-      
-      {/* Hero Section */}
-      <section className="hero-section">
-        <ScrollReveal className="hero-container" animation="fadeUp" distance={80} once={false}>
+      <div className="hero-background-wrapper">
+        <BackgroundRippleEffect />
+        <Header navigateTo={navigateTo} currentPage={currentPage} />
+        
+        {/* Hero Section */}
+        <section className="hero-section">
+          <ScrollReveal className="hero-container" animation="fadeUp" distance={80} duration={1.5} once={false}>
           <div className="hero-content">
             <h1 className="hero-title">
               <span className="title-line">
@@ -206,19 +209,20 @@ export default function Home({ navigateTo, currentPage }) {
           </div>
           
           <div className="floating-shapes">
-            <Image src="/Icons/circle.webp" alt="" className="shape shape-circle-1" width={70} height={70} />
-            <Image src="/Icons/halfcircle.webp" alt="" className="shape shape-half-1" width={60} height={60} />
-            <Image src="/Icons/halfcircle.webp" alt="" className="shape shape-half-2" width={60} height={60} />
-            <Image src="/Icons/circle.webp" alt="" className="shape shape-circle-2" width={70} height={70} />
-            <Image src="/Icons/square.webp" alt="" className="shape shape-square-1" width={50} height={50} />
+            <Image src="/Icons/circle.webp" alt="" className="shape shape-circle-1" width={55} height={55} />
+            <Image src="/Icons/halfcircle.webp" alt="" className="shape shape-half-1" width={55} height={55} />
+            <Image src="/Icons/halfcircle.webp" alt="" className="shape shape-half-2" width={55} height={55} />
+            <Image src="/Icons/circle.webp" alt="" className="shape shape-circle-2" width={55} height={55} />
+            <Image src="/Icons/square.webp" alt="" className="shape shape-square-1" width={55} height={55} />
           </div>
         </ScrollReveal>
       </section>
+      </div>
 
       {/* Services We Offer */}
       <section ref={servicesSectionRef} className="services-offer-section">
         <div className="services-container">
-          <ScrollReveal as="div" className="services-title-wrapper" animation="fadeUp" delay={0.1} once={false}>
+          <ScrollReveal as="div" className="services-title-wrapper" animation="fadeUp" delay={0.1} duration={1.5} once={false}>
             <h2 className="section-title services-title">
               <SplitText
                 as="span"
@@ -264,7 +268,7 @@ export default function Home({ navigateTo, currentPage }) {
       {/* Case Studies */}
       <section className="case-studies-section">
         <div className="container">
-          <ScrollReveal as="div" animation="fadeUp" once={false}>
+          <ScrollReveal as="div" animation="fadeUp" duration={1.5} once={false}>
             <SplitText
               as="h2"
               className="section-title"
@@ -285,6 +289,7 @@ export default function Home({ navigateTo, currentPage }) {
                 className="case-study-card"
                 animation="slideUp"
                 delay={0.1 + index * 0.05}
+                duration={1.5}
                 once={false}
               >
                 <div className="case-placeholder"></div>
@@ -300,19 +305,27 @@ export default function Home({ navigateTo, currentPage }) {
         <div className="container">
           <div className="stats-grid">
             {stats.map((stat, index) => (
-              <div key={stat.id} className="stat-item">
-                <h3 className="stat-value">
-                  <Counter
-                    value={stat.value}
-                    fontSize={72}
-                    textColor="#EC691F"
-                    fontWeight={700}
-                    gap={4}
-                  />
-                  {stat.suffix && <span className="stat-suffix">{stat.suffix}</span>}
-                </h3>
-                <p className="stat-label">{stat.label}</p>
-              </div>
+              <ScrollReveal
+                key={stat.id}
+                animation="fadeUp"
+                delay={0.1 + index * 0.05}
+                duration={1.5}
+                once={false}
+              >
+                <div className="stat-item">
+                  <h3 className="stat-value">
+                    <Counter
+                      value={stat.value}
+                      fontSize={72}
+                      textColor="#EC691F"
+                      fontWeight={700}
+                      gap={4}
+                    />
+                    {stat.suffix && <span className="stat-suffix">{stat.suffix}</span>}
+                  </h3>
+                  <p className="stat-label">{stat.label}</p>
+                </div>
+              </ScrollReveal>
             ))}
           </div>
         </div>
@@ -323,7 +336,7 @@ export default function Home({ navigateTo, currentPage }) {
         <div className="container">
           <div className="faq-wrapper">
             <div className="faq-left">
-              <ScrollReveal as="div" animation="fadeUp" once={false}>
+              <ScrollReveal as="div" animation="fadeUp" duration={1.5} once={false}>
                 <h1 className="section-title faq-title">Frequently Asked Topics</h1>
                 <p className="faq-subtitle">
                   We turn ideas into digital brilliance — here&apos;s everything you need to know.
@@ -339,6 +352,7 @@ export default function Home({ navigateTo, currentPage }) {
                     className={`faq-item ${openFaqId === item.id ? 'is-open' : ''}`}
                     animation="fadeUp"
                     delay={0.1 + index * 0.05}
+                    duration={1.5}
                     once={false}
                   >
                     <div 
@@ -370,7 +384,7 @@ export default function Home({ navigateTo, currentPage }) {
           onMouseEnter={() => setIsTestimonialsHovered(true)}
           onMouseLeave={() => setIsTestimonialsHovered(false)}
         >
-          <ScrollReveal as="div" animation="fadeUp" once={false}>
+          <ScrollReveal as="div" animation="fadeUp" duration={1.5} once={false}>
             <SplitText
               as="h2"
               className="section-title"
@@ -438,7 +452,7 @@ export default function Home({ navigateTo, currentPage }) {
       {/* Digital Growth Hub */}
       <section className="growth-hub-section">
         <div className="container">
-          <ScrollReveal as="div" animation="fadeUp" once={false}>
+          <ScrollReveal as="div" animation="fadeUp" duration={1.5} once={false}>
             <SplitText
               as="h2"
               className="section-title"
@@ -459,6 +473,7 @@ export default function Home({ navigateTo, currentPage }) {
                 className="blog-card"
                 animation="slideUp"
                 delay={0.1 + index * 0.05}
+                duration={1.5}
                 once={false}
               >
                 <div className="blog-placeholder"></div>
