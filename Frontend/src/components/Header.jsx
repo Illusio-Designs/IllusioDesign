@@ -15,6 +15,7 @@ export default function Header({ navigateTo, currentPage }) {
     if (currentPage === 'service-detail') return 'services';
     if (currentPage === 'case-study-detail') return '';
     if (currentPage === 'blog-detail') return 'blog';
+    if (currentPage === 'position-apply') return 'career';
     
     return currentPage;
   };

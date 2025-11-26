@@ -46,6 +46,7 @@ export default function PositionApply({ positionId, navigateTo, currentPage }) {
   });
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const job = jobDetails[positionId] || jobDetails['graphic-designer'];
 
@@ -113,6 +114,14 @@ export default function PositionApply({ positionId, navigateTo, currentPage }) {
       // Handle form submission here
       console.log('Form submitted:', formData);
       // You can add API call here
+      
+      // Show success message
+      setIsSubmitted(true);
+      
+      // Redirect to career page after 2 seconds
+      setTimeout(() => {
+        navigateTo('career');
+      }, 2000);
     } else {
       // Mark all fields as touched to show errors
       setTouched({
@@ -183,8 +192,15 @@ export default function PositionApply({ positionId, navigateTo, currentPage }) {
 
             {/* Right Side - Application Form */}
             <div className="application-form-section">
-              <ScrollReveal as="div" animation="fadeUp" delay={0.15} duration={1.5} once={false}>
-                <form className="application-form" onSubmit={handleSubmit}>
+              {isSubmitted ? (
+                <div className="success-message">
+                  <div className="success-icon">✓</div>
+                  <h2>Your application is successfully applied!</h2>
+                  <p>We will review your application and get back to you soon.</p>
+                </div>
+              ) : (
+                <ScrollReveal as="div" animation="fadeUp" delay={0.15} duration={1.5} once={false}>
+                  <form className="application-form" onSubmit={handleSubmit}>
                   <div className="form-group">
                     <input
                       type="text"
@@ -285,6 +301,7 @@ export default function PositionApply({ positionId, navigateTo, currentPage }) {
                   </button>
                 </form>
               </ScrollReveal>
+              )}
             </div>
           </div>
         </div>
