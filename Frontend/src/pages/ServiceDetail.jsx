@@ -3,234 +3,315 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
+import { useEffect } from 'react';
+
+const serviceData = {
+  'branding': {
+    title: ['Carve Your Brand\'s', 'Iconic Mark.'],
+    processTitle: 'Where Identity Begins.',
+    layoutType: 'branding',
+    description: [
+      'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text.',
+      'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.'
+    ],
+    processSteps: [
+      { number: 1, title: 'Understand the Brand', position: 'top-left' },
+      { number: 2, title: 'Research & Inspiration', position: 'top-right' },
+      { number: 3, title: 'Concept & Sketching', position: 'middle-left' },
+      { number: 4, title: 'Digital Drafting', position: 'middle-right' },
+      { number: 5, title: 'Typography & Color', position: 'bottom-left' },
+      { number: 6, title: 'Review & Feedback', position: 'bottom-right' },
+    ],
+  },
+  'web-app': {
+    title: ['Shape Your Brand,', 'Stand Out!'],
+    processTitle: 'Timeless Brand Identity.',
+    layoutType: 'web-app',
+    description: [
+      'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text.',
+      'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.'
+    ],
+    processSteps: [
+      { number: 1, title: 'Discovery & Research', position: 'top-right' },
+      { number: 2, title: 'Strategy & Positioning', position: 'middle-right' },
+      { number: 3, title: 'Visual Direction', position: 'middle-left' },
+      { number: 4, title: 'Identity Design', position: 'bottom-left' },
+      { number: 5, title: 'Review & Feedback', position: 'bottom-right' },
+      { number: 6, title: 'Guidelines & Delivery', position: 'middle-bottom' },
+    ],
+  },
+  'marketing': {
+    title: ['Your Product, Our', 'Stunning Wrap!'],
+    processTitle: 'Packaging That Speaks.',
+    layoutType: 'marketing',
+    description: [
+      'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text.',
+      'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.'
+    ],
+    processSteps: [
+      { number: 1, title: 'Research & Understanding', position: 'top-right' },
+      { number: 2, title: 'Concept Development', position: 'middle-right' },
+      { number: 3, title: 'Design & Visualization', position: 'middle-left' },
+      { number: 4, title: 'Refine & Deliver', position: 'bottom-left' },
+      { number: 5, title: 'Final Handover', position: 'bottom-center' },
+      { number: 6, title: 'Review & Feedback', position: 'bottom-right' },
+    ],
+  },
+  'b2b': {
+    title: ['Spark Your Digital', 'Presence!'],
+    processTitle: 'Unified Digital Journeys.',
+    layoutType: 'b2b',
+    description: [
+      'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text.',
+      'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.'
+    ],
+    processSteps: [
+      { number: 1, title: 'Discovery & Research', position: 'top-left' },
+      { number: 2, title: 'Frame & Design Pulse', position: 'top-right' },
+      { number: 3, title: 'UI & Visual Design', position: 'middle-left' },
+      { number: 4, title: 'Proto & UX Design', position: 'middle-right' },
+      { number: 5, title: 'Final Handover', position: 'bottom-left' },
+      { number: 6, title: 'Review & Feedback', position: 'bottom-right' },
+    ],
+  },
+  'design': {
+    title: ['Carve Your Brand\'s', 'Iconic Mark.'],
+    processTitle: 'Where Identity Begins.',
+    layoutType: 'branding',
+    description: [
+      'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text.',
+      'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.'
+    ],
+    processSteps: [
+      { number: 1, title: 'Understand the Brand', position: 'top-left' },
+      { number: 2, title: 'Research & Inspiration', position: 'top-right' },
+      { number: 3, title: 'Concept & Sketching', position: 'middle-left' },
+      { number: 4, title: 'Digital Drafting', position: 'middle-right' },
+      { number: 5, title: 'Typography & Color', position: 'bottom-left' },
+      { number: 6, title: 'Review & Feedback', position: 'bottom-right' },
+    ],
+  },
+  'development': {
+    title: ['Shape Your Brand,', 'Stand Out!'],
+    processTitle: 'Timeless Brand Identity.',
+    layoutType: 'web-app',
+    description: [
+      'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text.',
+      'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.'
+    ],
+    processSteps: [
+      { number: 1, title: 'Discovery & Research', position: 'top-right' },
+      { number: 2, title: 'Strategy & Positioning', position: 'middle-right' },
+      { number: 3, title: 'Visual Direction', position: 'middle-left' },
+      { number: 4, title: 'Identity Design', position: 'bottom-left' },
+      { number: 5, title: 'Review & Feedback', position: 'bottom-right' },
+      { number: 6, title: 'Guidelines & Delivery', position: 'middle-bottom' },
+    ],
+  },
+  'brand-identity': {
+    title: ['Carve Your Brand\'s', 'Iconic Mark.'],
+    processTitle: 'Where Identity Begins.',
+    layoutType: 'branding',
+    description: [
+      'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text.',
+      'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.'
+    ],
+    processSteps: [
+      { number: 1, title: 'Understand the Brand', position: 'top-left' },
+      { number: 2, title: 'Research & Inspiration', position: 'top-right' },
+      { number: 3, title: 'Concept & Sketching', position: 'middle-left' },
+      { number: 4, title: 'Digital Drafting', position: 'middle-right' },
+      { number: 5, title: 'Typography & Color', position: 'bottom-left' },
+      { number: 6, title: 'Review & Feedback', position: 'bottom-right' },
+    ],
+  },
+  'logo-design': {
+    title: ['Carve Your Brand\'s', 'Iconic Mark.'],
+    processTitle: 'Where Identity Begins.',
+    layoutType: 'branding',
+    description: [
+      'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text.',
+      'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.'
+    ],
+    processSteps: [
+      { number: 1, title: 'Understand the Brand', position: 'top-left' },
+      { number: 2, title: 'Research & Inspiration', position: 'top-right' },
+      { number: 3, title: 'Concept & Sketching', position: 'middle-left' },
+      { number: 4, title: 'Digital Drafting', position: 'middle-right' },
+      { number: 5, title: 'Typography & Color', position: 'bottom-left' },
+      { number: 6, title: 'Review & Feedback', position: 'bottom-right' },
+    ],
+  },
+  'packaging-design': {
+    title: ['Your Product, Our', 'Stunning Wrap!'],
+    processTitle: 'Packaging That Speaks.',
+    layoutType: 'marketing',
+    description: [
+      'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text.',
+      'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.'
+    ],
+    processSteps: [
+      { number: 1, title: 'Research & Understanding', position: 'top-right' },
+      { number: 2, title: 'Concept Development', position: 'middle-right' },
+      { number: 3, title: 'Design & Visualization', position: 'middle-left' },
+      { number: 4, title: 'Refine & Deliver', position: 'bottom-left' },
+      { number: 5, title: 'Final Handover', position: 'bottom-center' },
+      { number: 6, title: 'Review & Feedback', position: 'bottom-right' },
+    ],
+  },
+  'web-app-design': {
+    title: ['Shape Your Brand,', 'Stand Out!'],
+    processTitle: 'Timeless Brand Identity.',
+    layoutType: 'web-app',
+    description: [
+      'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text.',
+      'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.'
+    ],
+    processSteps: [
+      { number: 1, title: 'Discovery & Research', position: 'top-right' },
+      { number: 2, title: 'Strategy & Positioning', position: 'middle-right' },
+      { number: 3, title: 'Visual Direction', position: 'middle-left' },
+      { number: 4, title: 'Identity Design', position: 'bottom-left' },
+      { number: 5, title: 'Review & Feedback', position: 'bottom-right' },
+      { number: 6, title: 'Guidelines & Delivery', position: 'middle-bottom' },
+    ],
+  },
+  'web-redesign': {
+    title: ['Shape Your Brand,', 'Stand Out!'],
+    processTitle: 'Timeless Brand Identity.',
+    layoutType: 'web-app',
+    description: [
+      'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text.',
+      'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.'
+    ],
+    processSteps: [
+      { number: 1, title: 'Discovery & Research', position: 'top-right' },
+      { number: 2, title: 'Strategy & Positioning', position: 'middle-right' },
+      { number: 3, title: 'Visual Direction', position: 'middle-left' },
+      { number: 4, title: 'Identity Design', position: 'bottom-left' },
+      { number: 5, title: 'Review & Feedback', position: 'bottom-right' },
+      { number: 6, title: 'Guidelines & Delivery', position: 'middle-bottom' },
+    ],
+  },
+};
+
+const otherServices = [
+  { name: 'Logo Design', slug: 'logo-design' },
+  { name: 'Brand Identity', slug: 'brand-identity' },
+  { name: 'Packaging Design', slug: 'packaging-design' },
+  { name: 'Web & App Design', slug: 'web-app-design' },
+  { name: 'Web Redesign', slug: 'web-redesign' },
+];
 
 export default function ServiceDetail({ serviceName, navigateTo, currentPage }) {
+  const service = serviceData[serviceName] || serviceData['branding'];
+
+  // Scroll to top when service changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [serviceName]);
+
   return (
     <>
       <Header navigateTo={navigateTo} currentPage={currentPage} />
       <section className="service-detail-section">
         <div className="service-detail-container">
-          <div className="breadcrumb">
-            <a onClick={() => navigateTo('home')} style={{ cursor: 'pointer' }}>
-              ← Back to Services
-            </a>
-          </div>
-        
-        <ScrollReveal animation="fadeUp" delay={0.1} duration={1.5}>
-          <div className="service-hero">
-            <h1>
-              <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
-                Design Services
+          {/* Main Title */}
+          <ScrollReveal as="div" animation="fadeUp" duration={1.5} once={false}>
+            <h1 className="section-title">
+              <SplitText
+                as="span"
+                splitBy="words"
+                animation="fadeUp"
+                delay={0.05}
+                trigger="onScroll"
+                once={false}
+              >
+                {service.title[0]}
+              </SplitText>
+              <SplitText
+                as="span"
+                splitBy="words"
+                animation="fadeUp"
+                delay={0.05}
+                trigger="onScroll"
+                once={false}
+              >
+                {service.title[1]}
               </SplitText>
             </h1>
-            <p className="service-tagline">
-              Creative and user-centric design solutions that bring your vision to life
-            </p>
-          </div>
-        </ScrollReveal>
-        
-        <div className="service-content">
-          <ScrollReveal animation="fadeUp" delay={0.15} duration={1.5}>
-            <div className="content-section">
-              <h2>
-                <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
-                  What We Offer
-                </SplitText>
-              </h2>
-              <p>
-                Our design services encompass everything you need to create stunning, effective 
-                digital experiences. We combine creativity with strategy to deliver designs that 
-                not only look beautiful but also achieve your business goals.
-              </p>
-            </div>
           </ScrollReveal>
-          
-          <div className="service-features">
-            <ScrollReveal animation="fadeUp" delay={0.2} duration={1.5}>
-              <div className="feature-card">
-              <div className="feature-icon">🎨</div>
-              <h3>
-                <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
-                  UI/UX Design
-                </SplitText>
-              </h3>
-              <p>
-                User-centered interface design that prioritizes usability and aesthetics. 
-                We create intuitive experiences that users love.
-              </p>
-            </div>
-            </ScrollReveal>
-            
-            <ScrollReveal animation="fadeUp" delay={0.25} duration={1.5}>
-              <div className="feature-card">
-                <div className="feature-icon">📱</div>
-                <h3>
-                  <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
-                    Mobile App Design
-                  </SplitText>
-                </h3>
-                <p>
-                  Native and cross-platform mobile app designs optimized for iOS and Android. 
-                  Beautiful interfaces that work seamlessly on any device.
-                </p>
+
+          {/* Content Section - Two Columns */}
+          <div className="service-content-layout">
+            <ScrollReveal as="div" animation="fadeUp" delay={0.1} duration={1.5} once={false}>
+              <div className="service-image-placeholder">
+                {/* Image placeholder */}
               </div>
             </ScrollReveal>
-            
-            <ScrollReveal animation="fadeUp" delay={0.3} duration={1.5}>
-              <div className="feature-card">
-                <div className="feature-icon">🌐</div>
-                <h3>
-                  <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
-                    Web Design
-                  </SplitText>
-                </h3>
-                <p>
-                  Modern, responsive website designs that engage visitors and drive conversions. 
-                  From landing pages to complex web applications.
-                </p>
-              </div>
-            </ScrollReveal>
-            
-            <ScrollReveal animation="fadeUp" delay={0.35} duration={1.5}>
-              <div className="feature-card">
-                <div className="feature-icon">🎯</div>
-                <h3>
-                  <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
-                    Brand Identity
-                  </SplitText>
-                </h3>
-                <p>
-                  Complete brand identity systems including logos, color palettes, typography, 
-                  and brand guidelines that make you stand out.
-                </p>
-              </div>
-            </ScrollReveal>
-            
-            <ScrollReveal animation="fadeUp" delay={0.4} duration={1.5}>
-              <div className="feature-card">
-                <div className="feature-icon">🔄</div>
-                <h3>
-                  <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
-                    Design Systems
-                  </SplitText>
-                </h3>
-                <p>
-                  Scalable design systems and component libraries that ensure consistency 
-                  across all your digital products.
-                </p>
-              </div>
-            </ScrollReveal>
-            
-            <ScrollReveal animation="fadeUp" delay={0.45} duration={1.5}>
-              <div className="feature-card">
-                <div className="feature-icon">✨</div>
-                <h3>
-                  <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
-                    Prototyping
-                  </SplitText>
-                </h3>
-                <p>
-                  Interactive prototypes that bring your ideas to life. Test and validate 
-                  concepts before development begins.
-                </p>
+            <ScrollReveal as="div" animation="fadeUp" delay={0.15} duration={1.5} once={false}>
+              <div className="service-description">
+                {service.description && service.description.map((paragraph, index) => (
+                  <p key={index}>
+                    {paragraph}
+                  </p>
+                ))}
               </div>
             </ScrollReveal>
           </div>
-          
-          <ScrollReveal animation="fadeUp" delay={0.5} duration={1.5}>
-            <div className="content-section">
-              <h2>
-                <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
-                  Our Process
-                </SplitText>
-              </h2>
-              <div className="process-steps">
-                <div className="process-step">
-                  <div className="step-number">01</div>
-                  <h3>
-                    <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
-                      Discovery
-                    </SplitText>
-                  </h3>
-                  <p>We start by understanding your business, users, and goals through research and workshops.</p>
+
+          {/* Our Process Section */}
+          <div className="process-section">
+            <div className="process-content">
+              <ScrollReveal as="div" animation="fadeUp" delay={0.1} duration={1.5} once={false}>
+                <div className="process-header">
+                  <span className="process-label">Our Process</span>
+                  <h2 className="process-title">{service.processTitle}</h2>
                 </div>
-                
-                <div className="process-step">
-                  <div className="step-number">02</div>
-                  <h3>
-                    <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
-                      Strategy
-                    </SplitText>
-                  </h3>
-                  <p>We develop a design strategy that aligns with your objectives and user needs.</p>
-                </div>
-                
-                <div className="process-step">
-                  <div className="step-number">03</div>
-                  <h3>
-                    <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
-                      Design
-                    </SplitText>
-                  </h3>
-                  <p>Our team creates beautiful, functional designs with multiple iterations and refinements.</p>
-                </div>
-                
-                <div className="process-step">
-                  <div className="step-number">04</div>
-                  <h3>
-                    <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
-                      Testing
-                    </SplitText>
-                  </h3>
-                  <p>We validate designs through user testing and gather feedback for improvements.</p>
-                </div>
-                
-                <div className="process-step">
-                  <div className="step-number">05</div>
-                  <h3>
-                    <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
-                      Delivery
-                    </SplitText>
-                  </h3>
-                  <p>Final designs are delivered with complete documentation and developer handoff.</p>
-                </div>
+              </ScrollReveal>
+              
+              <div className={`process-flow process-flow-${service.layoutType}`}>
+                {service.processSteps.map((step, index) => (
+                  <ScrollReveal 
+                    key={step.number} 
+                    as="div" 
+                    animation="fadeUp" 
+                    delay={0.1 + index * 0.05} 
+                    duration={1.5} 
+                    once={false}
+                    className={`process-card-wrapper process-card-${step.position}`}
+                  >
+                    <div className="process-card">
+                      <span className="process-number">{step.number}</span>
+                      <span className="process-card-title">{step.title}</span>
+                    </div>
+                  </ScrollReveal>
+                ))}
               </div>
             </div>
-          </ScrollReveal>
-          
-          <ScrollReveal animation="fadeUp" delay={0.55} duration={1.5}>
-            <div className="content-section">
-              <h2>
-                <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
-                  Why Choose Our Design Services?
-                </SplitText>
-              </h2>
-              <ul className="benefits-list">
-                <li>Experienced team of designers with diverse expertise</li>
-                <li>User-centered approach backed by research and data</li>
-                <li>Modern design tools and best practices</li>
-                <li>Collaborative process with regular feedback loops</li>
-                <li>Fast turnaround without compromising quality</li>
-                <li>Ongoing support and design iterations</li>
-              </ul>
-            </div>
-          </ScrollReveal>
-          
-          <ScrollReveal animation="fadeUp" delay={0.6} duration={1.5}>
-            <div className="cta-section">
-              <h2>
-                <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
-                  Ready to Start Your Project?
-                </SplitText>
-              </h2>
-              <p>Let&apos;s discuss how our design services can help you achieve your goals.</p>
-              <button className="cta-button">Get in Touch</button>
-            </div>
-          </ScrollReveal>
+          </div>
+
+          {/* Our Other Services Section */}
+          <div className="other-services-section">
+            <ScrollReveal as="div" animation="fadeUp" delay={0.1} duration={1.5} once={false}>
+              <h3 className="other-services-title">Our Other Services in Design</h3>
+              <div className="other-services-list">
+                {otherServices.map((otherService) => (
+                  <span 
+                    key={otherService.slug}
+                    className="other-service-link"
+                    onClick={() => navigateTo('service-detail', otherService.slug)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    {otherService.name}
+                  </span>
+                ))}
+              </div>
+            </ScrollReveal>
+          </div>
         </div>
-      </div>
-    </section>
-    <Footer navigateTo={navigateTo} />
+      </section>
+      <Footer navigateTo={navigateTo} />
     </>
   );
 }

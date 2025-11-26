@@ -30,7 +30,8 @@ export default function Header({ navigateTo, currentPage }) {
       accent: '#EC691F',
       background: '#000000',
       textColor: '#FAF9F6',
-      path: 'service-detail'
+      path: 'service-detail',
+      serviceName: 'branding'
     },
     {
       title: 'Web & App Development',
@@ -39,7 +40,8 @@ export default function Header({ navigateTo, currentPage }) {
       accent: '#EC691F',
       background: '#000000',
       textColor: '#FAF9F6',
-      path: 'service-detail'
+      path: 'service-detail',
+      serviceName: 'web-app'
     },
     {
       title: 'Digital Marketing',
@@ -48,7 +50,8 @@ export default function Header({ navigateTo, currentPage }) {
       accent: '#EC691F',
       background: '#000000',
       textColor: '#FAF9F6',
-      path: 'service-detail'
+      path: 'service-detail',
+      serviceName: 'marketing'
     },
     {
       title: 'B2B & Custom Solutions',
@@ -57,7 +60,8 @@ export default function Header({ navigateTo, currentPage }) {
       accent: '#EC691F',
       background: '#000000',
       textColor: '#FAF9F6',
-      path: 'service-detail'
+      path: 'service-detail',
+      serviceName: 'b2b'
     }
   ];
 
@@ -79,7 +83,7 @@ export default function Header({ navigateTo, currentPage }) {
               </a>
               <CardNav
                 items={servicesItems}
-                onNavigate={(path) => navigateTo(path)}
+                onNavigate={(path, serviceName) => navigateTo(path, serviceName)}
                 isOpen={isServicesOpen}
                 onClose={() => setIsServicesOpen(false)}
               />

@@ -30,7 +30,6 @@
 
 .case-study-card:hover {
   box-shadow: 0 8px 20px rgba(236, 105, 31, 0.15);
-  transform: translateY(-4px);
 }
 
 .case-placeholder {

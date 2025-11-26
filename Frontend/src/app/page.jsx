@@ -93,7 +93,7 @@ export default function Page() {
       case 'terms':
         return <TermsOfService navigateTo={navigateTo} currentPage={currentPage} />;
       case 'service-detail':
-        return <ServiceDetail serviceName={currentItem} navigateTo={navigateTo} currentPage={currentPage} />;
+        return <ServiceDetail key={currentItem} serviceName={currentItem} navigateTo={navigateTo} currentPage={currentPage} />;
       case 'case-study-detail':
         return <CaseStudyDetail caseStudyName={currentItem} navigateTo={navigateTo} currentPage={currentPage} />;
       case 'blog-detail':

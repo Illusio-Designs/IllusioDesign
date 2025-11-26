@@ -37,7 +37,7 @@ const CardNav = ({ items, onNavigate, isOpen, onClose }) => {
               key={index}
               className="card-nav-item"
               onClick={() => {
-                onNavigate(item.path);
+                onNavigate(item.path, item.serviceName);
                 onClose();
               }}
             >

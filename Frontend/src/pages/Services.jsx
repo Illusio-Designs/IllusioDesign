@@ -19,33 +19,43 @@ export default function Services({ navigateTo, currentPage }) {
           </ScrollReveal>
           <div className="services-grid">
             <ScrollReveal animation="fadeUp" delay={0.1} duration={1.5}>
-              <div className="service-card" onClick={() => navigateTo('service-detail', 'design')} style={{ cursor: 'pointer' }}>
+              <div className="service-card" onClick={() => navigateTo('service-detail', 'branding')} style={{ cursor: 'pointer' }}>
                 <h3>
                   <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
-                    Design
+                    Branding & Design
                   </SplitText>
                 </h3>
-                <p>Creative and user-centric design solutions that bring your vision to life.</p>
+                <p>Brand identity, guidelines, and creative systems that feel ownable.</p>
               </div>
             </ScrollReveal>
             <ScrollReveal animation="fadeUp" delay={0.15} duration={1.5}>
-              <div className="service-card" onClick={() => navigateTo('service-detail', 'development')} style={{ cursor: 'pointer' }}>
+              <div className="service-card" onClick={() => navigateTo('service-detail', 'web-app')} style={{ cursor: 'pointer' }}>
                 <h3>
                   <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
-                    Development
+                    Web & App Development
                   </SplitText>
                 </h3>
-                <p>Robust and scalable web and mobile applications built with cutting-edge technology.</p>
+                <p>Product-ready web, mobile, and immersive experiences built to scale.</p>
               </div>
             </ScrollReveal>
             <ScrollReveal animation="fadeUp" delay={0.2} duration={1.5}>
               <div className="service-card" onClick={() => navigateTo('service-detail', 'marketing')} style={{ cursor: 'pointer' }}>
                 <h3>
                   <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
-                    Marketing
+                    Digital Marketing
                   </SplitText>
                 </h3>
-                <p>Strategic digital marketing campaigns that drive growth and engagement.</p>
+                <p>Lifecycle strategy across performance, content, and automation.</p>
+              </div>
+            </ScrollReveal>
+            <ScrollReveal animation="fadeUp" delay={0.25} duration={1.5}>
+              <div className="service-card" onClick={() => navigateTo('service-detail', 'b2b')} style={{ cursor: 'pointer' }}>
+                <h3>
+                  <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
+                    B2B & Custom Solutions
+                  </SplitText>
+                </h3>
+                <p>Complex workflows, portals, and bespoke tools for ambitious teams.</p>
               </div>
             </ScrollReveal>
           </div>
