@@ -42,10 +42,30 @@ const serviceCards = [
 ];
 
 const caseStudies = [
-  'Branding & Design',
-  'Web & App Development',
-  'Digital Marketing',
-  'B2B & Custom Solutions',
+  {
+    name: 'Branding & Design',
+    slug: 'branding-design',
+  },
+  {
+    name: 'Web & App Development',
+    slug: 'web-app-development',
+  },
+  {
+    name: 'Digital Marketing',
+    slug: 'digital-marketing',
+  },
+  {
+    name: 'B2B & Custom Solutions',
+    slug: 'b2b-custom-solutions',
+  },
+  {
+    name: 'E-Commerce Solutions',
+    slug: 'e-commerce-solutions',
+  },
+  {
+    name: 'SaaS Platform Development',
+    slug: 'saas-platform-development',
+  },
 ];
 
 const stats = [
@@ -129,16 +149,19 @@ const blogPosts = [
     id: 'blog-1',
     date: 'July 14, 2025',
     title: 'From Logo to Legacy: How Strong Branding Drives Business Growth',
+    slug: 'from-logo-to-legacy-how-strong-branding-drives-business-growth',
   },
   {
     id: 'blog-2',
     date: 'July 14, 2025',
     title: 'Why Your Website Isn\'t Converting And How Smart UI/UX Fixes That',
+    slug: 'why-your-website-isnt-converting-and-how-smart-ui-ux-fixes-that',
   },
   {
     id: 'blog-3',
     date: 'July 14, 2025',
     title: 'Custom B2B Dashboards: A Game-Changer for Scaling',
+    slug: 'custom-b2b-dashboards-a-game-changer-for-scaling',
   },
 ];
 
@@ -285,16 +308,26 @@ export default function Home({ navigateTo, currentPage }) {
             <div className="case-studies-track">
               {/* First set of items */}
               {caseStudies.map((study, index) => (
-                <div key={`${study}-1`} className="case-study-card">
+                <div 
+                  key={`${study.slug}-1`} 
+                  className="case-study-card"
+                  onClick={() => navigateTo('case-study-detail', study.slug)}
+                  style={{ cursor: 'pointer' }}
+                >
                   <div className="case-placeholder"></div>
-                  <h3>{study}</h3>
+                  <h3>{study.name}</h3>
                 </div>
               ))}
               {/* Duplicate set for seamless loop */}
               {caseStudies.map((study, index) => (
-                <div key={`${study}-2`} className="case-study-card">
+                <div 
+                  key={`${study.slug}-2`} 
+                  className="case-study-card"
+                  onClick={() => navigateTo('case-study-detail', study.slug)}
+                  style={{ cursor: 'pointer' }}
+                >
                   <div className="case-placeholder"></div>
-                  <h3>{study}</h3>
+                  <h3>{study.name}</h3>
                 </div>
               ))}
             </div>
@@ -472,16 +505,21 @@ export default function Home({ navigateTo, currentPage }) {
               <ScrollReveal
                 key={post.id}
                 as="div"
-                className="blog-card"
                 animation="slideUp"
                 delay={0.1 + index * 0.05}
                 duration={1.5}
                 once={false}
               >
-                <div className="blog-placeholder"></div>
-                <div className="blog-content">
-                  <span className="blog-date">{post.date}</span>
-                  <p className="blog-title">{post.title}</p>
+                <div 
+                  className="blog-card"
+                  onClick={() => navigateTo('blog-detail', post.slug)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <div className="blog-placeholder"></div>
+                  <div className="blog-content">
+                    <span className="blog-date">{post.date}</span>
+                    <p className="blog-title">{post.title}</p>
+                  </div>
                 </div>
               </ScrollReveal>
             ))}

@@ -4,70 +4,106 @@ import Footer from '@/components/Footer';
 import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
 
+const blogPosts = [
+  {
+    id: 'blog-1',
+    date: 'July 14, 2025',
+    title: 'From Logo to Legacy: How Strong Branding Drives Business Growth',
+    slug: 'from-logo-to-legacy-how-strong-branding-drives-business-growth',
+  },
+  {
+    id: 'blog-2',
+    date: 'July 14, 2025',
+    title: 'Why Your Website Isn\'t Converting And How Smart UI/UX Fixes That',
+    slug: 'why-your-website-isnt-converting-and-how-smart-ui-ux-fixes-that',
+  },
+  {
+    id: 'blog-3',
+    date: 'July 14, 2025',
+    title: 'Custom B2B Dashboards: A Game-Changer for Scaling',
+    slug: 'custom-b2b-dashboards-a-game-changer-for-scaling',
+  },
+  {
+    id: 'blog-4',
+    date: 'July 10, 2025',
+    title: 'The Future of Web Design: Trends to Watch in 2025',
+    slug: 'the-future-of-web-design-trends-to-watch-in-2025',
+  },
+  {
+    id: 'blog-5',
+    date: 'July 5, 2025',
+    title: 'Digital Marketing ROI: Measuring Success in the Modern Era',
+    slug: 'digital-marketing-roi-measuring-success-in-the-modern-era',
+  },
+  {
+    id: 'blog-6',
+    date: 'June 28, 2025',
+    title: 'Building Scalable Web Applications: Best Practices',
+    slug: 'building-scalable-web-applications-best-practices',
+  },
+];
+
 export default function Blog({ navigateTo, currentPage }) {
+  const handleBlogClick = (slug) => {
+    navigateTo('blog-detail', slug);
+  };
+
   return (
     <>
       <Header navigateTo={navigateTo} currentPage={currentPage} />
       <section className="blog-section" id="blog">
-      <div className="blog-container">
-        <ScrollReveal animation="fadeUp" delay={0.1} duration={1.5}>
-          <h2>
-            <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
-              Our Blog
-            </SplitText>
-          </h2>
-          <p className="blog-intro">Stay updated with the latest trends and insights</p>
-        </ScrollReveal>
-        <div className="blog-grid">
-          <ScrollReveal animation="fadeUp" delay={0.15} duration={1.5}>
-            <article className="blog-card" onClick={() => navigateTo('blog-detail', 'latest-design-trends-2024')} style={{ cursor: 'pointer' }}>
-              <div className="blog-image">Blog Image 1</div>
-              <div className="blog-content">
-                <span className="blog-date">Nov 15, 2024</span>
-                <h3>
-                  <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
-                    Latest Design Trends in 2024
-                  </SplitText>
-                </h3>
-                <p>Discover the top design trends shaping the digital landscape this year.</p>
-                <span className="read-more">Read More →</span>
-              </div>
-            </article>
+        <div className="container">
+          <ScrollReveal as="div" animation="fadeUp" duration={1.5} once={false}>
+            <h1 className="section-title">
+              <SplitText
+                as="span"
+                splitBy="words"
+                animation="fadeUp"
+                delay={0.05}
+                trigger="onScroll"
+                once={false}
+              >
+                Design News & Trends
+              </SplitText>
+              <SplitText
+                as="span"
+                splitBy="words"
+                animation="fadeUp"
+                delay={0.05}
+                trigger="onScroll"
+                once={false}
+              >
+                for Inspired Living
+              </SplitText>
+            </h1>
           </ScrollReveal>
-          <ScrollReveal animation="fadeUp" delay={0.2} duration={1.5}>
-            <article className="blog-card" onClick={() => navigateTo('blog-detail', 'building-scalable-web-applications')} style={{ cursor: 'pointer' }}>
-              <div className="blog-image">Blog Image 2</div>
-              <div className="blog-content">
-                <span className="blog-date">Nov 10, 2024</span>
-                <h3>
-                  <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
-                    Building Scalable Web Applications
-                  </SplitText>
-                </h3>
-                <p>Learn best practices for creating robust and scalable web solutions.</p>
-                <span className="read-more">Read More →</span>
-              </div>
-            </article>
-          </ScrollReveal>
-          <ScrollReveal animation="fadeUp" delay={0.25} duration={1.5}>
-            <article className="blog-card" onClick={() => navigateTo('blog-detail', 'digital-marketing-strategies')} style={{ cursor: 'pointer' }}>
-              <div className="blog-image">Blog Image 3</div>
-              <div className="blog-content">
-                <span className="blog-date">Nov 5, 2024</span>
-                <h3>
-                  <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
-                    Digital Marketing Strategies
-                  </SplitText>
-                </h3>
-                <p>Effective strategies to boost your online presence and engagement.</p>
-                <span className="read-more">Read More →</span>
-              </div>
-            </article>
-          </ScrollReveal>
+          <div className="blog-grid">
+            {blogPosts.map((post, index) => (
+              <ScrollReveal
+                key={post.id}
+                as="div"
+                animation="slideUp"
+                delay={0.1 + index * 0.05}
+                duration={1.5}
+                once={false}
+              >
+                <div 
+                  className="blog-card"
+                  onClick={() => handleBlogClick(post.slug)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <div className="blog-placeholder"></div>
+                  <div className="blog-content">
+                    <span className="blog-date">{post.date}</span>
+                    <p className="blog-title">{post.title}</p>
+                  </div>
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
-    <Footer navigateTo={navigateTo} />
+      </section>
+      <Footer navigateTo={navigateTo} />
     </>
   );
 }
