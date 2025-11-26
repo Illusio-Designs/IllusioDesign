@@ -21,16 +21,19 @@ export default function Page() {
 
   // Initialize from URL on mount
   useEffect(() => {
-    const path = window.location.pathname;
-    const params = new URLSearchParams(window.location.search);
-    const item = params.get('item');
-    
-    if (path === '/' || path === '/home') {
-      setCurrentPage('home');
-    } else {
-      const page = path.substring(1); // Remove leading slash
-      setCurrentPage(page);
-      if (item) setCurrentItem(item);
+    if (typeof window !== 'undefined') {
+      const path = window.location.pathname;
+      const params = new URLSearchParams(window.location.search);
+      const item = params.get('item');
+      
+      if (path === '/' || path === '/home') {
+        setCurrentPage('home');
+        setCurrentItem('');
+      } else {
+        const page = path.substring(1).split('?')[0]; // Remove leading slash and query params
+        setCurrentPage(page);
+        if (item) setCurrentItem(item);
+      }
     }
   }, []);
 
@@ -45,9 +48,9 @@ export default function Page() {
         setCurrentPage('home');
         setCurrentItem('');
       } else {
-        const page = path.substring(1);
+        const page = path.substring(1).split('?')[0]; // Remove leading slash and query params
         setCurrentPage(page);
-        setCurrentItem(item || '');
+        if (item) setCurrentItem(item || '');
       }
       window.scrollTo(0, 0);
     };

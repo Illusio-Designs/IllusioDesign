@@ -2,6 +2,7 @@ import '@/styles/pages/PrivacyPolicy.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SplitText from '@/components/SplitText';
+import ScrollReveal from '@/components/ScrollReveal';
 
 export default function PrivacyPolicy({ navigateTo, currentPage }) {
   return (
@@ -9,119 +10,73 @@ export default function PrivacyPolicy({ navigateTo, currentPage }) {
       <Header navigateTo={navigateTo} currentPage={currentPage} />
       <section className="privacy-section" id="privacy">
       <div className="privacy-container">
-        <h2>
+        <h1 className="section-title">
           <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
             Privacy Policy
           </SplitText>
-        </h2>
-        <p className="last-updated">Last Updated: November 15, 2024</p>
+        </h1>
+        <ScrollReveal animation="fadeUp" delay={0.1} duration={2.0}>
+          <p className="last-updated">Last Updated: November 15, 2024</p>
+        </ScrollReveal>
         
         <div className="privacy-content">
-          <div className="privacy-block">
-            <h3>
-              <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
-                1. Information We Collect
-              </SplitText>
-            </h3>
-            <p>
-              We collect information that you provide directly to us, including name, email address, 
-              phone number, and any other information you choose to provide when you contact us or 
-              use our services.
-            </p>
-          </div>
+          <ScrollReveal animation="fadeUp" delay={0.1} duration={2.0}>
+            <div className="privacy-block">
+              <h3>
+                <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
+                  Definitions
+                </SplitText>
+              </h3>
+              <p>
+                <strong>&quot;Illusio Designs&quot;</strong> (or &quot;we&quot; or &quot;us&quot;): refers to Illusio Designs, a development and design agency, including its officers, directors, employees, agents, and affiliates.
+              </p>
+              <p>
+                <strong>&quot;Website&quot;</strong>: refers to Illusio Designs&apos; website located at illusiodesigns.agency, including any subdomains, mobile versions, and related content and functionality.
+              </p>
+              <p>
+                <strong>&quot;Services&quot;</strong>: refers to the development, design, marketing, and other services provided by Illusio Designs, as well as any related software, documentation, and other materials provided by Illusio Designs through your use of the Website&apos;s Contacts form.
+              </p>
+            </div>
+          </ScrollReveal>
           
-          <div className="privacy-block">
-            <h3>
-              <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
-                2. How We Use Your Information
-              </SplitText>
-            </h3>
-            <p>We use the information we collect to:</p>
-            <ul>
-              <li>Provide, maintain, and improve our services</li>
-              <li>Respond to your inquiries and fulfill your requests</li>
-              <li>Send you technical notices and support messages</li>
-              <li>Communicate with you about products, services, and events</li>
-              <li>Monitor and analyze trends, usage, and activities</li>
-            </ul>
-          </div>
+          <ScrollReveal animation="fadeUp" delay={0.15} duration={2.0}>
+            <div className="privacy-block">
+              <h3>
+                <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
+                  General
+                </SplitText>
+              </h3>
+              <p>
+                These Terms of Use (&quot;Terms&quot;) govern your access to and use of the Website, and the ordering of services and products provided by Illusio Designs (&quot;Services&quot;). By accessing or using the Services, you agree to be bound by these Terms. Please read these Terms carefully. If you do not agree, you must not access or use the Services through the Website.
+              </p>
+            </div>
+          </ScrollReveal>
           
-          <div className="privacy-block">
-            <h3>
-              <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
-                3. Information Sharing
-              </SplitText>
-            </h3>
-            <p>
-              We do not share your personal information with third parties except as described in 
-              this policy. We may share information with service providers who perform services on 
-              our behalf, and when required by law or to protect our rights.
-            </p>
-          </div>
+          <ScrollReveal animation="fadeUp" delay={0.2} duration={2.0}>
+            <div className="privacy-block">
+              <h3>
+                <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
+                  Eligibility
+                </SplitText>
+              </h3>
+              <p>
+                You must be at least 18 years of age to use the Services, unless you are between 14 and 18 (or the age of majority established by law in your jurisdiction) and are under the supervision of a parent or legal guardian who has agreed to these Terms. Individuals under the age of 14 are prohibited from requesting Services. By accessing or using the Services, you represent and warrant that you meet these requirements and are capable of entering into a legally binding agreement.
+              </p>
+            </div>
+          </ScrollReveal>
           
-          <div className="privacy-block">
-            <h3>
-              <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
-                4. Data Security
-              </SplitText>
-            </h3>
-            <p>
-              We take reasonable measures to help protect your personal information from loss, theft, 
-              misuse, unauthorized access, disclosure, alteration, and destruction.
-            </p>
-          </div>
-          
-          <div className="privacy-block">
-            <h3>
-              <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
-                5. Your Rights
-              </SplitText>
-            </h3>
-            <p>
-              You have the right to access, update, or delete your personal information. You may also 
-              opt out of receiving promotional communications from us by following the instructions in 
-              those messages.
-            </p>
-          </div>
-          
-          <div className="privacy-block">
-            <h3>
-              <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
-                6. Cookies and Tracking
-              </SplitText>
-            </h3>
-            <p>
-              We use cookies and similar tracking technologies to collect information about your 
-              browsing activities. You can control cookies through your browser settings.
-            </p>
-          </div>
-          
-          <div className="privacy-block">
-            <h3>
-              <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
-                7. Changes to This Policy
-              </SplitText>
-            </h3>
-            <p>
-              We may update this privacy policy from time to time. We will notify you of any changes 
-              by posting the new policy on this page and updating the &quot;Last Updated&quot; date.
-            </p>
-          </div>
-          
-          <div className="privacy-block">
-            <h3>
-              <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
-                8. Contact Us
-              </SplitText>
-            </h3>
-            <p>
-              If you have any questions about this privacy policy, please contact us at:
-              <br />
-              Email: info@illusiodesigns.agency
-              <br />
-              Phone: +91 76000 48416
-            </p>
-          </div>
+          <ScrollReveal animation="fadeUp" delay={0.25} duration={2.0}>
+            <div className="privacy-block">
+              <h3>
+                <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
+                  License to Use the Website
+                </SplitText>
+              </h3>
+              <p>
+                Subject to these Terms, Illusio Designs grants you a limited, non-exclusive, non-transferable, and revocable license to access and use the Website solely for personal and non-commercial use.
+              </p>
+            </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>
