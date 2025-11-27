@@ -1,11 +1,11 @@
-import '@/styles/pages/Portfolio.css';
+import '@/styles/pages/Projects.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
 import { useState } from 'react';
 
-export default function Portfolio({ navigateTo, currentPage }) {
+export default function Projects({ navigateTo, currentPage }) {
   const [hoveredProject, setHoveredProject] = useState(null);
 
   const projects = [
@@ -67,15 +67,15 @@ export default function Portfolio({ navigateTo, currentPage }) {
   return (
     <>
       <Header navigateTo={navigateTo} currentPage={currentPage} />
-      <section className="portfolio-section" id="portfolio">
+      <section className="projects-section" id="projects">
         <ScrollReveal animation="fadeUp" delay={0.1} duration={1.5}>
           <h1 className="section-title">
             <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
-              Our Portfolio
+              Our Projects
             </SplitText>
           </h1>
         </ScrollReveal>
-        <div className="portfolio-grid">
+        <div className="projects-grid">
           {projects.map((project, index) => (
             <ScrollReveal key={project.id} animation="fadeUp" delay={0.15 + index * 0.05} duration={1.5}>
               <div
@@ -118,3 +118,4 @@ export default function Portfolio({ navigateTo, currentPage }) {
     </>
   );
 }
+

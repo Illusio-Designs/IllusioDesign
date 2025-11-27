@@ -90,10 +90,10 @@ export default function Header({ navigateTo, currentPage }) {
             </li>
             <li>
               <a 
-                onClick={() => navigateTo('portfolio')}
-                className={activePage === 'portfolio' ? 'active' : ''}
+                onClick={() => navigateTo('projects')}
+                className={activePage === 'projects' ? 'active' : ''}
               >
-                Portfolio
+                Projects
               </a>
             </li>
             <li>
