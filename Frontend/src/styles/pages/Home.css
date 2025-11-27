@@ -134,7 +134,7 @@
 
 /* Services We Offer Section */
 .services-offer-section {
-  padding: 6rem;
+  padding: 12rem 6rem 6rem;
   position: relative;
 }
 
@@ -827,9 +827,15 @@
 }
 
 .rating {
-  font-size: 1.3rem;
-  letter-spacing: 0.18rem;
-  color: #EC691F;
+  display: flex;
+  gap: 0.3rem;
+  align-items: center;
+}
+
+.rating svg {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
 }
 
 .testimonial-text {
@@ -908,12 +914,20 @@
   animation-play-state: paused;
 }
 
-.testimonial-marquee.is-active .marquee-row--top .marquee-track {
+/* Spread state - cards are visible in rows but not sliding yet */
+.testimonial-marquee.is-spread .marquee-row--top .marquee-track,
+.testimonial-marquee.is-spread .marquee-row--bottom .marquee-track {
+  animation-play-state: paused;
+  transform: translateX(0);
+}
+
+/* Sliding state - animation starts after 2 seconds */
+.testimonial-marquee.is-sliding .marquee-row--top .marquee-track {
   animation-name: marquee-left;
   animation-play-state: running;
 }
 
-.testimonial-marquee.is-active .marquee-row--bottom .marquee-track {
+.testimonial-marquee.is-sliding .marquee-row--bottom .marquee-track {
   animation-name: marquee-right;
   animation-play-state: running;
 }

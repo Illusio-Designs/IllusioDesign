@@ -10,6 +10,29 @@ import SplitText from '@/components/SplitText';
 import Counter from '@/components/Counter';
 import { BackgroundRippleEffect } from '@/components/ui/background-ripple-effect';
 
+// Star Rating Component
+const StarRating = () => {
+  return (
+    <div className="rating">
+      {[...Array(5)].map((_, index) => (
+        <svg
+          key={index}
+          width="28"
+          height="28"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+            fill="#EC691F"
+          />
+        </svg>
+      ))}
+    </div>
+  );
+};
+
 const serviceCards = [
   {
     id: 'branding',
@@ -168,8 +191,10 @@ const blogPosts = [
 export default function Home({ navigateTo, currentPage }) {
   const [isServicesVisible, setIsServicesVisible] = useState(false);
   const [isTestimonialsHovered, setIsTestimonialsHovered] = useState(false);
+  const [isTestimonialsSliding, setIsTestimonialsSliding] = useState(false);
   const [openFaqId, setOpenFaqId] = useState(null);
   const servicesSectionRef = useRef(null);
+  const testimonialsSlideTimeoutRef = useRef(null);
 
   useEffect(() => {
     if (!servicesSectionRef.current) return;
@@ -192,6 +217,32 @@ export default function Home({ navigateTo, currentPage }) {
       observer.disconnect();
     };
   }, []);
+
+  // Handle testimonials hover with 2 second delay before sliding
+  useEffect(() => {
+    if (isTestimonialsHovered) {
+      // Clear any existing timeout
+      if (testimonialsSlideTimeoutRef.current) {
+        clearTimeout(testimonialsSlideTimeoutRef.current);
+      }
+      // Set sliding state after 2 seconds
+      testimonialsSlideTimeoutRef.current = setTimeout(() => {
+        setIsTestimonialsSliding(true);
+      }, 1000);
+    } else {
+      // Reset sliding state when not hovered
+      setIsTestimonialsSliding(false);
+      if (testimonialsSlideTimeoutRef.current) {
+        clearTimeout(testimonialsSlideTimeoutRef.current);
+      }
+    }
+
+    return () => {
+      if (testimonialsSlideTimeoutRef.current) {
+        clearTimeout(testimonialsSlideTimeoutRef.current);
+      }
+    };
+  }, [isTestimonialsHovered]);
 
   return (
     <>
@@ -440,7 +491,7 @@ export default function Home({ navigateTo, currentPage }) {
             >
               {testimonials.map((testimonial, index) => (
                 <article key={testimonial.id} className={`testimonial-card static-card-${index + 1}`}>
-                  <div className="rating">⭐⭐⭐⭐⭐</div>
+                  <StarRating />
                   <p className="testimonial-text">&quot;{testimonial.quote}&quot;</p>
                   <div className="testimonial-signature">
                     <h1 className="client-name">{testimonial.client}</h1>
@@ -450,14 +501,14 @@ export default function Home({ navigateTo, currentPage }) {
             </div>
           ) : (
             <div
-              className="testimonial-marquee is-active"
+              className={`testimonial-marquee ${isTestimonialsSliding ? 'is-sliding' : 'is-spread'}`}
               onMouseLeave={() => setIsTestimonialsHovered(false)}
             >
               <div className="marquee-row marquee-row--top">
                 <div className="marquee-track">
                   {[...topRowTestimonials, ...topRowTestimonials].map((testimonial, index) => (
                     <article key={`${testimonial.id}-top-${index}`} className="testimonial-card">
-                      <div className="rating">⭐⭐⭐⭐⭐</div>
+                      <StarRating />
                       <p className="testimonial-text">&quot;{testimonial.quote}&quot;</p>
                       <div className="testimonial-signature">
                         <h1 className="client-name">{testimonial.client}</h1>
@@ -470,7 +521,7 @@ export default function Home({ navigateTo, currentPage }) {
                 <div className="marquee-track">
                   {[...bottomRowTestimonials, ...bottomRowTestimonials].map((testimonial, index) => (
                     <article key={`${testimonial.id}-bottom-${index}`} className="testimonial-card">
-                      <div className="rating">⭐⭐⭐⭐⭐</div>
+                      <StarRating />
                       <p className="testimonial-text">&quot;{testimonial.quote}&quot;</p>
                       <div className="testimonial-signature">
                         <h1 className="client-name">{testimonial.client}</h1>
