@@ -3,7 +3,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const serviceData = {
   'branding': {
@@ -15,18 +15,18 @@ const serviceData = {
       'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.'
     ],
     processSteps: [
-      { number: 1, title: 'Understand the Brand', position: 'top-left' },
-      { number: 2, title: 'Research & Inspiration', position: 'top-right' },
+      { number: 1, title: 'Understand the Brand', position: 'top-right' },
+      { number: 2, title: 'Research & Exploration', position: 'middle-right' },
       { number: 3, title: 'Concept & Sketching', position: 'middle-left' },
-      { number: 4, title: 'Digital Drafting', position: 'middle-right' },
-      { number: 5, title: 'Typography & Color', position: 'bottom-left' },
+      { number: 4, title: 'Digital Mockup', position: 'bottom-left' },
+      { number: 5, title: 'Typography & Color', position: 'bottom-middle' },
       { number: 6, title: 'Review & Feedback', position: 'bottom-right' },
     ],
   },
   'web-app': {
     title: ['Shape Your Brand,', 'Stand Out!'],
     processTitle: 'Timeless Brand Identity.',
-    layoutType: 'web-app',
+    layoutType: 'branding',
     description: [
       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text.',
       'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.'
@@ -43,7 +43,7 @@ const serviceData = {
   'marketing': {
     title: ['Your Product, Our', 'Stunning Wrap!'],
     processTitle: 'Packaging That Speaks.',
-    layoutType: 'marketing',
+    layoutType: 'branding',
     description: [
       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text.',
       'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.'
@@ -60,7 +60,7 @@ const serviceData = {
   'b2b': {
     title: ['Spark Your Digital', 'Presence!'],
     processTitle: 'Unified Digital Journeys.',
-    layoutType: 'b2b',
+    layoutType: 'branding',
     description: [
       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text.',
       'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.'
@@ -83,18 +83,18 @@ const serviceData = {
       'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.'
     ],
     processSteps: [
-      { number: 1, title: 'Understand the Brand', position: 'top-left' },
-      { number: 2, title: 'Research & Inspiration', position: 'top-right' },
+      { number: 1, title: 'Understand the Brand', position: 'top-right' },
+      { number: 2, title: 'Research & Exploration', position: 'middle-right' },
       { number: 3, title: 'Concept & Sketching', position: 'middle-left' },
-      { number: 4, title: 'Digital Drafting', position: 'middle-right' },
-      { number: 5, title: 'Typography & Color', position: 'bottom-left' },
+      { number: 4, title: 'Digital Mockup', position: 'bottom-left' },
+      { number: 5, title: 'Typography & Color', position: 'bottom-middle' },
       { number: 6, title: 'Review & Feedback', position: 'bottom-right' },
     ],
   },
   'development': {
     title: ['Shape Your Brand,', 'Stand Out!'],
     processTitle: 'Timeless Brand Identity.',
-    layoutType: 'web-app',
+    layoutType: 'branding',
     description: [
       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text.',
       'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.'
@@ -117,11 +117,11 @@ const serviceData = {
       'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.'
     ],
     processSteps: [
-      { number: 1, title: 'Understand the Brand', position: 'top-left' },
-      { number: 2, title: 'Research & Inspiration', position: 'top-right' },
+      { number: 1, title: 'Understand the Brand', position: 'top-right' },
+      { number: 2, title: 'Research & Exploration', position: 'middle-right' },
       { number: 3, title: 'Concept & Sketching', position: 'middle-left' },
-      { number: 4, title: 'Digital Drafting', position: 'middle-right' },
-      { number: 5, title: 'Typography & Color', position: 'bottom-left' },
+      { number: 4, title: 'Digital Mockup', position: 'bottom-left' },
+      { number: 5, title: 'Typography & Color', position: 'bottom-middle' },
       { number: 6, title: 'Review & Feedback', position: 'bottom-right' },
     ],
   },
@@ -134,18 +134,18 @@ const serviceData = {
       'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.'
     ],
     processSteps: [
-      { number: 1, title: 'Understand the Brand', position: 'top-left' },
-      { number: 2, title: 'Research & Inspiration', position: 'top-right' },
+      { number: 1, title: 'Understand the Brand', position: 'top-right' },
+      { number: 2, title: 'Research & Exploration', position: 'middle-right' },
       { number: 3, title: 'Concept & Sketching', position: 'middle-left' },
-      { number: 4, title: 'Digital Drafting', position: 'middle-right' },
-      { number: 5, title: 'Typography & Color', position: 'bottom-left' },
+      { number: 4, title: 'Digital Mockup', position: 'bottom-left' },
+      { number: 5, title: 'Typography & Color', position: 'bottom-middle' },
       { number: 6, title: 'Review & Feedback', position: 'bottom-right' },
     ],
   },
   'packaging-design': {
     title: ['Your Product, Our', 'Stunning Wrap!'],
     processTitle: 'Packaging That Speaks.',
-    layoutType: 'marketing',
+    layoutType: 'branding',
     description: [
       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text.',
       'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.'
@@ -162,7 +162,7 @@ const serviceData = {
   'web-app-design': {
     title: ['Shape Your Brand,', 'Stand Out!'],
     processTitle: 'Timeless Brand Identity.',
-    layoutType: 'web-app',
+    layoutType: 'branding',
     description: [
       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text.',
       'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.'
@@ -179,7 +179,7 @@ const serviceData = {
   'web-redesign': {
     title: ['Shape Your Brand,', 'Stand Out!'],
     processTitle: 'Timeless Brand Identity.',
-    layoutType: 'web-app',
+    layoutType: 'branding',
     description: [
       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text.',
       'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.'
@@ -205,11 +205,42 @@ const otherServices = [
 
 export default function ServiceDetail({ serviceName, navigateTo, currentPage }) {
   const service = serviceData[serviceName] || serviceData['branding'];
+  const processFlowRef = useRef(null);
+  const [lineProgress, setLineProgress] = useState(0);
 
   // Scroll to top when service changes
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [serviceName]);
+
+  // Animate line on scroll - reveal from start
+  useEffect(() => {
+    if (!processFlowRef.current) return;
+
+    const updateProgress = () => {
+      const rect = processFlowRef.current.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      const elementTop = rect.top;
+      const elementHeight = rect.height;
+      
+      // Start revealing when element enters viewport
+      const startPoint = windowHeight;
+      const endPoint = -elementHeight;
+      const progress = Math.max(
+        0,
+        Math.min(1, (startPoint - elementTop) / (startPoint - endPoint))
+      );
+      
+      setLineProgress(progress);
+    };
+
+    window.addEventListener('scroll', updateProgress);
+    updateProgress(); // Initial check
+
+    return () => {
+      window.removeEventListener('scroll', updateProgress);
+    };
+  }, []);
 
   return (
     <>
@@ -270,7 +301,33 @@ export default function ServiceDetail({ serviceName, navigateTo, currentPage }) 
                 </div>
               </ScrollReveal>
               
-              <div className={`process-flow process-flow-${service.layoutType}`}>
+              <div 
+                ref={processFlowRef}
+                className={`process-flow process-flow-${service.layoutType}`}
+              >
+                {/* Curved connecting line - starts from process title end (right side), passes through each card dot */}
+                <svg className="process-flow-line" viewBox="0 0 1000 800" preserveAspectRatio="none">
+                  <path
+                    id="process-path"
+                    d="M 950 80 
+                       Q 940 100 920 50
+                       Q 910 120 900 200
+                       Q 500 280 100 352
+                       Q 80 450 100 552
+                       Q 250 600 450 648
+                       Q 650 640 900 648"
+                    fill="none"
+                    stroke="rgba(255, 255, 255, 0.5)"
+                    strokeWidth="2.5"
+                    strokeDasharray="8, 5"
+                    strokeDashoffset={1600 * (1 - lineProgress)}
+                    strokeLinecap="round"
+                    vectorEffect="non-scaling-stroke"
+                    style={{
+                      transition: 'stroke-dashoffset 0.15s ease-out',
+                    }}
+                  />
+                </svg>
                 {service.processSteps.map((step, index) => (
                   <ScrollReveal 
                     key={step.number} 
@@ -282,8 +339,10 @@ export default function ServiceDetail({ serviceName, navigateTo, currentPage }) 
                     className={`process-card-wrapper process-card-${step.position}`}
                   >
                     <div className="process-card">
-                      <span className="process-number">{step.number}</span>
-                      <span className="process-card-title">{step.title}</span>
+                      <div className="process-card-dot"></div>
+                      <span className="process-card-content">
+                        <span className="process-number">{step.number}.</span> {step.title}
+                      </span>
                     </div>
                   </ScrollReveal>
                 ))}
@@ -294,12 +353,17 @@ export default function ServiceDetail({ serviceName, navigateTo, currentPage }) 
           {/* Our Other Services Section */}
           <div className="other-services-section">
             <ScrollReveal as="div" animation="fadeUp" delay={0.1} duration={1.5} once={false}>
-              <h3 className="other-services-title">Our Other Services in Design</h3>
+              <div className="other-services-header">
+                <h3 className="other-services-title">
+                  <span className="other-services-title-small">Our Other</span>
+                  <span className="other-services-title-large">Services in Design</span>
+                </h3>
+              </div>
               <div className="other-services-list">
                 {otherServices.map((otherService) => (
                   <span 
                     key={otherService.slug}
-                    className="other-service-link"
+                    className={`other-service-link ${serviceName === otherService.slug ? 'active' : ''}`}
                     onClick={() => navigateTo('service-detail', otherService.slug)}
                     style={{ cursor: 'pointer' }}
                   >

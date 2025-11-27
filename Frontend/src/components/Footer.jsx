@@ -38,9 +38,10 @@ export default function Footer({ navigateTo }) {
             <div className="footer-section">
               <h3>Services</h3>
               <ul>
-                <li><a href="#" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('services'); }}>Design</a></li>
-                <li><a href="#" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('services'); }}>Development</a></li>
-                <li><a href="#" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('services'); }}>Marketing</a></li>
+                <li><a href="#" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('service-detail', 'branding'); }}>Branding & Design</a></li>
+                <li><a href="#" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('service-detail', 'web-app'); }}>Web & App Development</a></li>
+                <li><a href="#" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('service-detail', 'marketing'); }}>Digital Marketing</a></li>
+                <li><a href="#" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('service-detail', 'b2b'); }}>B2B & Custom Solutions</a></li>
               </ul>
             </div>
             <div className="footer-section">

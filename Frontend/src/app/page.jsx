@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Home from '@/pages/Home';
-import Services from '@/pages/Services';
+// import Services from '@/pages/Services';
 import Projects from '@/pages/Projects';
 import AboutUs from '@/pages/AboutUs';
 import Career from '@/pages/Career';
@@ -74,8 +74,8 @@ export default function Page() {
     switch (currentPage) {
       case 'home':
         return <Home navigateTo={navigateTo} currentPage={currentPage} />;
-      case 'services':
-        return <Services navigateTo={navigateTo} currentPage={currentPage} />;  
+      // case 'services':
+      //   return <Services navigateTo={navigateTo} currentPage={currentPage} />;  
       case 'projects':
         return <Projects navigateTo={navigateTo} currentPage={currentPage} />;
       case 'about':
