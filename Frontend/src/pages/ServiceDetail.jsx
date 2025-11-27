@@ -16,9 +16,9 @@ const serviceData = {
     ],
     processSteps: [
       { number: 1, title: 'Understand the Brand', position: 'top-right' },
-      { number: 2, title: 'Research & Exploration', position: 'middle-right' },
+      { number: 2, title: 'Research & Inspiration', position: 'middle-right' },
       { number: 3, title: 'Concept & Sketching', position: 'middle-left' },
-      { number: 4, title: 'Digital Mockup', position: 'bottom-left' },
+      { number: 4, title: 'Digital Drafting', position: 'bottom-left' },
       { number: 5, title: 'Typography & Color', position: 'bottom-middle' },
       { number: 6, title: 'Review & Feedback', position: 'bottom-right' },
     ],
@@ -84,9 +84,9 @@ const serviceData = {
     ],
     processSteps: [
       { number: 1, title: 'Understand the Brand', position: 'top-right' },
-      { number: 2, title: 'Research & Exploration', position: 'middle-right' },
+      { number: 2, title: 'Research & Inspiration', position: 'middle-right' },
       { number: 3, title: 'Concept & Sketching', position: 'middle-left' },
-      { number: 4, title: 'Digital Mockup', position: 'bottom-left' },
+      { number: 4, title: 'Digital Drafting', position: 'bottom-left' },
       { number: 5, title: 'Typography & Color', position: 'bottom-middle' },
       { number: 6, title: 'Review & Feedback', position: 'bottom-right' },
     ],
@@ -118,9 +118,9 @@ const serviceData = {
     ],
     processSteps: [
       { number: 1, title: 'Understand the Brand', position: 'top-right' },
-      { number: 2, title: 'Research & Exploration', position: 'middle-right' },
+      { number: 2, title: 'Research & Inspiration', position: 'middle-right' },
       { number: 3, title: 'Concept & Sketching', position: 'middle-left' },
-      { number: 4, title: 'Digital Mockup', position: 'bottom-left' },
+      { number: 4, title: 'Digital Drafting', position: 'bottom-left' },
       { number: 5, title: 'Typography & Color', position: 'bottom-middle' },
       { number: 6, title: 'Review & Feedback', position: 'bottom-right' },
     ],
@@ -135,9 +135,9 @@ const serviceData = {
     ],
     processSteps: [
       { number: 1, title: 'Understand the Brand', position: 'top-right' },
-      { number: 2, title: 'Research & Exploration', position: 'middle-right' },
+      { number: 2, title: 'Research & Inspiration', position: 'middle-right' },
       { number: 3, title: 'Concept & Sketching', position: 'middle-left' },
-      { number: 4, title: 'Digital Mockup', position: 'bottom-left' },
+      { number: 4, title: 'Digital Drafting', position: 'bottom-left' },
       { number: 5, title: 'Typography & Color', position: 'bottom-middle' },
       { number: 6, title: 'Review & Feedback', position: 'bottom-right' },
     ],
@@ -305,29 +305,12 @@ export default function ServiceDetail({ serviceName, navigateTo, currentPage }) 
                 ref={processFlowRef}
                 className={`process-flow process-flow-${service.layoutType}`}
               >
-                {/* Curved connecting line - starts from process title end (right side), passes through each card dot */}
-                <svg className="process-flow-line" viewBox="0 0 1000 800" preserveAspectRatio="none">
-                  <path
-                    id="process-path"
-                    d="M 950 80 
-                       Q 940 100 920 50
-                       Q 910 120 900 200
-                       Q 500 280 100 352
-                       Q 80 450 100 552
-                       Q 250 600 450 648
-                       Q 650 640 900 648"
-                    fill="none"
-                    stroke="rgba(255, 255, 255, 0.5)"
-                    strokeWidth="2.5"
-                    strokeDasharray="8, 5"
-                    strokeDashoffset={1600 * (1 - lineProgress)}
-                    strokeLinecap="round"
-                    vectorEffect="non-scaling-stroke"
-                    style={{
-                      transition: 'stroke-dashoffset 0.15s ease-out',
-                    }}
-                  />
-                </svg>
+                {/* Flow line image - starts from end of "Begins." title, passes through each card dot in sequence */}
+                <img 
+                  src="/images/flowline.webp" 
+                  alt="Process flow line" 
+                  className="process-flow-line"
+                />
                 {service.processSteps.map((step, index) => (
                   <ScrollReveal 
                     key={step.number} 
