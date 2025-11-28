@@ -13,7 +13,7 @@ export default function Header({ navigateTo, currentPage }) {
     
     // Map detail pages to their parent pages
     if (currentPage === 'service-detail') return 'services';
-    if (currentPage === 'case-study-detail') return '';
+    if (currentPage === 'case-study-detail') return 'case-study';
     if (currentPage === 'blog-detail') return 'blog';
     if (currentPage === 'position-apply') return 'career';
     
@@ -90,10 +90,10 @@ export default function Header({ navigateTo, currentPage }) {
             </li>
             <li>
               <a 
-                onClick={() => navigateTo('projects')}
-                className={activePage === 'projects' ? 'active' : ''}
+                onClick={() => navigateTo('case-study')}
+                className={activePage === 'case-study' ? 'active' : ''}
               >
-                Projects
+                Case Study
               </a>
             </li>
             <li>

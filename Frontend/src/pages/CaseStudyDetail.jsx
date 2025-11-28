@@ -4,39 +4,69 @@ import Footer from '@/components/Footer';
 import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
 
-const caseStudies = [
+const projects = [
   {
-    name: 'Branding & Design',
-    slug: 'branding-design',
+    id: 1,
+    title: 'Aicumen AI',
+    description: 'Intelligent automation system powered by state-of-the-art AI technology, enabling organizations to streamline operations and enhance productivity through smart solutions.',
+    image: '/images/aicumen-ai.webp',
+    link: 'https://www.aicumen.ai/'
   },
   {
-    name: 'Web & App Development',
-    slug: 'web-app-development',
+    id: 2,
+    title: 'AMRUTKUMAR GOVINDDAS LLP',
+    description: 'Sophisticated digital storefront presenting luxury jewelry pieces with intuitive navigation, smooth checkout process, and trusted payment security.',
+    image: '/images/amrutkumar-jewelry.webp',
+    link: 'https://amrutkumargovinddasllp.com/'
   },
   {
-    name: 'Digital Marketing',
-    slug: 'digital-marketing',
+    id: 3,
+    title: 'Crosscoin',
+    description: 'Contemporary e-commerce destination specializing in premium sock collections, combining stylish aesthetics with superior comfort for daily use.',
+    image: '/images/crosscoin.webp',
+    link: 'https://crosscoin.in/'
   },
   {
-    name: 'B2B & Custom Solutions',
-    slug: 'b2b-custom-solutions',
+    id: 4,
+    title: 'Immune Protector',
+    description: 'Comprehensive wellness resource center delivering valuable insights and quality supplements designed to naturally boost and maintain immune health.',
+    image: '/images/immune-protector.webp',
+    link: 'https://www.immuneprotector.in/'
   },
   {
-    name: 'E-Commerce Solutions',
-    slug: 'e-commerce-solutions',
+    id: 5,
+    title: 'Nanak Finserv',
+    description: 'Digital banking ecosystem providing creative financial tools and services tailored for individual consumers and corporate clients seeking modern banking solutions.',
+    image: '/images/nanak-finserv.webp',
+    link: 'https://nanakfinserv.com/'
   },
   {
-    name: 'SaaS Platform Development',
-    slug: 'saas-platform-development',
+    id: 6,
+    title: 'Radhe Consultancy',
+    description: 'Expert advisory network linking companies with seasoned consultants who deliver strategic guidance to drive organizational expansion and success.',
+    image: '/images/radhe-consultancy.webp',
+    link: 'https://radheconsultancy.co.in/'
   },
+  {
+    id: 7,
+    title: 'Vivera Lighting',
+    description: 'Contemporary illumination specialist creating stylish fixtures and eco-friendly lighting options perfect for both home environments and workplace settings.',
+    image: '/images/vivera-lighting.webp',
+    link: 'https://www.viveralighting.com/'
+  }
 ];
 
 export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage }) {
-  // Find current case study
-  const currentCaseStudy = caseStudies.find(study => study.slug === caseStudyName) || caseStudies[0];
+  // Find current project by ID (caseStudyName is now a project ID string)
+  const projectId = parseInt(caseStudyName, 10);
+  const currentProject = projects.find(project => project.id === projectId) || projects[0];
   
-  // Get related case studies (exclude current one)
-  const relatedCaseStudies = caseStudies.filter(study => study.slug !== caseStudyName).slice(0, 5);
+  // Get related projects (exclude current one)
+  const relatedProjects = projects.filter(project => project.id !== projectId).slice(0, 5);
+  
+  const handleVisitSite = () => {
+    window.open(currentProject.link, '_blank', 'noopener,noreferrer');
+  };
 
   return (
     <>
@@ -53,7 +83,7 @@ export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage
                 trigger="onScroll"
                 once={false}
               >
-                {currentCaseStudy.name}
+                {currentProject.title}
               </SplitText>
             </h1>
           </ScrollReveal>
@@ -62,33 +92,49 @@ export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage
             {/* Main Content Column */}
             <div className="case-study-main-content">
               <ScrollReveal as="div" animation="fadeUp" delay={0.1} duration={1.5} once={false}>
-                <div className="case-study-image-placeholder"></div>
+                <div className="case-study-image-container">
+                  <img
+                    src={currentProject.image}
+                    alt={currentProject.title}
+                    className="case-study-detail-image"
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                    }}
+                  />
+                </div>
                 <div className="case-study-body-text">
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                  </p>
-                  <p>
-                    Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
-                  </p>
-                  <p>
-                    Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur.
-                  </p>
+                  <p>{currentProject.description}</p>
+                  <button 
+                    className="visit-site-button"
+                    onClick={handleVisitSite}
+                  >
+                    Visit Site →
+                  </button>
                 </div>
               </ScrollReveal>
             </div>
 
-            {/* Related Case Studies Column */}
+            {/* Related Projects Column */}
             <div className="case-study-related">
               <ScrollReveal as="div" animation="fadeUp" delay={0.15} duration={1.5} once={false}>
-                {relatedCaseStudies.map((study, index) => (
+                <h3 className="related-projects-title">Related Projects</h3>
+                {relatedProjects.map((project, index) => (
                   <div 
-                    key={study.slug} 
+                    key={project.id} 
                     className="related-case-study-card"
-                    onClick={() => navigateTo('case-study-detail', study.slug)}
+                    onClick={() => navigateTo('case-study-detail', project.id.toString())}
                     style={{ cursor: 'pointer' }}
                   >
-                    <div className="related-case-study-image"></div>
-                    <div className="related-case-study-title">{study.name}</div>
+                    <div className="related-case-study-image">
+                      <img
+                        src={project.image}
+                        alt={project.title}
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                        }}
+                      />
+                    </div>
+                    <div className="related-case-study-title">{project.title}</div>
                   </div>
                 ))}
               </ScrollReveal>
