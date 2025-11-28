@@ -169,7 +169,7 @@ export default function AboutUs({ navigateTo, currentPage }) {
         setIsTestimonialsSliding(true);
       }, 2000);
     } else {
-      // Reset sliding state when not hovered
+      // Reset both sliding and hover states when not hovered
       setIsTestimonialsSliding(false);
       if (testimonialsSlideTimeoutRef.current) {
         clearTimeout(testimonialsSlideTimeoutRef.current);
@@ -368,7 +368,10 @@ export default function AboutUs({ navigateTo, currentPage }) {
                     ))}
                   </div>
                 ) : (
-                  <div className="testimonial-marquee is-sliding">
+                  <div 
+                    className="testimonial-marquee is-sliding"
+                    onMouseLeave={() => setIsTestimonialsHovered(false)}
+                  >
                     <div className="marquee-row marquee-row--top">
                       <div className="marquee-track">
                         {[...topRowTestimonials, ...topRowTestimonials].map((testimonial, index) => (

@@ -283,6 +283,10 @@
   z-index: 1;
 }
 
+.about-container .testimonials-section {
+  padding: 0;
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
   .about-section {
