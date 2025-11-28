@@ -128,7 +128,7 @@
 
 .process-card-wrapper {
   position: absolute;
-  z-index: 2;
+  z-index: 0;
 }
 
 .process-card {
@@ -171,83 +171,61 @@
 /* Position Classes - Curved Flow Pattern matching the image */
 /* Card 1: Top right */
 .process-card-top-right {
-  top: 4%;
-  right: 6%;
-  transform: rotate(-4deg) !important;
-}
-
-.process-card-top-right:hover {
-  transform: rotate(-4deg) translateY(-4px);
+  top: -12%;
+  right: 3%;
+  transform: rotate(7deg) !important;
 }
 
 /* Card 2: Middle right, below Card 1 */
 .process-card-middle-right {
-  top: 25%;
-  right: 19%;
-  transform: rotate(3deg);
-}
-
-.process-card-middle-right:hover {
-  transform: rotate(3deg) translateY(-4px);
+  top: 20%;
+  right: 22%;
+  transform: rotate(-10deg) !important;
 }
 
 /* Card 3: Left side, middle */
 .process-card-middle-left {
-  top: 37%;
-  left: 35%;
-  transform: rotate(-6deg);
-}
-
-.process-card-middle-left:hover {
-  transform: rotate(-6deg) translateY(-4px);
+  top: 22%;
+  left: 31%;
+  transform: rotate(5deg) !important;
 }
 
 /* Card 4: Bottom left */
 .process-card-bottom-left {
-  bottom: 44%;
-  left: 8%;
-  transform: rotate(4deg);
-}
-
-.process-card-bottom-left:hover {
-  transform: rotate(4deg) translateY(-4px);
+  bottom: 40%;
+  left: 3%;
+  transform: rotate(-5deg) !important;
 }
 
 /* Card 5: Bottom center-left */
 .process-card-bottom-middle {
-  bottom: 20%;
-  left: 24%;
-  transform: rotate(-3deg);
-}
-
-
-.process-card-bottom-middle:hover {
-  transform: rotate(-3deg) translateY(-4px);
+  bottom: 8%;
+  left: 30%;
+  transform: rotate(7deg) !important;
 }
 
 /* Card 6: Bottom right */
 .process-card-bottom-right {
-  bottom: 16.5%;
-  right: 20%;
-  transform: rotate(5deg);
-}
-
-.process-card-bottom-right:hover {
-  transform: rotate(5deg) translateY(-4px);
+  bottom: 4%;
+  right: 25%;
+  transform: rotate(-15deg) !important;
 }
 
 /* Other Services Section */
 .other-services-section {
   margin-top: 4rem;
   padding-top: 2rem;
+}
+
+.other-services-content {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 3rem;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 .other-services-header {
-  flex: 1;
+  display: flex;
+  align-items: flex-start;
 }
 
 .other-services-title {
@@ -258,55 +236,49 @@
 
 .other-services-title-small {
   color: #EC691F;
-  font-size: 1.1rem;
+  font-size: 45px;
   font-weight: 400;
 }
 
 .other-services-title-large {
   color: #EC691F;
-  font-size: 2rem;
-  font-weight: 600;
+  font-size: 45px;
+  font-weight: 400;
 }
+
+.other-services-divider {
+  width: 80%;
+  height: 0.5px;
+  background: #2D2C2B;
+  position: absolute;
+  left: 20%;
+  top: 38%;
+}
+
 
 .other-services-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 2rem;
+  gap: 2.5rem;
   align-items: center;
-  flex: 1.5;
-  justify-content: flex-end;
+  position: absolute;
+  right: 0%;
+  top: 70%;
 }
 
 .other-service-link {
   color: #2D2C2B;
   font-size: 1rem;
-  font-weight: 400;
-  text-decoration: none;
-  position: relative;
-  transition: color 0.3s ease;
-  cursor: pointer;
+  font-weight: 300;
+  text-decoration: 1px solid underline #2D2C2B;
+  text-underline-offset: 2px;
+  transition: color 0.3s ease, text-decoration-color 0.3s ease;
+  cursor: default;
 }
 
-.other-service-link::after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  background: #EC691F;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.other-service-link:hover,
-.other-service-link.active {
+.other-service-link:hover {
   color: #EC691F;
-}
-
-.other-service-link:hover::after,
-.other-service-link.active::after {
-  opacity: 1;
+  text-decoration-color: #EC691F;
 }
 
 /* Dark Theme Support */
@@ -336,16 +308,18 @@ body.dark-theme .process-number {
   color: #FAF9F6;
 }
 
-body.dark-theme .other-services-section {
-  border-top-color: #2D2C2B;
+body.dark-theme .other-services-divider {
+  background: #4A4A4A;
 }
 
 body.dark-theme .other-service-link {
-  color: #FAF9F6;
+  color: #A0A0A0;
+  text-decoration-color: #A0A0A0;
 }
 
 body.dark-theme .other-service-link:hover {
   color: #EC691F;
+  text-decoration-color: #EC691F;
 }
 
 /* Responsive Design */

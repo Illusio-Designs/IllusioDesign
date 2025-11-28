@@ -36,8 +36,8 @@ const serviceData = {
       { number: 2, title: 'Strategy & Positioning', position: 'middle-right' },
       { number: 3, title: 'Visual Direction', position: 'middle-left' },
       { number: 4, title: 'Identity Design', position: 'bottom-left' },
-      { number: 5, title: 'Review & Feedback', position: 'bottom-right' },
-      { number: 6, title: 'Guidelines & Delivery', position: 'middle-bottom' },
+      { number: 5, title: 'Guidelines & Delivery', position: 'bottom-middle' },
+      { number: 6, title: 'Review & Feedback', position: 'bottom-right' },
     ],
   },
   'marketing': {
@@ -53,7 +53,7 @@ const serviceData = {
       { number: 2, title: 'Concept Development', position: 'middle-right' },
       { number: 3, title: 'Design & Visualization', position: 'middle-left' },
       { number: 4, title: 'Refine & Deliver', position: 'bottom-left' },
-      { number: 5, title: 'Final Handover', position: 'bottom-center' },
+      { number: 5, title: 'Final Handover', position: 'bottom-middle' },
       { number: 6, title: 'Review & Feedback', position: 'bottom-right' },
     ],
   },
@@ -66,145 +66,46 @@ const serviceData = {
       'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.'
     ],
     processSteps: [
-      { number: 1, title: 'Discovery & Research', position: 'top-left' },
-      { number: 2, title: 'Frame & Design Pulse', position: 'top-right' },
+      { number: 1, title: 'Discovery & Research', position: 'top-right' },
+      { number: 2, title: 'Frame & Design Pulse', position: 'middle-right' },
       { number: 3, title: 'UI & Visual Design', position: 'middle-left' },
-      { number: 4, title: 'Proto & UX Design', position: 'middle-right' },
-      { number: 5, title: 'Final Handover', position: 'bottom-left' },
+      { number: 4, title: 'Proto & UX Design', position: 'bottom-left' },
+      { number: 5, title: 'Final Handover', position: 'bottom-middle' },
       { number: 6, title: 'Review & Feedback', position: 'bottom-right' },
-    ],
-  },
-  'design': {
-    title: ['Carve Your Brand\'s', 'Iconic Mark.'],
-    processTitle: 'Where Identity Begins.',
-    layoutType: 'branding',
-    description: [
-      'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text.',
-      'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.'
-    ],
-    processSteps: [
-      { number: 1, title: 'Understand the Brand', position: 'top-right' },
-      { number: 2, title: 'Research & Inspiration', position: 'middle-right' },
-      { number: 3, title: 'Concept & Sketching', position: 'middle-left' },
-      { number: 4, title: 'Digital Drafting', position: 'bottom-left' },
-      { number: 5, title: 'Typography & Color', position: 'bottom-middle' },
-      { number: 6, title: 'Review & Feedback', position: 'bottom-right' },
-    ],
-  },
-  'development': {
-    title: ['Shape Your Brand,', 'Stand Out!'],
-    processTitle: 'Timeless Brand Identity.',
-    layoutType: 'branding',
-    description: [
-      'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text.',
-      'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.'
-    ],
-    processSteps: [
-      { number: 1, title: 'Discovery & Research', position: 'top-right' },
-      { number: 2, title: 'Strategy & Positioning', position: 'middle-right' },
-      { number: 3, title: 'Visual Direction', position: 'middle-left' },
-      { number: 4, title: 'Identity Design', position: 'bottom-left' },
-      { number: 5, title: 'Review & Feedback', position: 'bottom-right' },
-      { number: 6, title: 'Guidelines & Delivery', position: 'middle-bottom' },
-    ],
-  },
-  'brand-identity': {
-    title: ['Carve Your Brand\'s', 'Iconic Mark.'],
-    processTitle: 'Where Identity Begins.',
-    layoutType: 'branding',
-    description: [
-      'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text.',
-      'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.'
-    ],
-    processSteps: [
-      { number: 1, title: 'Understand the Brand', position: 'top-right' },
-      { number: 2, title: 'Research & Inspiration', position: 'middle-right' },
-      { number: 3, title: 'Concept & Sketching', position: 'middle-left' },
-      { number: 4, title: 'Digital Drafting', position: 'bottom-left' },
-      { number: 5, title: 'Typography & Color', position: 'bottom-middle' },
-      { number: 6, title: 'Review & Feedback', position: 'bottom-right' },
-    ],
-  },
-  'logo-design': {
-    title: ['Carve Your Brand\'s', 'Iconic Mark.'],
-    processTitle: 'Where Identity Begins.',
-    layoutType: 'branding',
-    description: [
-      'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text.',
-      'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.'
-    ],
-    processSteps: [
-      { number: 1, title: 'Understand the Brand', position: 'top-right' },
-      { number: 2, title: 'Research & Inspiration', position: 'middle-right' },
-      { number: 3, title: 'Concept & Sketching', position: 'middle-left' },
-      { number: 4, title: 'Digital Drafting', position: 'bottom-left' },
-      { number: 5, title: 'Typography & Color', position: 'bottom-middle' },
-      { number: 6, title: 'Review & Feedback', position: 'bottom-right' },
-    ],
-  },
-  'packaging-design': {
-    title: ['Your Product, Our', 'Stunning Wrap!'],
-    processTitle: 'Packaging That Speaks.',
-    layoutType: 'branding',
-    description: [
-      'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text.',
-      'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.'
-    ],
-    processSteps: [
-      { number: 1, title: 'Research & Understanding', position: 'top-right' },
-      { number: 2, title: 'Concept Development', position: 'middle-right' },
-      { number: 3, title: 'Design & Visualization', position: 'middle-left' },
-      { number: 4, title: 'Refine & Deliver', position: 'bottom-left' },
-      { number: 5, title: 'Final Handover', position: 'bottom-center' },
-      { number: 6, title: 'Review & Feedback', position: 'bottom-right' },
-    ],
-  },
-  'web-app-design': {
-    title: ['Shape Your Brand,', 'Stand Out!'],
-    processTitle: 'Timeless Brand Identity.',
-    layoutType: 'branding',
-    description: [
-      'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text.',
-      'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.'
-    ],
-    processSteps: [
-      { number: 1, title: 'Discovery & Research', position: 'top-right' },
-      { number: 2, title: 'Strategy & Positioning', position: 'middle-right' },
-      { number: 3, title: 'Visual Direction', position: 'middle-left' },
-      { number: 4, title: 'Identity Design', position: 'bottom-left' },
-      { number: 5, title: 'Review & Feedback', position: 'bottom-right' },
-      { number: 6, title: 'Guidelines & Delivery', position: 'middle-bottom' },
-    ],
-  },
-  'web-redesign': {
-    title: ['Shape Your Brand,', 'Stand Out!'],
-    processTitle: 'Timeless Brand Identity.',
-    layoutType: 'branding',
-    description: [
-      'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text.',
-      'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.'
-    ],
-    processSteps: [
-      { number: 1, title: 'Discovery & Research', position: 'top-right' },
-      { number: 2, title: 'Strategy & Positioning', position: 'middle-right' },
-      { number: 3, title: 'Visual Direction', position: 'middle-left' },
-      { number: 4, title: 'Identity Design', position: 'bottom-left' },
-      { number: 5, title: 'Review & Feedback', position: 'bottom-right' },
-      { number: 6, title: 'Guidelines & Delivery', position: 'middle-bottom' },
     ],
   },
 };
 
-const otherServices = [
-  { name: 'Logo Design', slug: 'logo-design' },
-  { name: 'Brand Identity', slug: 'brand-identity' },
-  { name: 'Packaging Design', slug: 'packaging-design' },
-  { name: 'Web & App Design', slug: 'web-app-design' },
-  { name: 'Web Redesign', slug: 'web-redesign' },
-];
+const otherServicesMap = {
+  'branding': [
+    'Brand Identity',
+    'Packaging Design',
+    'Web & App Design',
+    'Web Redesign',
+  ],
+  'web-app': [
+    'Logo Design',
+    'Packaging Design',
+    'Web & App Design',
+    'Web Redesign',
+  ],
+  'marketing': [
+    'Logo Design',
+    'Brand Identity',
+    'Web & App Design',
+    'Web Redesign',
+  ],
+  'b2b': [
+    'Logo Design',
+    'Brand Identity',
+    'Packaging Design',
+    'Web Redesign',
+  ],
+};
 
 export default function ServiceDetail({ serviceName, navigateTo, currentPage }) {
   const service = serviceData[serviceName] || serviceData['branding'];
+  const otherServices = otherServicesMap[serviceName] || otherServicesMap['branding'];
   const processFlowRef = useRef(null);
   const [lineProgress, setLineProgress] = useState(0);
 
@@ -336,23 +237,24 @@ export default function ServiceDetail({ serviceName, navigateTo, currentPage }) 
           {/* Our Other Services Section */}
           <div className="other-services-section">
             <ScrollReveal as="div" animation="fadeUp" delay={0.1} duration={1.5} once={false}>
-              <div className="other-services-header">
-                <h3 className="other-services-title">
-                  <span className="other-services-title-small">Our Other</span>
-                  <span className="other-services-title-large">Services in Design</span>
-                </h3>
-              </div>
-              <div className="other-services-list">
-                {otherServices.map((otherService) => (
-                  <span 
-                    key={otherService.slug}
-                    className={`other-service-link ${serviceName === otherService.slug ? 'active' : ''}`}
-                    onClick={() => navigateTo('service-detail', otherService.slug)}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    {otherService.name}
-                  </span>
-                ))}
+              <div className="other-services-content">
+                <div className="other-services-header">
+                  <h3 className="other-services-title">
+                    <span className="other-services-title-small">Our Other</span>
+                    <span className="other-services-title-large">Services in Design</span>
+                  </h3>
+                </div>
+                <div className="other-services-divider"></div>
+                <div className="other-services-list">
+                  {otherServices.map((serviceName, index) => (
+                    <span 
+                      key={index}
+                      className="other-service-link"
+                    >
+                      {serviceName}
+                    </span>
+                  ))}
+                </div>
               </div>
             </ScrollReveal>
           </div>
