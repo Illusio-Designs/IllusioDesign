@@ -18,7 +18,7 @@
 
 /* Introduction Section */
 .about-intro {
-  max-width: 900px;
+  max-width: 800px;
   margin: 0 auto 5rem;
   text-align: center;
 }
@@ -30,41 +30,63 @@
   font-size: 1.1rem;
 }
 
+/* Vision and Mission Grid */
+.vision-mission-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 3rem;
+  margin-bottom: 5rem;
+}
+
 /* Vision and Mission Cards */
 .about-card {
-  background: #FAF9F6;
+  background: linear-gradient(135deg, rgba(236, 105, 31, 0.03) 0%, rgba(255, 255, 255, 0) 100%);
+  border: 2px solid rgba(236, 105, 31, 0.15);
   border-radius: 20px;
-  padding: 3rem;
-  margin-bottom: 3rem;
-  text-align: center;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 3rem 2.5rem;
+  text-align: left;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.about-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(236, 105, 31, 0.05) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
 }
 
 .about-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 30px rgba(236, 105, 31, 0.15);
+  border-color: #EC691F;
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px rgba(236, 105, 31, 0.15);
 }
 
-.card-icon {
-  margin-bottom: 1.5rem;
-  display: flex;
-  justify-content: center;
+.about-card:hover::before {
+  opacity: 1;
 }
 
 .card-title {
-  font-size: 2rem;
-  font-weight: 600;
+  font-size: 1.75rem;
+  font-weight: 500;
   color: #EC691F;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
+  position: relative;
+  z-index: 1;
 }
 
 .card-description {
   color: #666;
-  line-height: 1.8;
-  font-size: 1.1rem;
-  max-width: 800px;
-  margin: 0 auto;
+  line-height: 1.7;
+  font-size: 1rem;
+  position: relative;
+  z-index: 1;
 }
 
 /* Goals Section */
@@ -82,37 +104,80 @@
 
 .goals-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 2rem;
   margin-top: 2rem;
 }
 
 .goal-card {
-  background: #FAF9F6;
-  border-radius: 15px;
-  padding: 2rem;
+  background: linear-gradient(135deg, rgba(236, 105, 31, 0.03) 0%, rgba(255, 255, 255, 0) 100%);
+  border: 2px solid rgba(236, 105, 31, 0.15);
+  border-radius: 18px;
+  padding: 2.5rem 2rem;
   text-align: center;
-  border: 2px solid transparent;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.goal-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(236, 105, 31, 0.05) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
 }
 
 .goal-card:hover {
   border-color: #EC691F;
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(236, 105, 31, 0.1);
+  transform: translateY(-10px);
+  box-shadow: 0 15px 35px rgba(236, 105, 31, 0.2);
+}
+
+.goal-card:hover::before {
+  opacity: 1;
+}
+
+.goal-icon-wrapper {
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.goal-icon {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.goal-card:hover .goal-icon {
+  transform: scale(1.1);
 }
 
 .goal-title {
   font-size: 1.5rem;
-  font-weight: 600;
+  font-weight: 500;
   color: #EC691F;
   margin-bottom: 1rem;
+  position: relative;
+  z-index: 1;
 }
 
 .goal-description {
   color: #666;
   line-height: 1.7;
-  font-size: 1rem;
+  font-size: 0.95rem;
+  flex-grow: 1;
+  position: relative;
+  z-index: 1;
 }
 
 /* Team Section */
@@ -122,63 +187,103 @@
 
 .team-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2.5rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
   margin-top: 2rem;
 }
 
 .team-card {
-  background: #FAF9F6;
+  background: linear-gradient(135deg, rgba(236, 105, 31, 0.03) 0%, rgba(255, 255, 255, 0) 100%);
+  border: 2px solid rgba(236, 105, 31, 0.15);
   border-radius: 20px;
-  padding: 2.5rem;
+  padding: 2.5rem 2rem;
   text-align: center;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.team-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(236, 105, 31, 0.05) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
 }
 
 .team-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 35px rgba(236, 105, 31, 0.15);
+  border-color: #EC691F;
+  transform: translateY(-10px);
+  box-shadow: 0 15px 35px rgba(236, 105, 31, 0.2);
+}
+
+.team-card:hover::before {
+  opacity: 1;
 }
 
 .team-avatar {
   margin-bottom: 1.5rem;
   display: flex;
   justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 1;
 }
 
 .avatar-placeholder {
-  width: 100px;
-  height: 100px;
+  width: 90px;
+  height: 90px;
   border-radius: 50%;
   background: linear-gradient(135deg, #EC691F 0%, #ff8c42 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2rem;
+  font-size: 1.75rem;
   font-weight: 600;
   color: #ffffff;
   margin: 0 auto;
+  position: relative;
+  box-shadow: 0 8px 20px rgba(236, 105, 31, 0.3);
+  transition: all 0.4s ease;
+}
+
+.team-card:hover .avatar-placeholder {
+  transform: scale(1.1);
+  box-shadow: 0 12px 30px rgba(236, 105, 31, 0.4);
 }
 
 .team-name {
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: 1.25rem;
+  font-weight: 500;
   color: #2d2d2d;
   margin-bottom: 0.5rem;
+  position: relative;
+  z-index: 1;
 }
 
 .team-role {
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: #EC691F;
   font-weight: 500;
   margin-bottom: 1rem;
+  position: relative;
+  z-index: 1;
 }
 
 .team-description {
   color: #666;
-  line-height: 1.7;
-  font-size: 0.95rem;
+  line-height: 1.6;
+  font-size: 0.9rem;
+  flex-grow: 1;
+  position: relative;
+  z-index: 1;
 }
 
 /* Responsive Design */
@@ -195,9 +300,18 @@
     font-size: 2rem;
   }
 
-  .goals-grid,
+  .vision-mission-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
   .team-grid {
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .goals-grid {
+    grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
   }
 }
@@ -225,9 +339,12 @@
     font-size: 1rem;
   }
 
+  .vision-mission-grid {
+    margin-bottom: 3rem;
+  }
+
   .about-card {
     padding: 2rem 1.5rem;
-    margin-bottom: 2rem;
   }
 
   .card-title {
@@ -235,7 +352,7 @@
   }
 
   .card-description {
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
 
   .goals-section,
@@ -243,7 +360,11 @@
     margin: 3rem 0;
   }
 
-  .goals-grid,
+  .goals-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
   .team-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
@@ -263,8 +384,15 @@ body.dark-theme .about-intro p {
 body.dark-theme .about-card,
 body.dark-theme .goal-card,
 body.dark-theme .team-card {
-  background: #1a1a1a;
-  border-color: rgba(236, 105, 31, 0.2);
+  background: transparent;
+  border-color: rgba(236, 105, 31, 0.3);
+}
+
+body.dark-theme .about-card:hover,
+body.dark-theme .goal-card:hover,
+body.dark-theme .team-card:hover {
+  background: rgba(236, 105, 31, 0.05);
+  border-color: #EC691F;
 }
 
 body.dark-theme .card-description,

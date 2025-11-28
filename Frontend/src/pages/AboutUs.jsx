@@ -3,32 +3,33 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
+import Image from 'next/image';
 
 export default function AboutUs({ navigateTo, currentPage }) {
   const teamMembers = [
     {
       id: 1,
       name: 'John Doe',
-      role: 'Creative Director',
-      description: 'Leading our creative vision with 10+ years of experience in design and branding.'
+      role: 'CEO',
+      description: 'Leading our vision with strategic direction and innovative thinking.'
     },
     {
       id: 2,
       name: 'Jane Smith',
-      role: 'Lead Developer',
-      description: 'Expert in full-stack development, bringing innovative solutions to life.'
+      role: 'CFO',
+      description: 'Managing financial operations and driving business growth strategies.'
     },
     {
       id: 3,
       name: 'Mike Johnson',
-      role: 'UX/UI Designer',
-      description: 'Crafting intuitive user experiences that delight and engage users.'
+      role: 'Frontend Developer',
+      description: 'Creating beautiful and responsive user interfaces with modern technologies.'
     },
     {
       id: 4,
       name: 'Sarah Williams',
-      role: 'Digital Marketing Lead',
-      description: 'Driving growth through strategic digital marketing and brand positioning.'
+      role: 'Backend Developer',
+      description: 'Building robust and scalable server-side solutions and APIs.'
     }
   ];
 
@@ -36,22 +37,26 @@ export default function AboutUs({ navigateTo, currentPage }) {
     {
       id: 1,
       title: 'Innovation',
-      description: 'Continuously push boundaries and explore new technologies to deliver cutting-edge solutions.'
+      description: 'Continuously push boundaries and explore new technologies to deliver cutting-edge solutions.',
+      icon: '/Icons/Brandanddesign.webp'
     },
     {
       id: 2,
       title: 'Excellence',
-      description: 'Maintain the highest standards in every project, ensuring quality and attention to detail.'
+      description: 'Maintain the highest standards in every project, ensuring quality and attention to detail.',
+      icon: '/Icons/Web&app.webp'
     },
     {
       id: 3,
       title: 'Client Success',
-      description: 'Prioritize client goals and work collaboratively to achieve measurable business results.'
+      description: 'Prioritize client goals and work collaboratively to achieve measurable business results.',
+      icon: '/Icons/digitalmarketing.webp'
     },
     {
       id: 4,
       title: 'Growth',
-      description: 'Foster a culture of learning and development, both for our team and our clients.'
+      description: 'Foster a culture of learning and development, both for our team and our clients.',
+      icon: '/Icons/b2bsolution.webp'
     }
   ];
 
@@ -92,45 +97,30 @@ export default function AboutUs({ navigateTo, currentPage }) {
             </div>
           </ScrollReveal>
 
-          {/* Vision Section */}
-          <ScrollReveal animation="fadeUp" delay={0.2} duration={1.5} once={false}>
-            <div className="about-card vision-card">
-              <div className="card-icon">
-                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#EC691F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M2 17L12 22L22 17" stroke="#EC691F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M2 12L12 17L22 12" stroke="#EC691F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
+          {/* Vision and Mission Grid */}
+          <div className="vision-mission-grid">
+            <ScrollReveal animation="fadeUp" delay={0.2} duration={1.5} once={false}>
+              <div className="about-card vision-card">
+                <h2 className="card-title">Our Vision</h2>
+                <p className="card-description">
+                  To be the leading digital design and development agency that transforms businesses 
+                  through innovative solutions, creating meaningful connections between brands and their 
+                  audiences.
+                </p>
               </div>
-              <h2 className="card-title">Our Vision</h2>
-              <p className="card-description">
-                To be the leading digital design and development agency that transforms businesses 
-                through innovative solutions, creating meaningful connections between brands and their 
-                audiences. We envision a future where every digital experience is intuitive, beautiful, 
-                and purpose-driven.
-              </p>
-            </div>
-          </ScrollReveal>
+            </ScrollReveal>
 
-          {/* Mission Section */}
-          <ScrollReveal animation="fadeUp" delay={0.25} duration={1.5} once={false}>
-            <div className="about-card mission-card">
-              <div className="card-icon">
-                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M21 16V8C20.9996 7.64928 20.9071 7.30481 20.7315 7.00116C20.556 6.69751 20.3037 6.44536 20 6.27L13 2.27C12.696 2.09446 12.3511 2.00205 12 2.00205C11.6489 2.00205 11.304 2.09446 11 2.27L4 6.27C3.69626 6.44536 3.44398 6.69751 3.26846 7.00116C3.09294 7.30481 3.00036 7.64928 3 8V16C3.00036 16.3507 3.09294 16.6952 3.26846 16.9988C3.44398 17.3025 3.69626 17.5546 4 17.73L11 21.73C11.304 21.9055 11.6489 21.9979 12 21.9979C12.3511 21.9979 12.696 21.9055 13 21.73L20 17.73C20.3037 17.5546 20.556 17.3025 20.7315 16.9988C20.9071 16.6952 20.9996 16.3507 21 16Z" stroke="#EC691F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M3.27 6.96L12 12.01L20.73 6.96" stroke="#EC691F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M12 22.08V12" stroke="#EC691F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
+            <ScrollReveal animation="fadeUp" delay={0.25} duration={1.5} once={false}>
+              <div className="about-card mission-card">
+                <h2 className="card-title">Our Mission</h2>
+                <p className="card-description">
+                  To empower businesses with exceptional digital solutions that drive growth and success. 
+                  We combine creative excellence with technical expertise to deliver projects that exceed 
+                  expectations.
+                </p>
               </div>
-              <h2 className="card-title">Our Mission</h2>
-              <p className="card-description">
-                To empower businesses with exceptional digital solutions that drive growth and success. 
-                We combine creative excellence with technical expertise to deliver projects that exceed 
-                expectations. Our mission is to understand our clients' unique challenges and provide 
-                tailored solutions that make a lasting impact.
-              </p>
-            </div>
-          </ScrollReveal>
+            </ScrollReveal>
+          </div>
 
           {/* Our Goals Section */}
           <ScrollReveal animation="fadeUp" delay={0.3} duration={1.5} once={false}>
@@ -146,6 +136,9 @@ export default function AboutUs({ navigateTo, currentPage }) {
                     once={false}
                   >
                     <div className="goal-card">
+                      <div className="goal-icon-wrapper">
+                        <Image src={goal.icon} alt={goal.title} width={60} height={60} className="goal-icon" />
+                      </div>
                       <h3 className="goal-title">{goal.title}</h3>
                       <p className="goal-description">{goal.description}</p>
                     </div>

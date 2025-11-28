@@ -61,9 +61,6 @@ export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage
   const projectId = parseInt(caseStudyName, 10);
   const currentProject = projects.find(project => project.id === projectId) || projects[0];
   
-  // Get related projects (exclude current one)
-  const relatedProjects = projects.filter(project => project.id !== projectId).slice(0, 5);
-  
   const handleVisitSite = () => {
     window.open(currentProject.link, '_blank', 'noopener,noreferrer');
   };
@@ -89,7 +86,6 @@ export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage
           </ScrollReveal>
 
           <div className="case-study-detail-layout">
-            {/* Main Content Column */}
             <div className="case-study-main-content">
               <ScrollReveal as="div" animation="fadeUp" delay={0.1} duration={1.5} once={false}>
                 <div className="case-study-image-container">
@@ -111,32 +107,6 @@ export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage
                     Visit Site →
                   </button>
                 </div>
-              </ScrollReveal>
-            </div>
-
-            {/* Related Projects Column */}
-            <div className="case-study-related">
-              <ScrollReveal as="div" animation="fadeUp" delay={0.15} duration={1.5} once={false}>
-                <h3 className="related-projects-title">Related Projects</h3>
-                {relatedProjects.map((project, index) => (
-                  <div 
-                    key={project.id} 
-                    className="related-case-study-card"
-                    onClick={() => navigateTo('case-study-detail', project.id.toString())}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    <div className="related-case-study-image">
-                      <img
-                        src={project.image}
-                        alt={project.title}
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                        }}
-                      />
-                    </div>
-                    <div className="related-case-study-title">{project.title}</div>
-                  </div>
-                ))}
               </ScrollReveal>
             </div>
           </div>

@@ -64,31 +64,42 @@ const serviceCards = [
   },
 ];
 
-const caseStudies = [
+const projects = [
   {
-    name: 'Branding & Design',
-    slug: 'branding-design',
+    id: 1,
+    title: 'Aicumen AI',
+    image: '/images/aicumen-ai.webp',
   },
   {
-    name: 'Web & App Development',
-    slug: 'web-app-development',
+    id: 2,
+    title: 'AMRUTKUMAR GOVINDDAS LLP',
+    image: '/images/amrutkumar-jewelry.webp',
   },
   {
-    name: 'Digital Marketing',
-    slug: 'digital-marketing',
+    id: 3,
+    title: 'Crosscoin',
+    image: '/images/crosscoin.webp',
   },
   {
-    name: 'B2B & Custom Solutions',
-    slug: 'b2b-custom-solutions',
+    id: 4,
+    title: 'Immune Protector',
+    image: '/images/immune-protector.webp',
   },
   {
-    name: 'E-Commerce Solutions',
-    slug: 'e-commerce-solutions',
+    id: 5,
+    title: 'Nanak Finserv',
+    image: '/images/nanak-finserv.webp',
   },
   {
-    name: 'SaaS Platform Development',
-    slug: 'saas-platform-development',
+    id: 6,
+    title: 'Radhe Consultancy',
+    image: '/images/radhe-consultancy.webp',
   },
+  {
+    id: 7,
+    title: 'Vivera Lighting',
+    image: '/images/vivera-lighting.webp',
+  }
 ];
 
 const stats = [
@@ -193,6 +204,7 @@ export default function Home({ navigateTo, currentPage }) {
   const [isTestimonialsHovered, setIsTestimonialsHovered] = useState(false);
   const [isTestimonialsSliding, setIsTestimonialsSliding] = useState(false);
   const [openFaqId, setOpenFaqId] = useState(null);
+  const [hoveredProject, setHoveredProject] = useState(null);
   const servicesSectionRef = useRef(null);
   const testimonialsSlideTimeoutRef = useRef(null);
 
@@ -358,27 +370,59 @@ export default function Home({ navigateTo, currentPage }) {
           <div className="case-studies-slider">
             <div className="case-studies-track">
               {/* First set of items */}
-              {caseStudies.map((study, index) => (
+              {projects.map((project, index) => (
                 <div 
-                  key={`${study.slug}-1`} 
+                  key={`${project.id}-1`} 
                   className="case-study-card"
-                  onClick={() => navigateTo('case-study-detail', study.slug)}
+                  onClick={() => navigateTo('case-study-detail', project.id.toString())}
+                  onMouseEnter={() => setHoveredProject(`${project.id}-1`)}
+                  onMouseLeave={() => setHoveredProject(null)}
                   style={{ cursor: 'pointer' }}
                 >
-                  <div className="case-placeholder"></div>
-                  <h3>{study.name}</h3>
+                  <div className="case-study-image-container">
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      className="case-study-image"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                      }}
+                    />
+                  </div>
+                  <div className="case-study-title-container">
+                    <h3>{project.title}</h3>
+                    <span className={`case-study-arrow ${hoveredProject === `${project.id}-1` ? 'arrow-visible' : ''}`}>
+                      →
+                    </span>
+                  </div>
                 </div>
               ))}
               {/* Duplicate set for seamless loop */}
-              {caseStudies.map((study, index) => (
+              {projects.map((project, index) => (
                 <div 
-                  key={`${study.slug}-2`} 
+                  key={`${project.id}-2`} 
                   className="case-study-card"
-                  onClick={() => navigateTo('case-study-detail', study.slug)}
+                  onClick={() => navigateTo('case-study-detail', project.id.toString())}
+                  onMouseEnter={() => setHoveredProject(`${project.id}-2`)}
+                  onMouseLeave={() => setHoveredProject(null)}
                   style={{ cursor: 'pointer' }}
                 >
-                  <div className="case-placeholder"></div>
-                  <h3>{study.name}</h3>
+                  <div className="case-study-image-container">
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      className="case-study-image"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                      }}
+                    />
+                  </div>
+                  <div className="case-study-title-container">
+                    <h3>{project.title}</h3>
+                    <span className={`case-study-arrow ${hoveredProject === `${project.id}-2` ? 'arrow-visible' : ''}`}>
+                      →
+                    </span>
+                  </div>
                 </div>
               ))}
             </div>
