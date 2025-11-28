@@ -684,6 +684,7 @@
 }
 
 .faq-question {
+  background: #FAF9F6;
   padding: 1rem 1.25rem;
   color: #2D2C2B;
   cursor: pointer;
@@ -785,7 +786,7 @@
 
 /* Testimonials Section */
 .testimonials-section {
-  padding: 6rem 0 10rem;
+  padding: 6rem 0;
 }
 
 .testimonials-container {
@@ -920,7 +921,6 @@
   flex-direction: column;
   gap: 2.5rem;
   overflow: hidden;
-  padding: 2rem 0;
 }
 
 .testimonial-marquee::before,

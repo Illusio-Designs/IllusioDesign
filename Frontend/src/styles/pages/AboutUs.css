@@ -1,6 +1,5 @@
 .about-section {
-  padding: 6rem 2rem;
-  min-height: 100vh;
+  padding: 6rem;
 }
 
 .about-container {
@@ -18,16 +17,21 @@
 
 /* Introduction Section */
 .about-intro {
-  max-width: 800px;
-  margin: 0 auto 5rem;
   text-align: center;
+  padding: 0 0 5rem 0;
 }
 
 .about-intro p {
-  color: #666;
+  color: #2D2C2B;
+  font-weight: 300;
   line-height: 1.8;
+  font-size: 20px;
   margin-bottom: 1.5rem;
-  font-size: 1.1rem;
+}
+
+/* Stats Section */
+.about-stats-section {
+  padding: 0 0 5rem 0;
 }
 
 /* Vision and Mission Grid */
@@ -35,7 +39,7 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 3rem;
-  margin-bottom: 5rem;
+  padding: 0 0 5rem 0;
 }
 
 /* Vision and Mission Cards */
@@ -91,7 +95,7 @@
 
 /* Goals Section */
 .goals-section {
-  margin: 5rem 0;
+  padding: 0 0 5rem 0;
 }
 
 .section-subtitle {
@@ -106,7 +110,6 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 2rem;
-  margin-top: 2rem;
 }
 
 .goal-card {
@@ -182,14 +185,13 @@
 
 /* Team Section */
 .team-section {
-  margin: 5rem 0;
+  padding: 0 0 5rem 0;
 }
 
 .team-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 2rem;
-  margin-top: 2rem;
 }
 
 .team-card {
@@ -286,6 +288,11 @@
   z-index: 1;
 }
 
+/* Testimonials Section */
+.testimonials-section {
+  padding: 0 0 5rem 0;
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
   .about-section {
@@ -300,9 +307,18 @@
     font-size: 2rem;
   }
 
+  .about-intro {
+    padding: 0 0 3rem 0;
+  }
+
+  .about-stats-section {
+    padding: 0 0 3rem 0;
+  }
+
   .vision-mission-grid {
     grid-template-columns: 1fr;
     gap: 2rem;
+    padding: 0 0 3rem 0;
   }
 
   .team-grid {
@@ -332,15 +348,19 @@
   }
 
   .about-intro {
-    margin-bottom: 3rem;
+    padding: 0 0 3rem 0;
   }
 
   .about-intro p {
     font-size: 1rem;
   }
 
+  .about-stats-section {
+    padding: 0 0 3rem 0;
+  }
+
   .vision-mission-grid {
-    margin-bottom: 3rem;
+    padding: 0 0 3rem 0;
   }
 
   .about-card {
@@ -357,7 +377,11 @@
 
   .goals-section,
   .team-section {
-    margin: 3rem 0;
+    padding: 0 0 3rem 0;
+  }
+
+  .testimonials-section {
+    padding: 0 0 3rem 0;
   }
 
   .goals-grid {

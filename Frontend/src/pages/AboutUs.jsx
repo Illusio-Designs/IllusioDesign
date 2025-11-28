@@ -1,11 +1,40 @@
 import '@/styles/pages/AboutUs.css';
+import '@/styles/pages/Home.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
 import Image from 'next/image';
+import Counter from '@/components/Counter';
+import { useState, useEffect, useRef } from 'react';
+
+// Star Rating Component
+const StarRating = () => {
+  return (
+    <div className="rating">
+      {[...Array(5)].map((_, index) => (
+        <svg
+          key={index}
+          width="28"
+          height="28"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+            fill="#EC691F"
+          />
+        </svg>
+      ))}
+    </div>
+  );
+};
 
 export default function AboutUs({ navigateTo, currentPage }) {
+  const [isTestimonialsHovered, setIsTestimonialsHovered] = useState(false);
+  const [isTestimonialsSliding, setIsTestimonialsSliding] = useState(false);
+  const testimonialsSlideTimeoutRef = useRef(null);
   const teamMembers = [
     {
       id: 1,
@@ -60,6 +89,75 @@ export default function AboutUs({ navigateTo, currentPage }) {
     }
   ];
 
+  const stats = [
+    { id: 'projects', value: 883, label: 'Project Completed', suffix: '' },
+    { id: 'services', value: 19, label: 'Total Top Services', suffix: '+' },
+    { id: 'feedback', value: 98, label: 'Positive Feedback', suffix: '%' },
+    { id: 'experience', value: 7, label: 'Years of Experience', suffix: '+' },
+  ];
+
+  const testimonials = [
+    {
+      id: 'card-1',
+      quote: 'Illusio Designs transformed our brand identity and built a website that truly reflects who we are.',
+      client: 'Rajesh, Founder, Vivera Lights',
+    },
+    {
+      id: 'card-2',
+      quote: 'From concept to launch, their team was supportive and creative. Highly recommended.',
+      client: 'Kunal, Director, Gold B2B Pvt.',
+    },
+    {
+      id: 'card-3',
+      quote: 'From concept to launch, their team was supportive and creative. Highly recommended.',
+      client: 'Kunal, Director, Gold B2B Pvt.',
+    },
+    {
+      id: 'card-4',
+      quote: 'Illusio Designs transformed our brand identity and built a website that truly reflects who we are.',
+      client: 'Rajesh, Founder, Vivera Lights',
+    },
+    {
+      id: 'card-5',
+      quote: 'From concept to launch, their team was supportive and creative. Highly recommended.',
+      client: 'Kunal, Director, Gold B2B Pvt.',
+    },
+    {
+      id: 'card-6',
+      quote: 'Illusio Designs transformed our brand identity and built a website that truly reflects who we are.',
+      client: 'Rajesh, Founder, Vivera Lights',
+    },
+  ];
+
+  const topRowTestimonials = testimonials.slice(0, 3);
+  const bottomRowTestimonials = testimonials.slice(3, 6);
+
+  // Handle testimonials hover with 2 second delay before sliding
+  useEffect(() => {
+    if (isTestimonialsHovered) {
+      // Clear any existing timeout
+      if (testimonialsSlideTimeoutRef.current) {
+        clearTimeout(testimonialsSlideTimeoutRef.current);
+      }
+      // Set sliding state after 1 second
+      testimonialsSlideTimeoutRef.current = setTimeout(() => {
+        setIsTestimonialsSliding(true);
+      }, 1000);
+    } else {
+      // Reset sliding state when not hovered
+      setIsTestimonialsSliding(false);
+      if (testimonialsSlideTimeoutRef.current) {
+        clearTimeout(testimonialsSlideTimeoutRef.current);
+      }
+    }
+
+    return () => {
+      if (testimonialsSlideTimeoutRef.current) {
+        clearTimeout(testimonialsSlideTimeoutRef.current);
+      }
+    };
+  }, [isTestimonialsHovered]);
+
   return (
     <>
       <Header navigateTo={navigateTo} currentPage={currentPage} />
@@ -97,33 +195,66 @@ export default function AboutUs({ navigateTo, currentPage }) {
             </div>
           </ScrollReveal>
 
-          {/* Vision and Mission Grid */}
-          <div className="vision-mission-grid">
-            <ScrollReveal animation="fadeUp" delay={0.2} duration={1.5} once={false}>
-              <div className="about-card vision-card">
-                <h2 className="card-title">Our Vision</h2>
-                <p className="card-description">
-                  To be the leading digital design and development agency that transforms businesses 
-                  through innovative solutions, creating meaningful connections between brands and their 
-                  audiences.
-                </p>
+          {/* Stats Section */}
+          <ScrollReveal animation="fadeUp" delay={0.2} duration={1.5} once={false}>
+            <div className="about-stats-section">
+              <div className="stats-grid">
+                {stats.map((stat, index) => (
+                  <ScrollReveal
+                    key={stat.id}
+                    animation="fadeUp"
+                    delay={0.1 + index * 0.05}
+                    duration={1.5}
+                    once={false}
+                  >
+                    <div className="stat-item">
+                      <h3 className="stat-value">
+                        <Counter
+                          value={stat.value}
+                          fontSize={72}
+                          textColor="#EC691F"
+                          fontWeight={700}
+                          gap={4}
+                        />
+                        {stat.suffix && <span className="stat-suffix">{stat.suffix}</span>}
+                      </h3>
+                      <p className="stat-label">{stat.label}</p>
+                    </div>
+                  </ScrollReveal>
+                ))}
               </div>
-            </ScrollReveal>
+            </div>
+          </ScrollReveal>
 
-            <ScrollReveal animation="fadeUp" delay={0.25} duration={1.5} once={false}>
-              <div className="about-card mission-card">
-                <h2 className="card-title">Our Mission</h2>
-                <p className="card-description">
-                  To empower businesses with exceptional digital solutions that drive growth and success. 
-                  We combine creative excellence with technical expertise to deliver projects that exceed 
-                  expectations.
-                </p>
-              </div>
-            </ScrollReveal>
-          </div>
+          {/* Vision and Mission Grid */}
+          <ScrollReveal animation="fadeUp" delay={0.25} duration={1.5} once={false}>
+            <div className="vision-mission-grid">
+              <ScrollReveal animation="fadeUp" delay={0.3} duration={1.5} once={false}>
+                <div className="about-card vision-card">
+                  <h2 className="card-title">Our Vision</h2>
+                  <p className="card-description">
+                    To be the leading digital design and development agency that transforms businesses 
+                    through innovative solutions, creating meaningful connections between brands and their 
+                    audiences.
+                  </p>
+                </div>
+              </ScrollReveal>
+
+              <ScrollReveal animation="fadeUp" delay={0.35} duration={1.5} once={false}>
+                <div className="about-card mission-card">
+                  <h2 className="card-title">Our Mission</h2>
+                  <p className="card-description">
+                    To empower businesses with exceptional digital solutions that drive growth and success. 
+                    We combine creative excellence with technical expertise to deliver projects that exceed 
+                    expectations.
+                  </p>
+                </div>
+              </ScrollReveal>
+            </div>
+          </ScrollReveal>
 
           {/* Our Goals Section */}
-          <ScrollReveal animation="fadeUp" delay={0.3} duration={1.5} once={false}>
+          <ScrollReveal animation="fadeUp" delay={0.4} duration={1.5} once={false}>
             <div className="goals-section">
               <h2 className="section-subtitle">Our Goals</h2>
               <div className="goals-grid">
@@ -149,7 +280,7 @@ export default function AboutUs({ navigateTo, currentPage }) {
           </ScrollReveal>
 
           {/* Team Section */}
-          <ScrollReveal animation="fadeUp" delay={0.35} duration={1.5} once={false}>
+          <ScrollReveal animation="fadeUp" delay={0.45} duration={1.5} once={false}>
             <div className="team-section">
               <h2 className="section-subtitle">Our Team</h2>
               <div className="team-grid">
@@ -176,8 +307,85 @@ export default function AboutUs({ navigateTo, currentPage }) {
               </div>
             </div>
           </ScrollReveal>
+
+          {/* What Our Clients Say */}
+          <ScrollReveal animation="fadeUp" delay={0.5} duration={1.5} once={false}>
+            <div className="testimonials-section">
+              <div
+                className={`testimonials-container ${isTestimonialsHovered ? 'is-hovered' : ''}`}
+                onMouseEnter={() => setIsTestimonialsHovered(true)}
+                onMouseLeave={() => setIsTestimonialsHovered(false)}
+              >
+                <ScrollReveal as="div" animation="fadeUp" duration={1.5} once={false}>
+                  <SplitText
+                    as="h2"
+                    className="section-subtitle"
+                    splitBy="words"
+                    animation="fadeUp"
+                    delay={0.05}
+                    trigger="onScroll"
+                    once={false}
+                  >
+                    What Our Clients Say
+                  </SplitText>
+                </ScrollReveal>
+
+                {!isTestimonialsHovered ? (
+                  <div
+                    className="testimonial-static-grid"
+                    onMouseEnter={() => setIsTestimonialsHovered(true)}
+                  >
+                    {testimonials.map((testimonial, index) => (
+                      <article key={testimonial.id} className={`testimonial-card static-card-${index + 1}`}>
+                        <StarRating />
+                        <p className="testimonial-text">&quot;{testimonial.quote}&quot;</p>
+                        <div className="testimonial-signature">
+                          <h1 className="client-name">{testimonial.client}</h1>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                ) : (
+                  <div
+                    className={`testimonial-marquee ${isTestimonialsSliding ? 'is-sliding' : 'is-spread'}`}
+                    onMouseLeave={() => setIsTestimonialsHovered(false)}
+                  >
+                    <div className="marquee-row marquee-row--top">
+                      <div className="marquee-track">
+                        {[...topRowTestimonials, ...topRowTestimonials].map((testimonial, index) => (
+                          <article key={`${testimonial.id}-top-${index}`} className="testimonial-card">
+                            <StarRating />
+                            <p className="testimonial-text">&quot;{testimonial.quote}&quot;</p>
+                            <div className="testimonial-signature">
+                              <h1 className="client-name">{testimonial.client}</h1>
+                            </div>
+                          </article>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="marquee-row marquee-row--bottom">
+                      <div className="marquee-track">
+                        {[...bottomRowTestimonials, ...bottomRowTestimonials].map((testimonial, index) => (
+                          <article key={`${testimonial.id}-bottom-${index}`} className="testimonial-card">
+                            <StarRating />
+                            <p className="testimonial-text">&quot;{testimonial.quote}&quot;</p>
+                            <div className="testimonial-signature">
+                              <h1 className="client-name">{testimonial.client}</h1>
+                            </div>
+                          </article>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </ScrollReveal>
         </div>
       </section>
+
+     
+
       <Footer navigateTo={navigateTo} />
     </>
   );
