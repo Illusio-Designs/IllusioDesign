@@ -32,8 +32,10 @@ const StarRating = () => {
 };
 
 export default function AboutUs({ navigateTo, currentPage }) {
+  const [isTestimonialsVisible, setIsTestimonialsVisible] = useState(false);
   const [isTestimonialsHovered, setIsTestimonialsHovered] = useState(false);
   const [isTestimonialsSliding, setIsTestimonialsSliding] = useState(false);
+  const testimonialsSectionRef = useRef(null);
   const testimonialsSlideTimeoutRef = useRef(null);
   const teamMembers = [
     {
@@ -132,17 +134,40 @@ export default function AboutUs({ navigateTo, currentPage }) {
   const topRowTestimonials = testimonials.slice(0, 3);
   const bottomRowTestimonials = testimonials.slice(3, 6);
 
-  // Handle testimonials hover with 2 second delay before sliding
+  // Handle testimonials visibility
+  useEffect(() => {
+    if (!testimonialsSectionRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsTestimonialsVisible(entry.isIntersecting);
+        });
+      },
+      {
+        threshold: 0.2,
+        rootMargin: '-50px 0px',
+      }
+    );
+
+    observer.observe(testimonialsSectionRef.current);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  // Handle testimonials hover and sliding
   useEffect(() => {
     if (isTestimonialsHovered) {
       // Clear any existing timeout
       if (testimonialsSlideTimeoutRef.current) {
         clearTimeout(testimonialsSlideTimeoutRef.current);
       }
-      // Set sliding state after 1 second
+      // Set sliding state after 2 seconds when hovered
       testimonialsSlideTimeoutRef.current = setTimeout(() => {
         setIsTestimonialsSliding(true);
-      }, 1000);
+      }, 2000);
     } else {
       // Reset sliding state when not hovered
       setIsTestimonialsSliding(false);

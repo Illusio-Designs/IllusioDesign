@@ -528,10 +528,11 @@ export default function Home({ navigateTo, currentPage }) {
             </SplitText>
           </ScrollReveal>
 
-          {!isTestimonialsHovered ? (
+          {!isTestimonialsSliding ? (
             <div
-              className="testimonial-static-grid"
+              className={`testimonial-static-grid ${isTestimonialsHovered ? 'is-hovered' : ''}`}
               onMouseEnter={() => setIsTestimonialsHovered(true)}
+              onMouseLeave={() => setIsTestimonialsHovered(false)}
             >
               {testimonials.map((testimonial, index) => (
                 <article key={testimonial.id} className={`testimonial-card static-card-${index + 1}`}>

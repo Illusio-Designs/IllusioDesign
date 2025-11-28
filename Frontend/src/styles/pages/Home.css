@@ -806,9 +806,10 @@
 .testimonial-static-grid .testimonial-card {
   position: absolute;
   transform-origin: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Initial stacked positions - original positions */
 .static-card-1 {
   top: 57px;
   left: 0%;
@@ -820,33 +821,91 @@
   top: -5%;
   left: 34%;
   transform: rotate(-4deg);
+  z-index: 2;
 }
 
 .static-card-3 {
   top: 50px;
   right: -6%;
   transform: rotate(10deg);
+  z-index: 3;
 }
 
 .static-card-4 {
   bottom: -30%;
   left: 8%;
   transform: rotate(-12deg);
-  z-index: 3;
+  z-index: 4;
 }
 
 .static-card-5 {
   bottom: -13%;
   left: 39%;
   transform: rotate(-3deg);
-  z-index: 2;
+  z-index: 5;
 }
 
 .static-card-6 {
   bottom: -20%;
   right: -11%;
   transform: rotate(1deg);
+  z-index: 6;
 }
+
+/* Spread into 3-column grid when hovered - translate from original positions to grid */
+/* Spread into 3-column grid when hovered - like service cards spread */
+.testimonial-static-grid:hover .static-card-1, .testimonial-static-grid.is-hovered .static-card-1 {
+  left: 3%;
+  right: auto;
+  bottom: auto;
+  transform: translate(-200px, -100px) rotate(0deg) scale(1);
+  z-index: 6;
+}
+
+.testimonial-static-grid:hover .static-card-2, .testimonial-static-grid.is-hovered .static-card-2 {
+  top: 13%;
+  left: 45%;
+  right: auto;
+  bottom: auto;
+  transform: translate(-50%, -100px) rotate(0deg) scale(1);
+  z-index: 6;
+}
+
+.testimonial-static-grid:hover .static-card-3, .testimonial-static-grid.is-hovered .static-card-3 {
+  top: 13%;
+  left: 60%;
+  right: auto;
+  bottom: auto;
+  transform: translate(100px, -100px) rotate(0deg) scale(1);
+  z-index: 6;
+}
+
+.testimonial-static-grid:hover .static-card-4, .testimonial-static-grid.is-hovered .static-card-4 {
+  top: 50%;
+  left: 92%;
+  right: auto;
+  bottom: auto;
+  transform: translate(-200px, 100px) rotate(0deg) scale(1);
+  z-index: 6;
+}
+
+.testimonial-static-grid:hover .static-card-5, .testimonial-static-grid.is-hovered .static-card-5 {
+  top: 50%;
+  left: 46%;
+  right: auto;
+  bottom: auto;
+  transform: translate(-50%, 100px) rotate(0deg) scale(1);
+  z-index: 6;
+}
+
+.testimonial-static-grid:hover .static-card-6, .testimonial-static-grid.is-hovered .static-card-6 {
+  top: 50%;
+  left: -28%;
+  right: auto;
+  bottom: auto;
+  transform: translate(100px, 100px) rotate(0deg) scale(1);
+  z-index: 6;
+  }
 
 .testimonial-card {
   width: 350px;
@@ -992,12 +1051,37 @@
 
 @media (max-width: 1024px) {
   .testimonial-static-grid {
-    height: 360px;
+    height: 400px;
   }
 
-  .testimonial-static-grid .testimonial-card {
-    min-width: 220px;
-    max-width: 220px;
+  .testimonial-static-grid:hover .static-card-1,
+  .testimonial-static-grid.is-hovered .static-card-1 {
+    transform: translate(-150px, -100px) rotate(0deg) scale(1);
+  }
+
+  .testimonial-static-grid:hover .static-card-2,
+  .testimonial-static-grid.is-hovered .static-card-2 {
+    transform: translate(0, -100px) rotate(0deg) scale(1);
+  }
+
+  .testimonial-static-grid:hover .static-card-3,
+  .testimonial-static-grid.is-hovered .static-card-3 {
+    transform: translate(150px, -100px) rotate(0deg) scale(1);
+  }
+
+  .testimonial-static-grid:hover .static-card-4,
+  .testimonial-static-grid.is-hovered .static-card-4 {
+    transform: translate(-150px, 100px) rotate(0deg) scale(1);
+  }
+
+  .testimonial-static-grid:hover .static-card-5,
+  .testimonial-static-grid.is-hovered .static-card-5 {
+    transform: translate(0, 100px) rotate(0deg) scale(1);
+  }
+
+  .testimonial-static-grid:hover .static-card-6,
+  .testimonial-static-grid.is-hovered .static-card-6 {
+    transform: translate(150px, 100px) rotate(0deg) scale(1);
   }
 
   .testimonial-card,
@@ -1011,21 +1095,38 @@
     padding: 4rem 1rem;
   }
 
-  .testimonial-subtitle {
-    font-size: 1rem;
-  }
-
   .testimonial-static-grid {
-    position: relative;
-    height: auto;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1rem;
+    height: 600px;
   }
 
-  .testimonial-static-grid .testimonial-card {
-    position: relative;
-    transform: rotate(0deg) !important;
+  .testimonial-static-grid:hover .static-card-1,
+  .testimonial-static-grid.is-hovered .static-card-1 {
+    transform: translate(-50%, -180px) rotate(0deg) scale(1);
+  }
+
+  .testimonial-static-grid:hover .static-card-2,
+  .testimonial-static-grid.is-hovered .static-card-2 {
+    transform: translate(-50%, -60px) rotate(0deg) scale(1);
+  }
+
+  .testimonial-static-grid:hover .static-card-3,
+  .testimonial-static-grid.is-hovered .static-card-3 {
+    transform: translate(-50%, 60px) rotate(0deg) scale(1);
+  }
+
+  .testimonial-static-grid:hover .static-card-4,
+  .testimonial-static-grid.is-hovered .static-card-4 {
+    transform: translate(-50%, 180px) rotate(0deg) scale(1);
+  }
+
+  .testimonial-static-grid:hover .static-card-5,
+  .testimonial-static-grid.is-hovered .static-card-5 {
+    transform: translate(-50%, 300px) rotate(0deg) scale(1);
+  }
+
+  .testimonial-static-grid:hover .static-card-6,
+  .testimonial-static-grid.is-hovered .static-card-6 {
+    transform: translate(-50%, 420px) rotate(0deg) scale(1);
   }
 
   .testimonial-marquee::before,
