@@ -201,11 +201,13 @@ const blogPosts = [
 
 export default function Home({ navigateTo, currentPage }) {
   const [isServicesVisible, setIsServicesVisible] = useState(false);
+  const [isTestimonialsVisible, setIsTestimonialsVisible] = useState(false);
   const [isTestimonialsHovered, setIsTestimonialsHovered] = useState(false);
   const [isTestimonialsSliding, setIsTestimonialsSliding] = useState(false);
   const [openFaqId, setOpenFaqId] = useState(null);
   const [hoveredProject, setHoveredProject] = useState(null);
   const servicesSectionRef = useRef(null);
+  const testimonialsSectionRef = useRef(null);
   const testimonialsSlideTimeoutRef = useRef(null);
 
   useEffect(() => {
@@ -230,17 +232,40 @@ export default function Home({ navigateTo, currentPage }) {
     };
   }, []);
 
-  // Handle testimonials hover with 2 second delay before sliding
+  // Handle testimonials visibility
+  useEffect(() => {
+    if (!testimonialsSectionRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsTestimonialsVisible(entry.isIntersecting);
+        });
+      },
+      {
+        threshold: 0.2,
+        rootMargin: '-50px 0px',
+      }
+    );
+
+    observer.observe(testimonialsSectionRef.current);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  // Handle testimonials hover and sliding
   useEffect(() => {
     if (isTestimonialsHovered) {
       // Clear any existing timeout
       if (testimonialsSlideTimeoutRef.current) {
         clearTimeout(testimonialsSlideTimeoutRef.current);
       }
-      // Set sliding state after 2 seconds
+      // Set sliding state after 2 seconds when hovered
       testimonialsSlideTimeoutRef.current = setTimeout(() => {
         setIsTestimonialsSliding(true);
-      }, 1000);
+      }, 2000);
     } else {
       // Reset sliding state when not hovered
       setIsTestimonialsSliding(false);
@@ -508,12 +533,8 @@ export default function Home({ navigateTo, currentPage }) {
       </section>
 
       {/* What Our Clients Say */}
-      <section className="testimonials-section">
-        <div
-          className={`container testimonials-container ${isTestimonialsHovered ? 'is-hovered' : ''}`}
-          onMouseEnter={() => setIsTestimonialsHovered(true)}
-          onMouseLeave={() => setIsTestimonialsHovered(false)}
-        >
+      <section ref={testimonialsSectionRef} className="testimonials-section">
+        <div className="container testimonials-container">
           <ScrollReveal as="div" animation="fadeUp" duration={1.5} once={false}>
             <SplitText
               as="h2"
@@ -545,10 +566,7 @@ export default function Home({ navigateTo, currentPage }) {
               ))}
             </div>
           ) : (
-            <div
-              className={`testimonial-marquee ${isTestimonialsSliding ? 'is-sliding' : 'is-spread'}`}
-              onMouseLeave={() => setIsTestimonialsHovered(false)}
-            >
+            <div className="testimonial-marquee is-sliding">
               <div className="marquee-row marquee-row--top">
                 <div className="marquee-track">
                   {[...topRowTestimonials, ...topRowTestimonials].map((testimonial, index) => (

@@ -335,16 +335,12 @@ export default function AboutUs({ navigateTo, currentPage }) {
 
           {/* What Our Clients Say */}
           <ScrollReveal animation="fadeUp" delay={0.5} duration={1.5} once={false}>
-            <div className="testimonials-section">
-              <div
-                className={`testimonials-container ${isTestimonialsHovered ? 'is-hovered' : ''}`}
-                onMouseEnter={() => setIsTestimonialsHovered(true)}
-                onMouseLeave={() => setIsTestimonialsHovered(false)}
-              >
+            <section ref={testimonialsSectionRef} className="testimonials-section">
+              <div className="container testimonials-container">
                 <ScrollReveal as="div" animation="fadeUp" duration={1.5} once={false}>
                   <SplitText
                     as="h2"
-                    className="section-subtitle"
+                    className="section-title"
                     splitBy="words"
                     animation="fadeUp"
                     delay={0.05}
@@ -355,10 +351,11 @@ export default function AboutUs({ navigateTo, currentPage }) {
                   </SplitText>
                 </ScrollReveal>
 
-                {!isTestimonialsHovered ? (
+                {!isTestimonialsSliding ? (
                   <div
-                    className="testimonial-static-grid"
+                    className={`testimonial-static-grid ${isTestimonialsHovered ? 'is-hovered' : ''}`}
                     onMouseEnter={() => setIsTestimonialsHovered(true)}
+                    onMouseLeave={() => setIsTestimonialsHovered(false)}
                   >
                     {testimonials.map((testimonial, index) => (
                       <article key={testimonial.id} className={`testimonial-card static-card-${index + 1}`}>
@@ -371,10 +368,7 @@ export default function AboutUs({ navigateTo, currentPage }) {
                     ))}
                   </div>
                 ) : (
-                  <div
-                    className={`testimonial-marquee ${isTestimonialsSliding ? 'is-sliding' : 'is-spread'}`}
-                    onMouseLeave={() => setIsTestimonialsHovered(false)}
-                  >
+                  <div className="testimonial-marquee is-sliding">
                     <div className="marquee-row marquee-row--top">
                       <div className="marquee-track">
                         {[...topRowTestimonials, ...topRowTestimonials].map((testimonial, index) => (
@@ -404,7 +398,7 @@ export default function AboutUs({ navigateTo, currentPage }) {
                   </div>
                 )}
               </div>
-            </div>
+            </section>
           </ScrollReveal>
         </div>
       </section>

@@ -2,11 +2,6 @@
   padding: 6rem;
 }
 
-.about-container {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
 .about-section .section-title {
   font-size: 50px;
   font-weight: 400;
@@ -288,11 +283,6 @@
   z-index: 1;
 }
 
-/* Testimonials Section */
-.testimonials-section {
-  padding: 0 0 5rem 0;
-}
-
 /* Responsive Design */
 @media (max-width: 1024px) {
   .about-section {
@@ -377,10 +367,6 @@
 
   .goals-section,
   .team-section {
-    padding: 0 0 3rem 0;
-  }
-
-  .testimonials-section {
     padding: 0 0 3rem 0;
   }
 
