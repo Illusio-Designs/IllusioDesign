@@ -5,6 +5,49 @@ import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
 import { useEffect, useRef, useState } from 'react';
 
+const caseStudyProjects = [
+  {
+    id: 1,
+    title: 'Aicumen AI',
+    image: '/images/aicumen-ai.webp',
+  },
+  {
+    id: 2,
+    title: 'AMRUTKUMAR GOVINDDAS LLP',
+    image: '/images/amrutkumar-jewelry.webp',
+  },
+  {
+    id: 3,
+    title: 'Crosscoin',
+    image: '/images/crosscoin.webp',
+  },
+  {
+    id: 4,
+    title: 'Immune Protector',
+    image: '/images/immune-protector.webp',
+  },
+  {
+    id: 5,
+    title: 'Nanak Finserv',
+    image: '/images/nanak-finserv.webp',
+  },
+  {
+    id: 6,
+    title: 'Radhe Consultancy',
+    image: '/images/radhe-consultancy.webp',
+  },
+  {
+    id: 7,
+    title: 'Vivera Lighting',
+    image: '/images/vivera-lighting.webp',
+  },
+  {
+    id: 8,
+    title: 'AMRUTKUMAR GOVINDDAS LLP (App)',
+    image: '/images/Amrut App.webp',
+  },
+];
+
 const serviceData = {
   'branding': {
     title: ['Carve Your Brand\'s', 'Iconic Mark.'],
@@ -103,11 +146,25 @@ const otherServicesMap = {
   ],
 };
 
+// Map each service to related project IDs
+const serviceProjectsMap = {
+  branding: [],
+  'web-app': [1, 2, 3, 4, 5, 6, 7, 8],
+  marketing: [],
+  b2b: [],
+};
+
 export default function ServiceDetail({ serviceName, navigateTo, currentPage }) {
   const service = serviceData[serviceName] || serviceData['branding'];
   const otherServices = otherServicesMap[serviceName] || otherServicesMap['branding'];
   const processFlowRef = useRef(null);
   const [lineProgress, setLineProgress] = useState(0);
+  const [hoveredProject, setHoveredProject] = useState(null);
+
+  const relatedProjectIds = serviceProjectsMap[serviceName] || [];
+  const relatedProjects = caseStudyProjects.filter((project) =>
+    relatedProjectIds.includes(project.id)
+  );
 
   // Scroll to top when service changes
   useEffect(() => {
@@ -258,6 +315,92 @@ export default function ServiceDetail({ serviceName, navigateTo, currentPage }) 
               </div>
             </ScrollReveal>
           </div>
+
+          {/* Related Projects Slider - only show if this service has mapped projects */}
+          {relatedProjects.length > 0 && (
+            <section className="related-projects-section">
+              <div className="related-projects-container">
+                <ScrollReveal as="div" animation="fadeUp" duration={1.5} once={false}>
+                  <h2 className="section-title related-projects-title">
+                    <SplitText
+                      as="span"
+                      splitBy="words"
+                      animation="fadeUp"
+                      delay={0.05}
+                      trigger="onScroll"
+                      once={false}
+                    >
+                      Related Projects
+                    </SplitText>
+                  </h2>
+                </ScrollReveal>
+                <div className="related-projects-slider">
+                  <div className="related-projects-track">
+                    {relatedProjects.map((project) => (
+                      <div
+                        key={`${project.id}-rel-1`}
+                        className="related-project-card"
+                        onClick={() => navigateTo('case-study-detail', project.id.toString())}
+                        onMouseEnter={() => setHoveredProject(`${project.id}-rel-1`)}
+                        onMouseLeave={() => setHoveredProject(null)}
+                      >
+                        <div className="related-project-image-container">
+                          <img
+                            src={project.image}
+                            alt={project.title}
+                            className="related-project-image"
+                            onError={(e) => {
+                              e.target.style.display = 'none';
+                            }}
+                          />
+                        </div>
+                        <div className="related-project-title-container">
+                          <h3>{project.title}</h3>
+                          <span
+                            className={`related-project-arrow ${
+                              hoveredProject === `${project.id}-rel-1` ? 'arrow-visible' : ''
+                            }`}
+                          >
+                            →
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                    {relatedProjects.map((project) => (
+                      <div
+                        key={`${project.id}-rel-2`}
+                        className="related-project-card"
+                        onClick={() => navigateTo('case-study-detail', project.id.toString())}
+                        onMouseEnter={() => setHoveredProject(`${project.id}-rel-2`)}
+                        onMouseLeave={() => setHoveredProject(null)}
+                      >
+                        <div className="related-project-image-container">
+                          <img
+                            src={project.image}
+                            alt={project.title}
+                            className="related-project-image"
+                            onError={(e) => {
+                              e.target.style.display = 'none';
+                            }}
+                          />
+                        </div>
+                        <div className="related-project-title-container">
+                          <h3>{project.title}</h3>
+                          <span
+                            className={`related-project-arrow ${
+                              hoveredProject === `${project.id}-rel-2` ? 'arrow-visible' : ''
+                            }`}
+                          >
+                            →
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </section>
+          )}
         </div>
       </section>
       <Footer navigateTo={navigateTo} />

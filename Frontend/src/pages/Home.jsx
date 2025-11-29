@@ -77,26 +77,31 @@ const projects = [
   },
   {
     id: 3,
+    title: 'AMRUTKUMAR GOVINDDAS LLP (App)',
+    image: '/images/Amrut App.webp',
+  },
+  {
+    id: 4,
     title: 'Crosscoin',
     image: '/images/crosscoin.webp',
   },
   {
-    id: 4,
+    id: 5,
     title: 'Immune Protector',
     image: '/images/immune-protector.webp',
   },
   {
-    id: 5,
+    id: 6,
     title: 'Nanak Finserv',
     image: '/images/nanak-finserv.webp',
   },
   {
-    id: 6,
+    id: 7,
     title: 'Radhe Consultancy',
     image: '/images/radhe-consultancy.webp',
   },
   {
-    id: 7,
+    id: 8,
     title: 'Vivera Lighting',
     image: '/images/vivera-lighting.webp',
   }
