@@ -14,6 +14,8 @@ import ServiceDetail from '@/pages/ServiceDetail';
 import CaseStudyDetail from '@/pages/CaseStudyDetail';
 import BlogDetail from '@/pages/BlogDetail';
 import PositionApply from '@/pages/PositionApply';
+import Login from '@/pages/Dashboard/Login';
+import Register from '@/pages/Dashboard/Register';
 
 export default function Page() {
   const [currentPage, setCurrentPage] = useState('home');
@@ -97,6 +99,10 @@ export default function Page() {
         return <BlogDetail blogName={currentItem} navigateTo={navigateTo} currentPage={currentPage} />;
       case 'position-apply':
         return <PositionApply positionId={currentItem} navigateTo={navigateTo} currentPage={currentPage} />;
+      case 'login':
+        return <Login navigateTo={navigateTo} />;
+      case 'register':
+        return <Register navigateTo={navigateTo} />;
       default:
         return <Home navigateTo={navigateTo} currentPage={currentPage} />;
     }
