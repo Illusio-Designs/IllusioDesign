@@ -1,8 +1,10 @@
-import { CaseStudy } from '../../models/CaseStudy.js';
+import CaseStudy from '../../models/CaseStudy.js';
 
 export const getAllCaseStudies = async (req, res) => {
   try {
-    const caseStudies = await CaseStudy.findAll();
+    const caseStudies = await CaseStudy.findAll({
+      order: [['createdAt', 'DESC']]
+    });
     res.json({ data: caseStudies });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -11,7 +13,7 @@ export const getAllCaseStudies = async (req, res) => {
 
 export const getCaseStudyById = async (req, res) => {
   try {
-    const caseStudy = await CaseStudy.findById(req.params.id);
+    const caseStudy = await CaseStudy.findByPk(req.params.id);
     
     if (!caseStudy) {
       return res.status(404).json({ error: 'Case study not found' });
@@ -39,33 +41,60 @@ export const createCaseStudy = async (req, res) => {
       overview,
       overviewExtended,
       industry,
+      industries,
+      year,
+      services,
+      duration,
       additionalImages,
       published
     } = req.body;
     
-    const image = req.file ? `/uploads/images/${req.file.filename}` : req.body.image;
+    // Handle main image
+    let image = null;
+    if (req.files && req.files.image && req.files.image[0]) {
+      image = `/uploads/images/${req.files.image[0].filename}`;
+    } else if (req.file) {
+      image = `/uploads/images/${req.file.filename}`;
+    } else if (req.body.image) {
+      image = req.body.image;
+    }
     
-    if (!title || !description || !category) {
-      return res.status(400).json({ error: 'Title, description, and category are required' });
+    // Handle additional images
+    let additionalImagesArray = [];
+    if (req.files && req.files.additionalImages && req.files.additionalImages.length > 0) {
+      additionalImagesArray = req.files.additionalImages.map(file => `/uploads/images/${file.filename}`);
+    } else if (additionalImages) {
+      if (Array.isArray(additionalImages)) {
+        additionalImagesArray = additionalImages;
+      } else if (typeof additionalImages === 'string') {
+        additionalImagesArray = additionalImages.split(',').map(t => t.trim()).filter(t => t);
+      }
+    }
+    
+    if (!title) {
+      return res.status(400).json({ error: 'Title is required' });
     }
     
     const caseStudy = await CaseStudy.create({
       title,
-      description,
-      image,
+      description: description || null,
+      image: image || null,
       link: link || null,
-      category,
-      tags: Array.isArray(tags) ? tags : (tags ? tags.split(',') : []),
-      techStack: Array.isArray(techStack) ? techStack : (techStack ? techStack.split(',') : []),
-      timeline: timeline || null,
-      results: Array.isArray(results) ? results : (results ? results.split(',') : []),
+      category: category || services || null,
+      tags: Array.isArray(tags) ? tags : (tags ? tags.split(',').map(t => t.trim()) : []),
+      techStack: Array.isArray(techStack) ? techStack : (techStack ? techStack.split(',').map(t => t.trim()) : []),
+      timeline: timeline || duration || null,
+      results: Array.isArray(results) ? results : (results ? results.split(',').map(t => t.trim()) : []),
       location: location || null,
       projectName: projectName || null,
-      overview: overview || null,
+      overview: overview || description || null,
       overviewExtended: overviewExtended || null,
-      industry: industry || null,
-      additionalImages: Array.isArray(additionalImages) ? additionalImages : (additionalImages ? additionalImages.split(',') : []),
-      published: published !== undefined ? published : true
+      industry: industry || industries || null,
+      year: year || null,
+      services: services || category || null,
+      duration: duration || timeline || null,
+      additionalImages: additionalImagesArray,
+      published: published !== undefined ? (published === 'true' || published === true) : true
     });
     
     res.status(201).json({ data: caseStudy });
@@ -77,32 +106,79 @@ export const createCaseStudy = async (req, res) => {
 export const updateCaseStudy = async (req, res) => {
   try {
     const { id } = req.params;
-    const updates = req.body;
+    const updates = { ...req.body };
     
-    if (req.file) {
-      updates.image = `/uploads/images/${req.file.filename}`;
-    }
-    
-    // Handle array fields
-    if (updates.tags && typeof updates.tags === 'string') {
-      updates.tags = updates.tags.split(',');
-    }
-    if (updates.techStack && typeof updates.techStack === 'string') {
-      updates.techStack = updates.techStack.split(',');
-    }
-    if (updates.results && typeof updates.results === 'string') {
-      updates.results = updates.results.split(',');
-    }
-    if (updates.additionalImages && typeof updates.additionalImages === 'string') {
-      updates.additionalImages = updates.additionalImages.split(',');
-    }
-    
-    const caseStudy = await CaseStudy.updateById(id, updates);
-    
+    // Get case study first to access current data
+    const caseStudy = await CaseStudy.findByPk(id);
     if (!caseStudy) {
       return res.status(404).json({ error: 'Case study not found' });
     }
     
+    // Handle main image
+    if (req.files && req.files.image && req.files.image[0]) {
+      updates.image = `/uploads/images/${req.files.image[0].filename}`;
+    } else if (req.file) {
+      updates.image = `/uploads/images/${req.file.filename}`;
+    } else if (updates.image === '') {
+      // If empty string sent, remove the image
+      updates.image = null;
+    }
+    
+    // Handle additional images
+    let finalAdditionalImages = [];
+    
+    // Check if existingAdditionalImages was explicitly sent
+    // FormData sends multiple values with same key as array or comma-separated
+    if (req.body.existingAdditionalImages !== undefined) {
+      const existingImages = req.body.existingAdditionalImages;
+      if (Array.isArray(existingImages)) {
+        finalAdditionalImages = existingImages.filter(img => img && img.trim() !== '');
+      } else if (typeof existingImages === 'string') {
+        if (existingImages.trim() !== '') {
+          finalAdditionalImages = existingImages.split(',').map(t => t.trim()).filter(t => t);
+        }
+        // If empty string, finalAdditionalImages stays empty (all removed)
+      }
+    } else if (caseStudy.additionalImages && Array.isArray(caseStudy.additionalImages)) {
+      // If no existing images specified in form, keep all current ones
+      finalAdditionalImages = [...caseStudy.additionalImages];
+    }
+    
+    // Add new uploaded images
+    if (req.files && req.files.additionalImages && req.files.additionalImages.length > 0) {
+      const newAdditionalImages = req.files.additionalImages.map(file => `/uploads/images/${file.filename}`);
+      finalAdditionalImages = [...finalAdditionalImages, ...newAdditionalImages];
+    }
+    
+    updates.additionalImages = finalAdditionalImages;
+    delete updates.existingAdditionalImages;
+    
+    // Handle industries field - map to industry
+    if (updates.industries !== undefined && updates.industry === undefined) {
+      updates.industry = updates.industries;
+      delete updates.industries;
+    }
+    
+    // Handle array fields - convert string to array
+    if (updates.tags && typeof updates.tags === 'string') {
+      updates.tags = updates.tags.split(',').map(t => t.trim()).filter(t => t);
+    }
+    if (updates.techStack && typeof updates.techStack === 'string') {
+      updates.techStack = updates.techStack.split(',').map(t => t.trim()).filter(t => t);
+    }
+    if (updates.results && typeof updates.results === 'string') {
+      updates.results = updates.results.split(',').map(t => t.trim()).filter(t => t);
+    }
+    if (updates.additionalImages && typeof updates.additionalImages === 'string') {
+      updates.additionalImages = updates.additionalImages.split(',').map(t => t.trim()).filter(t => t);
+    }
+    
+    // Handle boolean fields
+    if (updates.published !== undefined) {
+      updates.published = updates.published === 'true' || updates.published === true;
+    }
+    
+    await caseStudy.update(updates);
     res.json({ data: caseStudy });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -112,12 +188,13 @@ export const updateCaseStudy = async (req, res) => {
 export const deleteCaseStudy = async (req, res) => {
   try {
     const { id } = req.params;
-    const deleted = await CaseStudy.deleteById(id);
+    const caseStudy = await CaseStudy.findByPk(id);
     
-    if (!deleted) {
+    if (!caseStudy) {
       return res.status(404).json({ error: 'Case study not found' });
     }
     
+    await caseStudy.destroy();
     res.json({ message: 'Case study deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: error.message });

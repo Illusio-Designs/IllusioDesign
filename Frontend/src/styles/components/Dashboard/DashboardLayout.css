@@ -1,0 +1,41 @@
+/* Dashboard background - same as auth pages */
+.dashboard-layout {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #D9D9DB 0%, #FFEADE 100%) !important;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  color-scheme: light !important;
+  color: #2D2C2B !important;
+  font-family: 'Poppins', sans-serif;
+}
+
+.dashboard-layout * {
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Elliptical blur effect at bottom center - same as auth pages */
+.dashboard-layout::before {
+  content: '';
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 600px;
+  background: radial-gradient(ellipse at center, rgba(255, 234, 222, 0.8) 0%, rgba(255, 234, 222, 0.4) 40%, transparent 70%);
+  filter: blur(497.61px);
+  -webkit-filter: blur(497.61px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.dashboard-main {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+  position: relative;
+  z-index: 1;
+}
+

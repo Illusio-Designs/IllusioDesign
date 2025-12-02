@@ -1,0 +1,94 @@
+/* Rich Text Editor Styles - Used in Blog and Case Study forms */
+
+.rich-text-editor {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.editor-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px;
+  background: linear-gradient(90.39deg, #FFD1AD 0%, #FFAC67 99.66%);
+  border-bottom: 1px solid #e5e7eb;
+  flex-wrap: wrap;
+}
+
+.toolbar-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  border: none;
+  background: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #4b5563;
+  transition: all 0.2s;
+  font-family: 'Poppins', sans-serif;
+}
+
+.toolbar-btn:hover {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.editor-content {
+  width: 100%;
+  min-height: 200px;
+  padding: 12px;
+  border: none;
+  resize: vertical;
+  font-family: 'Poppins', sans-serif;
+}
+
+.editor-content.auto-resize {
+  min-height: auto;
+  resize: none;
+  overflow-y: hidden;
+}
+
+.file-upload-area {
+  position: relative;
+  border: 2px dashed #d1d5db;
+  border-radius: 8px;
+  padding: 40px;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.file-upload-area:hover {
+  border-color: #EC691F;
+  background: #fef3f2;
+}
+
+.file-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: #6b7280;
+}
+
+.upload-placeholder svg {
+  color: #9ca3af;
+}
+
+.upload-placeholder p {
+  margin: 0;
+  font-size: 14px;
+  font-family: 'Poppins', sans-serif;
+}
+

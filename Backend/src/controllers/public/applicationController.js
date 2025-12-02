@@ -1,5 +1,5 @@
-import { Application } from '../../models/Application.js';
-import { Position } from '../../models/Position.js';
+import Application from '../../models/Application.js';
+import Position from '../../models/Position.js';
 import { sendApplicationNotification, sendConfirmationEmail } from '../../services/emailService.js';
 import { trackJobApplication } from '../../integration/googleAnalytics.js';
 import { trackJobApplication as trackFBApplication } from '../../integration/facebookPixel.js';
@@ -14,7 +14,7 @@ export const createApplication = async (req, res) => {
     }
     
     // Verify position exists and is active
-    const position = await Position.findById(positionId);
+    const position = await Position.findByPk(positionId);
     if (!position || position.isActive === false) {
       return res.status(404).json({ error: 'Position not found or not active' });
     }

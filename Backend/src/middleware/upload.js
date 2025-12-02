@@ -51,72 +51,64 @@ const upload = multer({
 
 // Middleware to convert uploaded images to WebP
 export const convertToWebP = async (req, res, next) => {
-  if (!req.file) {
-    return next();
-  }
-
-  try {
-    const inputPath = req.file.path;
-    const originalName = path.parse(req.file.originalname).name;
-    
-    // If file is already WebP, just rename and update paths
-    if (req.file.mimetype === 'image/webp' || inputPath.toLowerCase().endsWith('.webp')) {
-      const outputPath = path.join(imagesDir, `${originalName}-${Date.now()}.webp`);
-      fs.renameSync(inputPath, outputPath);
+  // Handle single file upload (req.file)
+  if (req.file) {
+    try {
+      const inputPath = req.file.path;
+      const originalName = path.parse(req.file.originalname).name;
       
+      // If file is already WebP, just rename and update paths
+      if (req.file.mimetype === 'image/webp' || inputPath.toLowerCase().endsWith('.webp')) {
+        const outputPath = path.join(imagesDir, `${originalName}-${Date.now()}.webp`);
+        fs.renameSync(inputPath, outputPath);
+        
+        req.file.filename = path.basename(outputPath);
+        req.file.path = outputPath;
+        req.file.mimetype = 'image/webp';
+        req.file.originalname = `${originalName}.webp`;
+        req.file.webpPath = `/uploads/images/${req.file.filename}`;
+        
+        return next();
+      }
+
+      // Convert other formats to WebP
+      const outputPath = path.join(imagesDir, `${originalName}-${Date.now()}.webp`);
+
+      // Convert image to WebP
+      await sharp(inputPath)
+        .webp({ quality: 85, effort: 6 })
+        .toFile(outputPath);
+
+      // Delete original file
+      fs.unlinkSync(inputPath);
+
+      // Update file info
       req.file.filename = path.basename(outputPath);
       req.file.path = outputPath;
       req.file.mimetype = 'image/webp';
       req.file.originalname = `${originalName}.webp`;
       req.file.webpPath = `/uploads/images/${req.file.filename}`;
-      
+
       return next();
+    } catch (error) {
+      // Clean up on error
+      if (fs.existsSync(req.file.path)) {
+        fs.unlinkSync(req.file.path);
+      }
+      return res.status(500).json({ error: 'Error converting image to WebP: ' + error.message });
     }
-
-    // Convert other formats to WebP
-    const outputPath = path.join(imagesDir, `${originalName}-${Date.now()}.webp`);
-
-    // Convert image to WebP
-    await sharp(inputPath)
-      .webp({ quality: 85, effort: 6 })
-      .toFile(outputPath);
-
-    // Delete original file
-    fs.unlinkSync(inputPath);
-
-    // Update file info
-    req.file.filename = path.basename(outputPath);
-    req.file.path = outputPath;
-    req.file.mimetype = 'image/webp';
-    req.file.originalname = `${originalName}.webp`;
-    req.file.webpPath = `/uploads/images/${req.file.filename}`;
-
-    next();
-  } catch (error) {
-    // Clean up on error
-    if (fs.existsSync(req.file.path)) {
-      fs.unlinkSync(req.file.path);
-    }
-    return res.status(500).json({ error: 'Error converting image to WebP: ' + error.message });
   }
-};
-
-// Middleware for multiple file uploads
-export const convertMultipleToWebP = async (req, res, next) => {
-  if (!req.files || req.files.length === 0) {
-    return next();
-  }
-
-  try {
-    const convertedFiles = [];
-
-    for (const file of req.files) {
+  
+  // Handle fields upload (req.files.image[0])
+  if (req.files && req.files.image && req.files.image[0]) {
+    try {
+      const file = req.files.image[0];
       const inputPath = file.path;
       const originalName = path.parse(file.originalname).name;
       
       // If file is already WebP, just rename and update paths
       if (file.mimetype === 'image/webp' || inputPath.toLowerCase().endsWith('.webp')) {
-        const outputPath = path.join(imagesDir, `${originalName}-${Date.now()}-${Math.round(Math.random() * 1E9)}.webp`);
+        const outputPath = path.join(imagesDir, `${originalName}-${Date.now()}.webp`);
         fs.renameSync(inputPath, outputPath);
         
         file.filename = path.basename(outputPath);
@@ -125,12 +117,11 @@ export const convertMultipleToWebP = async (req, res, next) => {
         file.originalname = `${originalName}.webp`;
         file.webpPath = `/uploads/images/${file.filename}`;
         
-        convertedFiles.push(file);
-        continue;
+        return next();
       }
 
       // Convert other formats to WebP
-      const outputPath = path.join(imagesDir, `${originalName}-${Date.now()}-${Math.round(Math.random() * 1E9)}.webp`);
+      const outputPath = path.join(imagesDir, `${originalName}-${Date.now()}.webp`);
 
       // Convert image to WebP
       await sharp(inputPath)
@@ -147,18 +138,134 @@ export const convertMultipleToWebP = async (req, res, next) => {
       file.originalname = `${originalName}.webp`;
       file.webpPath = `/uploads/images/${file.filename}`;
 
-      convertedFiles.push(file);
+      return next();
+    } catch (error) {
+      // Clean up on error
+      if (req.files.image[0] && fs.existsSync(req.files.image[0].path)) {
+        fs.unlinkSync(req.files.image[0].path);
+      }
+      return res.status(500).json({ error: 'Error converting image to WebP: ' + error.message });
+    }
+  }
+  
+  // No file to process
+  next();
+};
+
+// Middleware for multiple file uploads
+export const convertMultipleToWebP = async (req, res, next) => {
+  if (!req.files || (typeof req.files === 'object' && !Array.isArray(req.files) && Object.keys(req.files).length === 0)) {
+    return next();
+  }
+
+  try {
+    // Handle req.files as object (from upload.fields())
+    if (req.files && typeof req.files === 'object' && !Array.isArray(req.files)) {
+      // Process each field's files
+      for (const fieldName in req.files) {
+        const files = req.files[fieldName];
+        if (Array.isArray(files)) {
+          for (const file of files) {
+            const inputPath = file.path;
+            const originalName = path.parse(file.originalname).name;
+            
+            // If file is already WebP, just rename and update paths
+            if (file.mimetype === 'image/webp' || inputPath.toLowerCase().endsWith('.webp')) {
+              const outputPath = path.join(imagesDir, `${originalName}-${Date.now()}-${Math.round(Math.random() * 1E9)}.webp`);
+              fs.renameSync(inputPath, outputPath);
+              
+              file.filename = path.basename(outputPath);
+              file.path = outputPath;
+              file.mimetype = 'image/webp';
+              file.originalname = `${originalName}.webp`;
+              file.webpPath = `/uploads/images/${file.filename}`;
+              continue;
+            }
+
+            // Convert other formats to WebP
+            const outputPath = path.join(imagesDir, `${originalName}-${Date.now()}-${Math.round(Math.random() * 1E9)}.webp`);
+
+            // Convert image to WebP
+            await sharp(inputPath)
+              .webp({ quality: 85, effort: 6 })
+              .toFile(outputPath);
+
+            // Delete original file
+            fs.unlinkSync(inputPath);
+
+            // Update file info
+            file.filename = path.basename(outputPath);
+            file.path = outputPath;
+            file.mimetype = 'image/webp';
+            file.originalname = `${originalName}.webp`;
+            file.webpPath = `/uploads/images/${file.filename}`;
+          }
+        }
+      }
+    } else if (Array.isArray(req.files)) {
+      // Handle req.files as array (from upload.array())
+      for (const file of req.files) {
+        const inputPath = file.path;
+        const originalName = path.parse(file.originalname).name;
+        
+        // If file is already WebP, just rename and update paths
+        if (file.mimetype === 'image/webp' || inputPath.toLowerCase().endsWith('.webp')) {
+          const outputPath = path.join(imagesDir, `${originalName}-${Date.now()}-${Math.round(Math.random() * 1E9)}.webp`);
+          fs.renameSync(inputPath, outputPath);
+          
+          file.filename = path.basename(outputPath);
+          file.path = outputPath;
+          file.mimetype = 'image/webp';
+          file.originalname = `${originalName}.webp`;
+          file.webpPath = `/uploads/images/${file.filename}`;
+          continue;
+        }
+
+        // Convert other formats to WebP
+        const outputPath = path.join(imagesDir, `${originalName}-${Date.now()}-${Math.round(Math.random() * 1E9)}.webp`);
+
+        // Convert image to WebP
+        await sharp(inputPath)
+          .webp({ quality: 85, effort: 6 })
+          .toFile(outputPath);
+
+        // Delete original file
+        fs.unlinkSync(inputPath);
+
+        // Update file info
+        file.filename = path.basename(outputPath);
+        file.path = outputPath;
+        file.mimetype = 'image/webp';
+        file.originalname = `${originalName}.webp`;
+        file.webpPath = `/uploads/images/${file.filename}`;
+      }
     }
 
-    req.files = convertedFiles;
     next();
   } catch (error) {
     // Clean up on error
-    req.files.forEach(file => {
-      if (fs.existsSync(file.path)) {
-        fs.unlinkSync(file.path);
+    if (req.files) {
+      if (typeof req.files === 'object' && !Array.isArray(req.files)) {
+        // Handle object structure
+        for (const fieldName in req.files) {
+          const files = req.files[fieldName];
+          if (Array.isArray(files)) {
+            files.forEach(file => {
+              if (file && fs.existsSync(file.path)) {
+                fs.unlinkSync(file.path);
+              }
+            });
+          }
+        }
+      } else if (Array.isArray(req.files)) {
+        // Handle array structure
+        req.files.forEach(file => {
+          if (file && fs.existsSync(file.path)) {
+            fs.unlinkSync(file.path);
+          }
+        });
       }
-    });
+    }
     return res.status(500).json({ error: 'Error converting images to WebP: ' + error.message });
   }
 };

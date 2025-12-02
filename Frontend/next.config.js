@@ -3,8 +3,9 @@ const nextConfig = {
   reactStrictMode: true,
   async rewrites() {
     return [
+      // Only rewrite public routes to root page, exclude dashboard/login/register
       {
-        source: '/:path*',
+        source: '/:path((?!dashboard|login|register).*)',
         destination: '/',
       },
     ];

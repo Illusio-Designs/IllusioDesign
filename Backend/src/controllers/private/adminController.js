@@ -1,92 +1,102 @@
-import { Content } from '../../models/Content.js';
-import { User } from '../../models/User.js';
-
-// Content Management
-export const getAllContent = async (req, res) => {
-  try {
-    const content = await Content.findAll();
-    res.json({ data: content });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-export const createContent = async (req, res) => {
-  try {
-    const { title, body, published } = req.body;
-    
-    if (!title || !body) {
-      return res.status(400).json({ error: 'Title and body are required' });
-    }
-    
-    // Handle image if uploaded
-    const imageData = req.file ? {
-      image: req.file.webpPath || `/uploads/images/${req.file.filename}`,
-      imageUrl: `${req.protocol}://${req.get('host')}${req.file.webpPath || `/uploads/images/${req.file.filename}`}`
-    } : {};
-    
-    const content = await Content.create({
-      title,
-      body,
-      published: published || false,
-      ...imageData
-    });
-    
-    res.status(201).json({
-      message: 'Content created successfully',
-      data: content
-    });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-export const updateContent = async (req, res) => {
-  try {
-    const id = parseInt(req.params.id);
-    const updates = req.body;
-    
-    // Handle image if uploaded
-    if (req.file) {
-      updates.image = req.file.webpPath || `/uploads/images/${req.file.filename}`;
-      updates.imageUrl = `${req.protocol}://${req.get('host')}${req.file.webpPath || `/uploads/images/${req.file.filename}`}`;
-    }
-    
-    const content = await Content.updateById(id, updates);
-    
-    if (!content) {
-      return res.status(404).json({ error: 'Content not found' });
-    }
-    
-    res.json({
-      message: 'Content updated successfully',
-      data: content
-    });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-export const deleteContent = async (req, res) => {
-  try {
-    const id = parseInt(req.params.id);
-    const deleted = await Content.deleteById(id);
-    
-    if (!deleted) {
-      return res.status(404).json({ error: 'Content not found' });
-    }
-    
-    res.json({ message: 'Content deleted successfully' });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
+import User from '../../models/User.js';
 
 // User Management
 export const getAllUsers = async (req, res) => {
   try {
-    const users = await User.findAll();
+    const users = await User.findAll({
+      attributes: { exclude: ['password'] },
+      order: [['createdAt', 'DESC']]
+    });
     res.json({ data: users });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const getUserById = async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const user = await User.findByPk(id, {
+      attributes: { exclude: ['password'] }
+    });
+    
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    res.json({ data: user });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const createUser = async (req, res) => {
+  try {
+    const { name, email, password, role } = req.body;
+    
+    if (!name || !email || !password) {
+      return res.status(400).json({ error: 'Name, email, and password are required' });
+    }
+    
+    // Check if email already exists
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      return res.status(400).json({ error: 'User with this email already exists' });
+    }
+    
+    // Validate role
+    const validRole = role && ['user', 'admin'].includes(role) ? role : 'user';
+    
+    const user = await User.create({
+      name,
+      email,
+      password, // Will be hashed by the beforeCreate hook
+      role: validRole
+    });
+    
+    const { password: _, ...safeUser } = user.toJSON();
+    res.status(201).json({
+      message: 'User created successfully',
+      data: safeUser
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const updateUser = async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const { name, email, role } = req.body;
+    
+    const user = await User.findByPk(id);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    const updates = {};
+    if (name !== undefined) updates.name = name;
+    if (email !== undefined) {
+      // Check if email is already taken by another user
+      const existingUser = await User.findOne({ where: { email } });
+      if (existingUser && existingUser.id !== id) {
+        return res.status(400).json({ error: 'Email already in use' });
+      }
+      updates.email = email;
+    }
+    if (role !== undefined) {
+      if (!['user', 'admin'].includes(role)) {
+        return res.status(400).json({ error: 'Valid role is required (user or admin)' });
+      }
+      updates.role = role;
+    }
+    
+    await user.update(updates);
+    const { password: _, ...safeUser } = user.toJSON();
+    res.json({
+      message: 'User updated successfully',
+      data: safeUser
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -101,15 +111,17 @@ export const updateUserRole = async (req, res) => {
       return res.status(400).json({ error: 'Valid role is required (user or admin)' });
     }
     
-    const user = await User.updateById(id, { role });
-    
+    const user = await User.findByPk(id);
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
     
+    await user.update({ role });
+    const { password: _, ...safeUser } = user.toJSON();
+    
     res.json({
       message: 'User role updated successfully',
-      data: user
+      data: safeUser
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -124,12 +136,12 @@ export const deleteUser = async (req, res) => {
       return res.status(400).json({ error: 'Cannot delete your own account' });
     }
     
-    const deleted = await User.deleteById(id);
-    
-    if (!deleted) {
+    const user = await User.findByPk(id);
+    if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
     
+    await user.destroy();
     res.json({ message: 'User deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: error.message });

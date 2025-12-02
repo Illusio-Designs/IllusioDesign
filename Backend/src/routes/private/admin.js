@@ -1,10 +1,8 @@
 import express from 'express';
 import {
-  getAllContent,
-  createContent,
-  updateContent,
-  deleteContent,
   getAllUsers,
+  getUserById,
+  updateUser,
   updateUserRole,
   deleteUser
 } from '../../controllers/private/adminController.js';
@@ -18,14 +16,10 @@ import { upload, convertToWebP, convertMultipleToWebP } from '../../middleware/u
 
 const router = express.Router();
 
-// Content management routes
-router.get('/content', getAllContent);
-router.post('/content', upload.single('image'), convertToWebP, createContent);
-router.put('/content/:id', upload.single('image'), convertToWebP, updateContent);
-router.delete('/content/:id', deleteContent);
-
 // User management routes
 router.get('/users', getAllUsers);
+router.get('/users/:id', getUserById);
+router.put('/users/:id', updateUser);
 router.put('/users/:id/role', updateUserRole);
 router.delete('/users/:id', deleteUser);
 

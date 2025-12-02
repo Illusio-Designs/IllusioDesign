@@ -1,0 +1,59 @@
+.case-study-page {
+  max-width: 1400px;
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.case-study-page .content-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.case-study-page .content-card-title {
+  flex-shrink: 0;
+}
+
+.case-study-page .table-container {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.case-study-page .pagination {
+  flex-shrink: 0;
+  margin-top: 16px;
+  padding: 0 24px 24px 24px;
+}
+
+.case-study-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.case-study-form::-webkit-scrollbar {
+  width: 8px;
+}
+
+.case-study-form::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.case-study-form::-webkit-scrollbar-thumb {
+  background: #FFFFFF;
+  border-radius: 4px;
+}
+
+.case-study-form::-webkit-scrollbar-thumb:hover {
+  background: #FFFFFF;
+  opacity: 0.8;
+}
+
+
+

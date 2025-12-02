@@ -1,12 +1,18 @@
-'use client';
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
+import { authAPI } from '@/services/api';
+import { toast } from 'react-toastify';
 import '@/styles/pages/Dashboard/Auth.css';
 import Image from 'next/image';
 
-export default function Register({ navigateTo }) {
+export default function Register() {
+  const router = useRouter();
+  const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [showRePassword, setShowRePassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -14,27 +20,72 @@ export default function Register({ navigateTo }) {
     rePassword: ''
   });
 
+  useEffect(() => {
+    // Clear form on mount
+    setFormData({
+      username: '',
+      email: '',
+      password: '',
+      rePassword: ''
+    });
+    setError('');
+  }, []);
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
+    setError('');
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle register logic here
+    setLoading(true);
+    setError('');
+
+    // Validate passwords match
     if (formData.password !== formData.rePassword) {
-      alert('Passwords do not match');
+      setError('Passwords do not match');
+      setLoading(false);
       return;
     }
-    console.log('Register submitted', formData);
+
+    // Validate password strength
+    if (formData.password.length < 6) {
+      setError('Password must be at least 6 characters long');
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const result = await authAPI.register(
+        formData.username,
+        formData.email,
+        formData.password
+      );
+
+      if (result.user && result.token) {
+        // Auto-login after registration
+        localStorage.setItem('auth_token', result.token);
+        localStorage.setItem('auth_user', JSON.stringify(result.user));
+        
+        // Redirect to dashboard - AuthContext will pick up the user on next render
+        window.location.href = '/dashboard';
+      } else if (result.user) {
+        // Registration successful but no token, redirect to login
+        toast.success('Registration successful! Please login with your credentials.');
+        router.push('/login');
+      } else {
+        setError(result.error || 'Registration failed. Please try again.');
+      }
+    } catch (error) {
+      setError(error.message || 'Registration failed. Please check your information and try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleSocialSignup = (provider) => {
-    // Handle social signup logic here
-    console.log(`Sign up with ${provider}`);
-  };
 
   return (
     <div className="auth-container">
@@ -48,7 +99,7 @@ export default function Register({ navigateTo }) {
               height={40} 
             />
           </div>
-          <h2 className="auth-title">Sign up with email</h2>
+          <h2 className="auth-title">Sign up</h2>
         </div>
 
         <form className="auth-form" onSubmit={handleSubmit}>
@@ -147,42 +198,26 @@ export default function Register({ navigateTo }) {
             </div>
           </div>
 
-          <button type="submit" className="auth-submit-btn">
-            Get Start
+          {error && (
+            <div className="error-message" style={{ 
+              color: '#ef4444', 
+              fontSize: '14px', 
+              marginBottom: '12px',
+              padding: '12px',
+              backgroundColor: '#fef2f2',
+              borderRadius: '8px',
+              border: '1px solid #fecaca'
+            }}>
+              {error}
+            </div>
+          )}
+
+          <button type="submit" className="auth-submit-btn" disabled={loading}>
+            {loading ? 'Registering...' : 'Get Start'}
           </button>
 
-          <div className="social-auth-divider">
-            <span>Or sign up with</span>
-          </div>
-
-          <div className="social-auth-buttons">
-            <button
-              type="button"
-              className="social-btn"
-              onClick={() => handleSocialSignup('google')}
-            >
-              <span className="social-btn-text">G</span>
-            </button>
-            <button
-              type="button"
-              className="social-btn"
-              onClick={() => handleSocialSignup('facebook')}
-            >
-              <span className="social-btn-text">f</span>
-            </button>
-            <button
-              type="button"
-              className="social-btn"
-              onClick={() => handleSocialSignup('apple')}
-            >
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                <path d="M15.5 6.5C15.4 6.5 15.3 6.5 15.2 6.5C14.9 5.4 14.3 4.4 13.4 3.7C12.6 3.1 11.6 2.8 10.6 2.8C9.9 2.8 9.3 3 8.8 3.2C8.5 3.3 8.2 3.5 8 3.6C7.8 3.7 7.5 3.8 7.2 3.8C6.8 3.8 6.4 3.7 6.1 3.5C5.7 3.2 5.2 3 4.7 3C3.6 3 2.6 3.6 2 4.5C1.1 5.8 0.5 7.5 0.7 9.3C0.9 11.5 1.6 13.6 2.7 15.4C3.5 16.7 4.4 18.1 5.6 18.9C6.3 19.4 7.1 19.7 7.9 19.7C8.4 19.7 8.9 19.6 9.3 19.4C9.8 19.2 10.3 19.1 10.8 19.1C11.4 19.1 11.9 19.2 12.3 19.4C12.8 19.6 13.3 19.7 13.8 19.7C14.6 19.7 15.4 19.4 16.1 18.9C17.4 18 18.2 16.5 18.9 15.1C17.7 14.5 16.8 13.4 16.8 12.1C16.8 11.1 17.3 10.2 18 9.7C17.2 8.8 16.2 8.2 15.1 8.1C15 7.1 14.6 6.2 14 5.5C13.5 4.9 12.8 4.5 12 4.3C12.2 4.1 12.4 3.9 12.6 3.7C13.4 2.9 14.4 2.4 15.5 2.4C15.5 3.4 15.2 4.3 14.6 5C15.1 5.1 15.5 5.3 15.9 5.6C16.6 6.1 17.1 6.8 17.4 7.6C16.9 7.3 16.3 7.1 15.6 7.1C15.6 6.9 15.5 6.7 15.5 6.5Z"/>
-              </svg>
-            </button>
-          </div>
-
           <div className="auth-switch">
-            <p>If you have account, <button type="button" className="auth-switch-link" onClick={() => navigateTo('login')}>Login</button></p>
+            <p>If you have account, <button type="button" className="auth-switch-link" onClick={() => router.push('/login')}>Login</button></p>
           </div>
         </form>
       </div>

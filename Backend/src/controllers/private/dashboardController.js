@@ -1,8 +1,11 @@
-import { User } from '../../models/User.js';
+import User from '../../models/User.js';
+import bcrypt from 'bcryptjs';
 
 export const getProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id);
+    const user = await User.findByPk(req.user.id, {
+      attributes: { exclude: ['password'] }
+    });
     
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
@@ -10,7 +13,7 @@ export const getProfile = async (req, res) => {
     
     res.json({
       message: 'User profile',
-      user
+      user: user.toJSON()
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -19,13 +22,37 @@ export const getProfile = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    const { name, email } = req.body;
+    const { name, email, image, currentPassword, newPassword } = req.body;
     
-    const updatedUser = await User.updateById(req.user.id, { name, email });
-    
-    if (!updatedUser) {
+    const user = await User.findByPk(req.user.id);
+    if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
+    
+    // Update basic fields
+    const updateData = {};
+    if (name) updateData.name = name;
+    if (email) updateData.email = email;
+    if (image) updateData.image = image;
+    
+    // Handle password change
+    if (newPassword) {
+      if (!currentPassword) {
+        return res.status(400).json({ error: 'Current password is required' });
+      }
+      
+      // Verify current password
+      const isValidPassword = await bcrypt.compare(currentPassword, user.password);
+      if (!isValidPassword) {
+        return res.status(400).json({ error: 'Current password is incorrect' });
+      }
+      
+      // Hash new password
+      updateData.password = await bcrypt.hash(newPassword, 10);
+    }
+    
+    await user.update(updateData);
+    const { password: _, ...updatedUser } = user.toJSON();
     
     res.json({
       message: 'Profile updated successfully',

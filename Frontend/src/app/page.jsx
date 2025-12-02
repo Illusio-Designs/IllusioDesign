@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import Home from '@/pages/Home';
 // import Services from '@/pages/Services';
 import AboutUs from '@/pages/AboutUs';
@@ -18,13 +19,26 @@ import Login from '@/pages/Dashboard/Login';
 import Register from '@/pages/Dashboard/Register';
 
 export default function Page() {
+  const pathname = usePathname();
   const [currentPage, setCurrentPage] = useState('home');
   const [currentItem, setCurrentItem] = useState('');
+
+  // Don't render this component for dashboard/login/register routes
+  // These are handled by Next.js App Router
+  if (pathname?.startsWith('/dashboard') || pathname?.startsWith('/login') || pathname?.startsWith('/register')) {
+    return null;
+  }
 
   // Initialize from URL on mount
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const path = window.location.pathname;
+      
+      // Don't handle dashboard routes here - they're handled by Next.js App Router
+      if (path.startsWith('/dashboard') || path.startsWith('/login') || path.startsWith('/register')) {
+        return;
+      }
+      
       const params = new URLSearchParams(window.location.search);
       const item = params.get('item');
       
@@ -43,6 +57,12 @@ export default function Page() {
   useEffect(() => {
     const handlePopState = () => {
       const path = window.location.pathname;
+      
+      // Don't handle dashboard routes here - they're handled by Next.js App Router
+      if (path.startsWith('/dashboard') || path.startsWith('/login') || path.startsWith('/register')) {
+        return;
+      }
+      
       const params = new URLSearchParams(window.location.search);
       const item = params.get('item');
       

@@ -1,0 +1,57 @@
+.position-page {
+  max-width: 1400px;
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.position-page .content-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.position-page .content-card-title {
+  flex-shrink: 0;
+}
+
+.position-page .table-container {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.position-page .pagination {
+  flex-shrink: 0;
+  margin-top: 16px;
+  padding: 0 24px 24px 24px;
+}
+
+.position-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.position-form::-webkit-scrollbar {
+  width: 8px;
+}
+
+.position-form::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.position-form::-webkit-scrollbar-thumb {
+  background: #FFFFFF;
+  border-radius: 4px;
+}
+
+.position-form::-webkit-scrollbar-thumb:hover {
+  background: #FFFFFF;
+  opacity: 0.8;
+}
+

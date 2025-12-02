@@ -1,48 +1,111 @@
-// Mock database - replace with actual database
-let caseStudies = [];
+import { DataTypes } from 'sequelize';
+import { sequelize } from '../config/db.js';
 
-export class CaseStudy {
-  static async findAll() {
-    return caseStudies;
+const CaseStudy = sequelize.define('CaseStudy', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  description: {
+    type: DataTypes.TEXT
+  },
+  image: {
+    type: DataTypes.STRING
+  },
+  link: {
+    type: DataTypes.STRING
+  },
+  category: {
+    type: DataTypes.STRING
+  },
+  tags: {
+    type: DataTypes.TEXT,
+    get() {
+      const value = this.getDataValue('tags');
+      return value ? JSON.parse(value) : [];
+    },
+    set(value) {
+      this.setDataValue('tags', JSON.stringify(Array.isArray(value) ? value : []));
+    }
+  },
+  techStack: {
+    type: DataTypes.TEXT,
+    get() {
+      const value = this.getDataValue('techStack');
+      return value ? JSON.parse(value) : [];
+    },
+    set(value) {
+      this.setDataValue('techStack', JSON.stringify(Array.isArray(value) ? value : []));
+    }
+  },
+  timeline: {
+    type: DataTypes.STRING
+  },
+  results: {
+    type: DataTypes.TEXT,
+    get() {
+      const value = this.getDataValue('results');
+      return value ? JSON.parse(value) : [];
+    },
+    set(value) {
+      this.setDataValue('results', JSON.stringify(Array.isArray(value) ? value : []));
+    }
+  },
+  location: {
+    type: DataTypes.STRING
+  },
+  projectName: {
+    type: DataTypes.STRING
+  },
+  overview: {
+    type: DataTypes.TEXT
+  },
+  overviewExtended: {
+    type: DataTypes.TEXT
+  },
+  industry: {
+    type: DataTypes.STRING
+  },
+  year: {
+    type: DataTypes.STRING
+  },
+  services: {
+    type: DataTypes.STRING
+  },
+  duration: {
+    type: DataTypes.STRING
+  },
+  seoTitle: {
+    type: DataTypes.STRING
+  },
+  metaDescription: {
+    type: DataTypes.TEXT
+  },
+  seoUrl: {
+    type: DataTypes.STRING
+  },
+  additionalImages: {
+    type: DataTypes.TEXT,
+    get() {
+      const value = this.getDataValue('additionalImages');
+      return value ? JSON.parse(value) : [];
+    },
+    set(value) {
+      this.setDataValue('additionalImages', JSON.stringify(Array.isArray(value) ? value : []));
+    }
+  },
+  published: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true
   }
+}, {
+  tableName: 'case_studies',
+  timestamps: true
+});
 
-  static async findPublished() {
-    return caseStudies.filter(cs => cs.published !== false);
-  }
-
-  static async findById(id) {
-    return caseStudies.find(cs => cs.id === parseInt(id));
-  }
-
-  static async findByCategory(category) {
-    return caseStudies.filter(cs => cs.category === category && cs.published !== false);
-  }
-
-  static async create(caseStudyData) {
-    const caseStudy = {
-      id: caseStudies.length + 1,
-      ...caseStudyData,
-      published: caseStudyData.published !== undefined ? caseStudyData.published : true,
-      createdAt: new Date().toISOString()
-    };
-    caseStudies.push(caseStudy);
-    return caseStudy;
-  }
-
-  static async updateById(id, updates) {
-    const index = caseStudies.findIndex(cs => cs.id === parseInt(id));
-    if (index === -1) return null;
-    
-    caseStudies[index] = { ...caseStudies[index], ...updates, updatedAt: new Date().toISOString() };
-    return caseStudies[index];
-  }
-
-  static async deleteById(id) {
-    const index = caseStudies.findIndex(cs => cs.id === parseInt(id));
-    if (index === -1) return false;
-    
-    caseStudies.splice(index, 1);
-    return true;
-  }
-}
-
+export default CaseStudy;

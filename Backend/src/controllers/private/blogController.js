@@ -1,8 +1,10 @@
-import { Blog } from '../../models/Blog.js';
+import Blog from '../../models/Blog.js';
 
 export const getAllBlogs = async (req, res) => {
   try {
-    const blogs = await Blog.findAll();
+    const blogs = await Blog.findAll({
+      order: [['createdAt', 'DESC']]
+    });
     res.json({ data: blogs });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -11,7 +13,7 @@ export const getAllBlogs = async (req, res) => {
 
 export const getBlogById = async (req, res) => {
   try {
-    const blog = await Blog.findById(req.params.id);
+    const blog = await Blog.findByPk(req.params.id);
     
     if (!blog) {
       return res.status(404).json({ error: 'Blog post not found' });
@@ -25,27 +27,56 @@ export const getBlogById = async (req, res) => {
 
 export const createBlog = async (req, res) => {
   try {
-    const { title, slug, date, content, published } = req.body;
+    const { 
+      title, 
+      slug, 
+      date, 
+      category,
+      tags,
+      content, 
+      author,
+      publishDate,
+      seoTitle,
+      metaDescription,
+      seoUrl,
+      published 
+    } = req.body;
     
     const image = req.file ? `/uploads/images/${req.file.filename}` : req.body.image;
     
-    if (!title || !slug) {
-      return res.status(400).json({ error: 'Title and slug are required' });
+    if (!title) {
+      return res.status(400).json({ error: 'Title is required' });
     }
     
+    // Generate slug from title if not provided
+    const blogSlug = slug || title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    
     // Check if slug already exists
-    const existingBlog = await Blog.findBySlug(slug);
+    const existingBlog = await Blog.findOne({ where: { slug: blogSlug } });
     if (existingBlog) {
       return res.status(400).json({ error: 'Blog with this slug already exists' });
     }
     
+    // Handle tags - convert string to array
+    let tagsArray = [];
+    if (tags) {
+      tagsArray = typeof tags === 'string' ? tags.split(',').map(t => t.trim()).filter(t => t) : tags;
+    }
+    
     const blog = await Blog.create({
       title,
-      slug,
+      slug: blogSlug,
       date: date || new Date().toISOString().split('T')[0],
+      category: category || null,
+      tags: tagsArray,
       content: content || '',
       image: image || null,
-      published: published !== undefined ? published : true
+      author: author || null,
+      publishDate: publishDate || date || new Date().toISOString().split('T')[0],
+      seoTitle: seoTitle || null,
+      metaDescription: metaDescription || null,
+      seoUrl: seoUrl || blogSlug,
+      published: published !== undefined ? (published === 'true' || published === true) : true
     });
     
     res.status(201).json({ data: blog });
@@ -57,26 +88,36 @@ export const createBlog = async (req, res) => {
 export const updateBlog = async (req, res) => {
   try {
     const { id } = req.params;
-    const updates = req.body;
+    const updates = { ...req.body };
     
     if (req.file) {
       updates.image = `/uploads/images/${req.file.filename}`;
     }
     
+    // Handle tags - convert string to array
+    if (updates.tags && typeof updates.tags === 'string') {
+      updates.tags = updates.tags.split(',').map(t => t.trim()).filter(t => t);
+    }
+    
+    // Handle boolean fields
+    if (updates.published !== undefined) {
+      updates.published = updates.published === 'true' || updates.published === true;
+    }
+    
     // Check slug uniqueness if slug is being updated
     if (updates.slug) {
-      const existingBlog = await Blog.findBySlug(updates.slug);
+      const existingBlog = await Blog.findOne({ where: { slug: updates.slug } });
       if (existingBlog && existingBlog.id !== parseInt(id)) {
         return res.status(400).json({ error: 'Blog with this slug already exists' });
       }
     }
     
-    const blog = await Blog.updateById(id, updates);
-    
+    const blog = await Blog.findByPk(id);
     if (!blog) {
       return res.status(404).json({ error: 'Blog post not found' });
     }
     
+    await blog.update(updates);
     res.json({ data: blog });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -86,12 +127,13 @@ export const updateBlog = async (req, res) => {
 export const deleteBlog = async (req, res) => {
   try {
     const { id } = req.params;
-    const deleted = await Blog.deleteById(id);
+    const blog = await Blog.findByPk(id);
     
-    if (!deleted) {
+    if (!blog) {
       return res.status(404).json({ error: 'Blog post not found' });
     }
     
+    await blog.destroy();
     res.json({ message: 'Blog post deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: error.message });

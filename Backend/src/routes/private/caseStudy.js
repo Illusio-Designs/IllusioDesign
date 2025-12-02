@@ -6,14 +6,20 @@ import {
   updateCaseStudy,
   deleteCaseStudy
 } from '../../controllers/private/caseStudyController.js';
-import { upload, convertToWebP } from '../../middleware/upload.js';
+import { upload, convertToWebP, convertMultipleToWebP } from '../../middleware/upload.js';
 
 const router = express.Router();
 
 router.get('/', getAllCaseStudies);
 router.get('/:id', getCaseStudyById);
-router.post('/', upload.single('image'), convertToWebP, createCaseStudy);
-router.put('/:id', upload.single('image'), convertToWebP, updateCaseStudy);
+router.post('/', upload.fields([
+  { name: 'image', maxCount: 1 },
+  { name: 'additionalImages', maxCount: 10 }
+]), convertToWebP, convertMultipleToWebP, createCaseStudy);
+router.put('/:id', upload.fields([
+  { name: 'image', maxCount: 1 },
+  { name: 'additionalImages', maxCount: 10 }
+]), convertToWebP, convertMultipleToWebP, updateCaseStudy);
 router.delete('/:id', deleteCaseStudy);
 
 export default router;

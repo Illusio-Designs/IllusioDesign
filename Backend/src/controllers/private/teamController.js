@@ -1,8 +1,10 @@
-import { Team } from '../../models/Team.js';
+import Team from '../../models/Team.js';
 
 export const getAllTeamMembers = async (req, res) => {
   try {
-    const teamMembers = await Team.findAll();
+    const teamMembers = await Team.findAll({
+      order: [['order', 'ASC'], ['createdAt', 'DESC']]
+    });
     res.json({ data: teamMembers });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -11,7 +13,7 @@ export const getAllTeamMembers = async (req, res) => {
 
 export const getTeamMemberById = async (req, res) => {
   try {
-    const teamMember = await Team.findById(req.params.id);
+    const teamMember = await Team.findByPk(req.params.id);
     
     if (!teamMember) {
       return res.status(404).json({ error: 'Team member not found' });
@@ -25,18 +27,18 @@ export const getTeamMemberById = async (req, res) => {
 
 export const createTeamMember = async (req, res) => {
   try {
-    const { name, role, description, order } = req.body;
+    const { name, role, bio, order } = req.body;
     
     const image = req.file ? `/uploads/images/${req.file.filename}` : req.body.image;
     
-    if (!name || !role) {
-      return res.status(400).json({ error: 'Name and role are required' });
+    if (!name) {
+      return res.status(400).json({ error: 'Name is required' });
     }
     
     const teamMember = await Team.create({
       name,
-      role,
-      description: description || null,
+      role: role || null,
+      bio: bio || null,
       image: image || null,
       order: order ? parseInt(order) : undefined
     });
@@ -50,7 +52,7 @@ export const createTeamMember = async (req, res) => {
 export const updateTeamMember = async (req, res) => {
   try {
     const { id } = req.params;
-    const updates = req.body;
+    const updates = { ...req.body };
     
     if (req.file) {
       updates.image = `/uploads/images/${req.file.filename}`;
@@ -60,12 +62,12 @@ export const updateTeamMember = async (req, res) => {
       updates.order = parseInt(updates.order);
     }
     
-    const teamMember = await Team.updateById(id, updates);
-    
+    const teamMember = await Team.findByPk(id);
     if (!teamMember) {
       return res.status(404).json({ error: 'Team member not found' });
     }
     
+    await teamMember.update(updates);
     res.json({ data: teamMember });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -75,12 +77,13 @@ export const updateTeamMember = async (req, res) => {
 export const deleteTeamMember = async (req, res) => {
   try {
     const { id } = req.params;
-    const deleted = await Team.deleteById(id);
+    const teamMember = await Team.findByPk(id);
     
-    if (!deleted) {
+    if (!teamMember) {
       return res.status(404).json({ error: 'Team member not found' });
     }
     
+    await teamMember.destroy();
     res.json({ message: 'Team member deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: error.message });

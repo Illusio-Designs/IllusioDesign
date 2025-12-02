@@ -1,0 +1,148 @@
+/* Page wrapper */
+.blog-page,
+.privacy-policy-page,
+.terms-of-service-page,
+.case-study-page,
+.seo-page,
+.position-page,
+.team-page,
+.application-page,
+.contact-page,
+.users-page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: 100%;
+  position: relative;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 0;
+}
+
+.page-header-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  position: relative;
+}
+
+.page-title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.page-title-wrapper .back-btn {
+  order: 1;
+}
+
+.page-title-wrapper h1 {
+  order: 2;
+}
+
+.page-add-button-wrapper {
+  display: flex;
+  align-items: center;
+  margin-left: 0;
+  position: absolute;
+  left: 0;
+  top: 48px;
+  z-index: 10;
+}
+
+.content-card {
+  margin-left: 56px;
+  flex: 1;
+}
+
+.page-header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: #FFFFFF6E;
+  color: #2D2C2B;
+  border-radius: 50%;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.back-btn:hover {
+  opacity: 0.8;
+}
+
+.page-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #2D2C2B;
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+.table-header-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.add-btn-inline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: #FFFFFF6E;
+  color: #2D2C2B;
+  border-radius: 50%;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.add-btn-inline:hover {
+  opacity: 0.8;
+}
+
+.content-card {
+  background: #FFFFFF3D;
+  border-radius: 50px;
+  padding: 0;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 500px;
+}
+
+.content-card-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #2D2C2B;
+  margin: 0;
+  padding: 20px 30px;
+  font-family: 'Poppins', sans-serif;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+
+/* Import common styles from component CSS files */
+@import '../../components/common/Form.css';
+@import '../../components/common/DashboardCommon.css';
+@import '../../components/common/RichTextEditor.css';
+

@@ -1,16 +1,41 @@
-import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-// Create transporter for Gmail
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_APP_PASSWORD
-    }
-});
+let transporter = null;
+let emailServiceAvailable = false;
+let nodemailer = null;
+
+// Try to import nodemailer
+try {
+    // Use dynamic import wrapped in a promise that resolves immediately
+    import('nodemailer').then((module) => {
+        nodemailer = module.default || module;
+        
+        // Create transporter for Gmail (only if email config is available)
+        if (process.env.EMAIL_USER && process.env.EMAIL_APP_PASSWORD) {
+            transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: process.env.EMAIL_USER,
+                    pass: process.env.EMAIL_APP_PASSWORD
+                }
+            });
+            emailServiceAvailable = true;
+            console.log('✅ Email service initialized');
+        } else {
+            console.warn('⚠️  Email service not configured. EMAIL_USER and EMAIL_APP_PASSWORD not set in .env');
+        }
+    }).catch((error) => {
+        console.warn('⚠️  Nodemailer not available. Email functionality will be disabled.');
+        console.warn('   Error:', error.message);
+        console.warn('   Install with: npm install nodemailer');
+        emailServiceAvailable = false;
+    });
+} catch (error) {
+    console.warn('⚠️  Could not load nodemailer. Email functionality will be disabled.');
+    emailServiceAvailable = false;
+}
 
 /**
  * Send email
@@ -22,6 +47,17 @@ const transporter = nodemailer.createTransport({
  * @returns {Promise}
  */
 export const sendEmail = async ({ to, subject, html, text }) => {
+    // Wait a bit for nodemailer to load if it's still loading
+    if (!emailServiceAvailable && nodemailer === null) {
+        // Give it a moment to initialize
+        await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    
+    if (!emailServiceAvailable || !transporter) {
+        console.warn('Email service not available. Skipping email send.');
+        return { success: false, error: 'Email service not configured' };
+    }
+    
     try {
         const mailOptions = {
             from: process.env.EMAIL_USER,
@@ -120,4 +156,3 @@ export const sendConfirmationEmail = async (to, type, data = {}) => {
         return await sendEmail({ to, subject, html });
     }
 };
-

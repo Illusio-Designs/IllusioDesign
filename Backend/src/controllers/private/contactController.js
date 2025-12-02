@@ -1,15 +1,18 @@
-import { ContactMessage } from '../../models/ContactMessage.js';
+import ContactMessage from '../../models/ContactMessage.js';
 
 export const getAllContactMessages = async (req, res) => {
   try {
     const { status } = req.query;
-    let messages;
+    const where = {};
     
     if (status === 'unread') {
-      messages = await ContactMessage.findUnread();
-    } else {
-      messages = await ContactMessage.findAll();
+      where.status = 'unread';
     }
+    
+    const messages = await ContactMessage.findAll({
+      where,
+      order: [['createdAt', 'DESC']]
+    });
     
     res.json({ data: messages });
   } catch (error) {
@@ -19,7 +22,7 @@ export const getAllContactMessages = async (req, res) => {
 
 export const getContactMessageById = async (req, res) => {
   try {
-    const message = await ContactMessage.findById(req.params.id);
+    const message = await ContactMessage.findByPk(req.params.id);
     
     if (!message) {
       return res.status(404).json({ error: 'Contact message not found' });
@@ -34,14 +37,14 @@ export const getContactMessageById = async (req, res) => {
 export const updateContactMessage = async (req, res) => {
   try {
     const { id } = req.params;
-    const { status } = req.body;
+    const updates = { ...req.body };
     
-    const message = await ContactMessage.updateById(id, { status });
-    
+    const message = await ContactMessage.findByPk(id);
     if (!message) {
       return res.status(404).json({ error: 'Contact message not found' });
     }
     
+    await message.update(updates);
     res.json({ data: message });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -51,12 +54,13 @@ export const updateContactMessage = async (req, res) => {
 export const deleteContactMessage = async (req, res) => {
   try {
     const { id } = req.params;
-    const deleted = await ContactMessage.deleteById(id);
+    const message = await ContactMessage.findByPk(id);
     
-    if (!deleted) {
+    if (!message) {
       return res.status(404).json({ error: 'Contact message not found' });
     }
     
+    await message.destroy();
     res.json({ message: 'Contact message deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: error.message });

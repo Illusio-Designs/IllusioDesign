@@ -1,29 +1,25 @@
-import { Application } from '../../models/Application.js';
-import { Position } from '../../models/Position.js';
+import Application from '../../models/Application.js';
+import Position from '../../models/Position.js';
 
 export const getAllApplications = async (req, res) => {
   try {
     const { positionId } = req.query;
-    let applications;
+    const where = {};
     
     if (positionId) {
-      applications = await Application.findByPositionId(positionId);
-    } else {
-      applications = await Application.findAll();
+      where.positionId = positionId;
     }
     
-    // Populate position details
-    const applicationsWithPosition = await Promise.all(
-      applications.map(async (app) => {
-        const position = await Position.findById(app.positionId);
-        return {
-          ...app,
-          position: position || null
-        };
-      })
-    );
+    const applications = await Application.findAll({
+      where,
+      include: [{
+        model: Position,
+        as: 'position'
+      }],
+      order: [['createdAt', 'DESC']]
+    });
     
-    res.json({ data: applicationsWithPosition });
+    res.json({ data: applications });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -31,35 +27,12 @@ export const getAllApplications = async (req, res) => {
 
 export const getApplicationById = async (req, res) => {
   try {
-    const application = await Application.findById(req.params.id);
-    
-    if (!application) {
-      return res.status(404).json({ error: 'Application not found' });
-    }
-    
-    const position = await Position.findById(application.positionId);
-    
-    res.json({ 
-      data: {
-        ...application,
-        position: position || null
-      }
+    const application = await Application.findByPk(req.params.id, {
+      include: [{
+        model: Position,
+        as: 'position'
+      }]
     });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-export const updateApplication = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { status, notes } = req.body;
-    
-    const updates = {};
-    if (status) updates.status = status;
-    if (notes !== undefined) updates.notes = notes;
-    
-    const application = await Application.updateById(id, updates);
     
     if (!application) {
       return res.status(404).json({ error: 'Application not found' });
@@ -71,15 +44,39 @@ export const updateApplication = async (req, res) => {
   }
 };
 
-export const deleteApplication = async (req, res) => {
+export const updateApplication = async (req, res) => {
   try {
     const { id } = req.params;
-    const deleted = await Application.deleteById(id);
+    const updates = { ...req.body };
     
-    if (!deleted) {
+    const application = await Application.findByPk(id, {
+      include: [{
+        model: Position,
+        as: 'position'
+      }]
+    });
+    if (!application) {
       return res.status(404).json({ error: 'Application not found' });
     }
     
+    await application.update(updates);
+    await application.reload({ include: [{ model: Position, as: 'position' }] });
+    res.json({ data: application });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const deleteApplication = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const application = await Application.findByPk(id);
+    
+    if (!application) {
+      return res.status(404).json({ error: 'Application not found' });
+    }
+    
+    await application.destroy();
     res.json({ message: 'Application deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: error.message });

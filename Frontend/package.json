@@ -13,7 +13,8 @@
     "framer-motion": "^12.23.24",
     "next": "^14.2.0",
     "react": "^18.3.0",
-    "react-dom": "^18.3.0"
+    "react-dom": "^18.3.0",
+    "react-toastify": "^11.0.5"
   },
   "devDependencies": {
     "eslint": "^8.57.0",

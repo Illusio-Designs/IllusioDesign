@@ -1,46 +1,58 @@
-// Mock database - replace with actual database (MongoDB, PostgreSQL, etc.)
-let users = [];
+import { DataTypes } from 'sequelize';
+import { sequelize } from '../config/db.js';
+import bcrypt from 'bcryptjs';
 
-export class User {
-  static async findAll() {
-    return users.map(({ password, ...user }) => user);
+const User = sequelize.define('User', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate: {
+      isEmail: true
+    }
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  role: {
+    type: DataTypes.ENUM('admin', 'user'),
+    defaultValue: 'user'
+  },
+  image: {
+    type: DataTypes.TEXT,
+    allowNull: true
   }
+}, {
+  tableName: 'users',
+  timestamps: true,
+  indexes: [
+    {
+      unique: true,
+      fields: ['email'],
+      name: 'email_unique'
+    }
+  ],
+  hooks: {
+    beforeCreate: async (user) => {
+      if (user.password && !user.password.startsWith('$2a$') && !user.password.startsWith('$2b$')) {
+        user.password = await bcrypt.hash(user.password, 10);
+      }
+    },
+    beforeUpdate: async (user) => {
+      if (user.changed('password') && user.password && !user.password.startsWith('$2a$') && !user.password.startsWith('$2b$')) {
+        user.password = await bcrypt.hash(user.password, 10);
+      }
+    }
+  }
+});
 
-  static async findById(id) {
-    const user = users.find(u => u.id === id);
-    if (!user) return null;
-    const { password, ...safeUser } = user;
-    return safeUser;
-  }
-
-  static async findByEmail(email) {
-    return users.find(u => u.email === email);
-  }
-
-  static async create(userData) {
-    const user = {
-      id: users.length + 1,
-      ...userData,
-      createdAt: new Date().toISOString()
-    };
-    users.push(user);
-    return user;
-  }
-
-  static async updateById(id, updates) {
-    const index = users.findIndex(u => u.id === id);
-    if (index === -1) return null;
-    
-    users[index] = { ...users[index], ...updates, updatedAt: new Date().toISOString() };
-    const { password, ...safeUser } = users[index];
-    return safeUser;
-  }
-
-  static async deleteById(id) {
-    const index = users.findIndex(u => u.id === id);
-    if (index === -1) return false;
-    
-    users.splice(index, 1);
-    return true;
-  }
-}
+export default User;

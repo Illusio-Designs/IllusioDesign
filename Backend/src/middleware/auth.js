@@ -1,5 +1,15 @@
 import jwt from 'jsonwebtoken';
 
+// Get JWT secret with fallback
+const getJWTSecret = () => {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    console.warn('⚠️  WARNING: JWT_SECRET not set in environment variables. Using default (INSECURE for production!)');
+    return 'your-secret-key-change-this-in-production-min-32-characters-long';
+  }
+  return secret;
+};
+
 export const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
@@ -9,7 +19,7 @@ export const authenticateToken = (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, getJWTSecret());
     req.user = decoded;
     next();
   } catch (error) {

@@ -1,4 +1,4 @@
-import { ContactMessage } from '../../models/ContactMessage.js';
+import ContactMessage from '../../models/ContactMessage.js';
 import { sendContactNotification, sendConfirmationEmail } from '../../services/emailService.js';
 import { trackContactForm } from '../../integration/googleAnalytics.js';
 import { trackContactForm as trackFBContact } from '../../integration/facebookPixel.js';

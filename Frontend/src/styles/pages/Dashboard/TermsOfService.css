@@ -1,0 +1,37 @@
+.terms-of-service-page {
+  max-width: 1400px;
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.terms-content {
+  padding: 24px;
+}
+
+.terms-meta {
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.terms-meta p {
+  margin: 0;
+  color: rgba(45, 44, 43, 0.7);
+  font-size: 14px;
+}
+
+.terms-text {
+  color: #2D2C2B;
+  line-height: 1.8;
+  font-size: 15px;
+  white-space: pre-wrap;
+}
+
+.empty-state {
+  padding: 40px;
+  text-align: center;
+  color: rgba(45, 44, 43, 0.6);
+}
+

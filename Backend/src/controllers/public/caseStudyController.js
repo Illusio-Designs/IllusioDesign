@@ -1,15 +1,18 @@
-import { CaseStudy } from '../../models/CaseStudy.js';
+import CaseStudy from '../../models/CaseStudy.js';
 
 export const getAllCaseStudies = async (req, res) => {
   try {
     const { category } = req.query;
-    let caseStudies;
+    const where = { published: true };
     
     if (category) {
-      caseStudies = await CaseStudy.findByCategory(category);
-    } else {
-      caseStudies = await CaseStudy.findPublished();
+      where.category = category;
     }
+    
+    const caseStudies = await CaseStudy.findAll({
+      where,
+      order: [['createdAt', 'DESC']]
+    });
     
     res.json({ data: caseStudies });
   } catch (error) {
@@ -19,7 +22,7 @@ export const getAllCaseStudies = async (req, res) => {
 
 export const getCaseStudyById = async (req, res) => {
   try {
-    const caseStudy = await CaseStudy.findById(req.params.id);
+    const caseStudy = await CaseStudy.findByPk(req.params.id);
     
     if (!caseStudy || caseStudy.published === false) {
       return res.status(404).json({ error: 'Case study not found' });
