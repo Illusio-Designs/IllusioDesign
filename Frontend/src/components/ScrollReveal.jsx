@@ -13,36 +13,50 @@ const ScrollReveal = ({
   className = '',
   as = 'div', // HTML element type
   once = true, // animate only once or every time it enters viewport
+  ready = true, // whether the component is ready to observe (for loader sync)
   ...props
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const containerRef = useRef(null);
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    if (!containerRef.current || !ready) {
+      setIsVisible(false);
+      return;
+    }
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsVisible(true);
-            if (once) {
-              observer.disconnect();
+    let observer = null;
+
+    // Small delay to ensure DOM is ready after loader
+    const initTimer = setTimeout(() => {
+      if (!containerRef.current) return;
+
+      observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              setIsVisible(true);
+              if (once) {
+                observer?.disconnect();
+              }
+            } else if (!once) {
+              setIsVisible(false);
             }
-          } else if (!once) {
-            setIsVisible(false);
-          }
-        });
-      },
-      { threshold }
-    );
+          });
+        },
+        { threshold }
+      );
 
-    observer.observe(containerRef.current);
+      observer.observe(containerRef.current);
+    }, 100);
 
     return () => {
-      observer.disconnect();
+      clearTimeout(initTimer);
+      if (observer) {
+        observer.disconnect();
+      }
     };
-  }, [threshold, once]);
+  }, [threshold, once, ready]);
 
   const Component = as;
 

@@ -8,6 +8,7 @@ import Footer from '@/components/Footer';
 import ScrollReveal from '@/components/ScrollReveal';
 import SplitText from '@/components/SplitText';
 import Counter from '@/components/Counter';
+import Loader from '@/components/Loader';
 import { BackgroundRippleEffect } from '@/components/ui/background-ripple-effect';
 
 // Star Rating Component
@@ -205,6 +206,7 @@ const blogPosts = [
 ];
 
 export default function Home({ navigateTo, currentPage }) {
+  const [isLoading, setIsLoading] = useState(true);
   const [isServicesVisible, setIsServicesVisible] = useState(false);
   const [isTestimonialsVisible, setIsTestimonialsVisible] = useState(false);
   const [isTestimonialsHovered, setIsTestimonialsHovered] = useState(false);
@@ -286,15 +288,20 @@ export default function Home({ navigateTo, currentPage }) {
     };
   }, [isTestimonialsHovered]);
 
+  const handleLoaderComplete = () => {
+    setIsLoading(false);
+  };
+
   return (
     <>
+      {isLoading && <Loader onComplete={handleLoaderComplete} />}
       <div className="hero-background-wrapper">
         <BackgroundRippleEffect />
         <Header navigateTo={navigateTo} currentPage={currentPage} />
         
         {/* Hero Section */}
         <section className="hero-section">
-          <ScrollReveal className="hero-container" animation="fadeUp" distance={80} duration={1.5} once={false}>
+          <ScrollReveal className="hero-container" animation="fadeUp" distance={80} duration={1.5} once={false} ready={!isLoading}>
           <div className="hero-content">
             <h1 className="hero-title">
               <span className="title-line">
@@ -338,7 +345,7 @@ export default function Home({ navigateTo, currentPage }) {
       {/* Services We Offer */}
       <section ref={servicesSectionRef} className="services-offer-section">
         <div className="services-container">
-          <ScrollReveal as="div" className="services-title-wrapper" animation="fadeUp" delay={0.1} duration={1.5} once={false}>
+          <ScrollReveal as="div" className="services-title-wrapper" animation="fadeUp" delay={0.1} duration={1.5} once={false} ready={!isLoading}>
             <h2 className="section-title services-title">
               <SplitText
                 as="span"
@@ -384,7 +391,7 @@ export default function Home({ navigateTo, currentPage }) {
       {/* Case Studies */}
       <section className="case-studies-section">
         <div className="container">
-          <ScrollReveal as="div" animation="fadeUp" duration={1.5} once={false}>
+          <ScrollReveal as="div" animation="fadeUp" duration={1.5} once={false} ready={!isLoading}>
             <SplitText
               as="h2"
               className="section-title"
@@ -471,6 +478,7 @@ export default function Home({ navigateTo, currentPage }) {
                 delay={0.1 + index * 0.05}
                 duration={1.5}
                 once={false}
+                ready={!isLoading}
               >
                 <div className="stat-item">
                   <h3 className="stat-value">
@@ -496,7 +504,7 @@ export default function Home({ navigateTo, currentPage }) {
         <div className="container">
           <div className="faq-wrapper">
             <div className="faq-left">
-              <ScrollReveal as="div" animation="fadeUp" duration={1.5} once={false}>
+              <ScrollReveal as="div" animation="fadeUp" duration={1.5} once={false} ready={!isLoading}>
                 <h1 className="section-title faq-title">Frequently Asked Topics</h1>
                 <p className="faq-subtitle">
                   We turn ideas into digital brilliance — here&apos;s everything you need to know.
@@ -514,6 +522,7 @@ export default function Home({ navigateTo, currentPage }) {
                     delay={0.1 + index * 0.05}
                     duration={1.5}
                     once={false}
+                    ready={!isLoading}
                   >
                     <div 
                       className="faq-question"
@@ -540,7 +549,7 @@ export default function Home({ navigateTo, currentPage }) {
       {/* What Our Clients Say */}
       <section ref={testimonialsSectionRef} className="testimonials-section">
         <div className="container testimonials-container">
-          <ScrollReveal as="div" animation="fadeUp" duration={1.5} once={false}>
+          <ScrollReveal as="div" animation="fadeUp" duration={1.5} once={false} ready={!isLoading}>
             <SplitText
               as="h2"
               className="section-title"
@@ -609,7 +618,7 @@ export default function Home({ navigateTo, currentPage }) {
       {/* Digital Growth Hub */}
       <section className="growth-hub-section">
         <div className="container">
-          <ScrollReveal as="div" animation="fadeUp" duration={1.5} once={false}>
+          <ScrollReveal as="div" animation="fadeUp" duration={1.5} once={false} ready={!isLoading}>
             <SplitText
               as="h2"
               className="section-title"
@@ -631,6 +640,7 @@ export default function Home({ navigateTo, currentPage }) {
                 delay={0.1 + index * 0.05}
                 duration={1.5}
                 once={false}
+                ready={!isLoading}
               >
                 <div 
                   className="blog-card"

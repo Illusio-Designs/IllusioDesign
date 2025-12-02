@@ -3,6 +3,8 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
+import Loader from '@/components/Loader';
+import { useState } from 'react';
 
 const blogPosts = [
   {
@@ -44,16 +46,23 @@ const blogPosts = [
 ];
 
 export default function Blog({ navigateTo, currentPage }) {
+  const [isLoading, setIsLoading] = useState(true);
+
+  const handleLoaderComplete = () => {
+    setIsLoading(false);
+  };
+
   const handleBlogClick = (slug) => {
     navigateTo('blog-detail', slug);
   };
 
   return (
     <>
+      {isLoading && <Loader onComplete={handleLoaderComplete} />}
       <Header navigateTo={navigateTo} currentPage={currentPage} />
       <section className="blog-section" id="blog">
         <div className="container">
-          <ScrollReveal as="div" animation="fadeUp" duration={1.5} once={false}>
+          <ScrollReveal as="div" animation="fadeUp" duration={1.5} once={false} ready={!isLoading}>
             <h1 className="section-title">
               <SplitText
                 as="span"
@@ -86,6 +95,7 @@ export default function Blog({ navigateTo, currentPage }) {
                 delay={0.1 + index * 0.05}
                 duration={1.5}
                 once={false}
+                ready={!isLoading}
               >
                 <div 
                   className="blog-card"

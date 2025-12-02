@@ -3,6 +3,8 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
+import Loader from '@/components/Loader';
+import { useState } from 'react';
 
 const projects = [
   {
@@ -176,6 +178,12 @@ const projects = [
 ];
 
 export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage }) {
+  const [isLoading, setIsLoading] = useState(true);
+
+  const handleLoaderComplete = () => {
+    setIsLoading(false);
+  };
+
   // Find current project by ID (caseStudyName is now a project ID string)
   const projectId = parseInt(caseStudyName, 10);
   const currentProject = projects.find(project => project.id === projectId) || projects[0];
@@ -186,11 +194,12 @@ export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage
 
   return (
     <>
+      {isLoading && <Loader onComplete={handleLoaderComplete} />}
       <Header navigateTo={navigateTo} currentPage={currentPage} />
       <section className="case-study-detail-section">
         <div className="case-study-detail-container">
           {/* Top Section - Tags and Title */}
-          <ScrollReveal animation="fadeUp" delay={0.1} duration={1.5} trigger="onScroll">
+          <ScrollReveal animation="fadeUp" delay={0.1} duration={1.5} trigger="onScroll" ready={!isLoading}>
             <div className="case-study-header">
               <div className="project-tags">
                 {currentProject.tags?.map((tag, tagIndex) => (
@@ -222,7 +231,7 @@ export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage
           </ScrollReveal>
 
           {/* Full Screen Hero Image */}
-          <ScrollReveal animation="fadeUp" delay={0.2} duration={1.5} trigger="onScroll">
+          <ScrollReveal animation="fadeUp" delay={0.2} duration={1.5} trigger="onScroll" ready={!isLoading}>
             <div className="case-study-hero-image">
               <img
                 src={currentProject.image}
@@ -236,7 +245,7 @@ export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage
           </ScrollReveal>
 
           {/* Results Cards Section */}
-          <ScrollReveal animation="fadeUp" delay={0.3} duration={1.5} trigger="onScroll">
+          <ScrollReveal animation="fadeUp" delay={0.3} duration={1.5} trigger="onScroll" ready={!isLoading}>
             <div className="results-cards-section">
               {currentProject.results?.map((result, resultIndex) => (
                 <ScrollReveal 
@@ -245,6 +254,7 @@ export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage
                   delay={0.1 + resultIndex * 0.1} 
                   duration={1.2} 
                   trigger="onScroll"
+                  ready={!isLoading}
                 >
                   <div className="result-card">
                     <h3 className="result-card-title">{result.title || result}</h3>
@@ -258,7 +268,7 @@ export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage
           </ScrollReveal>
 
           {/* Overview Section */}
-          <ScrollReveal animation="fadeUp" delay={0.4} duration={1.5} trigger="onScroll">
+          <ScrollReveal animation="fadeUp" delay={0.4} duration={1.5} trigger="onScroll" ready={!isLoading}>
             <div className="overview-section">
               <span className="section-label">OVERVIEW</span>
               <h2 className="overview-title">{currentProject.overview || currentProject.title}</h2>
@@ -275,7 +285,7 @@ export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage
           </ScrollReveal>
 
           {/* Project Details */}
-          <ScrollReveal animation="fadeUp" delay={0.5} duration={1.5} trigger="onScroll">
+          <ScrollReveal animation="fadeUp" delay={0.5} duration={1.5} trigger="onScroll" ready={!isLoading}>
             <div className="project-details-full">
               <div className="detail-row">
                 <span className="detail-label">Client</span>
@@ -307,7 +317,7 @@ export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage
           </ScrollReveal>
 
           {/* Additional Images Gallery */}
-          <ScrollReveal animation="fadeUp" delay={0.6} duration={1.5} trigger="onScroll">
+          <ScrollReveal animation="fadeUp" delay={0.6} duration={1.5} trigger="onScroll" ready={!isLoading}>
             <div className="case-study-gallery">
               {currentProject.additionalImages?.map((image, index) => (
                 <ScrollReveal 
@@ -316,6 +326,7 @@ export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage
                   delay={0.1 + index * 0.1} 
                   duration={1.2} 
                   trigger="onScroll"
+                  ready={!isLoading}
                 >
                   <div className="gallery-item">
                     <img

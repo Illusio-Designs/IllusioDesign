@@ -3,6 +3,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
+import Loader from '@/components/Loader';
 import { useEffect, useRef, useState } from 'react';
 
 const caseStudyProjects = [
@@ -155,11 +156,16 @@ const serviceProjectsMap = {
 };
 
 export default function ServiceDetail({ serviceName, navigateTo, currentPage }) {
+  const [isLoading, setIsLoading] = useState(true);
   const service = serviceData[serviceName] || serviceData['branding'];
   const otherServices = otherServicesMap[serviceName] || otherServicesMap['branding'];
   const processFlowRef = useRef(null);
   const [lineProgress, setLineProgress] = useState(0);
   const [hoveredProject, setHoveredProject] = useState(null);
+
+  const handleLoaderComplete = () => {
+    setIsLoading(false);
+  };
 
   const relatedProjectIds = serviceProjectsMap[serviceName] || [];
   const relatedProjects = caseStudyProjects.filter((project) =>
@@ -202,6 +208,7 @@ export default function ServiceDetail({ serviceName, navigateTo, currentPage }) 
 
   return (
     <>
+      {isLoading && <Loader onComplete={handleLoaderComplete} />}
       <Header navigateTo={navigateTo} currentPage={currentPage} />
       <section className="service-detail-section">
         <div className="service-detail-container">
@@ -238,7 +245,7 @@ export default function ServiceDetail({ serviceName, navigateTo, currentPage }) 
                 {/* Image placeholder */}
               </div>
             </ScrollReveal>
-            <ScrollReveal as="div" animation="fadeUp" delay={0.15} duration={1.5} once={false}>
+            <ScrollReveal as="div" animation="fadeUp" delay={0.15} duration={1.5} once={false} ready={!isLoading}>
               <div className="service-description">
                 {service.description && service.description.map((paragraph, index) => (
                   <p key={index}>
@@ -252,7 +259,7 @@ export default function ServiceDetail({ serviceName, navigateTo, currentPage }) 
           {/* Our Process Section */}
           <div className="process-section">
             <div className="process-content">
-              <ScrollReveal as="div" animation="fadeUp" delay={0.1} duration={1.5} once={false}>
+              <ScrollReveal as="div" animation="fadeUp" delay={0.1} duration={1.5} once={false} ready={!isLoading}>
                 <div className="process-header">
                   <span className="process-label">Our Process</span>
                   <h2 className="process-title">{service.processTitle}</h2>
@@ -277,6 +284,7 @@ export default function ServiceDetail({ serviceName, navigateTo, currentPage }) 
                     delay={0.1 + index * 0.05} 
                     duration={1.5} 
                     once={false}
+                    ready={!isLoading}
                     className={`process-card-wrapper process-card-${step.position}`}
                   >
                     <div className="process-card">
@@ -293,7 +301,7 @@ export default function ServiceDetail({ serviceName, navigateTo, currentPage }) 
 
           {/* Our Other Services Section */}
           <div className="other-services-section">
-            <ScrollReveal as="div" animation="fadeUp" delay={0.1} duration={1.5} once={false}>
+            <ScrollReveal as="div" animation="fadeUp" delay={0.1} duration={1.5} once={false} ready={!isLoading}>
               <div className="other-services-content">
                 <div className="other-services-header">
                   <h3 className="other-services-title">
@@ -320,7 +328,7 @@ export default function ServiceDetail({ serviceName, navigateTo, currentPage }) 
           {relatedProjects.length > 0 && (
             <section className="related-projects-section">
               <div className="related-projects-container">
-                <ScrollReveal as="div" animation="fadeUp" duration={1.5} once={false}>
+                <ScrollReveal as="div" animation="fadeUp" duration={1.5} once={false} ready={!isLoading}>
                   <h2 className="section-title related-projects-title">
                     <SplitText
                       as="span"

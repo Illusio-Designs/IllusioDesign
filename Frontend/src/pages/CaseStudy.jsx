@@ -3,9 +3,11 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
+import Loader from '@/components/Loader';
 import { useState, useEffect, useRef } from 'react';
 
 export default function CaseStudy({ navigateTo, currentPage }) {
+  const [isLoading, setIsLoading] = useState(true);
   const [hoveredProject, setHoveredProject] = useState(null);
   const [activeCategory, setActiveCategory] = useState('web');
   const [animatedProjects, setAnimatedProjects] = useState(new Set());
@@ -186,11 +188,16 @@ export default function CaseStudy({ navigateTo, currentPage }) {
     };
   }, [filteredProjects, animatedProjects]);
 
+  const handleLoaderComplete = () => {
+    setIsLoading(false);
+  };
+
   return (
     <>
+      {isLoading && <Loader onComplete={handleLoaderComplete} />}
       <Header navigateTo={navigateTo} currentPage={currentPage} />
       <section className="projects-section" id="case-study">
-        <ScrollReveal animation="fadeUp" delay={0.1} duration={1.5}>
+        <ScrollReveal animation="fadeUp" delay={0.1} duration={1.5} ready={!isLoading}>
           <h1 className="section-title">
             <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
               Case Studies

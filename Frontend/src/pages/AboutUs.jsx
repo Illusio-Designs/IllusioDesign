@@ -4,6 +4,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
+import Loader from '@/components/Loader';
 import Image from 'next/image';
 import Counter from '@/components/Counter';
 import { useState, useEffect, useRef } from 'react';
@@ -32,6 +33,7 @@ const StarRating = () => {
 };
 
 export default function AboutUs({ navigateTo, currentPage }) {
+  const [isLoading, setIsLoading] = useState(true);
   const [isTestimonialsVisible, setIsTestimonialsVisible] = useState(false);
   const [isTestimonialsHovered, setIsTestimonialsHovered] = useState(false);
   const [isTestimonialsSliding, setIsTestimonialsSliding] = useState(false);
@@ -183,13 +185,18 @@ export default function AboutUs({ navigateTo, currentPage }) {
     };
   }, [isTestimonialsHovered]);
 
+  const handleLoaderComplete = () => {
+    setIsLoading(false);
+  };
+
   return (
     <>
+      {isLoading && <Loader onComplete={handleLoaderComplete} />}
       <Header navigateTo={navigateTo} currentPage={currentPage} />
       <section className="about-section" id="about">
         <div className="about-container">
           {/* Main Title */}
-          <ScrollReveal as="div" animation="fadeUp" delay={0.1} duration={1.5} once={false}>
+          <ScrollReveal as="div" animation="fadeUp" delay={0.1} duration={1.5} once={false} ready={!isLoading}>
             <h1 className="section-title">
               <SplitText
                 as="span"
@@ -205,7 +212,7 @@ export default function AboutUs({ navigateTo, currentPage }) {
           </ScrollReveal>
 
           {/* Introduction */}
-          <ScrollReveal animation="fadeUp" delay={0.15} duration={1.5} once={false}>
+          <ScrollReveal animation="fadeUp" delay={0.15} duration={1.5} once={false} ready={!isLoading}>
             <div className="about-intro">
               <p>
                 At Illusio Designs, we are passionate about creating exceptional digital experiences. 
@@ -221,7 +228,7 @@ export default function AboutUs({ navigateTo, currentPage }) {
           </ScrollReveal>
 
           {/* Stats Section */}
-          <ScrollReveal animation="fadeUp" delay={0.2} duration={1.5} once={false}>
+          <ScrollReveal animation="fadeUp" delay={0.2} duration={1.5} once={false} ready={!isLoading}>
             <div className="about-stats-section">
               <div className="stats-grid">
                 {stats.map((stat, index) => (
@@ -231,6 +238,7 @@ export default function AboutUs({ navigateTo, currentPage }) {
                     delay={0.1 + index * 0.05}
                     duration={1.5}
                     once={false}
+                    ready={!isLoading}
                   >
                     <div className="stat-item">
                       <h3 className="stat-value">
@@ -252,9 +260,9 @@ export default function AboutUs({ navigateTo, currentPage }) {
           </ScrollReveal>
 
           {/* Vision and Mission Grid */}
-          <ScrollReveal animation="fadeUp" delay={0.25} duration={1.5} once={false}>
+          <ScrollReveal animation="fadeUp" delay={0.25} duration={1.5} once={false} ready={!isLoading}>
             <div className="vision-mission-grid">
-              <ScrollReveal animation="fadeUp" delay={0.3} duration={1.5} once={false}>
+              <ScrollReveal animation="fadeUp" delay={0.3} duration={1.5} once={false} ready={!isLoading}>
                 <div className="about-card vision-card">
                   <h2 className="card-title">Our Vision</h2>
                   <p className="card-description">
@@ -265,7 +273,7 @@ export default function AboutUs({ navigateTo, currentPage }) {
                 </div>
               </ScrollReveal>
 
-              <ScrollReveal animation="fadeUp" delay={0.35} duration={1.5} once={false}>
+              <ScrollReveal animation="fadeUp" delay={0.35} duration={1.5} once={false} ready={!isLoading}>
                 <div className="about-card mission-card">
                   <h2 className="card-title">Our Mission</h2>
                   <p className="card-description">
@@ -279,7 +287,7 @@ export default function AboutUs({ navigateTo, currentPage }) {
           </ScrollReveal>
 
           {/* Our Goals Section */}
-          <ScrollReveal animation="fadeUp" delay={0.4} duration={1.5} once={false}>
+          <ScrollReveal animation="fadeUp" delay={0.4} duration={1.5} once={false} ready={!isLoading}>
             <div className="goals-section">
               <h2 className="section-subtitle">Our Goals</h2>
               <div className="goals-grid">
@@ -290,6 +298,7 @@ export default function AboutUs({ navigateTo, currentPage }) {
                     delay={0.1 + index * 0.05}
                     duration={1.5}
                     once={false}
+                    ready={!isLoading}
                   >
                     <div className="goal-card">
                       <div className="goal-icon-wrapper">
@@ -305,7 +314,7 @@ export default function AboutUs({ navigateTo, currentPage }) {
           </ScrollReveal>
 
           {/* Team Section */}
-          <ScrollReveal animation="fadeUp" delay={0.45} duration={1.5} once={false}>
+          <ScrollReveal animation="fadeUp" delay={0.45} duration={1.5} once={false} ready={!isLoading}>
             <div className="team-section">
               <h2 className="section-subtitle">Our Team</h2>
               <div className="team-grid">
@@ -316,6 +325,7 @@ export default function AboutUs({ navigateTo, currentPage }) {
                     delay={0.1 + index * 0.05}
                     duration={1.5}
                     once={false}
+                    ready={!isLoading}
                   >
                     <div className="team-card">
                       <div className="team-avatar">
@@ -334,10 +344,10 @@ export default function AboutUs({ navigateTo, currentPage }) {
           </ScrollReveal>
 
           {/* What Our Clients Say */}
-          <ScrollReveal animation="fadeUp" delay={0.5} duration={1.5} once={false}>
+          <ScrollReveal animation="fadeUp" delay={0.5} duration={1.5} once={false} ready={!isLoading}>
             <section ref={testimonialsSectionRef} className="testimonials-section">
               <div className="container testimonials-container">
-                <ScrollReveal as="div" animation="fadeUp" duration={1.5} once={false}>
+                <ScrollReveal as="div" animation="fadeUp" duration={1.5} once={false} ready={!isLoading}>
                   <SplitText
                     as="h2"
                     className="section-title"

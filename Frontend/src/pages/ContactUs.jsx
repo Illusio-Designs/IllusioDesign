@@ -3,8 +3,16 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
+import Loader from '@/components/Loader';
+import { useState } from 'react';
 
 export default function ContactUs({ navigateTo, currentPage }) {
+  const [isLoading, setIsLoading] = useState(true);
+
+  const handleLoaderComplete = () => {
+    setIsLoading(false);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle form submission here
@@ -13,10 +21,11 @@ export default function ContactUs({ navigateTo, currentPage }) {
 
   return (
     <>
+      {isLoading && <Loader onComplete={handleLoaderComplete} />}
       <Header navigateTo={navigateTo} currentPage={currentPage} />
       <section className="contact-section" id="contact">
         <div className="contact-container">
-          <ScrollReveal as="div" animation="fadeUp" duration={1.5} once={false}>
+          <ScrollReveal as="div" animation="fadeUp" duration={1.5} once={false} ready={!isLoading}>
             <h1 className="section-title">
               <SplitText
                 as="span"
@@ -43,7 +52,7 @@ export default function ContactUs({ navigateTo, currentPage }) {
           
           <div className="contact-content">
             {/* Left Side - Orange Block */}
-            <ScrollReveal as="div" animation="fadeUp" delay={0.1} duration={1.5} once={false}>
+            <ScrollReveal as="div" animation="fadeUp" delay={0.1} duration={1.5} once={false} ready={!isLoading}>
               <div className="contact-message-block">
                 <div className="message-text">
                   <p>Convert Your</p>
@@ -55,7 +64,7 @@ export default function ContactUs({ navigateTo, currentPage }) {
             </ScrollReveal>
             
             {/* Right Side - Contact Form */}
-            <ScrollReveal as="div" animation="fadeUp" delay={0.15} duration={1.5} once={false}>
+            <ScrollReveal as="div" animation="fadeUp" delay={0.15} duration={1.5} once={false} ready={!isLoading}>
               <div className="contact-form">
                 <form onSubmit={handleSubmit}>
                   <div className="form-group">

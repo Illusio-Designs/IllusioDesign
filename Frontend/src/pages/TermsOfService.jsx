@@ -3,10 +3,19 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
+import Loader from '@/components/Loader';
+import { useState } from 'react';
 
 export default function TermsOfService({ navigateTo, currentPage }) {
+  const [isLoading, setIsLoading] = useState(true);
+
+  const handleLoaderComplete = () => {
+    setIsLoading(false);
+  };
+
   return (
     <>
+      {isLoading && <Loader onComplete={handleLoaderComplete} />}
       <Header navigateTo={navigateTo} currentPage={currentPage} />
       <section className="terms-section" id="terms">
       <div className="terms-container">
@@ -15,12 +24,12 @@ export default function TermsOfService({ navigateTo, currentPage }) {
             Terms of Service
           </SplitText>
         </h1>
-        <ScrollReveal animation="fadeUp" delay={0.1} duration={1.5}>
+        <ScrollReveal animation="fadeUp" delay={0.1} duration={1.5} ready={!isLoading}>
           <p className="last-updated">Last Updated: November 15, 2024</p>
         </ScrollReveal>
         
         <div className="terms-content">
-          <ScrollReveal animation="fadeUp" delay={0.1} duration={1.5}>
+          <ScrollReveal animation="fadeUp" delay={0.1} duration={1.5} ready={!isLoading}>
             <div className="terms-block">
             <h3>
               <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
@@ -39,7 +48,7 @@ export default function TermsOfService({ navigateTo, currentPage }) {
             </div>
           </ScrollReveal>
           
-          <ScrollReveal animation="fadeUp" delay={0.15} duration={1.5}>
+          <ScrollReveal animation="fadeUp" delay={0.15} duration={1.5} ready={!isLoading}>
             <div className="terms-block">
               <h3>
                 <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
@@ -52,7 +61,7 @@ export default function TermsOfService({ navigateTo, currentPage }) {
             </div>
           </ScrollReveal>
           
-          <ScrollReveal animation="fadeUp" delay={0.2} duration={1.5}>
+          <ScrollReveal animation="fadeUp" delay={0.2} duration={1.5} ready={!isLoading}>
             <div className="terms-block">
               <h3>
                 <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
@@ -65,7 +74,7 @@ export default function TermsOfService({ navigateTo, currentPage }) {
             </div>
           </ScrollReveal>
           
-          <ScrollReveal animation="fadeUp" delay={0.25} duration={1.5}>
+          <ScrollReveal animation="fadeUp" delay={0.25} duration={1.5} ready={!isLoading}>
             <div className="terms-block">
               <h3>
                 <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">

@@ -3,6 +3,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
+import Loader from '@/components/Loader';
 import { useState } from 'react';
 
 const jobDetails = {
@@ -37,6 +38,7 @@ const jobDetails = {
 };
 
 export default function PositionApply({ positionId, navigateTo, currentPage }) {
+  const [isLoading, setIsLoading] = useState(true);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -135,12 +137,17 @@ export default function PositionApply({ positionId, navigateTo, currentPage }) {
     }
   };
 
+  const handleLoaderComplete = () => {
+    setIsLoading(false);
+  };
+
   return (
     <>
+      {isLoading && <Loader onComplete={handleLoaderComplete} />}
       <Header navigateTo={navigateTo} currentPage={currentPage} />
       <section className="position-apply-section">
         <div className="position-apply-container">
-          <ScrollReveal as="div" animation="fadeUp" duration={1.5} once={false}>
+          <ScrollReveal as="div" animation="fadeUp" duration={1.5} once={false} ready={!isLoading}>
             <h1 className="section-title">
               <SplitText
                 as="span"
@@ -168,7 +175,7 @@ export default function PositionApply({ positionId, navigateTo, currentPage }) {
           <div className="position-apply-layout">
             {/* Left Side - Job Description */}
             <div className="job-description-section">
-              <ScrollReveal as="div" animation="fadeUp" delay={0.1} duration={1.5} once={false}>
+              <ScrollReveal as="div" animation="fadeUp" delay={0.1} duration={1.5} once={false} ready={!isLoading}>
                 <div className="job-info">
                   <div className="info-item">
                     <span className="info-label">Location:</span>
@@ -199,7 +206,7 @@ export default function PositionApply({ positionId, navigateTo, currentPage }) {
                   <p>We will review your application and get back to you soon.</p>
                 </div>
               ) : (
-                <ScrollReveal as="div" animation="fadeUp" delay={0.15} duration={1.5} once={false}>
+                <ScrollReveal as="div" animation="fadeUp" delay={0.15} duration={1.5} once={false} ready={!isLoading}>
                   <form className="application-form" onSubmit={handleSubmit}>
                   <div className="form-group">
                     <input

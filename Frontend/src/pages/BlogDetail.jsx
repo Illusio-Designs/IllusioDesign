@@ -3,6 +3,8 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
+import Loader from '@/components/Loader';
+import { useState } from 'react';
 
 const blogPosts = [
   {
@@ -44,6 +46,12 @@ const blogPosts = [
 ];
 
 export default function BlogDetail({ blogName, navigateTo, currentPage }) {
+  const [isLoading, setIsLoading] = useState(true);
+
+  const handleLoaderComplete = () => {
+    setIsLoading(false);
+  };
+
   // Find current blog post
   const currentBlog = blogPosts.find(blog => blog.slug === blogName) || blogPosts[0];
   
@@ -52,10 +60,11 @@ export default function BlogDetail({ blogName, navigateTo, currentPage }) {
 
   return (
     <>
+      {isLoading && <Loader onComplete={handleLoaderComplete} />}
       <Header navigateTo={navigateTo} currentPage={currentPage} />
       <section className="blog-detail-section">
         <div className="blog-detail-container">
-          <ScrollReveal as="div" animation="fadeUp" duration={1.5} once={false}>
+          <ScrollReveal as="div" animation="fadeUp" duration={1.5} once={false} ready={!isLoading}>
             <h1 className="section-title">
               <SplitText
                 as="span"
@@ -73,7 +82,7 @@ export default function BlogDetail({ blogName, navigateTo, currentPage }) {
           <div className="blog-detail-layout">
             {/* Main Content Column */}
             <div className="blog-main-content">
-              <ScrollReveal as="div" animation="fadeUp" delay={0.1} duration={1.5} once={false}>
+              <ScrollReveal as="div" animation="fadeUp" delay={0.1} duration={1.5} once={false} ready={!isLoading}>
                 <div className="blog-image-placeholder"></div>
                 <div className="blog-date">{currentBlog.date}</div>
                 <div className="blog-body-text">
@@ -92,7 +101,7 @@ export default function BlogDetail({ blogName, navigateTo, currentPage }) {
 
             {/* Related Articles Column */}
             <div className="blog-related-articles">
-              <ScrollReveal as="div" animation="fadeUp" delay={0.15} duration={1.5} once={false}>
+              <ScrollReveal as="div" animation="fadeUp" delay={0.15} duration={1.5} once={false} ready={!isLoading}>
                 {relatedPosts.map((post, index) => (
                   <div 
                     key={post.id} 
