@@ -5,8 +5,12 @@ import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
 import Loader from '@/components/Loader';
 import { useState } from 'react';
+import { useSEO } from '@/hooks/useSEO';
 
 export default function TermsOfService({ navigateTo, currentPage }) {
+  // SEO Integration
+  useSEO('terms');
+
   const [isLoading, setIsLoading] = useState(true);
 
   const handleLoaderComplete = () => {

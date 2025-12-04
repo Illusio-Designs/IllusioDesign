@@ -5,6 +5,7 @@ import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
 import Loader from '@/components/Loader';
 import { useEffect, useRef, useState } from 'react';
+import { useSEO } from '@/hooks/useSEO';
 
 const caseStudyProjects = [
   {
@@ -156,6 +157,9 @@ const serviceProjectsMap = {
 };
 
 export default function ServiceDetail({ serviceName, navigateTo, currentPage }) {
+  // SEO Integration
+  useSEO('service-detail');
+
   const [isLoading, setIsLoading] = useState(true);
   const service = serviceData[serviceName] || serviceData['branding'];
   const otherServices = otherServicesMap[serviceName] || otherServicesMap['branding'];

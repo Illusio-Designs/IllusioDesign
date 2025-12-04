@@ -24,7 +24,7 @@ import { createTeamMember, updateTeamMember, deleteTeamMember } from '../../cont
 import { createSEO, updateSEO, deleteSEO } from '../../controllers/private/seoController.js';
 import { createUser, updateUser, updateUserRole, deleteUser } from '../../controllers/private/adminController.js';
 import { uploadImage, uploadMultipleImages, deleteImage, getAllImages } from '../../controllers/private/imageController.js';
-import { upload, convertToWebP, convertMultipleToWebP } from '../../middleware/upload.js';
+import { upload, uploadBlog, uploadProject, convertToWebP, convertMultipleToWebP } from '../../middleware/upload.js';
 
 const router = express.Router();
 
@@ -55,18 +55,18 @@ router.get('/admin/users', getAllUsers);
 router.get('/admin/users/:id', getUserById);
 
 // Write routes (POST, PUT, DELETE) - accessible to all authenticated users
-router.post('/case-studies', upload.fields([
+router.post('/case-studies', uploadProject.fields([
   { name: 'image', maxCount: 1 },
   { name: 'additionalImages', maxCount: 10 }
 ]), convertToWebP, convertMultipleToWebP, createCaseStudy);
-router.put('/case-studies/:id', upload.fields([
+router.put('/case-studies/:id', uploadProject.fields([
   { name: 'image', maxCount: 1 },
   { name: 'additionalImages', maxCount: 10 }
 ]), convertToWebP, convertMultipleToWebP, updateCaseStudy);
 router.delete('/case-studies/:id', deleteCaseStudy);
 
-router.post('/blogs', upload.single('image'), convertToWebP, createBlog);
-router.put('/blogs/:id', upload.single('image'), convertToWebP, updateBlog);
+router.post('/blogs', uploadBlog.single('image'), convertToWebP, createBlog);
+router.put('/blogs/:id', uploadBlog.single('image'), convertToWebP, updateBlog);
 router.delete('/blogs/:id', deleteBlog);
 
 router.post('/positions', createPosition);

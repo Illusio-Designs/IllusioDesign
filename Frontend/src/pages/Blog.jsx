@@ -5,6 +5,7 @@ import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
 import Loader from '@/components/Loader';
 import { useState } from 'react';
+import { useSEO } from '@/hooks/useSEO';
 
 const blogPosts = [
   {
@@ -46,6 +47,9 @@ const blogPosts = [
 ];
 
 export default function Blog({ navigateTo, currentPage }) {
+  // SEO Integration
+  useSEO('blog');
+
   const [isLoading, setIsLoading] = useState(true);
 
   const handleLoaderComplete = () => {

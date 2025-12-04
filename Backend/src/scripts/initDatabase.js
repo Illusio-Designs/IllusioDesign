@@ -1,7 +1,6 @@
 import { connectDB, syncDatabase } from '../config/db.js';
 import { User, SEO } from '../models/index.js';
 import bcrypt from 'bcryptjs';
-import { initCaseStudies } from './initCaseStudies.js';
 
 // Import all models to ensure they're registered
 import '../models/index.js';
@@ -34,9 +33,6 @@ export const initDatabase = async () => {
     
     // Initialize admin user
     await initAdminUser();
-    
-    // Initialize case studies
-    await initCaseStudies();
     
     console.log('✅ Database initialization completed');
   } catch (error) {

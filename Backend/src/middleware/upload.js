@@ -10,24 +10,47 @@ const __dirname = path.dirname(__filename);
 // Ensure uploads directory exists
 const uploadsDir = path.join(__dirname, '../../uploads');
 const imagesDir = path.join(uploadsDir, 'images');
+const blogDir = path.join(imagesDir, 'blog');
+const projectDir = path.join(imagesDir, 'project');
 
+// Create directories if they don't exist
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
 if (!fs.existsSync(imagesDir)) {
   fs.mkdirSync(imagesDir, { recursive: true });
 }
+if (!fs.existsSync(blogDir)) {
+  fs.mkdirSync(blogDir, { recursive: true });
+}
+if (!fs.existsSync(projectDir)) {
+  fs.mkdirSync(projectDir, { recursive: true });
+}
 
-// Configure multer for temporary storage
-const storage = multer.diskStorage({
+// Helper function to generate filename
+const generateFilename = (file) => {
+  const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+  const originalName = file.originalname.replace(/[^a-zA-Z0-9.-]/g, '_');
+  return uniqueSuffix + '-' + originalName;
+};
+
+// Configure multer storage for blog images
+const blogStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, imagesDir);
+    cb(null, blogDir);
   },
   filename: (req, file, cb) => {
-    // Generate unique filename with timestamp
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    const originalName = file.originalname.replace(/[^a-zA-Z0-9.-]/g, '_');
-    cb(null, uniqueSuffix + '-' + originalName);
+    cb(null, generateFilename(file));
+  }
+});
+
+// Configure multer storage for project/case study images
+const projectStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, projectDir);
+  },
+  filename: (req, file, cb) => {
+    cb(null, generateFilename(file));
   }
 });
 
@@ -41,13 +64,36 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-const upload = multer({
-  storage: storage,
+// Multer instances for blog and project uploads
+export const uploadBlog = multer({
+  storage: blogStorage,
   fileFilter: fileFilter,
   limits: {
     fileSize: 10 * 1024 * 1024 // 10MB limit
   }
 });
+
+export const uploadProject = multer({
+  storage: projectStorage,
+  fileFilter: fileFilter,
+  limits: {
+    fileSize: 10 * 1024 * 1024 // 10MB limit
+  }
+});
+
+// Default upload (for backward compatibility, uses project directory)
+const upload = uploadProject;
+
+// Helper function to determine upload type and directory
+const getUploadType = (filePath) => {
+  if (filePath.includes('blog')) {
+    return { type: 'blog', dir: blogDir, urlPath: '/uploads/images/blog' };
+  } else if (filePath.includes('project')) {
+    return { type: 'project', dir: projectDir, urlPath: '/uploads/images/project' };
+  }
+  // Default to project for backward compatibility
+  return { type: 'project', dir: projectDir, urlPath: '/uploads/images/project' };
+};
 
 // Middleware to convert uploaded images to WebP
 export const convertToWebP = async (req, res, next) => {
@@ -56,23 +102,24 @@ export const convertToWebP = async (req, res, next) => {
     try {
       const inputPath = req.file.path;
       const originalName = path.parse(req.file.originalname).name;
+      const { dir, urlPath } = getUploadType(inputPath);
       
       // If file is already WebP, just rename and update paths
       if (req.file.mimetype === 'image/webp' || inputPath.toLowerCase().endsWith('.webp')) {
-        const outputPath = path.join(imagesDir, `${originalName}-${Date.now()}.webp`);
+        const outputPath = path.join(dir, `${originalName}-${Date.now()}.webp`);
         fs.renameSync(inputPath, outputPath);
         
         req.file.filename = path.basename(outputPath);
         req.file.path = outputPath;
         req.file.mimetype = 'image/webp';
         req.file.originalname = `${originalName}.webp`;
-        req.file.webpPath = `/uploads/images/${req.file.filename}`;
+        req.file.webpPath = `${urlPath}/${req.file.filename}`;
         
         return next();
       }
 
       // Convert other formats to WebP
-      const outputPath = path.join(imagesDir, `${originalName}-${Date.now()}.webp`);
+      const outputPath = path.join(dir, `${originalName}-${Date.now()}.webp`);
 
       // Convert image to WebP
       await sharp(inputPath)
@@ -87,7 +134,7 @@ export const convertToWebP = async (req, res, next) => {
       req.file.path = outputPath;
       req.file.mimetype = 'image/webp';
       req.file.originalname = `${originalName}.webp`;
-      req.file.webpPath = `/uploads/images/${req.file.filename}`;
+      req.file.webpPath = `${urlPath}/${req.file.filename}`;
 
       return next();
     } catch (error) {
@@ -105,23 +152,24 @@ export const convertToWebP = async (req, res, next) => {
       const file = req.files.image[0];
       const inputPath = file.path;
       const originalName = path.parse(file.originalname).name;
+      const { dir, urlPath } = getUploadType(inputPath);
       
       // If file is already WebP, just rename and update paths
       if (file.mimetype === 'image/webp' || inputPath.toLowerCase().endsWith('.webp')) {
-        const outputPath = path.join(imagesDir, `${originalName}-${Date.now()}.webp`);
+        const outputPath = path.join(dir, `${originalName}-${Date.now()}.webp`);
         fs.renameSync(inputPath, outputPath);
         
         file.filename = path.basename(outputPath);
         file.path = outputPath;
         file.mimetype = 'image/webp';
         file.originalname = `${originalName}.webp`;
-        file.webpPath = `/uploads/images/${file.filename}`;
+        file.webpPath = `${urlPath}/${file.filename}`;
         
         return next();
       }
 
       // Convert other formats to WebP
-      const outputPath = path.join(imagesDir, `${originalName}-${Date.now()}.webp`);
+      const outputPath = path.join(dir, `${originalName}-${Date.now()}.webp`);
 
       // Convert image to WebP
       await sharp(inputPath)
@@ -136,7 +184,7 @@ export const convertToWebP = async (req, res, next) => {
       file.path = outputPath;
       file.mimetype = 'image/webp';
       file.originalname = `${originalName}.webp`;
-      file.webpPath = `/uploads/images/${file.filename}`;
+      file.webpPath = `${urlPath}/${file.filename}`;
 
       return next();
     } catch (error) {
@@ -168,22 +216,23 @@ export const convertMultipleToWebP = async (req, res, next) => {
           for (const file of files) {
             const inputPath = file.path;
             const originalName = path.parse(file.originalname).name;
+            const { dir, urlPath } = getUploadType(inputPath);
             
             // If file is already WebP, just rename and update paths
             if (file.mimetype === 'image/webp' || inputPath.toLowerCase().endsWith('.webp')) {
-              const outputPath = path.join(imagesDir, `${originalName}-${Date.now()}-${Math.round(Math.random() * 1E9)}.webp`);
+              const outputPath = path.join(dir, `${originalName}-${Date.now()}-${Math.round(Math.random() * 1E9)}.webp`);
               fs.renameSync(inputPath, outputPath);
               
               file.filename = path.basename(outputPath);
               file.path = outputPath;
               file.mimetype = 'image/webp';
               file.originalname = `${originalName}.webp`;
-              file.webpPath = `/uploads/images/${file.filename}`;
+              file.webpPath = `${urlPath}/${file.filename}`;
               continue;
             }
 
             // Convert other formats to WebP
-            const outputPath = path.join(imagesDir, `${originalName}-${Date.now()}-${Math.round(Math.random() * 1E9)}.webp`);
+            const outputPath = path.join(dir, `${originalName}-${Date.now()}-${Math.round(Math.random() * 1E9)}.webp`);
 
             // Convert image to WebP
             await sharp(inputPath)
@@ -198,7 +247,7 @@ export const convertMultipleToWebP = async (req, res, next) => {
             file.path = outputPath;
             file.mimetype = 'image/webp';
             file.originalname = `${originalName}.webp`;
-            file.webpPath = `/uploads/images/${file.filename}`;
+            file.webpPath = `${urlPath}/${file.filename}`;
           }
         }
       }
@@ -207,22 +256,23 @@ export const convertMultipleToWebP = async (req, res, next) => {
       for (const file of req.files) {
         const inputPath = file.path;
         const originalName = path.parse(file.originalname).name;
+        const { dir, urlPath } = getUploadType(inputPath);
         
         // If file is already WebP, just rename and update paths
         if (file.mimetype === 'image/webp' || inputPath.toLowerCase().endsWith('.webp')) {
-          const outputPath = path.join(imagesDir, `${originalName}-${Date.now()}-${Math.round(Math.random() * 1E9)}.webp`);
+          const outputPath = path.join(dir, `${originalName}-${Date.now()}-${Math.round(Math.random() * 1E9)}.webp`);
           fs.renameSync(inputPath, outputPath);
           
           file.filename = path.basename(outputPath);
           file.path = outputPath;
           file.mimetype = 'image/webp';
           file.originalname = `${originalName}.webp`;
-          file.webpPath = `/uploads/images/${file.filename}`;
+          file.webpPath = `${urlPath}/${file.filename}`;
           continue;
         }
 
         // Convert other formats to WebP
-        const outputPath = path.join(imagesDir, `${originalName}-${Date.now()}-${Math.round(Math.random() * 1E9)}.webp`);
+        const outputPath = path.join(dir, `${originalName}-${Date.now()}-${Math.round(Math.random() * 1E9)}.webp`);
 
         // Convert image to WebP
         await sharp(inputPath)
@@ -237,7 +287,7 @@ export const convertMultipleToWebP = async (req, res, next) => {
         file.path = outputPath;
         file.mimetype = 'image/webp';
         file.originalname = `${originalName}.webp`;
-        file.webpPath = `/uploads/images/${file.filename}`;
+        file.webpPath = `${urlPath}/${file.filename}`;
       }
     }
 

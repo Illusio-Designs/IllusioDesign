@@ -5,6 +5,7 @@ import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
 import Loader from '@/components/Loader';
 import { useState } from 'react';
+import { useSEO } from '@/hooks/useSEO';
 
 const jobDetails = {
   'graphic-designer': {
@@ -38,6 +39,9 @@ const jobDetails = {
 };
 
 export default function PositionApply({ positionId, navigateTo, currentPage }) {
+  // SEO Integration
+  useSEO('position-apply');
+
   const [isLoading, setIsLoading] = useState(true);
   const [formData, setFormData] = useState({
     name: '',

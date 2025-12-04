@@ -42,7 +42,7 @@ export const createBlog = async (req, res) => {
       published 
     } = req.body;
     
-    const image = req.file ? `/uploads/images/${req.file.filename}` : req.body.image;
+    const image = req.file ? (req.file.webpPath || `/uploads/images/blog/${req.file.filename}`) : req.body.image;
     
     if (!title) {
       return res.status(400).json({ error: 'Title is required' });
@@ -91,7 +91,7 @@ export const updateBlog = async (req, res) => {
     const updates = { ...req.body };
     
     if (req.file) {
-      updates.image = `/uploads/images/${req.file.filename}`;
+      updates.image = req.file.webpPath || `/uploads/images/blog/${req.file.filename}`;
     }
     
     // Handle tags - convert string to array

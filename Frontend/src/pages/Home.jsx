@@ -10,6 +10,7 @@ import SplitText from '@/components/SplitText';
 import Counter from '@/components/Counter';
 import Loader from '@/components/Loader';
 import { BackgroundRippleEffect } from '@/components/ui/background-ripple-effect';
+import { useSEO } from '@/hooks/useSEO';
 
 // Star Rating Component
 const StarRating = () => {
@@ -206,6 +207,9 @@ const blogPosts = [
 ];
 
 export default function Home({ navigateTo, currentPage }) {
+  // SEO Integration
+  useSEO('home');
+
   const [isLoading, setIsLoading] = useState(true);
   const [isServicesVisible, setIsServicesVisible] = useState(false);
   const [isTestimonialsVisible, setIsTestimonialsVisible] = useState(false);

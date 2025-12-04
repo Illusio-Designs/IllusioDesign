@@ -6,14 +6,14 @@ import {
   updateBlog,
   deleteBlog
 } from '../../controllers/private/blogController.js';
-import { upload, convertToWebP } from '../../middleware/upload.js';
+import { uploadBlog, convertToWebP } from '../../middleware/upload.js';
 
 const router = express.Router();
 
 router.get('/', getAllBlogs);
 router.get('/:id', getBlogById);
-router.post('/', upload.single('image'), convertToWebP, createBlog);
-router.put('/:id', upload.single('image'), convertToWebP, updateBlog);
+router.post('/', uploadBlog.single('image'), convertToWebP, createBlog);
+router.put('/:id', uploadBlog.single('image'), convertToWebP, updateBlog);
 router.delete('/:id', deleteBlog);
 
 export default router;

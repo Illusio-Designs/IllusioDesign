@@ -5,6 +5,7 @@ import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
 import Loader from '@/components/Loader';
 import { useState } from 'react';
+import { useSEO } from '@/hooks/useSEO';
 
 const projects = [
   {
@@ -178,6 +179,9 @@ const projects = [
 ];
 
 export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage }) {
+  // SEO Integration
+  useSEO('case-study-detail');
+
   const [isLoading, setIsLoading] = useState(true);
 
   const handleLoaderComplete = () => {

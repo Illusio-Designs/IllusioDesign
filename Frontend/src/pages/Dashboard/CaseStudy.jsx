@@ -39,6 +39,9 @@ export default function CaseStudy() {
     description: '',
     services: '',
     duration: '',
+    seoTitle: '',
+    metaDescription: '',
+    seoUrl: '',
     image: null,
     additionalImages: []
   });
@@ -78,6 +81,9 @@ export default function CaseStudy() {
       description: '',
       services: '',
       duration: '',
+      seoTitle: '',
+      metaDescription: '',
+      seoUrl: '',
       image: null,
       additionalImages: []
     });
@@ -96,6 +102,9 @@ export default function CaseStudy() {
       description: caseStudy.description || '',
       services: caseStudy.category || '',
       duration: caseStudy.timeline || '',
+      seoTitle: caseStudy.seoTitle || '',
+      metaDescription: caseStudy.metaDescription || '',
+      seoUrl: caseStudy.seoUrl || '',
       image: null,
       additionalImages: [],
       additionalImagesToKeep: Array.isArray(caseStudy.additionalImages) ? caseStudy.additionalImages : []
@@ -623,6 +632,33 @@ export default function CaseStudy() {
                   type="text"
                   value={formData.duration}
                   onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
+                />
+              </div>
+
+              <div className="form-group">
+                <label>SEO Title</label>
+                <input
+                  type="text"
+                  value={formData.seoTitle}
+                  onChange={(e) => setFormData({ ...formData, seoTitle: e.target.value })}
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Meta Description</label>
+                <textarea
+                  value={formData.metaDescription}
+                  onChange={(e) => setFormData({ ...formData, metaDescription: e.target.value })}
+                  rows={3}
+                />
+              </div>
+
+              <div className="form-group">
+                <label>SEO URL</label>
+                <input
+                  type="text"
+                  value={formData.seoUrl}
+                  onChange={(e) => setFormData({ ...formData, seoUrl: e.target.value })}
                 />
               </div>
             </div>

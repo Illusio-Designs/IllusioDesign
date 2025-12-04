@@ -169,7 +169,9 @@ export const seoAPI = {
   }),
   delete: (id) => apiCall(`/private/seo/${id}`, {
     method: 'DELETE'
-  })
+  }),
+  // Public API
+  getByPagePublic: (page) => apiCall(`/public/seo/${page}`, {}, true)
 };
 
 // Dashboard APIs

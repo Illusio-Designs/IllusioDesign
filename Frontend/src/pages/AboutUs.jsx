@@ -8,6 +8,7 @@ import Loader from '@/components/Loader';
 import Image from 'next/image';
 import Counter from '@/components/Counter';
 import { useState, useEffect, useRef } from 'react';
+import { useSEO } from '@/hooks/useSEO';
 
 // Star Rating Component
 const StarRating = () => {
@@ -33,6 +34,9 @@ const StarRating = () => {
 };
 
 export default function AboutUs({ navigateTo, currentPage }) {
+  // SEO Integration
+  useSEO('about');
+
   const [isLoading, setIsLoading] = useState(true);
   const [isTestimonialsVisible, setIsTestimonialsVisible] = useState(false);
   const [isTestimonialsHovered, setIsTestimonialsHovered] = useState(false);

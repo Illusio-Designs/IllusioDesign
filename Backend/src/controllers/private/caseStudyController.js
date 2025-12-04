@@ -46,7 +46,10 @@ export const createCaseStudy = async (req, res) => {
       services,
       duration,
       additionalImages,
-      published
+      published,
+      seoTitle,
+      metaDescription,
+      seoUrl
     } = req.body;
     
     // Handle main image
@@ -94,7 +97,10 @@ export const createCaseStudy = async (req, res) => {
       services: services || category || null,
       duration: duration || timeline || null,
       additionalImages: additionalImagesArray,
-      published: published !== undefined ? (published === 'true' || published === true) : true
+      published: published !== undefined ? (published === 'true' || published === true) : true,
+      seoTitle: seoTitle || null,
+      metaDescription: metaDescription || null,
+      seoUrl: seoUrl || null
     });
     
     res.status(201).json({ data: caseStudy });

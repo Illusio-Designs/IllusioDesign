@@ -5,8 +5,12 @@ import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
 import Loader from '@/components/Loader';
 import { useState, useEffect, useRef } from 'react';
+import { useSEO } from '@/hooks/useSEO';
 
 export default function CaseStudy({ navigateTo, currentPage }) {
+  // SEO Integration
+  useSEO('case-study');
+
   const [isLoading, setIsLoading] = useState(true);
   const [hoveredProject, setHoveredProject] = useState(null);
   const [activeCategory, setActiveCategory] = useState('web');
