@@ -1,3 +1,9 @@
+/* Hide theme toggle on dashboard pages */
+body:has(.dashboard-layout) .theme-toggle-wrapper,
+.dashboard-layout ~ .theme-toggle-wrapper {
+  display: none !important;
+}
+
 /* Dashboard background - same as auth pages */
 .dashboard-layout {
   min-height: 100vh;

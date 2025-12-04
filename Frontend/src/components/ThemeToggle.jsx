@@ -1,10 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import '@/styles/components/themeToggle.css';
 
 export default function ThemeToggle() {
   const [isDark, setIsDark] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme');
@@ -13,6 +15,15 @@ export default function ThemeToggle() {
       document.body.classList.add('dark-theme');
     }
   }, []);
+
+  // Hide theme toggle on dashboard, login, and register pages
+  const shouldHide = pathname?.startsWith('/dashboard') || 
+                     pathname?.startsWith('/login') || 
+                     pathname?.startsWith('/register');
+
+  if (shouldHide) {
+    return null;
+  }
 
   const toggleTheme = () => {
     setIsDark(!isDark);

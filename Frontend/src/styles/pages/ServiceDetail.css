@@ -438,18 +438,6 @@ body.dark-theme .process-section::before {
     linear-gradient(90deg, rgba(255, 255, 255, 0.15) 1px, transparent 1px);
 }
 
-body.dark-theme .process-card {
-  background: #000000;
-}
-
-body.dark-theme .process-card-content {
-  color: #FAF9F6;
-}
-
-body.dark-theme .process-number {
-  color: #FAF9F6;
-}
-
 body.dark-theme .other-services-divider {
   background: #4A4A4A;
 }

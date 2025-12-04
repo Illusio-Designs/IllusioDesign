@@ -1,5 +1,5 @@
-/* Hide theme toggle on dashboard pages */
-.theme-toggle-wrapper {
+/* Hide theme toggle on auth pages (login/register) - backup CSS rule */
+.auth-container ~ .theme-toggle-wrapper {
   display: none !important;
 }
 
