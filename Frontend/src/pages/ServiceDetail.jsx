@@ -6,49 +6,7 @@ import ScrollReveal from '@/components/ScrollReveal';
 import Loader from '@/components/Loader';
 import { useEffect, useRef, useState } from 'react';
 import { useSEO } from '@/hooks/useSEO';
-
-const caseStudyProjects = [
-  {
-    id: 1,
-    title: 'Aicumen AI',
-    image: '/images/aicumen-ai.webp',
-  },
-  {
-    id: 2,
-    title: 'AMRUTKUMAR GOVINDDAS LLP',
-    image: '/images/amrutkumar-jewelry.webp',
-  },
-  {
-    id: 3,
-    title: 'Crosscoin',
-    image: '/images/crosscoin.webp',
-  },
-  {
-    id: 4,
-    title: 'Immune Protector',
-    image: '/images/immune-protector.webp',
-  },
-  {
-    id: 5,
-    title: 'Nanak Finserv',
-    image: '/images/nanak-finserv.webp',
-  },
-  {
-    id: 6,
-    title: 'Radhe Consultancy',
-    image: '/images/radhe-consultancy.webp',
-  },
-  {
-    id: 7,
-    title: 'Vivera Lighting',
-    image: '/images/vivera-lighting.webp',
-  },
-  {
-    id: 8,
-    title: 'AMRUTKUMAR GOVINDDAS LLP (App)',
-    image: '/images/Amrut App.webp',
-  },
-];
+import { caseStudyAPI } from '@/services/api';
 
 const serviceData = {
   'branding': {
@@ -148,12 +106,12 @@ const otherServicesMap = {
   ],
 };
 
-// Map each service to related project IDs
-const serviceProjectsMap = {
-  branding: [],
-  'web-app': [1, 2, 3, 4, 5, 6, 7, 8],
-  marketing: [],
-  b2b: [],
+// Map each service to industry filter (for web-app service, filter by industry)
+const serviceIndustryMap = {
+  branding: null, // No filtering
+  'web-app': null, // Filter by industry - will be handled dynamically
+  marketing: null,
+  b2b: null,
 };
 
 export default function ServiceDetail({ serviceName, navigateTo, currentPage }) {
@@ -161,6 +119,7 @@ export default function ServiceDetail({ serviceName, navigateTo, currentPage }) 
   useSEO('service-detail');
 
   const [isLoading, setIsLoading] = useState(true);
+  const [relatedProjects, setRelatedProjects] = useState([]);
   const service = serviceData[serviceName] || serviceData['branding'];
   const otherServices = otherServicesMap[serviceName] || otherServicesMap['branding'];
   const processFlowRef = useRef(null);
@@ -171,10 +130,70 @@ export default function ServiceDetail({ serviceName, navigateTo, currentPage }) 
     setIsLoading(false);
   };
 
-  const relatedProjectIds = serviceProjectsMap[serviceName] || [];
-  const relatedProjects = caseStudyProjects.filter((project) =>
-    relatedProjectIds.includes(project.id)
-  );
+  // Fetch projects from API based on service
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await caseStudyAPI.getAllPublic();
+        if (response && response.data) {
+          let filteredProjects = response.data;
+
+          // For web-app service, filter by industry if available
+          if (serviceName === 'web-app') {
+            // Filter projects that have an industry field (or show all if no industry filter needed)
+            // You can customize this logic based on your requirements
+            filteredProjects = response.data.filter((project) => {
+              // Show projects that have industry data or are web/app category
+              return project.industry || project.category === 'web' || project.category === 'app';
+            });
+          } else {
+            // For other services, you can add specific filtering logic
+            // For now, show all projects or filter by category
+            if (serviceName === 'branding') {
+              filteredProjects = response.data.filter((project) => project.category === 'branding');
+            } else if (serviceName === 'b2b') {
+              filteredProjects = response.data.filter((project) => project.category === 'b2b');
+            } else if (serviceName === 'marketing') {
+              filteredProjects = response.data.filter((project) => project.category === 'marketing');
+            }
+          }
+
+          // Transform API data to match component structure
+          const transformedProjects = filteredProjects.map((project) => {
+            // Handle image URL - use NEXT_PUBLIC_IMAGE_URL
+            let imageUrl = project.image || '/images/placeholder.webp';
+            if (project.image) {
+              if (project.image.startsWith('http')) {
+                // Already a full URL
+                imageUrl = project.image;
+              } else if (project.image.startsWith('/uploads/')) {
+                // Backend upload path - prepend IMAGE URL
+                const IMAGE_BASE_URL = process.env.NEXT_PUBLIC_IMAGE_URL || 'https://api.illusiodesigns.agency';
+                imageUrl = `${IMAGE_BASE_URL}${project.image}`;
+              } else if (!project.image.startsWith('/')) {
+                // Relative path without leading slash
+                const IMAGE_BASE_URL = process.env.NEXT_PUBLIC_IMAGE_URL || 'https://api.illusiodesigns.agency';
+                imageUrl = `${IMAGE_BASE_URL}/${project.image}`;
+              }
+            }
+
+            return {
+              id: project.id,
+              title: project.title,
+              image: imageUrl,
+            };
+          });
+
+          setRelatedProjects(transformedProjects);
+        }
+      } catch (error) {
+        console.error('Error fetching projects:', error);
+        setRelatedProjects([]);
+      }
+    };
+
+    fetchProjects();
+  }, [serviceName]);
 
   // Scroll to top when service changes
   useEffect(() => {
@@ -350,10 +369,10 @@ export default function ServiceDetail({ serviceName, navigateTo, currentPage }) 
                   <div className="related-projects-track">
                     {relatedProjects.map((project) => (
                       <div
-                        key={`${project.id}-rel-1`}
+                        key={project.id}
                         className="related-project-card"
                         onClick={() => navigateTo('case-study-detail', project.id.toString())}
-                        onMouseEnter={() => setHoveredProject(`${project.id}-rel-1`)}
+                        onMouseEnter={() => setHoveredProject(project.id)}
                         onMouseLeave={() => setHoveredProject(null)}
                       >
                         <div className="related-project-image-container">
@@ -370,37 +389,7 @@ export default function ServiceDetail({ serviceName, navigateTo, currentPage }) 
                           <h3>{project.title}</h3>
                           <span
                             className={`related-project-arrow ${
-                              hoveredProject === `${project.id}-rel-1` ? 'arrow-visible' : ''
-                            }`}
-                          >
-                            →
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                    {relatedProjects.map((project) => (
-                      <div
-                        key={`${project.id}-rel-2`}
-                        className="related-project-card"
-                        onClick={() => navigateTo('case-study-detail', project.id.toString())}
-                        onMouseEnter={() => setHoveredProject(`${project.id}-rel-2`)}
-                        onMouseLeave={() => setHoveredProject(null)}
-                      >
-                        <div className="related-project-image-container">
-                          <img
-                            src={project.image}
-                            alt={project.title}
-                            className="related-project-image"
-                            onError={(e) => {
-                              e.target.style.display = 'none';
-                            }}
-                          />
-                        </div>
-                        <div className="related-project-title-container">
-                          <h3>{project.title}</h3>
-                          <span
-                            className={`related-project-arrow ${
-                              hoveredProject === `${project.id}-rel-2` ? 'arrow-visible' : ''
+                              hoveredProject === project.id ? 'arrow-visible' : ''
                             }`}
                           >
                             →

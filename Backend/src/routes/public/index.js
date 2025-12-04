@@ -1,5 +1,4 @@
 import express from 'express';
-import authRoutes from './auth.js';
 import caseStudyRoutes from './caseStudy.js';
 import blogRoutes from './blog.js';
 import positionRoutes from './position.js';
@@ -12,7 +11,6 @@ import termsOfServiceRoutes from './termsOfService.js';
 
 const router = express.Router();
 
-router.use('/auth', authRoutes);
 router.use('/case-studies', caseStudyRoutes);
 router.use('/blogs', blogRoutes);
 router.use('/positions', positionRoutes);

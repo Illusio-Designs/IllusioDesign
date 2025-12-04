@@ -4,53 +4,16 @@ import Footer from '@/components/Footer';
 import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
 import Loader from '@/components/Loader';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSEO } from '@/hooks/useSEO';
-
-const blogPosts = [
-  {
-    id: 'blog-1',
-    date: 'July 14, 2025',
-    title: 'From Logo to Legacy: How Strong Branding Drives Business Growth',
-    slug: 'from-logo-to-legacy-how-strong-branding-drives-business-growth',
-  },
-  {
-    id: 'blog-2',
-    date: 'July 14, 2025',
-    title: 'Why Your Website Isn\'t Converting And How Smart UI/UX Fixes That',
-    slug: 'why-your-website-isnt-converting-and-how-smart-ui-ux-fixes-that',
-  },
-  {
-    id: 'blog-3',
-    date: 'July 14, 2025',
-    title: 'Custom B2B Dashboards: A Game-Changer for Scaling',
-    slug: 'custom-b2b-dashboards-a-game-changer-for-scaling',
-  },
-  {
-    id: 'blog-4',
-    date: 'July 10, 2025',
-    title: 'The Future of Web Design: Trends to Watch in 2025',
-    slug: 'the-future-of-web-design-trends-to-watch-in-2025',
-  },
-  {
-    id: 'blog-5',
-    date: 'July 5, 2025',
-    title: 'Digital Marketing ROI: Measuring Success in the Modern Era',
-    slug: 'digital-marketing-roi-measuring-success-in-the-modern-era',
-  },
-  {
-    id: 'blog-6',
-    date: 'June 28, 2025',
-    title: 'Building Scalable Web Applications: Best Practices',
-    slug: 'building-scalable-web-applications-best-practices',
-  },
-];
+import { blogAPI } from '@/services/api';
 
 export default function Blog({ navigateTo, currentPage }) {
   // SEO Integration
   useSEO('blog');
 
   const [isLoading, setIsLoading] = useState(true);
+  const [blogPosts, setBlogPosts] = useState([]);
 
   const handleLoaderComplete = () => {
     setIsLoading(false);
@@ -59,6 +22,59 @@ export default function Blog({ navigateTo, currentPage }) {
   const handleBlogClick = (slug) => {
     navigateTo('blog-detail', slug);
   };
+
+  // Fetch blog posts from API
+  useEffect(() => {
+    const fetchBlogPosts = async () => {
+      try {
+        const response = await blogAPI.getAllPublic();
+        if (response && response.data) {
+          // Transform API data to match component structure
+          const transformedPosts = response.data.map((post) => {
+            // Format date
+            const formatDate = (dateString) => {
+              if (!dateString) return '';
+              const date = new Date(dateString);
+              const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                            'July', 'August', 'September', 'October', 'November', 'December'];
+              return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+            };
+
+            // Handle image URL - use NEXT_PUBLIC_IMAGE_URL
+            let imageUrl = post.image || null;
+            if (post.image) {
+              if (post.image.startsWith('http')) {
+                // Already a full URL
+                imageUrl = post.image;
+              } else if (post.image.startsWith('/uploads/')) {
+                // Backend upload path - prepend IMAGE URL
+                const IMAGE_BASE_URL = process.env.NEXT_PUBLIC_IMAGE_URL || 'https://api.illusiodesigns.agency';
+                imageUrl = `${IMAGE_BASE_URL}${post.image}`;
+              } else if (!post.image.startsWith('/')) {
+                // Relative path without leading slash
+                const IMAGE_BASE_URL = process.env.NEXT_PUBLIC_IMAGE_URL || 'https://api.illusiodesigns.agency';
+                imageUrl = `${IMAGE_BASE_URL}/${post.image}`;
+              }
+            }
+
+            return {
+              id: post.id,
+              date: formatDate(post.date || post.publishDate || post.createdAt),
+              title: post.title,
+              slug: post.slug || post.seoUrl || `blog-${post.id}`,
+              image: imageUrl,
+            };
+          });
+          setBlogPosts(transformedPosts);
+        }
+      } catch (error) {
+        console.error('Error fetching blog posts:', error);
+        setBlogPosts([]);
+      }
+    };
+
+    fetchBlogPosts();
+  }, []);
 
   return (
     <>
@@ -91,7 +107,7 @@ export default function Blog({ navigateTo, currentPage }) {
             </h1>
           </ScrollReveal>
           <div className="blog-grid">
-            {blogPosts.map((post, index) => (
+            {blogPosts.length > 0 && blogPosts.map((post, index) => (
               <ScrollReveal
                 key={post.id}
                 as="div"
@@ -106,7 +122,26 @@ export default function Blog({ navigateTo, currentPage }) {
                   onClick={() => handleBlogClick(post.slug)}
                   style={{ cursor: 'pointer' }}
                 >
-                  <div className="blog-placeholder"></div>
+                  {post.image ? (
+                    <div className="blog-placeholder" style={{ padding: 0, background: 'transparent', overflow: 'hidden' }}>
+                      <img
+                        src={post.image}
+                        alt={post.title}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                          display: 'block'
+                        }}
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          e.target.parentElement.style.background = '#e0e0e0';
+                        }}
+                      />
+                    </div>
+                  ) : (
+                    <div className="blog-placeholder"></div>
+                  )}
                   <div className="blog-content">
                     <span className="blog-date">{post.date}</span>
                     <p className="blog-title">{post.title}</p>

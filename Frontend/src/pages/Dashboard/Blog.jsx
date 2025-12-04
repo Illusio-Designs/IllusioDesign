@@ -10,6 +10,19 @@ import Pagination from '@/components/common/Pagination';
 import '@/styles/pages/Dashboard/shared.css';
 import '@/styles/pages/Dashboard/Blog.css';
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'https://api.illusiodesigns.agency';
+
+// Helper function to construct image URL
+const getImageUrl = (imagePath) => {
+  if (!imagePath) return null;
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+    return imagePath;
+  }
+  // Ensure path starts with /
+  const normalizedPath = imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
+  return `${API_BASE_URL}${normalizedPath}`;
+};
+
 export default function Blog() {
   const { getToken } = useAuth();
   const [blogs, setBlogs] = useState([]);
@@ -35,6 +48,7 @@ export default function Blog() {
     seoUrl: '',
     image: null
   });
+  const [currentMainImage, setCurrentMainImage] = useState(null);
 
   useEffect(() => {
     if (fetchingRef.current) return;
@@ -75,6 +89,7 @@ export default function Blog() {
       seoUrl: '',
       image: null
     });
+    setCurrentMainImage(null);
     setIsModalOpen(true);
     setShowTable(false);
   };
@@ -95,6 +110,9 @@ export default function Blog() {
       seoUrl: blog.seoUrl || blog.slug || '',
       image: null
     });
+    // Set current image for display
+    const mainImagePath = blog.image || null;
+    setCurrentMainImage(mainImagePath);
     setIsModalOpen(true);
     setShowTable(false);
   };
@@ -121,8 +139,13 @@ export default function Blog() {
           formDataToSend.append(key, formData[key]);
         }
       });
+      
+      // Add main image
       if (formData.image) {
         formDataToSend.append('image', formData.image);
+      } else if (editingBlog && !currentMainImage) {
+        // If main image was removed, send empty to delete
+        formDataToSend.append('image', '');
       }
 
       if (editingBlog) {
@@ -135,6 +158,7 @@ export default function Blog() {
       
       setIsModalOpen(false);
       setShowTable(true);
+      setCurrentMainImage(null);
       fetchBlogs();
     } catch (error) {
       console.error('Error saving blog:', error);
@@ -144,8 +168,15 @@ export default function Blog() {
 
   const handleImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
-      setFormData({ ...formData, image: e.target.files[0] });
+      const file = e.target.files[0];
+      setFormData({ ...formData, image: file });
+      // Don't update currentMainImage here - let the preview use URL.createObjectURL
     }
+  };
+
+  const removeCurrentMainImage = () => {
+    setFormData({ ...formData, image: null });
+    setCurrentMainImage(null);
   };
 
   const columns = [
@@ -319,6 +350,109 @@ export default function Blog() {
                     </svg>
                     <p>Drag & Drop your Files or Browse</p>
                   </div>
+                  
+                  {/* Current Image Preview */}
+                  {currentMainImage && !formData.image && (
+                    <div style={{ marginTop: '12px', position: 'relative' }}>
+                      <div style={{ fontSize: '12px', color: '#666', marginBottom: '8px' }}>Current Image:</div>
+                      <div style={{ position: 'relative', display: 'inline-block' }}>
+                        <img 
+                          src={getImageUrl(currentMainImage)}
+                          alt="Current main"
+                          style={{ 
+                            maxWidth: '200px', 
+                            maxHeight: '150px', 
+                            borderRadius: '8px',
+                            objectFit: 'cover',
+                            border: '1px solid #e5e5e5',
+                            display: 'block'
+                          }}
+                          onError={(e) => {
+                            console.error('Image load error:', currentMainImage, 'Full URL:', getImageUrl(currentMainImage));
+                            e.target.style.display = 'none';
+                          }}
+                        />
+                        <button
+                          type="button"
+                          onClick={removeCurrentMainImage}
+                          style={{
+                            position: 'absolute',
+                            top: '4px',
+                            right: '4px',
+                            background: '#ef4444',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '50%',
+                            width: '24px',
+                            height: '24px',
+                            cursor: 'pointer',
+                            fontSize: '14px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                          }}
+                          title="Remove image"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* New Selected Image Preview */}
+                  {formData.image && (
+                    <div style={{ marginTop: '12px' }}>
+                      <div style={{ fontSize: '12px', color: '#666', marginBottom: '8px' }}>New Selected: {formData.image.name}</div>
+                      <div style={{ position: 'relative', display: 'inline-block' }}>
+                        <img 
+                          src={URL.createObjectURL(formData.image)}
+                          alt="Preview"
+                          style={{ 
+                            maxWidth: '200px', 
+                            maxHeight: '150px', 
+                            borderRadius: '8px',
+                            objectFit: 'cover',
+                            border: '1px solid #e5e5e5',
+                            display: 'block'
+                          }}
+                          onError={(e) => {
+                            console.error('Preview image load error');
+                            e.target.style.display = 'none';
+                          }}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setFormData({ ...formData, image: null });
+                            if (editingBlog && editingBlog.image) {
+                              setCurrentMainImage(editingBlog.image);
+                            } else {
+                              setCurrentMainImage(null);
+                            }
+                          }}
+                          style={{
+                            position: 'absolute',
+                            top: '4px',
+                            right: '4px',
+                            background: '#ef4444',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '50%',
+                            width: '24px',
+                            height: '24px',
+                            cursor: 'pointer',
+                            fontSize: '14px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                          }}
+                          title="Remove"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 

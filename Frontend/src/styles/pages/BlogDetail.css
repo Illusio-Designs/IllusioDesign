@@ -30,6 +30,21 @@
   flex-shrink: 0;
 }
 
+.blog-image-container {
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.blog-detail-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 10px;
+  display: block;
+}
+
 .blog-detail-container .blog-date {
   font-size: 0.9rem;
   font-weight: 500;
@@ -109,6 +124,11 @@
 
   .blog-image-placeholder {
     height: 250px;
+  }
+
+  .blog-detail-image {
+    max-height: 250px;
+    object-fit: cover;
   }
 
   .related-article-image {

@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 const AuthContext = createContext(null);
 
 import API_BASE_URL, { authAPI } from '@/services/api';
+import interceptedFetch from '@/services/fetchInterceptor';
 
 const TOKEN_KEY = 'auth_token';
 const USER_KEY = 'auth_user';
@@ -22,10 +23,8 @@ export function AuthProvider({ children }) {
 
   const verifyToken = async (token) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/private/dashboard/profile`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
+      const response = await interceptedFetch(`${API_BASE_URL}/private/dashboard/profile`, {
+        method: 'GET'
       });
       if (!response.ok && response.status === 401) {
         return false;

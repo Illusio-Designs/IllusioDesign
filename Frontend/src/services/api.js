@@ -1,3 +1,5 @@
+import interceptedFetch from './fetchInterceptor';
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.illusiodesigns.agency/api';
 
 // Helper function to get auth token
@@ -11,7 +13,9 @@ const getAuthToken = () => {
 // Backend health check
 export const checkBackendConnection = async () => {
   try {
-    const response = await fetch(`${API_BASE_URL.replace('/api', '')}/health`);
+    const response = await interceptedFetch(`${API_BASE_URL.replace('/api', '')}/health`, {
+      method: 'GET'
+    }, { isPublic: true, skipAuth: true });
     if (response.ok) {
       return { connected: true };
     }
@@ -23,27 +27,10 @@ export const checkBackendConnection = async () => {
 
 // Helper function for API calls
 const apiCall = async (endpoint, options = {}, isPublic = false) => {
-  const token = getAuthToken();
-  const headers = {
-    'Content-Type': 'application/json',
-    ...options.headers
-  };
-
-  // Only add auth token if not public
-  if (!isPublic && token) {
-    headers['Authorization'] = `Bearer ${token}`;
-  }
-
-  // Remove Content-Type for FormData
-  if (options.body instanceof FormData) {
-    delete headers['Content-Type'];
-  }
-
   try {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-      ...options,
-      headers
-    });
+    const response = await interceptedFetch(`${API_BASE_URL}${endpoint}`, {
+      ...options
+    }, { isPublic });
 
     const data = await response.json();
 
@@ -72,7 +59,11 @@ export const blogAPI = {
   }),
   delete: (id) => apiCall(`/private/blogs/${id}`, {
     method: 'DELETE'
-  })
+  }),
+  // Public APIs
+  getAllPublic: () => apiCall('/public/blogs', {}, true),
+  getBySlugPublic: (slug) => apiCall(`/public/blogs/slug/${slug}`, {}, true),
+  getByIdPublic: (id) => apiCall(`/public/blogs/${id}`, {}, true)
 };
 
 // Case Study APIs
@@ -180,13 +171,8 @@ export const dashboardAPI = {
   getProfile: () => apiCall('/private/dashboard/profile'),
   updateProfile: async (data) => {
     try {
-      const token = localStorage.getItem('auth_token');
-      const response = await fetch(`${API_BASE_URL}/private/dashboard/profile`, {
+      const response = await interceptedFetch(`${API_BASE_URL}/private/dashboard/profile`, {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
         body: JSON.stringify(data)
       });
 
@@ -201,17 +187,14 @@ export const dashboardAPI = {
   }
 };
 
-// Auth APIs (public - no token required)
+// Auth APIs (private endpoints - login/register skip auth since user doesn't have token yet)
 export const authAPI = {
   login: async (email, password) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/public/auth/login`, {
+      const response = await interceptedFetch(`${API_BASE_URL}/private/auth/login`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
         body: JSON.stringify({ email, password })
-      });
+      }, { skipAuth: true });
 
       const data = await response.json();
 
@@ -227,13 +210,10 @@ export const authAPI = {
   },
   register: async (username, email, password) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/public/auth/register`, {
+      const response = await interceptedFetch(`${API_BASE_URL}/private/auth/register`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
         body: JSON.stringify({ username, email, password })
-      });
+      }, { skipAuth: true });
 
       const data = await response.json();
 
@@ -249,14 +229,10 @@ export const authAPI = {
   },
   logout: async () => {
     try {
-      const token = getAuthToken();
-      const response = await fetch(`${API_BASE_URL}/public/auth/logout`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      // Logout doesn't require token - use skipAuth to avoid 401 errors if token is invalid
+      const response = await interceptedFetch(`${API_BASE_URL}/private/auth/logout`, {
+        method: 'POST'
+      }, { skipAuth: true });
 
       const data = await response.json();
 

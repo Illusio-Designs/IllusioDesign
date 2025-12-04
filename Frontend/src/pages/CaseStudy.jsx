@@ -6,6 +6,7 @@ import ScrollReveal from '@/components/ScrollReveal';
 import Loader from '@/components/Loader';
 import { useState, useEffect, useRef } from 'react';
 import { useSEO } from '@/hooks/useSEO';
+import { caseStudyAPI } from '@/services/api';
 
 export default function CaseStudy({ navigateTo, currentPage }) {
   // SEO Integration
@@ -15,122 +16,16 @@ export default function CaseStudy({ navigateTo, currentPage }) {
   const [hoveredProject, setHoveredProject] = useState(null);
   const [activeCategory, setActiveCategory] = useState('web');
   const [animatedProjects, setAnimatedProjects] = useState(new Set());
+  const [projects, setProjects] = useState([]);
   const projectRefs = useRef([]);
 
-  const projects = [
-    {
-      id: 1,
-      title: 'Aicumen AI',
-      description: 'Intelligent automation system powered by state-of-the-art AI technology, enabling organizations to streamline operations and enhance productivity through smart solutions.',
-      image: '/images/aicumen-ai.webp',
-      link: 'https://www.aicumen.ai/',
-      category: 'web',
-      tags: ['#WEBSITE DESIGN', '#WEBSITE DEVELOPMENT'],
-      techStack: ['React', 'Node.js'],
-      timeline: '1 months',
-      results: ['Enhanced automation capabilities', 'Improved user experience', 'Scalable architecture'],
-      location: 'India',
-      projectName: 'AICUMEN'
-    },
-    {
-      id: 2,
-      title: 'AMRUTKUMAR GOVINDDAS LLP',
-      description: 'Sophisticated digital storefront presenting luxury jewelry pieces with intuitive navigation, smooth checkout process, and trusted payment security.',
-      image: '/images/amrutkumar-jewelry.webp',
-      link: 'https://amrutkumargovinddasllp.com/',
-      category: 'web',
-      tags: ['#WEBSITE DESIGN', '#WEBSITE DEVELOPMENT'],
-      techStack: ['React', 'Node.js'],
-      timeline: '2 Days',
-      results: ['Improved conversion rates', 'Enhanced user experience', 'Mobile-responsive design'],
-      location: 'India',
-      projectName: 'AMRUTKUMAR'
-    },
-    {
-      id: 3,
-      title: 'AMRUTKUMAR GOVINDDAS LLP (App)',
-      description: 'Mobile app experience for AMRUTKUMAR GOVINDDAS LLP, bringing their premium jewelry collection and seamless shopping journey directly to users\' devices.',
-      image: '/images/Amrut App.webp',
-      link: '#',
-      category: 'app',
-      tags: ['#MOBILE APP DESIGN', '#MOBILE APP DEVELOPMENT'],
-      techStack: ['React Native', 'Node.js'],
-      timeline: '5 months',
-      results: ['Native mobile experience', 'Improved user engagement', 'Seamless shopping journey'],
-      location: 'India',
-      projectName: 'AMRUTKUMAR APP'
-    },
-    {
-      id: 4,
-      title: 'Crosscoin',
-      description: 'Contemporary e-commerce destination specializing in premium sock collections, combining stylish aesthetics with superior comfort for daily use.',
-      image: '/images/crosscoin.webp',
-      link: 'https://crosscoin.in/',
-      category: 'web',
-      tags: ['#WEBSITE DESIGN', '#WEBSITE DEVELOPMENT'],
-      techStack: ['React', 'Node.js'],
-      timeline: '3 months',
-      results: ['Modern e-commerce platform', 'Improved sales conversion', 'User-friendly interface'],
-      location: 'India',
-      projectName: 'CROSSCOIN'
-    },
-    {
-      id: 5,
-      title: 'Immune Protector',
-      description: 'Comprehensive wellness resource center delivering valuable insights and quality supplements designed to naturally boost and maintain immune health.',
-      image: '/images/immune-protector.webp',
-      link: 'https://www.immuneprotector.in/',
-      category: 'web',
-      tags: ['#WEBSITE DESIGN', '#WEBSITE DEVELOPMENT'],
-      techStack: ['React', 'Node.js'],
-      timeline: '2 months',
-      results: ['Enhanced user engagement', 'Improved content delivery', 'Better user experience'],
-      location: 'India',
-      projectName: 'IMMUNE PROTECTOR'
-    },
-    {
-      id: 6,
-      title: 'Nanak Finserv',
-      description: 'Digital banking ecosystem providing creative financial tools and services tailored for individual consumers and corporate clients seeking modern banking solutions.',
-      image: '/images/nanak-finserv.webp',
-      link: 'https://nanakfinserv.com/',
-      category: 'web',
-      tags: ['#WEBSITE DESIGN', '#WEBSITE DEVELOPMENT'],
-      techStack: ['React', 'Node.js'],
-      timeline: '4 months',
-      results: ['Secure banking platform', 'Improved user trust', 'Enhanced functionality'],
-      location: 'India',
-      projectName: 'NANAK FINSERV'
-    },
-    {
-      id: 7,
-      title: 'Radhe Consultancy',
-      description: 'Expert advisory network linking companies with seasoned consultants who deliver strategic guidance to drive organizational expansion and success.',
-      image: '/images/radhe-consultancy.webp',
-      link: 'https://radheconsultancy.co.in/',
-      category: 'web',
-      tags: ['#WEBSITE DESIGN', '#WEBSITE DEVELOPMENT'],
-      techStack: ['React', 'Node.js'],
-      timeline: '3 months',
-      results: ['Professional platform', 'Improved client engagement', 'Better service delivery'],
-      location: 'India',
-      projectName: 'RADHE CONSULTANCY'
-    },
-    {
-      id: 8,
-      title: 'Vivera Lighting',
-      description: 'Contemporary illumination specialist creating stylish fixtures and eco-friendly lighting options perfect for both home environments and workplace settings.',
-      image: '/images/vivera-lighting.webp',
-      link: 'https://www.viveralighting.com/',
-      category: 'web',
-      tags: ['#WEBSITE DESIGN', '#WEBSITE DEVELOPMENT'],
-      techStack: ['React', 'Node.js'],
-      timeline: '3 months',
-      results: ['Modern design showcase', 'Improved product visibility', 'Enhanced user experience'],
-      location: 'India',
-      projectName: 'VIVERA LIGHTING'
-    }
-  ];
+  // Map category keys to API category values
+  const categoryMap = {
+    'branding': 'branding',
+    'web': 'web',
+    'app': 'app',
+    'b2b': 'b2b'
+  };
 
   const categories = [
     { key: 'branding', label: 'Branding & Design' },
@@ -139,9 +34,93 @@ export default function CaseStudy({ navigateTo, currentPage }) {
     { key: 'b2b', label: 'B2B & Custom Solution' }
   ];
 
+  // Fetch projects from API
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const category = categoryMap[activeCategory];
+        const response = await caseStudyAPI.getAllPublic();
+        if (response && response.data) {
+          // Transform API data to match component structure
+          const transformedProjects = response.data.map((project) => {
+            // Handle image URL - use NEXT_PUBLIC_IMAGE_URL
+            let imageUrl = project.image || '/images/placeholder.webp';
+            if (project.image) {
+              if (project.image.startsWith('http')) {
+                // Already a full URL
+                imageUrl = project.image;
+              } else if (project.image.startsWith('/uploads/')) {
+                // Backend upload path - prepend IMAGE URL
+                const IMAGE_BASE_URL = process.env.NEXT_PUBLIC_IMAGE_URL || 'https://api.illusiodesigns.agency';
+                imageUrl = `${IMAGE_BASE_URL}${project.image}`;
+              } else if (!project.image.startsWith('/')) {
+                // Relative path without leading slash
+                const IMAGE_BASE_URL = process.env.NEXT_PUBLIC_IMAGE_URL || 'https://api.illusiodesigns.agency';
+                imageUrl = `${IMAGE_BASE_URL}/${project.image}`;
+              }
+            }
+
+            return {
+              id: project.id,
+              title: project.title,
+              description: project.description || '',
+              image: imageUrl,
+              link: project.link || '#',
+              category: project.category || 'web',
+              tags: Array.isArray(project.tags) ? project.tags : [],
+              techStack: Array.isArray(project.techStack) ? project.techStack : [],
+              timeline: project.timeline || project.duration || '',
+              results: Array.isArray(project.results) ? project.results : [],
+              location: project.location || '',
+              projectName: project.projectName || project.title.toUpperCase()
+            };
+          });
+          setProjects(transformedProjects);
+        }
+      } catch (error) {
+        console.error('Error fetching projects:', error);
+        setProjects([]);
+      }
+    };
+
+    fetchProjects();
+  }, [activeCategory]);
+
   const filteredProjects = projects.filter(
-    (project) => project.category === activeCategory
+    (project) => {
+      const projectCategory = project.category?.toLowerCase() || '';
+      const activeCategoryLower = activeCategory.toLowerCase();
+      
+      // Map category values to match
+      const categoryMapping = {
+        'web': ['web', 'website', 'website development', 'test'], // Include 'test' for now
+        'app': ['app', 'mobile', 'mobile app', 'application'],
+        'branding': ['branding', 'brand', 'design'],
+        'b2b': ['b2b', 'custom', 'custom solution', 'dashboard']
+      };
+      
+      // If category matches exactly
+      if (projectCategory === activeCategoryLower) {
+        return true;
+      }
+      
+      // Check if project category matches any mapped value for active category
+      const mappedCategories = categoryMapping[activeCategoryLower] || [];
+      if (mappedCategories.includes(projectCategory)) {
+        return true;
+      }
+      
+      // For 'web' category, also show projects with no category or empty category
+      if (activeCategoryLower === 'web' && (!projectCategory || projectCategory === '')) {
+        return true;
+      }
+      
+      return false;
+    }
   );
+  
+  // If filtered projects is empty but we have projects, show all projects (fallback)
+  const displayProjects = filteredProjects.length > 0 ? filteredProjects : projects;
 
   // Reset animated projects when category changes
   useEffect(() => {
@@ -155,7 +134,8 @@ export default function CaseStudy({ navigateTo, currentPage }) {
 
   // Trigger boom animation when project comes into view
   useEffect(() => {
-    if (filteredProjects.length === 0) return;
+    const displayProjects = filteredProjects.length > 0 ? filteredProjects : projects;
+    if (displayProjects.length === 0) return;
 
     const observerOptions = {
       root: null,
@@ -190,7 +170,7 @@ export default function CaseStudy({ navigateTo, currentPage }) {
     return () => {
       observer.disconnect();
     };
-  }, [filteredProjects, animatedProjects]);
+  }, [filteredProjects, projects, animatedProjects]);
 
   const handleLoaderComplete = () => {
     setIsLoading(false);
@@ -223,7 +203,7 @@ export default function CaseStudy({ navigateTo, currentPage }) {
           ))}
         </div>
         <div className="projects-list">
-          {filteredProjects.map((project, index) => (
+          {displayProjects.map((project, index) => (
             <div
               key={project.id}
               ref={(el) => {

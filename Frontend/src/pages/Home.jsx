@@ -11,6 +11,7 @@ import Counter from '@/components/Counter';
 import Loader from '@/components/Loader';
 import { BackgroundRippleEffect } from '@/components/ui/background-ripple-effect';
 import { useSEO } from '@/hooks/useSEO';
+import { caseStudyAPI, blogAPI } from '@/services/api';
 
 // Star Rating Component
 const StarRating = () => {
@@ -66,48 +67,7 @@ const serviceCards = [
   },
 ];
 
-const projects = [
-  {
-    id: 1,
-    title: 'Aicumen AI',
-    image: '/images/aicumen-ai.webp',
-  },
-  {
-    id: 2,
-    title: 'AMRUTKUMAR GOVINDDAS LLP',
-    image: '/images/amrutkumar-jewelry.webp',
-  },
-  {
-    id: 3,
-    title: 'AMRUTKUMAR GOVINDDAS LLP (App)',
-    image: '/images/Amrut App.webp',
-  },
-  {
-    id: 4,
-    title: 'Crosscoin',
-    image: '/images/crosscoin.webp',
-  },
-  {
-    id: 5,
-    title: 'Immune Protector',
-    image: '/images/immune-protector.webp',
-  },
-  {
-    id: 6,
-    title: 'Nanak Finserv',
-    image: '/images/nanak-finserv.webp',
-  },
-  {
-    id: 7,
-    title: 'Radhe Consultancy',
-    image: '/images/radhe-consultancy.webp',
-  },
-  {
-    id: 8,
-    title: 'Vivera Lighting',
-    image: '/images/vivera-lighting.webp',
-  }
-];
+// Projects will be loaded from API
 
 const stats = [
   { id: 'projects', value: 883, label: 'Project Completed', suffix: '' },
@@ -185,26 +145,7 @@ const testimonials = [
 const topRowTestimonials = testimonials.slice(0, 3);
 const bottomRowTestimonials = testimonials.slice(3, 6);
 
-const blogPosts = [
-  {
-    id: 'blog-1',
-    date: 'July 14, 2025',
-    title: 'From Logo to Legacy: How Strong Branding Drives Business Growth',
-    slug: 'from-logo-to-legacy-how-strong-branding-drives-business-growth',
-  },
-  {
-    id: 'blog-2',
-    date: 'July 14, 2025',
-    title: 'Why Your Website Isn\'t Converting And How Smart UI/UX Fixes That',
-    slug: 'why-your-website-isnt-converting-and-how-smart-ui-ux-fixes-that',
-  },
-  {
-    id: 'blog-3',
-    date: 'July 14, 2025',
-    title: 'Custom B2B Dashboards: A Game-Changer for Scaling',
-    slug: 'custom-b2b-dashboards-a-game-changer-for-scaling',
-  },
-];
+// Blog posts will be loaded from API
 
 export default function Home({ navigateTo, currentPage }) {
   // SEO Integration
@@ -217,9 +158,108 @@ export default function Home({ navigateTo, currentPage }) {
   const [isTestimonialsSliding, setIsTestimonialsSliding] = useState(false);
   const [openFaqId, setOpenFaqId] = useState(null);
   const [hoveredProject, setHoveredProject] = useState(null);
+  const [projects, setProjects] = useState([]);
+  const [blogPosts, setBlogPosts] = useState([]);
   const servicesSectionRef = useRef(null);
   const testimonialsSectionRef = useRef(null);
   const testimonialsSlideTimeoutRef = useRef(null);
+
+  // Fetch projects from API
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await caseStudyAPI.getAllPublic();
+        if (response && response.data) {
+          // Transform API data to match component structure
+          const transformedProjects = response.data.map((project) => {
+            // Handle image URL - use NEXT_PUBLIC_IMAGE_URL
+            let imageUrl = project.image || '/images/placeholder.webp';
+            if (project.image) {
+              if (project.image.startsWith('http')) {
+                // Already a full URL
+                imageUrl = project.image;
+              } else if (project.image.startsWith('/uploads/')) {
+                // Backend upload path - prepend IMAGE URL
+                const IMAGE_BASE_URL = process.env.NEXT_PUBLIC_IMAGE_URL || 'https://api.illusiodesigns.agency';
+                imageUrl = `${IMAGE_BASE_URL}${project.image}`;
+              } else if (!project.image.startsWith('/')) {
+                // Relative path without leading slash
+                const IMAGE_BASE_URL = process.env.NEXT_PUBLIC_IMAGE_URL || 'https://api.illusiodesigns.agency';
+                imageUrl = `${IMAGE_BASE_URL}/${project.image}`;
+              }
+            }
+            
+            return {
+              id: project.id,
+              title: project.title,
+              image: imageUrl,
+            };
+          });
+          setProjects(transformedProjects);
+        }
+      } catch (error) {
+        console.error('Error fetching projects:', error);
+        // Fallback to empty array on error
+        setProjects([]);
+      }
+    };
+
+    fetchProjects();
+  }, []);
+
+  // Fetch blog posts from API
+  useEffect(() => {
+    const fetchBlogPosts = async () => {
+      try {
+        const response = await blogAPI.getAllPublic();
+        if (response && response.data) {
+          // Transform API data to match component structure
+          // Limit to 3 posts for home page
+          const transformedPosts = response.data.slice(0, 3).map((post) => {
+            // Format date
+            const formatDate = (dateString) => {
+              if (!dateString) return '';
+              const date = new Date(dateString);
+              const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                            'July', 'August', 'September', 'October', 'November', 'December'];
+              return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+            };
+
+            // Handle image URL - use NEXT_PUBLIC_IMAGE_URL
+            let imageUrl = post.image || null;
+            if (post.image) {
+              if (post.image.startsWith('http')) {
+                // Already a full URL
+                imageUrl = post.image;
+              } else if (post.image.startsWith('/uploads/')) {
+                // Backend upload path - prepend IMAGE URL
+                const IMAGE_BASE_URL = process.env.NEXT_PUBLIC_IMAGE_URL || 'https://api.illusiodesigns.agency';
+                imageUrl = `${IMAGE_BASE_URL}${post.image}`;
+              } else if (!post.image.startsWith('/')) {
+                // Relative path without leading slash
+                const IMAGE_BASE_URL = process.env.NEXT_PUBLIC_IMAGE_URL || 'https://api.illusiodesigns.agency';
+                imageUrl = `${IMAGE_BASE_URL}/${post.image}`;
+              }
+            }
+
+            return {
+              id: post.id,
+              date: formatDate(post.date || post.publishDate || post.createdAt),
+              title: post.title,
+              slug: post.slug || post.seoUrl || `blog-${post.id}`,
+              image: imageUrl,
+            };
+          });
+          setBlogPosts(transformedPosts);
+        }
+      } catch (error) {
+        console.error('Error fetching blog posts:', error);
+        setBlogPosts([]);
+      }
+    };
+
+    fetchBlogPosts();
+  }, []);
 
   useEffect(() => {
     if (!servicesSectionRef.current) return;
@@ -410,13 +450,12 @@ export default function Home({ navigateTo, currentPage }) {
           </ScrollReveal>
           <div className="case-studies-slider">
             <div className="case-studies-track">
-              {/* First set of items */}
-              {projects.map((project, index) => (
+              {projects.length > 0 && projects.map((project, index) => (
                 <div 
-                  key={`${project.id}-1`} 
+                  key={project.id} 
                   className="case-study-card"
                   onClick={() => navigateTo('case-study-detail', project.id.toString())}
-                  onMouseEnter={() => setHoveredProject(`${project.id}-1`)}
+                  onMouseEnter={() => setHoveredProject(project.id)}
                   onMouseLeave={() => setHoveredProject(null)}
                   style={{ cursor: 'pointer' }}
                 >
@@ -432,35 +471,7 @@ export default function Home({ navigateTo, currentPage }) {
                   </div>
                   <div className="case-study-title-container">
                     <h3>{project.title}</h3>
-                    <span className={`case-study-arrow ${hoveredProject === `${project.id}-1` ? 'arrow-visible' : ''}`}>
-                      →
-                    </span>
-                  </div>
-                </div>
-              ))}
-              {/* Duplicate set for seamless loop */}
-              {projects.map((project, index) => (
-                <div 
-                  key={`${project.id}-2`} 
-                  className="case-study-card"
-                  onClick={() => navigateTo('case-study-detail', project.id.toString())}
-                  onMouseEnter={() => setHoveredProject(`${project.id}-2`)}
-                  onMouseLeave={() => setHoveredProject(null)}
-                  style={{ cursor: 'pointer' }}
-                >
-                  <div className="case-study-image-container">
-                    <img
-                      src={project.image}
-                      alt={project.title}
-                      className="case-study-image"
-                      onError={(e) => {
-                        e.target.style.display = 'none';
-                      }}
-                    />
-                  </div>
-                  <div className="case-study-title-container">
-                    <h3>{project.title}</h3>
-                    <span className={`case-study-arrow ${hoveredProject === `${project.id}-2` ? 'arrow-visible' : ''}`}>
+                    <span className={`case-study-arrow ${hoveredProject === project.id ? 'arrow-visible' : ''}`}>
                       →
                     </span>
                   </div>
@@ -636,7 +647,7 @@ export default function Home({ navigateTo, currentPage }) {
             </SplitText>
           </ScrollReveal>
           <div className="blog-grid">
-            {blogPosts.map((post, index) => (
+            {blogPosts.length > 0 && blogPosts.map((post, index) => (
               <ScrollReveal
                 key={post.id}
                 as="div"
@@ -651,7 +662,26 @@ export default function Home({ navigateTo, currentPage }) {
                   onClick={() => navigateTo('blog-detail', post.slug)}
                   style={{ cursor: 'pointer' }}
                 >
-                  <div className="blog-placeholder"></div>
+                  {post.image ? (
+                    <div className="blog-placeholder" style={{ padding: 0, background: 'transparent', overflow: 'hidden' }}>
+                      <img
+                        src={post.image}
+                        alt={post.title}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                          display: 'block'
+                        }}
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          e.target.parentElement.style.background = '#e0e0e0';
+                        }}
+                      />
+                    </div>
+                  ) : (
+                    <div className="blog-placeholder"></div>
+                  )}
                   <div className="blog-content">
                     <span className="blog-date">{post.date}</span>
                     <p className="blog-title">{post.title}</p>

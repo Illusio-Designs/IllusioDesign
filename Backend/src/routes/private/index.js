@@ -1,6 +1,7 @@
 import express from 'express';
 import { authenticateToken, isAdmin } from '../../middleware/auth.js';
 import dashboardRoutes from './dashboard.js';
+import authRoutes from './auth.js';
 
 // Import controllers for read operations (accessible to all authenticated users)
 import { getAllCaseStudies, getCaseStudyById } from '../../controllers/private/caseStudyController.js';
@@ -28,7 +29,10 @@ import { upload, uploadBlog, uploadProject, convertToWebP, convertMultipleToWebP
 
 const router = express.Router();
 
-// All private routes require authentication
+// Auth routes (login/register don't require authentication, logout is optional)
+router.use('/auth', authRoutes);
+
+// All other private routes require authentication
 router.use(authenticateToken);
 
 // Dashboard routes (authenticated users)

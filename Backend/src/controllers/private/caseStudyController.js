@@ -52,20 +52,22 @@ export const createCaseStudy = async (req, res) => {
       seoUrl
     } = req.body;
     
-    // Handle main image
+    // Handle main image - use webpPath if available (from convertToWebP middleware)
     let image = null;
     if (req.files && req.files.image && req.files.image[0]) {
-      image = `/uploads/images/${req.files.image[0].filename}`;
+      image = req.files.image[0].webpPath || `/uploads/images/project/${req.files.image[0].filename}`;
     } else if (req.file) {
-      image = `/uploads/images/${req.file.filename}`;
+      image = req.file.webpPath || `/uploads/images/project/${req.file.filename}`;
     } else if (req.body.image) {
       image = req.body.image;
     }
     
-    // Handle additional images
+    // Handle additional images - use webpPath if available
     let additionalImagesArray = [];
     if (req.files && req.files.additionalImages && req.files.additionalImages.length > 0) {
-      additionalImagesArray = req.files.additionalImages.map(file => `/uploads/images/${file.filename}`);
+      additionalImagesArray = req.files.additionalImages.map(file => 
+        file.webpPath || `/uploads/images/project/${file.filename}`
+      );
     } else if (additionalImages) {
       if (Array.isArray(additionalImages)) {
         additionalImagesArray = additionalImages;
@@ -120,17 +122,17 @@ export const updateCaseStudy = async (req, res) => {
       return res.status(404).json({ error: 'Case study not found' });
     }
     
-    // Handle main image
+    // Handle main image - use webpPath if available (from convertToWebP middleware)
     if (req.files && req.files.image && req.files.image[0]) {
-      updates.image = `/uploads/images/${req.files.image[0].filename}`;
+      updates.image = req.files.image[0].webpPath || `/uploads/images/project/${req.files.image[0].filename}`;
     } else if (req.file) {
-      updates.image = `/uploads/images/${req.file.filename}`;
+      updates.image = req.file.webpPath || `/uploads/images/project/${req.file.filename}`;
     } else if (updates.image === '') {
       // If empty string sent, remove the image
       updates.image = null;
     }
     
-    // Handle additional images
+    // Handle additional images - use webpPath if available
     let finalAdditionalImages = [];
     
     // Check if existingAdditionalImages was explicitly sent
@@ -150,9 +152,11 @@ export const updateCaseStudy = async (req, res) => {
       finalAdditionalImages = [...caseStudy.additionalImages];
     }
     
-    // Add new uploaded images
+    // Add new uploaded images - use webpPath if available
     if (req.files && req.files.additionalImages && req.files.additionalImages.length > 0) {
-      const newAdditionalImages = req.files.additionalImages.map(file => `/uploads/images/${file.filename}`);
+      const newAdditionalImages = req.files.additionalImages.map(file => 
+        file.webpPath || `/uploads/images/project/${file.filename}`
+      );
       finalAdditionalImages = [...finalAdditionalImages, ...newAdditionalImages];
     }
     
