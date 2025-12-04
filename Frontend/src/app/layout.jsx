@@ -1,31 +1,21 @@
-'use client';
-
 import './globals.css';
-import ThemeToggle from '@/components/ThemeToggle';
-import { AuthProvider } from '@/contexts/AuthContext';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import ClientLayout from '@/components/ClientLayout';
+
+export const metadata = {
+  icons: {
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/favicon-16x16.webp', sizes: '16x16', type: 'image/webp' },
+      { url: '/favicon.webp', type: 'image/webp' },
+    ],
+  },
+};
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <AuthProvider>
-          {children}
-        </AuthProvider>
-        <ThemeToggle />
-        <ToastContainer
-          position="top-right"
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-        />
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );
