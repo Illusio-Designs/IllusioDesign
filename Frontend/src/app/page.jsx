@@ -23,12 +23,6 @@ export default function Page() {
   const [currentPage, setCurrentPage] = useState('home');
   const [currentItem, setCurrentItem] = useState('');
 
-  // Don't render this component for dashboard/login/register routes
-  // These are handled by Next.js App Router
-  if (pathname?.startsWith('/dashboard') || pathname?.startsWith('/login') || pathname?.startsWith('/register')) {
-    return null;
-  }
-
   // Initialize from URL on mount
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -80,6 +74,12 @@ export default function Page() {
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
+
+  // Don't render this component for dashboard/login/register routes
+  // These are handled by Next.js App Router
+  if (pathname?.startsWith('/dashboard') || pathname?.startsWith('/login') || pathname?.startsWith('/register')) {
+    return null;
+  }
 
   const navigateTo = (page, item = '') => {
     setCurrentPage(page);

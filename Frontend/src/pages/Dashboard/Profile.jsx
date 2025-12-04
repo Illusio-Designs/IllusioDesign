@@ -313,7 +313,7 @@ export default function Profile() {
 
           <div className="password-section">
             <h3 className="section-title">Change Password</h3>
-            <p className="section-subtitle">Leave blank if you don't want to change password</p>
+            <p className="section-subtitle">Leave blank if you don&apos;t want to change password</p>
 
             <div className="form-row">
               <div className="form-group">
