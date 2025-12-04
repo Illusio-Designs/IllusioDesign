@@ -18,9 +18,18 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-const allowedOrigins = process.env.FRONTEND_URL 
+const defaultOrigins = [
+  'http://localhost:3000', 
+  'http://localhost:3001',
+  'https://illusio-design.vercel.app'
+];
+
+const envOrigins = process.env.FRONTEND_URL 
   ? process.env.FRONTEND_URL.split(',').map(url => url.trim())
-  : ['http://localhost:3000', 'http://localhost:3001'];
+  : [];
+
+// Combine and remove duplicates
+const allowedOrigins = [...new Set([...defaultOrigins, ...envOrigins])];
 
 app.use(cors({
   origin: function (origin, callback) {
