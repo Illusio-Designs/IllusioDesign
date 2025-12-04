@@ -4,9 +4,6 @@ import { useParams } from 'next/navigation';
 import ProtectedRoute from '@/components/Dashboard/ProtectedRoute';
 import Dashboard from '@/pages/Dashboard/Dashboard';
 
-// Force dynamic rendering since this page uses AuthProvider context
-export const dynamic = 'force-dynamic';
-
 export default function DashboardSlugPage() {
   const params = useParams();
   const slug = params?.slug || [];
