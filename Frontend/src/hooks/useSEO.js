@@ -48,7 +48,7 @@ export const useSEO = (pageName) => {
           const ogTags = {
             'og:title': seoData.ogTitle || seoData.title,
             'og:description': seoData.ogDescription || seoData.description,
-            'og:image': seoData.ogImage ? `${process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http://localhost:5000'}${seoData.ogImage}` : null,
+            'og:image': seoData.ogImage ? `${process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'https://api.illusiodesigns.agency'}${seoData.ogImage}` : null,
             'og:type': 'website',
             'og:url': typeof window !== 'undefined' ? window.location.href : null
           };
@@ -100,7 +100,7 @@ export const useSEO = (pageName) => {
                 twitterImage.setAttribute('name', 'twitter:image');
                 document.head.appendChild(twitterImage);
               }
-              twitterImage.setAttribute('content', `${process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http://localhost:5000'}${seoData.ogImage}`);
+              twitterImage.setAttribute('content', `${process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'https://api.illusiodesigns.agency'}${seoData.ogImage}`);
             }
           }
         }

@@ -30,7 +30,7 @@ export default function Profile() {
       return imagePath;
     }
     // If it's a relative path, prepend backend URL
-    const backendUrl = process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http://localhost:5000';
+    const backendUrl = process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'https://api.illusiodesigns.agency';
     return `${backendUrl}${imagePath.startsWith('/') ? imagePath : '/' + imagePath}`;
   };
 

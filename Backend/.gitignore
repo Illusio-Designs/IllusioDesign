@@ -1,5 +1,40 @@
-node_modules
+# Dependencies
+node_modules/
+package-lock.json
+
+# Environment variables
 .env
-*.log
-.DS_Store
+.env.local
+.env.development
+.env.production
+.env.test
+.env.*
+
+# Uploads directory
 uploads/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# FTP test files
+ftp-test-*.txt
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+deployFTP_temp_*.js

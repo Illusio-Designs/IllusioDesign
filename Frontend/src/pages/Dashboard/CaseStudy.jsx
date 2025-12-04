@@ -9,7 +9,7 @@ import Pagination from '@/components/common/Pagination';
 import '@/styles/pages/Dashboard/shared.css';
 import '@/styles/pages/Dashboard/CaseStudy.css';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'https://api.illusiodesigns.agency';
 
 // Helper function to construct image URL
 const getImageUrl = (imagePath) => {
