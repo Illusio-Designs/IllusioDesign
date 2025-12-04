@@ -187,6 +187,19 @@ export function AuthProvider({ children }) {
 export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) {
+    // During SSR/SSG, return a default context to prevent build errors
+    // The actual context will be available on the client side
+    if (typeof window === 'undefined') {
+      return {
+        user: null,
+        loading: true,
+        login: async () => ({ success: false, error: 'Not available during SSR' }),
+        logout: async () => {},
+        getToken: () => null,
+        isAuthenticated: () => false,
+        isAdmin: () => false
+      };
+    }
     throw new Error('useAuth must be used within AuthProvider');
   }
   return context;

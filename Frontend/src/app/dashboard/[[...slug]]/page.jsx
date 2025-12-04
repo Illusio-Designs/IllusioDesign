@@ -5,6 +5,7 @@ import ProtectedRoute from '@/components/Dashboard/ProtectedRoute';
 import Dashboard from '@/pages/Dashboard/Dashboard';
 
 export const dynamic = 'force-dynamic';
+export const dynamicParams = true;
 
 export default function DashboardSlugPage() {
   const params = useParams();
