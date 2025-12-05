@@ -62,6 +62,17 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', message: 'Server is running' });
 });
 
+// Email service status check (for debugging)
+app.get('/api/email-status', async (req, res) => {
+  try {
+    const { checkEmailServiceStatus } = await import('./services/emailService.js');
+    const status = checkEmailServiceStatus();
+    res.json({ status: 'ok', emailService: status });
+  } catch (error) {
+    res.json({ status: 'error', error: error.message });
+  }
+});
+
 // Error handling
 app.use(errorHandler);
 

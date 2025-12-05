@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { userAPI } from '@/services/api';
 import { toast } from 'react-toastify';
+import { useSearch } from '@/contexts/SearchContext';
 import Table from '@/components/common/Table';
 import Modal from '@/components/common/Modal';
 import Pagination from '@/components/common/Pagination';
@@ -10,6 +11,7 @@ import '@/styles/pages/Dashboard/shared.css';
 import '@/styles/pages/Dashboard/Users.css';
 
 export default function Users() {
+  const { searchQuery } = useSearch();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -25,8 +27,20 @@ export default function Users() {
   });
 
   const itemsPerPage = 8;
-  const totalPages = Math.ceil(users.length / itemsPerPage);
-  const paginatedUsers = users.slice(
+
+  // Filter users based on search query
+  const filteredUsers = users.filter(user => {
+    if (!searchQuery) return true;
+    const query = searchQuery.toLowerCase();
+    return (
+      user.name?.toLowerCase().includes(query) ||
+      user.email?.toLowerCase().includes(query) ||
+      user.role?.toLowerCase().includes(query)
+    );
+  });
+
+  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+  const paginatedUsers = filteredUsers.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -34,6 +48,11 @@ export default function Users() {
   useEffect(() => {
     fetchUsers();
   }, [currentPage]);
+
+  // Reset to page 1 when search query changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery]);
 
   const fetchUsers = async () => {
     setLoading(true);

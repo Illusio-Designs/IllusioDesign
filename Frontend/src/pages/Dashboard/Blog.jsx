@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useSearch } from '@/contexts/SearchContext';
 import { blogAPI } from '@/services/api';
 import { toast } from 'react-toastify';
 import Table from '@/components/common/Table';
@@ -26,13 +27,13 @@ const getImageUrl = (imagePath) => {
 
 export default function Blog() {
   const { getToken } = useAuth();
+  const { searchQuery } = useSearch();
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showTable, setShowTable] = useState(true);
   const [editingBlog, setEditingBlog] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchQuery, setSearchQuery] = useState('');
   const itemsPerPage = 8;
   const fetchingRef = useRef(false);
   const [formData, setFormData] = useState({
@@ -54,7 +55,12 @@ export default function Blog() {
   useEffect(() => {
     if (fetchingRef.current) return;
     fetchBlogs();
-  }, [currentPage, searchQuery]);
+  }, [currentPage]);
+
+  // Reset to page 1 when search query changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery]);
 
   const fetchBlogs = async () => {
     if (fetchingRef.current) return;

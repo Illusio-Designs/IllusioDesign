@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { teamAPI } from '@/services/api';
 import { toast } from 'react-toastify';
+import { useSearch } from '@/contexts/SearchContext';
 import Table from '@/components/common/Table';
 import Modal from '@/components/common/Modal';
 import Pagination from '@/components/common/Pagination';
@@ -47,13 +48,13 @@ const getTeamImageUrl = (imagePath) => {
 };
 
 export default function Team() {
+  const { searchQuery } = useSearch();
   const [teamMembers, setTeamMembers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showTable, setShowTable] = useState(true);
   const [editingMember, setEditingMember] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 8;
   const fetchingRef = useRef(false);
   const [formData, setFormData] = useState({
@@ -70,6 +71,11 @@ export default function Team() {
     fetchTeamMembers();
   }, [currentPage]);
 
+  // Reset to page 1 when search query changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery]);
+
   const fetchTeamMembers = async () => {
     if (fetchingRef.current) return;
     fetchingRef.current = true;
@@ -78,7 +84,6 @@ export default function Team() {
       const result = await teamAPI.getAll();
       if (result.data) {
         setTeamMembers(result.data);
-        setTotalPages(Math.ceil(result.data.length / itemsPerPage));
       }
     } catch (error) {
       console.error('Error fetching team members:', error);
@@ -182,7 +187,19 @@ export default function Team() {
     { key: 'order', label: 'Order' }
   ];
 
-  const paginatedData = teamMembers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  // Filter team members based on search query
+  const filteredTeamMembers = teamMembers.filter(member => {
+    if (!searchQuery) return true;
+    const query = searchQuery.toLowerCase();
+    return (
+      member.name?.toLowerCase().includes(query) ||
+      member.role?.toLowerCase().includes(query) ||
+      member.bio?.toLowerCase().includes(query)
+    );
+  });
+
+  const totalPages = Math.ceil(filteredTeamMembers.length / itemsPerPage);
+  const paginatedData = filteredTeamMembers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const handleBack = () => {
     setShowTable(true);

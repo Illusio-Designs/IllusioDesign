@@ -6,21 +6,64 @@ import ScrollReveal from '@/components/ScrollReveal';
 import Loader from '@/components/Loader';
 import { useState } from 'react';
 import { useSEO } from '@/hooks/useSEO';
+import { contactAPI } from '@/services/api';
+import { toast } from 'react-toastify';
 
 export default function ContactUs({ navigateTo, currentPage }) {
   // SEO Integration
   useSEO('contact');
 
   const [isLoading, setIsLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    subject: '',
+    message: ''
+  });
 
   const handleLoaderComplete = () => {
     setIsLoading(false);
   };
 
-  const handleSubmit = (e) => {
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log('Form submitted');
+    
+    if (!formData.name || !formData.email || !formData.phone || !formData.subject || !formData.message) {
+      toast.error('Please fill in all required fields');
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+      const result = await contactAPI.create(formData);
+      
+      if (result.data) {
+        toast.success('Message sent successfully! We will get back to you soon.');
+        // Reset form
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          subject: '',
+          message: ''
+        });
+      }
+    } catch (error) {
+      console.error('Error submitting contact form:', error);
+      toast.error(error.message || 'Failed to send message. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -77,6 +120,8 @@ export default function ContactUs({ navigateTo, currentPage }) {
                       id="name" 
                       name="name" 
                       placeholder="Your name*" 
+                      value={formData.name}
+                      onChange={handleInputChange}
                       required 
                     />
                   </div>
@@ -87,6 +132,8 @@ export default function ContactUs({ navigateTo, currentPage }) {
                       id="email" 
                       name="email" 
                       placeholder="Your email address*" 
+                      value={formData.email}
+                      onChange={handleInputChange}
                       required 
                     />
                   </div>
@@ -97,6 +144,8 @@ export default function ContactUs({ navigateTo, currentPage }) {
                       id="phone" 
                       name="phone" 
                       placeholder="Your mobile number*" 
+                      value={formData.phone}
+                      onChange={handleInputChange}
                       required 
                     />
                   </div>
@@ -107,6 +156,8 @@ export default function ContactUs({ navigateTo, currentPage }) {
                       id="subject" 
                       name="subject" 
                       placeholder="Your subject*" 
+                      value={formData.subject}
+                      onChange={handleInputChange}
                       required 
                     />
                   </div>
@@ -117,12 +168,14 @@ export default function ContactUs({ navigateTo, currentPage }) {
                       name="message" 
                       rows="5" 
                       placeholder="Your message*" 
+                      value={formData.message}
+                      onChange={handleInputChange}
                       required
                     ></textarea>
                   </div>
                   
-                  <button type="submit" className="submit-button">
-                    Send Message
+                  <button type="submit" className="submit-button" disabled={submitting}>
+                    {submitting ? 'Sending...' : 'Send Message'}
                   </button>
                 </form>
               </div>

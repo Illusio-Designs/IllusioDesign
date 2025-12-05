@@ -4,17 +4,46 @@ import Footer from '@/components/Footer';
 import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
 import Loader from '@/components/Loader';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSEO } from '@/hooks/useSEO';
+import { privacyPolicyAPI } from '@/services/api';
 
 export default function PrivacyPolicy({ navigateTo, currentPage }) {
   // SEO Integration
   useSEO('privacy');
 
   const [isLoading, setIsLoading] = useState(true);
+  const [privacyPolicy, setPrivacyPolicy] = useState(null);
+  const [error, setError] = useState(null);
 
   const handleLoaderComplete = () => {
     setIsLoading(false);
+  };
+
+  // Fetch privacy policy from API
+  useEffect(() => {
+    const fetchPrivacyPolicy = async () => {
+      try {
+        const response = await privacyPolicyAPI.getPublic();
+        if (response && response.data) {
+          setPrivacyPolicy(response.data);
+        }
+      } catch (err) {
+        console.error('Error fetching privacy policy:', err);
+        setError(err.message || 'Failed to load privacy policy');
+      }
+    };
+
+    fetchPrivacyPolicy();
+  }, []);
+
+  // Format date helper
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                  'July', 'August', 'September', 'October', 'November', 'December'];
+    return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
   };
 
   return (
@@ -28,68 +57,30 @@ export default function PrivacyPolicy({ navigateTo, currentPage }) {
             Privacy Policy
           </SplitText>
         </h1>
-        <ScrollReveal animation="fadeUp" delay={0.1} duration={1.5} ready={!isLoading}>
-          <p className="last-updated">Last Updated: November 15, 2024</p>
-        </ScrollReveal>
+        {privacyPolicy?.lastUpdated && (
+          <ScrollReveal animation="fadeUp" delay={0.1} duration={1.5} ready={!isLoading}>
+            <p className="last-updated">
+              Last Updated: {formatDate(privacyPolicy.lastUpdated)}
+            </p>
+          </ScrollReveal>
+        )}
         
         <div className="privacy-content">
-          <ScrollReveal animation="fadeUp" delay={0.1} duration={1.5} ready={!isLoading}>
-            <div className="privacy-block">
-              <h3>
-                <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
-                  Definitions
-                </SplitText>
-              </h3>
-              <p>
-                <strong>&quot;Illusio Designs&quot;</strong> (or &quot;we&quot; or &quot;us&quot;): refers to Illusio Designs, a development and design agency, including its officers, directors, employees, agents, and affiliates.
-              </p>
-              <p>
-                <strong>&quot;Website&quot;</strong>: refers to Illusio Designs&apos; website located at illusiodesigns.agency, including any subdomains, mobile versions, and related content and functionality.
-              </p>
-              <p>
-                <strong>&quot;Services&quot;</strong>: refers to the development, design, marketing, and other services provided by Illusio Designs, as well as any related software, documentation, and other materials provided by Illusio Designs through your use of the Website&apos;s Contacts form.
-              </p>
-            </div>
-          </ScrollReveal>
-          
-          <ScrollReveal animation="fadeUp" delay={0.15} duration={1.5} ready={!isLoading}>
-            <div className="privacy-block">
-              <h3>
-                <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
-                  General
-                </SplitText>
-              </h3>
-              <p>
-                These Terms of Use (&quot;Terms&quot;) govern your access to and use of the Website, and the ordering of services and products provided by Illusio Designs (&quot;Services&quot;). By accessing or using the Services, you agree to be bound by these Terms. Please read these Terms carefully. If you do not agree, you must not access or use the Services through the Website.
-              </p>
-            </div>
-          </ScrollReveal>
-          
-          <ScrollReveal animation="fadeUp" delay={0.2} duration={1.5} ready={!isLoading}>
-            <div className="privacy-block">
-              <h3>
-                <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
-                  Eligibility
-                </SplitText>
-              </h3>
-              <p>
-                You must be at least 18 years of age to use the Services, unless you are between 14 and 18 (or the age of majority established by law in your jurisdiction) and are under the supervision of a parent or legal guardian who has agreed to these Terms. Individuals under the age of 14 are prohibited from requesting Services. By accessing or using the Services, you represent and warrant that you meet these requirements and are capable of entering into a legally binding agreement.
-              </p>
-            </div>
-          </ScrollReveal>
-          
-          <ScrollReveal animation="fadeUp" delay={0.25} duration={1.5} ready={!isLoading}>
-            <div className="privacy-block">
-              <h3>
-                <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
-                  License to Use the Website
-                </SplitText>
-              </h3>
-              <p>
-                Subject to these Terms, Illusio Designs grants you a limited, non-exclusive, non-transferable, and revocable license to access and use the Website solely for personal and non-commercial use.
-              </p>
-            </div>
-          </ScrollReveal>
+          {error ? (
+            <ScrollReveal animation="fadeUp" delay={0.1} duration={1.5} ready={!isLoading}>
+              <div className="privacy-block">
+                <p style={{ color: '#ff4444' }}>Error: {error}</p>
+                <p>Please try refreshing the page or contact support if the problem persists.</p>
+              </div>
+            </ScrollReveal>
+          ) : privacyPolicy?.content ? (
+            <ScrollReveal animation="fadeUp" delay={0.1} duration={1.5} ready={!isLoading}>
+              <div 
+                className="privacy-block"
+                dangerouslySetInnerHTML={{ __html: privacyPolicy.content }}
+              />
+            </ScrollReveal>
+          ) : null}
         </div>
       </div>
     </section>

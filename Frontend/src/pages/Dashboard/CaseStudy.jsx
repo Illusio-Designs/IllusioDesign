@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { caseStudyAPI } from '@/services/api';
 import { toast } from 'react-toastify';
+import { useSearch } from '@/contexts/SearchContext';
 import Table from '@/components/common/Table';
 import Modal from '@/components/common/Modal';
 import Pagination from '@/components/common/Pagination';
@@ -24,6 +25,7 @@ const getImageUrl = (imagePath) => {
 };
 
 export default function CaseStudy() {
+  const { searchQuery } = useSearch();
   const [caseStudies, setCaseStudies] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -113,7 +115,6 @@ export default function CaseStudy() {
   const [showTable, setShowTable] = useState(true);
   const [editingCaseStudy, setEditingCaseStudy] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 8;
   const fetchingRef = useRef(false);
   const [formData, setFormData] = useState({
@@ -145,6 +146,11 @@ export default function CaseStudy() {
     fetchCaseStudies();
   }, [currentPage]);
 
+  // Reset to page 1 when search query changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery]);
+
   const fetchCaseStudies = async () => {
     if (fetchingRef.current) return;
     fetchingRef.current = true;
@@ -153,7 +159,6 @@ export default function CaseStudy() {
       const result = await caseStudyAPI.getAll();
       if (result.data) {
         setCaseStudies(result.data);
-        setTotalPages(Math.ceil(result.data.length / itemsPerPage));
       }
     } catch (error) {
       console.error('Error fetching case studies:', error);
@@ -378,7 +383,22 @@ export default function CaseStudy() {
     { key: 'category', label: 'Service', render: (value) => value || 'N/A' }
   ];
 
-  const paginatedData = caseStudies.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  // Filter case studies based on search query
+  const filteredCaseStudies = caseStudies.filter(cs => {
+    if (!searchQuery) return true;
+    const query = searchQuery.toLowerCase();
+    return (
+      cs.title?.toLowerCase().includes(query) ||
+      cs.industry?.toLowerCase().includes(query) ||
+      cs.category?.toLowerCase().includes(query) ||
+      cs.projectName?.toLowerCase().includes(query) ||
+      cs.clientName?.toLowerCase().includes(query) ||
+      cs.description?.toLowerCase().includes(query)
+    );
+  });
+
+  const totalPages = Math.ceil(filteredCaseStudies.length / itemsPerPage);
+  const paginatedData = filteredCaseStudies.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const handleBack = () => {
     setShowTable(true);

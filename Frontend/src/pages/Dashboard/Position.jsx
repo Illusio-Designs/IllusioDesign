@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { positionAPI } from '@/services/api';
 import { toast } from 'react-toastify';
+import { useSearch } from '@/contexts/SearchContext';
 import Table from '@/components/common/Table';
 import Modal from '@/components/common/Modal';
 import Pagination from '@/components/common/Pagination';
@@ -10,13 +11,13 @@ import '@/styles/pages/Dashboard/shared.css';
 import '@/styles/pages/Dashboard/Position.css';
 
 export default function Position() {
+  const { searchQuery } = useSearch();
   const [positions, setPositions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showTable, setShowTable] = useState(true);
   const [editingPosition, setEditingPosition] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 8;
   const fetchingRef = useRef(false);
   const [formData, setFormData] = useState({
@@ -34,6 +35,11 @@ export default function Position() {
     fetchPositions();
   }, [currentPage]);
 
+  // Reset to page 1 when search query changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery]);
+
   const fetchPositions = async () => {
     if (fetchingRef.current) return;
     fetchingRef.current = true;
@@ -42,7 +48,6 @@ export default function Position() {
       const result = await positionAPI.getAll();
       if (result.data) {
         setPositions(result.data);
-        setTotalPages(Math.ceil(result.data.length / itemsPerPage));
       }
     } catch (error) {
       console.error('Error fetching positions:', error);
@@ -124,7 +129,22 @@ export default function Position() {
     { key: 'isActive', label: 'Status', render: (value) => value ? 'Active' : 'Inactive' }
   ];
 
-  const paginatedData = positions.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  // Filter positions based on search query
+  const filteredPositions = positions.filter(pos => {
+    if (!searchQuery) return true;
+    const query = searchQuery.toLowerCase();
+    return (
+      pos.title?.toLowerCase().includes(query) ||
+      pos.experience?.toLowerCase().includes(query) ||
+      pos.location?.toLowerCase().includes(query) ||
+      pos.type?.toLowerCase().includes(query) ||
+      pos.description?.toLowerCase().includes(query) ||
+      pos.requirements?.toLowerCase().includes(query)
+    );
+  });
+
+  const totalPages = Math.ceil(filteredPositions.length / itemsPerPage);
+  const paginatedData = filteredPositions.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const handleBack = () => {
     setShowTable(true);

@@ -3,10 +3,14 @@
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { FiMaximize, FiMinimize } from 'react-icons/fi';
 import { useAuth } from '@/contexts/AuthContext';
+import { useSearch } from '@/contexts/SearchContext';
+import { contactAPI, applicationAPI } from '@/services/api';
 import '@/styles/components/Dashboard/DashboardHeader.css';
 
-export default function DashboardHeader({ currentPage, onPageChange, onSearch }) {
+export default function DashboardHeader({ currentPage, onPageChange }) {
+  const { searchQuery, updateSearch } = useSearch();
   const { logout, user } = useAuth();
   const router = useRouter();
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
@@ -14,7 +18,12 @@ export default function DashboardHeader({ currentPage, onPageChange, onSearch })
   const [showMessages, setShowMessages] = useState(false);
   const [showSiteUpdateDropdown, setShowSiteUpdateDropdown] = useState(false);
   const [showBusinessDropdown, setShowBusinessDropdown] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [localSearchQuery, setLocalSearchQuery] = useState('');
+  const [contactMessages, setContactMessages] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [applications, setApplications] = useState([]);
+  const [pendingCount, setPendingCount] = useState(0);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const profileRef = useRef(null);
   const notificationRef = useRef(null);
   const messagesRef = useRef(null);
@@ -29,14 +38,14 @@ export default function DashboardHeader({ currentPage, onPageChange, onSearch })
       if (notificationRef.current && !notificationRef.current.contains(event.target)) {
         setShowNotifications(false);
       }
-      if (messagesRef.current && !messagesRef.current.contains(event.target)) {
-        setShowMessages(false);
-      }
       if (siteUpdateRef.current && !siteUpdateRef.current.contains(event.target)) {
         setShowSiteUpdateDropdown(false);
       }
       if (businessRef.current && !businessRef.current.contains(event.target)) {
         setShowBusinessDropdown(false);
+      }
+      if (messagesRef.current && !messagesRef.current.contains(event.target)) {
+        setShowMessages(false);
       }
     };
 
@@ -44,19 +53,101 @@ export default function DashboardHeader({ currentPage, onPageChange, onSearch })
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (onSearch) {
-      onSearch(searchQuery);
+  // Check fullscreen state
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, []);
+
+  // Fetch contact messages
+  useEffect(() => {
+    fetchContactMessages();
+    // Refresh every 30 seconds
+    const interval = setInterval(fetchContactMessages, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Fetch applications
+  useEffect(() => {
+    fetchApplications();
+    // Refresh every 30 seconds
+    const interval = setInterval(fetchApplications, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const fetchContactMessages = async () => {
+    try {
+      const result = await contactAPI.getAll();
+      if (result.data) {
+        // Get latest 5 messages
+        const latestMessages = result.data.slice(0, 5);
+        setContactMessages(latestMessages);
+        
+        // Count unread messages
+        const unread = result.data.filter(msg => msg.status === 'unread').length;
+        setUnreadCount(unread);
+      }
+    } catch (error) {
+      console.error('Error fetching contact messages:', error);
     }
   };
 
-  const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
-    if (onSearch && e.target.value) {
-      onSearch(e.target.value);
+  const fetchApplications = async () => {
+    try {
+      const result = await applicationAPI.getAll();
+      if (result.data) {
+        // Get latest 5 applications
+        const latestApplications = result.data.slice(0, 5);
+        setApplications(latestApplications);
+        
+        // Count pending applications
+        const pending = result.data.filter(app => app.status === 'pending').length;
+        setPendingCount(pending);
+      }
+    } catch (error) {
+      console.error('Error fetching applications:', error);
     }
   };
+
+  const formatTime = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = now - date;
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+
+    if (diffMins < 1) return 'Just now';
+    if (diffMins < 60) return `${diffMins}m ago`;
+    if (diffHours < 24) return `${diffHours}h ago`;
+    if (diffDays < 7) return `${diffDays}d ago`;
+    
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    updateSearch(localSearchQuery);
+  };
+
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setLocalSearchQuery(value);
+    updateSearch(value);
+  };
+
+  // Sync local search with context when it changes externally
+  useEffect(() => {
+    if (searchQuery !== localSearchQuery) {
+      setLocalSearchQuery(searchQuery);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchQuery]);
 
   const siteUpdateItems = [
     { label: 'Blog', page: 'blog' },
@@ -72,21 +163,52 @@ export default function DashboardHeader({ currentPage, onPageChange, onSearch })
     logout();
   };
 
-  const notifications = [
-    { id: 1, title: 'Lorem ipsum', message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', time: '12:45 PM' },
-    { id: 2, title: 'Lorem ipsum', message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', time: '12:45 PM' },
-    { id: 3, title: 'Lorem ipsum', message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', time: '12:45 PM' },
-    { id: 4, title: 'Lorem ipsum', message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', time: '12:45 PM' },
-    { id: 5, title: 'Lorem ipsum', message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', time: '12:45 PM' }
-  ];
+  const handleToggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(err => {
+        console.error('Error attempting to enable fullscreen:', err);
+      });
+    } else {
+      document.exitFullscreen();
+    }
+  };
 
-  const messages = [
-    { id: 1, email: 'loremipsum@gmail.com', time: '12:45 PM', unread: true },
-    { id: 2, email: 'loremipsum@gmail.com', time: '12:45 PM', unread: true },
-    { id: 3, email: 'loremipsum@gmail.com', time: '12:45 PM', unread: true },
-    { id: 4, email: 'loremipsum@gmail.com', time: '12:45 PM', unread: false },
-    { id: 5, email: 'loremipsum@gmail.com', time: '12:45 PM', unread: false }
-  ];
+  const handleMarkAsRead = async (messageId) => {
+    try {
+      await contactAPI.update(messageId, { status: 'read' });
+      fetchContactMessages();
+    } catch (error) {
+      console.error('Error updating message status:', error);
+    }
+  };
+
+  const handleNotificationClick = (type, id) => {
+    setShowNotifications(false);
+    if (onPageChange) {
+      if (type === 'application') {
+        onPageChange('application');
+      } else if (type === 'message') {
+        handleMarkAsRead(id);
+        onPageChange('contact');
+      }
+    }
+  };
+
+  const handleViewAllMessages = () => {
+    setShowMessages(false);
+    if (onPageChange) {
+      onPageChange('contact');
+    }
+  };
+
+  const handleViewAllApplications = () => {
+    setShowNotifications(false);
+    if (onPageChange) {
+      onPageChange('application');
+    }
+  };
+
+  const totalNotificationCount = pendingCount + unreadCount;
 
   return (
     <header className="dashboard-header">
@@ -201,48 +323,18 @@ export default function DashboardHeader({ currentPage, onPageChange, onSearch })
             type="text"
             className="search-input"
             placeholder="Search..."
-            value={searchQuery}
+            value={localSearchQuery}
             onChange={handleSearchChange}
           />
         </form>
 
-        <div className="messages-dropdown" ref={messagesRef}>
-          <button
-            className="header-icon-btn"
-            onClick={() => setShowMessages(!showMessages)}
-            title="Messages"
-          >
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M17.5 4.16667V13.3333C17.5 14.2538 16.7538 15 15.8333 15H5.83333L2.5 18.3333V4.16667C2.5 3.24619 3.24619 2.5 4.16667 2.5H15.8333C16.7538 2.5 17.5 3.24619 17.5 4.16667Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-            <span className="icon-badge">{messages.filter(m => m.unread).length}</span>
-          </button>
-          {showMessages && (
-            <div className="messages-panel">
-              <div className="messages-header">
-                <span>email N... ({messages.length})</span>
-              </div>
-              <div className="messages-list">
-                {messages.map((message) => (
-                  <div key={message.id} className={`message-item ${message.unread ? 'unread' : ''}`}>
-                    <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M10 10C11.8409 10 13.3333 8.50762 13.3333 6.66667C13.3333 4.82572 11.8409 3.33333 10 3.33333C8.15905 3.33333 6.66667 4.82572 6.66667 6.66667C6.66667 8.50762 8.15905 10 10 10Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M17.5 16.6667C17.5 13.9052 14.1421 11.6667 10 11.6667C5.85786 11.6667 2.5 13.9052 2.5 16.6667V18.3333H17.5V16.6667Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                    <div className="message-content">
-                      <div className="message-email">{message.email}</div>
-                    </div>
-                    <div className="message-time">{message.time}</div>
-                  </div>
-                ))}
-              </div>
-              <div className="messages-actions">
-                <button className="messages-btn read-all">Read All</button>
-                <button className="messages-btn view-all">View All</button>
-              </div>
-            </div>
-          )}
-        </div>
+        <button
+          className="header-icon-btn"
+          onClick={handleToggleFullscreen}
+          title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
+        >
+          {isFullscreen ? <FiMinimize size={20} /> : <FiMaximize size={20} />}
+        </button>
 
         <div className="notification-dropdown" ref={notificationRef}>
           <button
@@ -254,31 +346,74 @@ export default function DashboardHeader({ currentPage, onPageChange, onSearch })
               <path d="M15 6.66667C15 5.34058 14.4732 4.06881 13.5355 3.13113C12.5979 2.19345 11.3261 1.66667 10 1.66667C8.67392 1.66667 7.40215 2.19345 6.46447 3.13113C5.52678 4.06881 5 5.34058 5 6.66667C5 12.5 2.5 14.1667 2.5 14.1667H17.5C17.5 14.1667 15 12.5 15 6.66667Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               <path d="M11.4417 17.5C11.1435 17.8313 10.7656 18.0833 10.3433 18.2337C9.92099 18.3841 9.46618 18.4282 9.02333 18.3621C8.58048 18.296 8.16312 18.1218 7.80948 17.8554C7.45585 17.589 7.17673 17.2387 6.99667 16.8333" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-            <span className="icon-badge">{notifications.length}</span>
+            {totalNotificationCount > 0 && <span className="icon-badge">{totalNotificationCount}</span>}
           </button>
           {showNotifications && (
             <div className="notification-panel">
               <div className="notification-header">
-                <span>Notification ({notifications.length})</span>
+                <span>Notifications ({applications.length + contactMessages.length})</span>
               </div>
               <div className="notification-list">
-                {notifications.map((notification) => (
-                  <div key={notification.id} className="notification-item">
-                    <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M10 10C11.8409 10 13.3333 8.50762 13.3333 6.66667C13.3333 4.82572 11.8409 3.33333 10 3.33333C8.15905 3.33333 6.66667 4.82572 6.66667 6.66667C6.66667 8.50762 8.15905 10 10 10Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M17.5 16.6667C17.5 13.9052 14.1421 11.6667 10 11.6667C5.85786 11.6667 2.5 13.9052 2.5 16.6667V18.3333H17.5V16.6667Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                    <div className="notification-content">
-                      <div className="notification-title">{notification.title}</div>
-                      <div className="notification-message">{notification.message}</div>
-                    </div>
-                    <div className="notification-time">{notification.time}</div>
+                {applications.length === 0 && contactMessages.length === 0 ? (
+                  <div style={{ padding: '20px', textAlign: 'center', color: '#666' }}>
+                    No notifications yet
                   </div>
-                ))}
+                ) : (
+                  <>
+                    {applications.map((application) => (
+                      <div 
+                        key={`app-${application.id}`} 
+                        className={`notification-item ${application.status === 'pending' ? 'unread' : ''}`}
+                        onClick={() => handleNotificationClick('application', application.id)}
+                        style={{ cursor: 'pointer' }}
+                      >
+                        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M10 10C11.8409 10 13.3333 8.50762 13.3333 6.66667C13.3333 4.82572 11.8409 3.33333 10 3.33333C8.15905 3.33333 6.66667 4.82572 6.66667 6.66667C6.66667 8.50762 8.15905 10 10 10Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                          <path d="M17.5 16.6667C17.5 13.9052 14.1421 11.6667 10 11.6667C5.85786 11.6667 2.5 13.9052 2.5 16.6667V18.3333H17.5V16.6667Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        <div className="notification-content">
+                          <div className="notification-title">{application.name}</div>
+                          <div style={{ fontSize: '12px', color: '#666', marginTop: '2px' }}>
+                            {application.position ? application.position.title : 'No position specified'}
+                          </div>
+                        </div>
+                        <div className="notification-time">{formatTime(application.createdAt)}</div>
+                      </div>
+                    ))}
+                    {contactMessages.map((message) => (
+                      <div 
+                        key={`msg-${message.id}`} 
+                        className={`notification-item ${message.status === 'unread' ? 'unread message-unread' : ''}`}
+                        onClick={() => handleNotificationClick('message', message.id)}
+                        style={{ cursor: 'pointer' }}
+                      >
+                        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M17.5 4.16667V13.3333C17.5 14.2538 16.7538 15 15.8333 15H5.83333L2.5 18.3333V4.16667C2.5 3.24619 3.24619 2.5 4.16667 2.5H15.8333C16.7538 2.5 17.5 3.24619 17.5 4.16667Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        <div className="notification-content">
+                          <div className="notification-title">{message.email}</div>
+                          <div style={{ fontSize: '12px', color: '#666', marginTop: '2px' }}>
+                            {message.subject}
+                          </div>
+                        </div>
+                        <div className="notification-time">{formatTime(message.createdAt)}</div>
+                      </div>
+                    ))}
+                  </>
+                )}
               </div>
               <div className="notification-actions">
-                <button className="notification-btn read-all">Read All</button>
-                <button className="notification-btn view-all">View All</button>
+                <button 
+                  className="notification-btn view-all" 
+                  onClick={() => {
+                    setShowNotifications(false);
+                    if (onPageChange) {
+                      onPageChange('application');
+                    }
+                  }}
+                >
+                  View All
+                </button>
               </div>
             </div>
           )}

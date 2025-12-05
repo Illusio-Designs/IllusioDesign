@@ -5,37 +5,64 @@ dotenv.config();
 let transporter = null;
 let emailServiceAvailable = false;
 let nodemailer = null;
+let initPromise = null;
 
-// Try to import nodemailer
-try {
-    // Use dynamic import wrapped in a promise that resolves immediately
-    import('nodemailer').then((module) => {
-        nodemailer = module.default || module;
-        
-        // Create transporter for Gmail (only if email config is available)
-        if (process.env.EMAIL_USER && process.env.EMAIL_APP_PASSWORD) {
-            transporter = nodemailer.createTransport({
-                service: 'gmail',
-                auth: {
-                    user: process.env.EMAIL_USER,
-                    pass: process.env.EMAIL_APP_PASSWORD
+// Initialize nodemailer
+const initializeEmailService = async () => {
+    if (initPromise) return initPromise;
+    
+    initPromise = (async () => {
+        try {
+            const nodemailerModule = await import('nodemailer');
+            nodemailer = nodemailerModule.default || nodemailerModule;
+            
+            // Create transporter for Gmail (only if email config is available)
+            if (process.env.EMAIL_USER && process.env.EMAIL_APP_PASSWORD) {
+                transporter = nodemailer.createTransport({
+                    service: 'gmail',
+                    auth: {
+                        user: process.env.EMAIL_USER,
+                        pass: process.env.EMAIL_APP_PASSWORD
+                    }
+                });
+                
+                // Verify connection
+                try {
+                    await transporter.verify();
+                    emailServiceAvailable = true;
+                    console.log('✅ Email service initialized and verified');
+                    console.log(`   Sending from: ${process.env.EMAIL_USER}`);
+                } catch (verifyError) {
+                    console.error('❌ Email service verification failed:', verifyError.message);
+                    emailServiceAvailable = false;
                 }
-            });
-            emailServiceAvailable = true;
-            console.log('✅ Email service initialized');
-        } else {
-            console.warn('⚠️  Email service not configured. EMAIL_USER and EMAIL_APP_PASSWORD not set in .env');
+            } else {
+                console.warn('⚠️  Email service not configured. EMAIL_USER and EMAIL_APP_PASSWORD not set in .env');
+                emailServiceAvailable = false;
+            }
+        } catch (error) {
+            console.error('❌ Failed to load nodemailer:', error.message);
+            emailServiceAvailable = false;
         }
-    }).catch((error) => {
-        console.warn('⚠️  Nodemailer not available. Email functionality will be disabled.');
-        console.warn('   Error:', error.message);
-        console.warn('   Install with: npm install nodemailer');
-        emailServiceAvailable = false;
-    });
-} catch (error) {
-    console.warn('⚠️  Could not load nodemailer. Email functionality will be disabled.');
-    emailServiceAvailable = false;
-}
+    })();
+    
+    return initPromise;
+};
+
+// Initialize on module load
+initializeEmailService();
+
+// Diagnostic function to check email service status
+export const checkEmailServiceStatus = () => {
+    return {
+        initialized: emailServiceAvailable,
+        hasTransporter: !!transporter,
+        hasNodemailer: !!nodemailer,
+        emailUser: process.env.EMAIL_USER ? 'Set' : 'Not set',
+        emailPassword: process.env.EMAIL_APP_PASSWORD ? 'Set' : 'Not set',
+        adminEmail: process.env.ADMIN_EMAIL || process.env.EMAIL_ADMIN || 'illusiodesigns@gmail.com (fallback)'
+    };
+};
 
 /**
  * Send email
@@ -47,15 +74,13 @@ try {
  * @returns {Promise}
  */
 export const sendEmail = async ({ to, subject, html, text }) => {
-    // Wait a bit for nodemailer to load if it's still loading
-    if (!emailServiceAvailable && nodemailer === null) {
-        // Give it a moment to initialize
-        await new Promise(resolve => setTimeout(resolve, 100));
-    }
+    // Ensure email service is initialized
+    await initializeEmailService();
     
     if (!emailServiceAvailable || !transporter) {
-        console.warn('Email service not available. Skipping email send.');
-        return { success: false, error: 'Email service not configured' };
+        const errorMsg = 'Email service not available. EMAIL_USER and EMAIL_APP_PASSWORD must be set in .env';
+        console.error('❌', errorMsg);
+        return { success: false, error: errorMsg };
     }
     
     try {
@@ -67,11 +92,15 @@ export const sendEmail = async ({ to, subject, html, text }) => {
             text: text || html.replace(/<[^>]*>/g, '') // Strip HTML tags for text version
         };
 
+        console.log(`📧 Attempting to send email to: ${to}`);
         const info = await transporter.sendMail(mailOptions);
-        console.log('Email sent successfully:', info.messageId);
+        console.log('✅ Email sent successfully:', info.messageId);
+        console.log(`   To: ${to}`);
+        console.log(`   Subject: ${subject}`);
         return { success: true, messageId: info.messageId };
     } catch (error) {
-        console.error('Error sending email:', error);
+        console.error('❌ Error sending email:', error.message);
+        console.error('   Full error:', error);
         throw error;
     }
 };
@@ -82,23 +111,40 @@ export const sendEmail = async ({ to, subject, html, text }) => {
  * @returns {Promise}
  */
 export const sendContactNotification = async (contactData) => {
-    const { name, email, phone, subject, message } = contactData;
+    try {
+        const { name, email, phone, subject, message } = contactData;
 
-    const html = `
-        <h2>New Contact Form Submission</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Phone:</strong> ${phone}</p>
-        <p><strong>Subject:</strong> ${subject}</p>
-        <p><strong>Message:</strong></p>
-        <p>${message.replace(/\n/g, '<br>')}</p>
-    `;
+        const html = `
+            <h2>New Contact Form Submission</h2>
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Phone:</strong> ${phone}</p>
+            <p><strong>Subject:</strong> ${subject}</p>
+            <p><strong>Message:</strong></p>
+            <p>${message.replace(/\n/g, '<br>')}</p>
+        `;
 
-    return await sendEmail({
-        to: process.env.EMAIL_USER, // Send to admin email
-        subject: `New Contact Form: ${subject}`,
-        html
-    });
+        // Use ADMIN_EMAIL from env, fallback to illusiodesigns@gmail.com
+        const adminEmail = process.env.ADMIN_EMAIL || process.env.EMAIL_ADMIN || 'illusiodesigns@gmail.com';
+        
+        console.log(`📧 Preparing to send contact notification to: ${adminEmail}`);
+        console.log(`   From: ${process.env.EMAIL_USER || 'Not set'}`);
+        
+        const result = await sendEmail({
+            to: adminEmail,
+            subject: `New Contact Form: ${subject}`,
+            html
+        });
+        
+        if (!result || !result.success) {
+            console.error('❌ Email send returned failure:', result);
+        }
+        
+        return result;
+    } catch (error) {
+        console.error('❌ Error in sendContactNotification:', error);
+        throw error;
+    }
 };
 
 /**
@@ -107,21 +153,37 @@ export const sendContactNotification = async (contactData) => {
  * @returns {Promise}
  */
 export const sendApplicationNotification = async (applicationData) => {
-    const { name, email, contact, position } = applicationData;
+    try {
+        const { name, email, contact, position } = applicationData;
 
-    const html = `
-        <h2>New Job Application</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Contact:</strong> ${contact}</p>
-        <p><strong>Position:</strong> ${position?.title || 'N/A'}</p>
-    `;
+        const html = `
+            <h2>New Job Application</h2>
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Contact:</strong> ${contact}</p>
+            <p><strong>Position:</strong> ${position?.title || 'N/A'}</p>
+        `;
 
-    return await sendEmail({
-        to: process.env.EMAIL_USER, // Send to admin email
-        subject: `New Job Application: ${name}`,
-        html
-    });
+        // Use ADMIN_EMAIL from env, fallback to illusiodesigns@gmail.com
+        const adminEmail = process.env.ADMIN_EMAIL || process.env.EMAIL_ADMIN || 'illusiodesigns@gmail.com';
+        
+        console.log(`📧 Preparing to send application notification to: ${adminEmail}`);
+        
+        const result = await sendEmail({
+            to: adminEmail,
+            subject: `New Job Application: ${name}`,
+            html
+        });
+        
+        if (!result || !result.success) {
+            console.error('❌ Email send returned failure:', result);
+        }
+        
+        return result;
+    } catch (error) {
+        console.error('❌ Error in sendApplicationNotification:', error);
+        throw error;
+    }
 };
 
 /**

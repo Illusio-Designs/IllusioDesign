@@ -152,7 +152,12 @@ export const contactAPI = {
   }),
   delete: (id) => apiCall(`/private/contact-messages/${id}`, {
     method: 'DELETE'
-  })
+  }),
+  // Public API - Create contact message
+  create: (data) => apiCall('/public/contact', {
+    method: 'POST',
+    body: JSON.stringify(data)
+  }, true)
 };
 
 // Team APIs
@@ -307,7 +312,9 @@ export const privacyPolicyAPI = {
   }),
   delete: (id) => apiCall(`/private/privacy-policy/${id}`, {
     method: 'DELETE'
-  })
+  }),
+  // Public API
+  getPublic: () => apiCall('/public/privacy-policy', {}, true)
 };
 
 // Terms of Service APIs
@@ -324,7 +331,9 @@ export const termsOfServiceAPI = {
   }),
   delete: (id) => apiCall(`/private/terms-of-service/${id}`, {
     method: 'DELETE'
-  })
+  }),
+  // Public API
+  getPublic: () => apiCall('/public/terms-of-service', {}, true)
 };
 
 export default API_BASE_URL;

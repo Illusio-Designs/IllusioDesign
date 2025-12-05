@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { seoAPI } from '@/services/api';
 import { toast } from 'react-toastify';
+import { useSearch } from '@/contexts/SearchContext';
 import Table from '@/components/common/Table';
 import Modal from '@/components/common/Modal';
 import Pagination from '@/components/common/Pagination';
@@ -10,13 +11,13 @@ import '@/styles/pages/Dashboard/shared.css';
 import '@/styles/pages/Dashboard/SEO.css';
 
 export default function SEO() {
+  const { searchQuery } = useSearch();
   const [seoData, setSeoData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showTable, setShowTable] = useState(true);
   const [editingSEO, setEditingSEO] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 8;
   const fetchingRef = useRef(false);
   const [formData, setFormData] = useState({
@@ -32,6 +33,11 @@ export default function SEO() {
     fetchSEO();
   }, [currentPage]);
 
+  // Reset to page 1 when search query changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery]);
+
   const fetchSEO = async () => {
     if (fetchingRef.current) return;
     fetchingRef.current = true;
@@ -40,7 +46,6 @@ export default function SEO() {
       const result = await seoAPI.getAll();
       if (result.data) {
         setSeoData(result.data);
-        setTotalPages(Math.ceil(result.data.length / itemsPerPage));
       }
     } catch (error) {
       console.error('Error fetching SEO:', error);
@@ -126,7 +131,20 @@ export default function SEO() {
     { key: 'description', label: 'Description', render: (value) => value ? (value.length > 50 ? value.substring(0, 50) + '...' : value) : 'N/A' }
   ];
 
-  const paginatedData = seoData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  // Filter SEO data based on search query
+  const filteredSEOData = seoData.filter(seo => {
+    if (!searchQuery) return true;
+    const query = searchQuery.toLowerCase();
+    return (
+      seo.page?.toLowerCase().includes(query) ||
+      seo.title?.toLowerCase().includes(query) ||
+      seo.description?.toLowerCase().includes(query) ||
+      seo.keywords?.toLowerCase().includes(query)
+    );
+  });
+
+  const totalPages = Math.ceil(filteredSEOData.length / itemsPerPage);
+  const paginatedData = filteredSEOData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const handleBack = () => {
     setShowTable(true);

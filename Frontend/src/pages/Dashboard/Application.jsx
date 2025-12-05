@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { applicationAPI } from '@/services/api';
 import { toast } from 'react-toastify';
+import { useSearch } from '@/contexts/SearchContext';
 import Table from '@/components/common/Table';
 import Modal from '@/components/common/Modal';
 import Pagination from '@/components/common/Pagination';
@@ -10,10 +11,10 @@ import '@/styles/pages/Dashboard/shared.css';
 import '@/styles/pages/Dashboard/Application.css';
 
 export default function Application() {
+  const { searchQuery } = useSearch();
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showTable, setShowTable] = useState(true);
   const [editingApplication, setEditingApplication] = useState(null);
@@ -26,6 +27,11 @@ export default function Application() {
     fetchApplications();
   }, [currentPage]);
 
+  // Reset to page 1 when search query changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery]);
+
   const fetchApplications = async () => {
     if (fetchingRef.current) return;
     fetchingRef.current = true;
@@ -34,7 +40,6 @@ export default function Application() {
       const result = await applicationAPI.getAll();
       if (result.data) {
         setApplications(result.data);
-        setTotalPages(Math.ceil(result.data.length / itemsPerPage));
       }
     } catch (error) {
       console.error('Error fetching applications:', error);
@@ -196,7 +201,22 @@ export default function Application() {
     }
   ];
 
-  const paginatedData = applications.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  // Filter applications based on search query
+  const filteredApplications = applications.filter(app => {
+    if (!searchQuery) return true;
+    const query = searchQuery.toLowerCase();
+    return (
+      app.name?.toLowerCase().includes(query) ||
+      app.email?.toLowerCase().includes(query) ||
+      app.contact?.toLowerCase().includes(query) ||
+      app.position?.title?.toLowerCase().includes(query) ||
+      app.status?.toLowerCase().includes(query) ||
+      app.portfolio?.toLowerCase().includes(query)
+    );
+  });
+
+  const totalPages = Math.ceil(filteredApplications.length / itemsPerPage);
+  const paginatedData = filteredApplications.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
     <div className="application-page">
