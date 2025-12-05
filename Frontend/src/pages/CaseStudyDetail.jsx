@@ -16,6 +16,16 @@ export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage
   const [currentProject, setCurrentProject] = useState(null);
   const [error, setError] = useState(null);
 
+  // Helper function to clean strings from escaped characters
+  const cleanString = (str) => {
+    if (!str) return '';
+    return String(str)
+      .replace(/\\/g, '') // Remove backslashes
+      .replace(/\|/g, '') // Remove pipes
+      .replace(/[\[\]"]/g, '') // Remove brackets and quotes
+      .trim();
+  };
+
   const handleLoaderComplete = () => {
     setIsLoading(false);
   };
@@ -70,20 +80,53 @@ export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage
             description: project.description || '',
             image: imageUrl,
             link: project.link || '#',
-            tags: Array.isArray(project.tags) ? project.tags : [],
-            techStack: Array.isArray(project.techStack) ? project.techStack : [],
+            tags: Array.isArray(project.tags) 
+              ? project.tags.map(tag => cleanString(tag)).filter(tag => tag)
+              : (typeof project.tags === 'string' ? project.tags.split(',').map(t => cleanString(t)).filter(t => t) : []),
+            techStack: Array.isArray(project.techStack) 
+              ? project.techStack.map(tech => cleanString(tech)).filter(tech => tech)
+              : (typeof project.techStack === 'string' ? project.techStack.split(',').map(t => cleanString(t)).filter(t => t) : []),
             timeline: project.timeline || project.duration || '',
-            results: Array.isArray(project.results) 
-              ? project.results.map(result => 
-                  typeof result === 'string' 
-                    ? { title: result, description: '' }
-                    : result
-                )
-              : [],
+            duration: project.duration || project.timeline || '',
+            services: project.services || project.category || '',
+            results: (() => {
+                try {
+                  let resultsArray = project.results;
+                  
+                  // If results is a string, try to parse it as JSON
+                  if (typeof resultsArray === 'string') {
+                    try {
+                      resultsArray = JSON.parse(resultsArray);
+                    } catch (e) {
+                      // If not JSON, treat as single string result
+                      const cleanResult = cleanString(resultsArray);
+                      return cleanResult ? [cleanResult] : [];
+                    }
+                  }
+                  
+                  // Handle array of results - just strings now
+                  if (Array.isArray(resultsArray)) {
+                    return resultsArray.map(result => {
+                      // If result is a string, use it directly
+                      if (typeof result === 'string') {
+                        return cleanString(result);
+                      }
+                      // For backward compatibility with old object format
+                      if (result && typeof result === 'object') {
+                        return cleanString(result.title || result.description || '');
+                      }
+                      return '';
+                    }).filter(r => r);
+                  }
+                  
+                  return [];
+                } catch (e) {
+                  console.error('Error parsing results:', e);
+                  return [];
+                }
+              })(),
             location: project.location || '',
-            projectName: project.projectName || project.title.toUpperCase(),
-            overview: project.overview || project.description || '',
-            overviewExtended: project.overviewExtended || project.description || '',
+            clientName: project.clientName || project.projectName || '',
             industry: project.industry || '',
             additionalImages: additionalImages.length > 0 ? additionalImages : [imageUrl] // Fallback to main image if no additional images
           };
@@ -154,14 +197,19 @@ export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage
           {/* Top Section - Tags and Title */}
           <ScrollReveal animation="fadeUp" delay={0.1} duration={1.5} trigger="onScroll" ready={!isLoading}>
             <div className="case-study-header">
-              <div className="project-tags">
-                {currentProject.tags?.map((tag, tagIndex) => (
-                  <span key={tagIndex} className="project-tag">{tag}</span>
-                ))}
-                {currentProject.industry && (
-                  <span className="project-tag">{currentProject.industry.toUpperCase()}</span>
-                )}
-              </div>
+              {(currentProject.tags && currentProject.tags.length > 0) || currentProject.industry ? (
+                <div className="project-tags">
+                  {currentProject.tags?.map((tag, tagIndex) => {
+                    const cleanTag = cleanString(tag);
+                    return cleanTag ? (
+                      <span key={tagIndex} className="project-tag">{cleanTag}</span>
+                    ) : null;
+                  })}
+                  {currentProject.industry && (
+                    <span className="project-tag">{cleanString(currentProject.industry).toUpperCase()}</span>
+                  )}
+                </div>
+              ) : null}
               <h1 className="project-title-main">
                 <SplitText
                   as="span"
@@ -199,11 +247,11 @@ export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage
             </div>
           </ScrollReveal>
 
-          {/* Results Cards Section */}
+          {/* Results Cards Section - Show only first 3 as boxes */}
           {currentProject.results && currentProject.results.length > 0 && (
             <ScrollReveal animation="fadeUp" delay={0.3} duration={1.5} trigger="onScroll" ready={!isLoading}>
               <div className="results-cards-section">
-                {currentProject.results.map((result, resultIndex) => (
+                {currentProject.results.slice(0, 3).map((result, resultIndex) => (
                   <ScrollReveal 
                     key={resultIndex} 
                     animation="fadeUp" 
@@ -213,35 +261,31 @@ export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage
                     ready={!isLoading}
                   >
                     <div className="result-card">
-                      <h3 className="result-card-title">{result.title || result}</h3>
-                      <p className="result-card-description">
-                        {result.description || 'The platform delivers exceptional results through innovative design and user-focused solutions.'}
-                      </p>
+                      <h3 className="result-card-title">
+                        {result || ''}
+                      </h3>
                     </div>
                   </ScrollReveal>
                 ))}
               </div>
+              {/* Show description after the boxes if there are more than 3 results */}
+              {currentProject.results.length > 3 && (
+                <div style={{ marginTop: '2rem' }}>
+                  <p style={{ color: '#666', lineHeight: '1.6' }}>
+                    {currentProject.description || 'The platform delivers exceptional results through innovative design and user-focused solutions.'}
+                  </p>
+                </div>
+              )}
+              {/* If 3 or fewer results, show description */}
+              {currentProject.results.length <= 3 && currentProject.description && (
+                <div style={{ marginTop: '2rem' }}>
+                  <p style={{ color: '#666', lineHeight: '1.6' }}>
+                    {currentProject.description}
+                  </p>
+                </div>
+              )}
             </ScrollReveal>
           )}
-
-          {/* Overview Section */}
-          <ScrollReveal animation="fadeUp" delay={0.4} duration={1.5} trigger="onScroll" ready={!isLoading}>
-            <div className="overview-section">
-              <span className="section-label">OVERVIEW</span>
-              <h2 className="overview-title">{currentProject.overview || currentProject.title}</h2>
-              <div className="overview-description">
-                <p>{currentProject.overviewExtended || currentProject.description}</p>
-                {currentProject.overviewExtended && (
-                  <p className="overview-para-2">
-                    The platform was built with a focus on user experience and modern design principles. 
-                    Every aspect of the interface was carefully crafted to ensure intuitive navigation and 
-                    seamless interactions. The design system incorporates best practices in accessibility, 
-                    performance, and scalability, making it ready for future growth and enhancements.
-                  </p>
-                )}
-              </div>
-            </div>
-          </ScrollReveal>
 
           {/* Project Details */}
           <ScrollReveal animation="fadeUp" delay={0.5} duration={1.5} trigger="onScroll" ready={!isLoading}>
@@ -249,16 +293,11 @@ export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage
               <div className="detail-row">
                 <span className="detail-label">Client</span>
                 <div className="detail-content">
-                  <span className="detail-value-bold">{currentProject.projectName || currentProject.title.toUpperCase()}</span>
+                  <span className="detail-value-bold">{currentProject.clientName || currentProject.title}</span>-
                   {currentProject.location && (
-                    <>
-                      <span className="flag-icon">
-                        {currentProject.location === 'USA' && '🇺🇸'}
-                        {currentProject.location === 'India' && '🇮🇳'}
-                        {currentProject.location === 'Australia' && '🇦🇺'}
-                      </span>
-                      <span className="detail-value-bold">{currentProject.location}</span>
-                    </>
+                    <span className="detail-value-bold">
+                      {currentProject.location}
+                    </span>
                   )}
                 </div>
               </div>
@@ -266,9 +305,7 @@ export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage
               <div className="detail-row">
                 <span className="detail-label">Services</span>
                 <span className="detail-value-bold">
-                  {currentProject.tags && currentProject.tags.length > 0 
-                    ? currentProject.tags.join(' ').replace(/#/g, '') 
-                    : 'N/A'}
+                  {currentProject.services || 'N/A'}
                 </span>
               </div>
 
@@ -276,7 +313,7 @@ export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage
                 <span className="detail-label">Technologies</span>
                 <span className="detail-value-bold">
                   {currentProject.techStack && currentProject.techStack.length > 0 
-                    ? currentProject.techStack.join(', ') 
+                    ? currentProject.techStack.join(', ')
                     : 'N/A'}
                 </span>
               </div>

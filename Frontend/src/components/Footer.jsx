@@ -10,9 +10,9 @@ export default function Footer({ navigateTo }) {
           <div className="footer-cta-content" style={{ position: 'relative', zIndex: 1 }}>
             <h2 className="footer-cta-title">Ready to Start?</h2>
             <p className="footer-cta-subtitle">Let&apos;s craft your next digital success story.</p>
-            <button className="footer-cta-button" onClick={() => navigateTo && navigateTo('contact')}>
+            <a href="/contact" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('contact'); }} className="footer-cta-button" style={{ textDecoration: 'none', display: 'inline-block' }}>
               Get a Free Consultation
-            </button>
+            </a>
           </div>
         </div>
       </ScrollReveal>
@@ -25,32 +25,33 @@ export default function Footer({ navigateTo }) {
           <ScrollReveal animation="fadeUp" delay={0.15} duration={1.5}>
             <div className="footer-content">
             <div className="footer-section footer-brand">
-              <div className="footer-logo">
-                <img 
-                  src="/images/IllusioDesignfulllogo.webp" 
-                  alt="Illusio Designs" 
-                  className="footer-logo-image"
-                  onClick={() => navigateTo && navigateTo('home')}
-                  style={{ cursor: 'pointer' }}
-                />
-              </div>
+              <a href="/" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('home'); }} style={{ textDecoration: 'none', display: 'block' }}>
+                <div className="footer-logo">
+                  <img 
+                    src="/images/IllusioDesignfulllogo.webp" 
+                    alt="Illusio Designs" 
+                    className="footer-logo-image"
+                    style={{ cursor: 'pointer' }}
+                  />
+                </div>
+              </a>
             </div>
             <div className="footer-section">
               <h3>Services</h3>
               <ul>
-                <li><a href="#" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('service-detail', 'branding'); }}>Branding & Design</a></li>
-                <li><a href="#" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('service-detail', 'web-app'); }}>Web & App Development</a></li>
-                <li><a href="#" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('service-detail', 'marketing'); }}>Digital Marketing</a></li>
-                <li><a href="#" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('service-detail', 'b2b'); }}>B2B & Custom Solutions</a></li>
+                <li><a href="/service-detail?item=branding" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('service-detail', 'branding'); }}>Branding & Design</a></li>
+                <li><a href="/service-detail?item=web-app" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('service-detail', 'web-app'); }}>Web & App Development</a></li>
+                <li><a href="/service-detail?item=marketing" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('service-detail', 'marketing'); }}>Digital Marketing</a></li>
+                <li><a href="/service-detail?item=b2b" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('service-detail', 'b2b'); }}>B2B & Custom Solutions</a></li>
               </ul>
             </div>
             <div className="footer-section">
               <h3>Resources</h3>
               <ul>
-                <li><a href="#" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('case-study'); }}>Case Studies</a></li>
-                <li><a href="#" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('blog'); }}>Blogs</a></li>
-                <li><a href="#" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('about'); }}>About Us</a></li>
-                <li><a href="#" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('contact'); }}>Contact Us</a></li>
+                <li><a href="/case-study" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('case-study'); }}>Case Studies</a></li>
+                <li><a href="/blog" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('blog'); }}>Blogs</a></li>
+                <li><a href="/about" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('about'); }}>About Us</a></li>
+                <li><a href="/contact" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('contact'); }}>Contact Us</a></li>
               </ul>
             </div>
           </div>
@@ -98,7 +99,7 @@ export default function Footer({ navigateTo }) {
           <div className="footer-bottom">
             <div className="footer-bottom-content">
               <p>
-                <a href="#" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('terms'); }}>Terms of Service</a> | <a href="#" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('privacy'); }}>Privacy Policy</a>
+                <a href="/terms" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('terms'); }}>Terms of Service</a> | <a href="/privacy" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('privacy'); }}>Privacy Policy</a>
               </p>
               <p>Copyright © 2025 Illusio Designs. All rights reserved.</p>
             </div>

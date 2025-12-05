@@ -9,7 +9,8 @@ import Pagination from '@/components/common/Pagination';
 import '@/styles/pages/Dashboard/shared.css';
 import '@/styles/pages/Dashboard/CaseStudy.css';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'https://api.illusiodesigns.agency';
+// Use NEXT_PUBLIC_IMAGE_URL for images (consistent with public pages)
+const IMAGE_BASE_URL = process.env.NEXT_PUBLIC_IMAGE_URL || 'https://api.illusiodesigns.agency';
 
 // Helper function to construct image URL
 const getImageUrl = (imagePath) => {
@@ -19,12 +20,95 @@ const getImageUrl = (imagePath) => {
   }
   // Ensure path starts with /
   const normalizedPath = imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
-  return `${API_BASE_URL}${normalizedPath}`;
+  return `${IMAGE_BASE_URL}${normalizedPath}`;
 };
 
 export default function CaseStudy() {
   const [caseStudies, setCaseStudies] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  // Helper function to clean strings from JSON artifacts
+  const cleanString = (str) => {
+    if (!str) return '';
+    return String(str)
+      .replace(/\\/g, '') // Remove backslashes
+      .replace(/\|/g, '') // Remove pipes
+      .replace(/[\[\]"]/g, '') // Remove brackets and quotes
+      .trim();
+  };
+
+  // Helper to parse array field and return clean comma-separated string
+  const parseArrayField = (field) => {
+    if (!field) return '';
+    try {
+      // If it's already a string with JSON artifacts, try to parse
+      if (typeof field === 'string') {
+        // Check if it looks like JSON
+        if (field.trim().startsWith('[') || field.includes('\\')) {
+          try {
+            const parsed = JSON.parse(field);
+            if (Array.isArray(parsed)) {
+              return parsed.map(item => cleanString(item)).filter(item => item).join(', ');
+            }
+          } catch (e) {
+            // If parsing fails, clean the string
+            return cleanString(field);
+          }
+        }
+        // If it's a simple string, clean it
+        return cleanString(field);
+      }
+      // If it's already an array
+      if (Array.isArray(field)) {
+        return field.map(item => cleanString(item)).filter(item => item).join(', ');
+      }
+      return '';
+    } catch (e) {
+      return '';
+    }
+  };
+
+  // Helper to parse results array and return clean newline-separated string
+  const parseResultsField = (field) => {
+    if (!field) return '';
+    try {
+      let resultsArray = field;
+      
+      // If it's a string, try to parse as JSON
+      if (typeof field === 'string') {
+        if (field.trim().startsWith('[') || field.includes('\\')) {
+          try {
+            resultsArray = JSON.parse(field);
+          } catch (e) {
+            // If not JSON, return cleaned string
+            return cleanString(field);
+          }
+        } else {
+          // Simple string, return as is
+          return field;
+        }
+      }
+      
+      // Handle array
+      if (Array.isArray(resultsArray)) {
+        return resultsArray.map(result => {
+          // If result is a string, use it
+          if (typeof result === 'string') {
+            return cleanString(result);
+          }
+          // If result is an object (old format), get title or description
+          if (result && typeof result === 'object') {
+            return cleanString(result.title || result.description || '');
+          }
+          return '';
+        }).filter(r => r).join('\n');
+      }
+      
+      return '';
+    } catch (e) {
+      return '';
+    }
+  };
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showTable, setShowTable] = useState(true);
   const [editingCaseStudy, setEditingCaseStudy] = useState(null);
@@ -39,6 +123,14 @@ export default function CaseStudy() {
     description: '',
     services: '',
     duration: '',
+    link: '',
+    category: '',
+    tags: '',
+    techStack: '',
+    timeline: '',
+    results: '',
+    location: '',
+    clientName: '',
     seoTitle: '',
     metaDescription: '',
     seoUrl: '',
@@ -81,6 +173,14 @@ export default function CaseStudy() {
       description: '',
       services: '',
       duration: '',
+      link: '',
+      category: '',
+      tags: '',
+      techStack: '',
+      timeline: '',
+      results: '',
+      location: '',
+      clientName: '',
       seoTitle: '',
       metaDescription: '',
       seoUrl: '',
@@ -100,8 +200,16 @@ export default function CaseStudy() {
       year: caseStudy.year || new Date().getFullYear().toString(),
       industries: caseStudy.industry || caseStudy.industries || '',
       description: caseStudy.description || '',
-      services: caseStudy.category || '',
-      duration: caseStudy.timeline || '',
+      services: caseStudy.services || caseStudy.category || '',
+      duration: caseStudy.duration || '',
+      link: caseStudy.link || '',
+      category: caseStudy.category || '',
+      tags: parseArrayField(caseStudy.tags),
+      techStack: parseArrayField(caseStudy.techStack),
+      timeline: caseStudy.timeline || caseStudy.duration || '',
+      results: parseResultsField(caseStudy.results),
+      location: caseStudy.location || '',
+      clientName: caseStudy.clientName || caseStudy.projectName || '',
       seoTitle: caseStudy.seoTitle || '',
       metaDescription: caseStudy.metaDescription || '',
       seoUrl: caseStudy.seoUrl || '',
@@ -140,7 +248,31 @@ export default function CaseStudy() {
       const formDataToSend = new FormData();
       Object.keys(formData).forEach(key => {
         if (key !== 'image' && key !== 'additionalImages' && key !== 'additionalImagesToKeep' && formData[key] !== null && formData[key] !== '') {
-          formDataToSend.append(key, formData[key]);
+          // Handle array fields (tags, techStack, results)
+          if (key === 'tags' || key === 'techStack') {
+            // Convert comma-separated string to array
+            const value = formData[key].trim();
+            if (value) {
+              const array = value.split(',').map(item => item.trim()).filter(item => item);
+              formDataToSend.append(key, JSON.stringify(array));
+            }
+          } else if (key === 'results') {
+            // Convert newline-separated string to array of strings (just lines, no title/description)
+            const value = formData[key].trim();
+            if (value) {
+              const lines = value.split('\n').map(line => line.trim()).filter(line => line);
+              // Store as array of strings, each line is a result
+              formDataToSend.append(key, JSON.stringify(lines));
+            }
+          } else if (key === 'industries') {
+            // Map industries to industry for backend
+            formDataToSend.append('industry', formData[key]);
+          } else if (key === 'clientName') {
+            // Map clientName to projectName for backend
+            formDataToSend.append('projectName', formData[key]);
+          } else {
+            formDataToSend.append(key, formData[key]);
+          }
         }
       });
       
@@ -158,7 +290,7 @@ export default function CaseStudy() {
         // This tells backend which images to keep
         const imagesToKeep = formData.additionalImagesToKeep !== undefined 
           ? formData.additionalImagesToKeep 
-          : currentAdditionalImages.map(img => img.startsWith('http') ? img.replace(API_BASE_URL, '') : img);
+          : currentAdditionalImages.map(img => img.startsWith('http') ? img.replace(IMAGE_BASE_URL, '') : img);
         
         if (imagesToKeep.length > 0) {
           imagesToKeep.forEach((img) => {
@@ -357,6 +489,93 @@ export default function CaseStudy() {
                     rows={10}
                   />
                 </div>
+              </div>
+
+              <div className="form-group">
+                <label>Link (Project URL)</label>
+                <input
+                  type="url"
+                  value={formData.link}
+                  onChange={(e) => setFormData({ ...formData, link: e.target.value })}
+                  placeholder="https://example.com"
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Category (Project Type)</label>
+                <select
+                  value={formData.category}
+                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                >
+                  <option value="">Select Category</option>
+                  <option value="branding">Branding & Design</option>
+                  <option value="web">Web</option>
+                  <option value="app">App</option>
+                  <option value="b2b">B2B & Custom Solution</option>
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label>Tags</label>
+                <input
+                  type="text"
+                  value={formData.tags}
+                  onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
+                  placeholder="Comma separated (e.g., Design, UI, UX)"
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Tech Stack</label>
+                <input
+                  type="text"
+                  value={formData.techStack}
+                  onChange={(e) => setFormData({ ...formData, techStack: e.target.value })}
+                  placeholder="Comma separated (e.g., React, Node.js, MongoDB)"
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Timeline</label>
+                <input
+                  type="text"
+                  value={formData.timeline}
+                  onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
+                  placeholder="e.g., 3 months, 6 weeks"
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Results</label>
+                <textarea
+                  value={formData.results}
+                  onChange={(e) => setFormData({ ...formData, results: e.target.value })}
+                  rows={5}
+                  placeholder="One result per line&#10;e.g.,&#10;Increased Conversion Rate&#10;Better User Engagement&#10;Improved Performance"
+                />
+                <small style={{ color: '#666', fontSize: '12px', marginTop: '4px', display: 'block' }}>
+                  One result per line (just the result text, no title/description format needed)
+                </small>
+              </div>
+
+              <div className="form-group">
+                <label>Location</label>
+                <input
+                  type="text"
+                  value={formData.location}
+                  onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                  placeholder="USA, India, Australia, etc."
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Client Name</label>
+                <input
+                  type="text"
+                  value={formData.clientName}
+                  onChange={(e) => setFormData({ ...formData, clientName: e.target.value })}
+                  placeholder="Client name (e.g., Company Name)"
+                />
               </div>
             </div>
 
@@ -560,7 +779,7 @@ export default function CaseStudy() {
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', gap: '8px' }}>
                         {formData.additionalImages.map((file, index) => {
                           const previewUrl = file instanceof File ? URL.createObjectURL(file) : 
-                            (file.startsWith('http') ? file : `${API_BASE_URL}${file}`);
+                            (file.startsWith('http') ? file : `${IMAGE_BASE_URL}${file}`);
                           return (
                             <div key={index} style={{ position: 'relative' }}>
                               <img 

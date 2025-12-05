@@ -130,32 +130,44 @@ export default function ServiceDetail({ serviceName, navigateTo, currentPage }) 
     setIsLoading(false);
   };
 
-  // Fetch projects from API based on service
+  // Fetch projects from API based on service category
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await caseStudyAPI.getAllPublic();
-        if (response && response.data) {
-          let filteredProjects = response.data;
+        let filteredProjects = [];
 
-          // For web-app service, filter by industry if available
+          // Map service names to categories
           if (serviceName === 'web-app') {
-            // Filter projects that have an industry field (or show all if no industry filter needed)
-            // You can customize this logic based on your requirements
-            filteredProjects = response.data.filter((project) => {
-              // Show projects that have industry data or are web/app category
-              return project.industry || project.category === 'web' || project.category === 'app';
-            });
+            // For web-app service, fetch both web and app projects
+            const [webResponse, appResponse] = await Promise.all([
+              caseStudyAPI.getAllPublic('web'),
+              caseStudyAPI.getAllPublic('app')
+            ]);
+            const webProjects = webResponse?.data || [];
+            const appProjects = appResponse?.data || [];
+            // Combine and remove duplicates
+            const allProjects = [...webProjects, ...appProjects];
+            const uniqueProjects = allProjects.filter((project, index, self) =>
+              index === self.findIndex(p => p.id === project.id)
+            );
+            filteredProjects = uniqueProjects;
+          } else if (serviceName === 'branding') {
+            // For branding service, fetch branding projects
+            const response = await caseStudyAPI.getAllPublic('branding');
+            filteredProjects = response?.data || [];
+          } else if (serviceName === 'b2b') {
+            // For b2b service, fetch b2b projects
+            const response = await caseStudyAPI.getAllPublic('b2b');
+            filteredProjects = response?.data || [];
+          } else if (serviceName === 'marketing') {
+            // For marketing service, fetch marketing projects (if category exists)
+            // If marketing category doesn't exist, show all or handle accordingly
+            const response = await caseStudyAPI.getAllPublic('marketing');
+            filteredProjects = response?.data || [];
           } else {
-            // For other services, you can add specific filtering logic
-            // For now, show all projects or filter by category
-            if (serviceName === 'branding') {
-              filteredProjects = response.data.filter((project) => project.category === 'branding');
-            } else if (serviceName === 'b2b') {
-              filteredProjects = response.data.filter((project) => project.category === 'b2b');
-            } else if (serviceName === 'marketing') {
-              filteredProjects = response.data.filter((project) => project.category === 'marketing');
-            }
+            // Default: fetch all projects
+            const response = await caseStudyAPI.getAllPublic();
+            filteredProjects = response?.data || [];
           }
 
           // Transform API data to match component structure
@@ -185,7 +197,6 @@ export default function ServiceDetail({ serviceName, navigateTo, currentPage }) 
           });
 
           setRelatedProjects(transformedProjects);
-        }
       } catch (error) {
         console.error('Error fetching projects:', error);
         setRelatedProjects([]);
@@ -368,12 +379,17 @@ export default function ServiceDetail({ serviceName, navigateTo, currentPage }) 
                 <div className="related-projects-slider">
                   <div className="related-projects-track">
                     {relatedProjects.map((project) => (
-                      <div
+                      <a
                         key={project.id}
+                        href={`/case-study-detail?item=${encodeURIComponent(project.id.toString())}`}
                         className="related-project-card"
-                        onClick={() => navigateTo('case-study-detail', project.id.toString())}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          navigateTo('case-study-detail', project.id.toString());
+                        }}
                         onMouseEnter={() => setHoveredProject(project.id)}
                         onMouseLeave={() => setHoveredProject(null)}
+                        style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
                       >
                         <div className="related-project-image-container">
                           <img
@@ -395,7 +411,7 @@ export default function ServiceDetail({ serviceName, navigateTo, currentPage }) 
                             →
                           </span>
                         </div>
-                      </div>
+                      </a>
                     ))}
                   </div>
                 </div>

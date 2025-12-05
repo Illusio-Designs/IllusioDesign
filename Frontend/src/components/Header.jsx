@@ -68,14 +68,17 @@ export default function Header({ navigateTo, currentPage }) {
   return (
     <header className="header">
       <div className="header-container">
-        <div className="logo" onClick={() => navigateTo('home')} style={{ cursor: 'pointer' }}>
-          <img src="/images/IllusioDesignfulllogo.webp" alt="Illusio Designs" className="logo-image" />
-        </div>
+        <a href="/" onClick={(e) => { e.preventDefault(); navigateTo('home'); }} style={{ cursor: 'pointer', textDecoration: 'none' }}>
+          <div className="logo" style={{ cursor: 'pointer' }}>
+            <img src="/images/IllusioDesignfulllogo.webp" alt="Illusio Designs" className="logo-image" />
+          </div>
+        </a>
         <nav className="nav">
           <ul>
             <li className="services-nav-item">
               <a 
-                onClick={() => setIsServicesOpen(!isServicesOpen)}
+                href="/service-detail"
+                onClick={(e) => { e.preventDefault(); setIsServicesOpen(!isServicesOpen); }}
                 onMouseEnter={() => setIsServicesOpen(true)}
                 className={activePage === 'services' ? 'active' : ''}
               >
@@ -90,7 +93,8 @@ export default function Header({ navigateTo, currentPage }) {
             </li>
             <li>
               <a 
-                onClick={() => navigateTo('case-study')}
+                href="/case-study"
+                onClick={(e) => { e.preventDefault(); navigateTo('case-study'); }}
                 className={activePage === 'case-study' ? 'active' : ''}
               >
                 Case Study
@@ -98,7 +102,8 @@ export default function Header({ navigateTo, currentPage }) {
             </li>
             <li>
               <a 
-                onClick={() => navigateTo('about')}
+                href="/about"
+                onClick={(e) => { e.preventDefault(); navigateTo('about'); }}
                 className={activePage === 'about' ? 'active' : ''}
               >
                 About Us
@@ -106,7 +111,8 @@ export default function Header({ navigateTo, currentPage }) {
             </li>
             <li>
               <a 
-                onClick={() => navigateTo('career')}
+                href="/career"
+                onClick={(e) => { e.preventDefault(); navigateTo('career'); }}
                 className={activePage === 'career' ? 'active' : ''}
               >
                 Career
@@ -114,7 +120,8 @@ export default function Header({ navigateTo, currentPage }) {
             </li>
             <li>
               <a 
-                onClick={() => navigateTo('blog')}
+                href="/blog"
+                onClick={(e) => { e.preventDefault(); navigateTo('blog'); }}
                 className={activePage === 'blog' ? 'active' : ''}
               >
                 Blog
@@ -122,7 +129,7 @@ export default function Header({ navigateTo, currentPage }) {
             </li>
           </ul>
         </nav>
-        <button className="engage-button" onClick={() => navigateTo('contact')}>Let&apos;s Engage</button>
+        <a href="/contact" onClick={(e) => { e.preventDefault(); navigateTo('contact'); }} className="engage-button" style={{ textDecoration: 'none' }}>Let&apos;s Engage</a>
       </div>
     </header>
   );

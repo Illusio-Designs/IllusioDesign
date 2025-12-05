@@ -14,12 +14,14 @@ export default function Blog({ navigateTo, currentPage }) {
 
   const [isLoading, setIsLoading] = useState(true);
   const [blogPosts, setBlogPosts] = useState([]);
+  const [hoveredBlog, setHoveredBlog] = useState(null);
 
   const handleLoaderComplete = () => {
     setIsLoading(false);
   };
 
-  const handleBlogClick = (slug) => {
+  const handleBlogClick = (e, slug) => {
+    e.preventDefault();
     navigateTo('blog-detail', slug);
   };
 
@@ -117,10 +119,13 @@ export default function Blog({ navigateTo, currentPage }) {
                 once={false}
                 ready={!isLoading}
               >
-                <div 
+                <a 
+                  href={`/blog-detail?item=${encodeURIComponent(post.slug)}`}
                   className="blog-card"
-                  onClick={() => handleBlogClick(post.slug)}
-                  style={{ cursor: 'pointer' }}
+                  onClick={(e) => handleBlogClick(e, post.slug)}
+                  onMouseEnter={() => setHoveredBlog(post.id)}
+                  onMouseLeave={() => setHoveredBlog(null)}
+                  style={{ cursor: 'pointer', textDecoration: 'none', color: 'inherit', display: 'block' }}
                 >
                   {post.image ? (
                     <div className="blog-placeholder" style={{ padding: 0, background: 'transparent', overflow: 'hidden' }}>
@@ -143,10 +148,15 @@ export default function Blog({ navigateTo, currentPage }) {
                     <div className="blog-placeholder"></div>
                   )}
                   <div className="blog-content">
-                    <span className="blog-date">{post.date}</span>
-                    <p className="blog-title">{post.title}</p>
+                    <div className="blog-title-wrapper">
+                      <span className="blog-date">{post.date}</span>
+                      <p className="blog-title">{post.title}</p>
+                    </div>
+                    <span className={`blog-arrow ${hoveredBlog === post.id ? 'arrow-visible' : ''}`}>
+                      →
+                    </span>
                   </div>
-                </div>
+                </a>
               </ScrollReveal>
             ))}
           </div>

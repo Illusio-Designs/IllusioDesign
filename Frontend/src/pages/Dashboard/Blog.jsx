@@ -10,7 +10,8 @@ import Pagination from '@/components/common/Pagination';
 import '@/styles/pages/Dashboard/shared.css';
 import '@/styles/pages/Dashboard/Blog.css';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'https://api.illusiodesigns.agency';
+// Use NEXT_PUBLIC_IMAGE_URL for images (consistent with public pages)
+const IMAGE_BASE_URL = process.env.NEXT_PUBLIC_IMAGE_URL || 'https://api.illusiodesigns.agency';
 
 // Helper function to construct image URL
 const getImageUrl = (imagePath) => {
@@ -20,7 +21,7 @@ const getImageUrl = (imagePath) => {
   }
   // Ensure path starts with /
   const normalizedPath = imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
-  return `${API_BASE_URL}${normalizedPath}`;
+  return `${IMAGE_BASE_URL}${normalizedPath}`;
 };
 
 export default function Blog() {

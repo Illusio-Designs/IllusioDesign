@@ -11,7 +11,7 @@ const Position = sequelize.define('Position', {
     type: DataTypes.STRING,
     allowNull: false
   },
-  department: {
+  experience: {
     type: DataTypes.STRING
   },
   location: {

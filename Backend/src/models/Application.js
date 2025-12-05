@@ -21,6 +21,10 @@ const Application = sequelize.define('Application', {
   contact: {
     type: DataTypes.STRING
   },
+  portfolio: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
   positionId: {
     type: DataTypes.INTEGER,
     references: {

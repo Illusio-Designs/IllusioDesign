@@ -3,7 +3,7 @@
 import '@/styles/components/common/Table.css';
 import '@/styles/components/common/DashboardCommon.css';
 
-export default function Table({ columns, data, onEdit, onDelete, actions = true }) {
+export default function Table({ columns, data, onEdit, onDelete, actions = true, shouldShowEdit }) {
   return (
     <div className="table-container">
       <table className="dashboard-table">
@@ -33,7 +33,7 @@ export default function Table({ columns, data, onEdit, onDelete, actions = true 
                 {actions && (
                   <td>
                     <div className="action-cells">
-                      {onEdit && (
+                      {onEdit && (!shouldShowEdit || shouldShowEdit(row)) && (
                         <button
                           className="action-btn edit-btn"
                           onClick={() => onEdit(row)}

@@ -82,7 +82,10 @@ export const caseStudyAPI = {
     method: 'DELETE'
   }),
   // Public APIs
-  getAllPublic: () => apiCall('/public/case-studies', {}, false),
+  getAllPublic: (category) => {
+    const queryParams = category ? `?category=${encodeURIComponent(category)}` : '';
+    return apiCall(`/public/case-studies${queryParams}`, {}, false);
+  },
   getByIdPublic: (id) => apiCall(`/public/case-studies/${id}`, {}, false)
 };
 
@@ -100,7 +103,10 @@ export const positionAPI = {
   }),
   delete: (id) => apiCall(`/private/positions/${id}`, {
     method: 'DELETE'
-  })
+  }),
+  // Public APIs
+  getAllPublic: () => apiCall('/public/positions', {}, true),
+  getByIdPublic: (id) => apiCall(`/public/positions/${id}`, {}, true)
 };
 
 // Application APIs
@@ -113,7 +119,27 @@ export const applicationAPI = {
   }),
   delete: (id) => apiCall(`/private/applications/${id}`, {
     method: 'DELETE'
-  })
+  }),
+  // Public API - Create application with file upload
+  create: async (formData) => {
+    try {
+      const response = await interceptedFetch(`${API_BASE_URL}/public/applications`, {
+        method: 'POST',
+        body: formData
+      }, { isPublic: true, skipAuth: true });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || `HTTP error! status: ${response.status}`);
+      }
+
+      return data;
+    } catch (error) {
+      console.error('Application API Error:', error);
+      throw error;
+    }
+  }
 };
 
 // Contact APIs
@@ -143,7 +169,9 @@ export const teamAPI = {
   }),
   delete: (id) => apiCall(`/private/team/${id}`, {
     method: 'DELETE'
-  })
+  }),
+  // Public API
+  getAllPublic: () => apiCall('/public/team', {}, true)
 };
 
 // SEO APIs

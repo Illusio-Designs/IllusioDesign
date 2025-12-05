@@ -12,6 +12,7 @@ const uploadsDir = path.join(__dirname, '../../uploads');
 const imagesDir = path.join(uploadsDir, 'images');
 const blogDir = path.join(imagesDir, 'blog');
 const projectDir = path.join(imagesDir, 'project');
+const teamDir = path.join(imagesDir, 'team');
 
 // Create directories if they don't exist
 if (!fs.existsSync(uploadsDir)) {
@@ -25,6 +26,9 @@ if (!fs.existsSync(blogDir)) {
 }
 if (!fs.existsSync(projectDir)) {
   fs.mkdirSync(projectDir, { recursive: true });
+}
+if (!fs.existsSync(teamDir)) {
+  fs.mkdirSync(teamDir, { recursive: true });
 }
 
 // Helper function to generate filename
@@ -81,6 +85,24 @@ export const uploadProject = multer({
   }
 });
 
+// Configure multer storage for team images
+const teamStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, teamDir);
+  },
+  filename: (req, file, cb) => {
+    cb(null, generateFilename(file));
+  }
+});
+
+export const uploadTeam = multer({
+  storage: teamStorage,
+  fileFilter: fileFilter,
+  limits: {
+    fileSize: 10 * 1024 * 1024 // 10MB limit
+  }
+});
+
 // Default upload (for backward compatibility, uses project directory)
 const upload = uploadProject;
 
@@ -88,6 +110,8 @@ const upload = uploadProject;
 const getUploadType = (filePath) => {
   if (filePath.includes('blog')) {
     return { type: 'blog', dir: blogDir, urlPath: '/uploads/images/blog' };
+  } else if (filePath.includes('team')) {
+    return { type: 'team', dir: teamDir, urlPath: '/uploads/images/team' };
   } else if (filePath.includes('project')) {
     return { type: 'project', dir: projectDir, urlPath: '/uploads/images/project' };
   }

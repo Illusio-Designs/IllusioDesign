@@ -158,6 +158,7 @@ export default function Home({ navigateTo, currentPage }) {
   const [isTestimonialsSliding, setIsTestimonialsSliding] = useState(false);
   const [openFaqId, setOpenFaqId] = useState(null);
   const [hoveredProject, setHoveredProject] = useState(null);
+  const [hoveredBlog, setHoveredBlog] = useState(null);
   const [projects, setProjects] = useState([]);
   const [blogPosts, setBlogPosts] = useState([]);
   const servicesSectionRef = useRef(null);
@@ -451,13 +452,17 @@ export default function Home({ navigateTo, currentPage }) {
           <div className="case-studies-slider">
             <div className="case-studies-track">
               {projects.length > 0 && projects.map((project, index) => (
-                <div 
+                <a 
                   key={project.id} 
+                  href={`/case-study-detail?item=${encodeURIComponent(project.id.toString())}`}
                   className="case-study-card"
-                  onClick={() => navigateTo('case-study-detail', project.id.toString())}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigateTo('case-study-detail', project.id.toString());
+                  }}
                   onMouseEnter={() => setHoveredProject(project.id)}
                   onMouseLeave={() => setHoveredProject(null)}
-                  style={{ cursor: 'pointer' }}
+                  style={{ cursor: 'pointer', textDecoration: 'none', color: 'inherit', display: 'block' }}
                 >
                   <div className="case-study-image-container">
                     <img
@@ -475,7 +480,7 @@ export default function Home({ navigateTo, currentPage }) {
                       →
                     </span>
                   </div>
-                </div>
+                </a>
               ))}
             </div>
           </div>
@@ -657,10 +662,16 @@ export default function Home({ navigateTo, currentPage }) {
                 once={false}
                 ready={!isLoading}
               >
-                <div 
+                <a 
+                  href={`/blog-detail?item=${encodeURIComponent(post.slug)}`}
                   className="blog-card"
-                  onClick={() => navigateTo('blog-detail', post.slug)}
-                  style={{ cursor: 'pointer' }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigateTo('blog-detail', post.slug);
+                  }}
+                  onMouseEnter={() => setHoveredBlog(post.id)}
+                  onMouseLeave={() => setHoveredBlog(null)}
+                  style={{ cursor: 'pointer', textDecoration: 'none', color: 'inherit', display: 'block' }}
                 >
                   {post.image ? (
                     <div className="blog-placeholder" style={{ padding: 0, background: 'transparent', overflow: 'hidden' }}>
@@ -683,10 +694,15 @@ export default function Home({ navigateTo, currentPage }) {
                     <div className="blog-placeholder"></div>
                   )}
                   <div className="blog-content">
-                    <span className="blog-date">{post.date}</span>
-                    <p className="blog-title">{post.title}</p>
+                    <div className="blog-title-wrapper">
+                      <span className="blog-date">{post.date}</span>
+                      <p className="blog-title">{post.title}</p>
+                    </div>
+                    <span className={`blog-arrow ${hoveredBlog === post.id ? 'arrow-visible' : ''}`}>
+                      →
+                    </span>
                   </div>
-                </div>
+                </a>
               </ScrollReveal>
             ))}
           </div>

@@ -19,6 +19,16 @@ export default function CaseStudy({ navigateTo, currentPage }) {
   const [projects, setProjects] = useState([]);
   const projectRefs = useRef([]);
 
+  // Helper function to clean strings from escaped characters
+  const cleanString = (str) => {
+    if (!str) return '';
+    return String(str)
+      .replace(/\\/g, '') // Remove backslashes
+      .replace(/\|/g, '') // Remove pipes
+      .replace(/[\[\]"]/g, '') // Remove brackets and quotes
+      .trim();
+  };
+
   // Map category keys to API category values
   const categoryMap = {
     'branding': 'branding',
@@ -34,12 +44,13 @@ export default function CaseStudy({ navigateTo, currentPage }) {
     { key: 'b2b', label: 'B2B & Custom Solution' }
   ];
 
-  // Fetch projects from API
+  // Fetch projects from API based on selected category
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const category = categoryMap[activeCategory];
-        const response = await caseStudyAPI.getAllPublic();
+        // Get category value for API (map UI key to API value)
+        const apiCategory = categoryMap[activeCategory] || activeCategory;
+        const response = await caseStudyAPI.getAllPublic(apiCategory);
         if (response && response.data) {
           // Transform API data to match component structure
           const transformedProjects = response.data.map((project) => {
@@ -66,13 +77,55 @@ export default function CaseStudy({ navigateTo, currentPage }) {
               description: project.description || '',
               image: imageUrl,
               link: project.link || '#',
-              category: project.category || 'web',
-              tags: Array.isArray(project.tags) ? project.tags : [],
-              techStack: Array.isArray(project.techStack) ? project.techStack : [],
+              category: project.category ? cleanString(project.category).toLowerCase() : '',
+              tags: Array.isArray(project.tags) 
+                ? project.tags.map(tag => cleanString(tag)).filter(t => t)
+                : (typeof project.tags === 'string' ? project.tags.split(',').map(t => cleanString(t)).filter(t => t) : []),
+              techStack: Array.isArray(project.techStack) 
+                ? project.techStack.map(tech => cleanString(tech)).filter(t => t)
+                : (typeof project.techStack === 'string' ? project.techStack.split(',').map(t => cleanString(t)).filter(t => t) : []),
               timeline: project.timeline || project.duration || '',
-              results: Array.isArray(project.results) ? project.results : [],
+              duration: project.duration || project.timeline || '',
+              services: project.services || project.category || '',
+              results: (() => {
+                try {
+                  let resultsArray = project.results;
+                  
+                  // If results is a string, try to parse it as JSON
+                  if (typeof resultsArray === 'string') {
+                    try {
+                      resultsArray = JSON.parse(resultsArray);
+                    } catch (e) {
+                      // If not JSON, treat as single string result
+                      const cleanResult = cleanString(resultsArray);
+                      return cleanResult ? [cleanResult] : [];
+                    }
+                  }
+                  
+                  // Handle array of results - just strings now
+                  if (Array.isArray(resultsArray)) {
+                    return resultsArray.map(result => {
+                      // If result is a string, use it directly
+                      if (typeof result === 'string') {
+                        return cleanString(result);
+                      }
+                      // For backward compatibility with old object format
+                      if (result && typeof result === 'object') {
+                        return cleanString(result.title || result.description || '');
+                      }
+                      return '';
+                    }).filter(r => r);
+                  }
+                  
+                  return [];
+                } catch (e) {
+                  console.error('Error parsing results:', e);
+                  return [];
+                }
+              })(),
               location: project.location || '',
-              projectName: project.projectName || project.title.toUpperCase()
+              clientName: project.clientName || project.projectName || '',
+              industry: project.industry || ''
             };
           });
           setProjects(transformedProjects);
@@ -86,41 +139,8 @@ export default function CaseStudy({ navigateTo, currentPage }) {
     fetchProjects();
   }, [activeCategory]);
 
-  const filteredProjects = projects.filter(
-    (project) => {
-      const projectCategory = project.category?.toLowerCase() || '';
-      const activeCategoryLower = activeCategory.toLowerCase();
-      
-      // Map category values to match
-      const categoryMapping = {
-        'web': ['web', 'website', 'website development', 'test'], // Include 'test' for now
-        'app': ['app', 'mobile', 'mobile app', 'application'],
-        'branding': ['branding', 'brand', 'design'],
-        'b2b': ['b2b', 'custom', 'custom solution', 'dashboard']
-      };
-      
-      // If category matches exactly
-      if (projectCategory === activeCategoryLower) {
-        return true;
-      }
-      
-      // Check if project category matches any mapped value for active category
-      const mappedCategories = categoryMapping[activeCategoryLower] || [];
-      if (mappedCategories.includes(projectCategory)) {
-        return true;
-      }
-      
-      // For 'web' category, also show projects with no category or empty category
-      if (activeCategoryLower === 'web' && (!projectCategory || projectCategory === '')) {
-        return true;
-      }
-      
-      return false;
-    }
-  );
-  
-  // If filtered projects is empty but we have projects, show all projects (fallback)
-  const displayProjects = filteredProjects.length > 0 ? filteredProjects : projects;
+  // Projects are already filtered by API, so use them directly
+  const displayProjects = projects;
 
   // Reset animated projects when category changes
   useEffect(() => {
@@ -134,7 +154,6 @@ export default function CaseStudy({ navigateTo, currentPage }) {
 
   // Trigger boom animation when project comes into view
   useEffect(() => {
-    const displayProjects = filteredProjects.length > 0 ? filteredProjects : projects;
     if (displayProjects.length === 0) return;
 
     const observerOptions = {
@@ -170,7 +189,7 @@ export default function CaseStudy({ navigateTo, currentPage }) {
     return () => {
       observer.disconnect();
     };
-  }, [filteredProjects, projects, animatedProjects]);
+  }, [displayProjects, animatedProjects]);
 
   const handleLoaderComplete = () => {
     setIsLoading(false);
@@ -230,52 +249,73 @@ export default function CaseStudy({ navigateTo, currentPage }) {
                 </div>
                 <div className="project-info-wrapper">
                   <div className="project-info">
-                  <div className="project-tags">
-                    {project.tags.map((tag, tagIndex) => (
-                      <span key={tagIndex} className="project-tag">{tag}</span>
-                    ))}
-                  </div>
+                  {(project.tags && project.tags.length > 0) || project.industry ? (
+                    <div className="project-tags">
+                      {project.tags && project.tags.map((tag, tagIndex) => {
+                        const cleanTag = cleanString(tag);
+                        return cleanTag ? (
+                          <span key={tagIndex} className="project-tag">{cleanTag}</span>
+                        ) : null;
+                      })}
+                      {project.industry && (
+                        <span className="project-tag">{cleanString(project.industry).toUpperCase()}</span>
+                      )}
+                    </div>
+                  ) : null}
                   <h3 className="project-title-main">
                     <SplitText splitBy="words" animation="fadeUp" delay={0.08} trigger="onScroll" as="span">
                       {project.title}
                     </SplitText>
                   </h3>
                   <div className="project-buttons">
-                    <button className="project-name-button">{project.projectName}</button>
-                    <button className="project-location-button">
-                      {project.location}
-                      {project.location === 'USA'}
-                      {project.location === 'India'}
-                      {project.location === 'Australia'}
-                    </button>
+                    {project.clientName && (
+                      <button className="project-name-button">{project.clientName}</button>
+                    )}
+                    {project.location && (
+                      <button className="project-location-button">
+                        {project.location}
+                      </button>
+                    )}
                   </div>
                   <div className="project-details-grid">
                     <div className="project-detail-item">
                       <span className="detail-label">TECH STACK</span>
-                      <span className="detail-value">{project.techStack.join(', ')}</span>
+                      <span className="detail-value">
+                        {project.techStack && project.techStack.length > 0 
+                          ? project.techStack.join(', ')
+                          : 'N/A'}
+                      </span>
                     </div>
                     <div className="project-detail-item">
                       <span className="detail-label">TIMELINE</span>
-                      <span className="detail-value">{project.timeline}</span>
+                      <span className="detail-value">{project.duration || project.timeline || 'N/A'}</span>
                     </div>
                   </div>
-                  <div className="project-results">
-                    <span className="detail-label">RESULTS</span>
-                    <ul className="results-list">
-                      {project.results.map((result, resultIndex) => (
-                        <li key={resultIndex}>{typeof result === 'string' ? result : result.title || result}</li>
-                      ))}
-                    </ul>
-                  </div>
-                  <button 
+                  {project.results && project.results.length > 0 && (
+                    <div className="project-results">
+                      <span className="detail-label">RESULTS</span>
+                      <ul className="results-list">
+                        {project.results.map((result, resultIndex) => {
+                          if (!result) return null;
+                          return (
+                            <li key={resultIndex}>{result}</li>
+                          );
+                        })}
+                      </ul>
+                    </div>
+                  )}
+                  <a 
+                    href={`/case-study-detail?item=${encodeURIComponent(project.id.toString())}`}
                     className={`explore-button ${hoveredProject === project.id ? 'hovered' : ''}`}
                     onClick={(e) => {
+                      e.preventDefault();
                       e.stopPropagation();
                       handleProjectClick(project);
                     }}
+                    style={{ textDecoration: 'none', display: 'inline-block' }}
                   >
                     EXPLORE →
-                  </button>
+                  </a>
                   </div>
                 </div>
               </div>

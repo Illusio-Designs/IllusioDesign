@@ -33,13 +33,16 @@ const CardNav = ({ items, onNavigate, isOpen, onClose }) => {
       >
         <div className="card-nav-grid">
           {items.map((item, index) => (
-            <div
+            <a
               key={index}
+              href={`/service-detail?item=${item.serviceName}`}
               className="card-nav-item"
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
                 onNavigate(item.path, item.serviceName);
                 onClose();
               }}
+              style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
             >
               <div className="card-nav-icon">
                 <span
@@ -56,7 +59,7 @@ const CardNav = ({ items, onNavigate, isOpen, onClose }) => {
                 <p className="card-nav-description">{item.description}</p>
               </div>
               <div className="card-nav-arrow">→</div>
-            </div>
+            </a>
           ))}
         </div>
       </div>

@@ -29,7 +29,8 @@ export const createTeamMember = async (req, res) => {
   try {
     const { name, role, bio, order } = req.body;
     
-    const image = req.file ? `/uploads/images/${req.file.filename}` : req.body.image;
+    // Use webpPath if available (set by convertToWebP middleware), otherwise construct path
+    const image = req.file ? (req.file.webpPath || `/uploads/images/${req.file.filename}`) : req.body.image;
     
     if (!name) {
       return res.status(400).json({ error: 'Name is required' });
@@ -54,8 +55,9 @@ export const updateTeamMember = async (req, res) => {
     const { id } = req.params;
     const updates = { ...req.body };
     
+    // Use webpPath if available (set by convertToWebP middleware), otherwise construct path
     if (req.file) {
-      updates.image = `/uploads/images/${req.file.filename}`;
+      updates.image = req.file.webpPath || `/uploads/images/${req.file.filename}`;
     }
     
     if (updates.order !== undefined) {

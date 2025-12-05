@@ -5,10 +5,10 @@ import Footer from '@/components/Footer';
 import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
 import Loader from '@/components/Loader';
-import Image from 'next/image';
 import Counter from '@/components/Counter';
 import { useState, useEffect, useRef } from 'react';
 import { useSEO } from '@/hooks/useSEO';
+import { teamAPI } from '@/services/api';
 
 // Star Rating Component
 const StarRating = () => {
@@ -33,6 +33,43 @@ const StarRating = () => {
   );
 };
 
+// Use NEXT_PUBLIC_IMAGE_URL for images (consistent with other pages)
+const IMAGE_BASE_URL = process.env.NEXT_PUBLIC_IMAGE_URL || 'https://api.illusiodesigns.agency';
+
+// Helper function to construct image URL
+const getImageUrl = (imagePath) => {
+  if (!imagePath || imagePath.trim() === '') return null;
+  // If already a full URL, return as is
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+    return imagePath;
+  }
+  // Ensure path starts with / for proper URL construction
+  const normalizedPath = imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
+  return `${IMAGE_BASE_URL}${normalizedPath}`;
+};
+
+// Helper function to get image URL with fallback for old team image paths
+const getTeamImageUrl = (imagePath) => {
+  const primaryUrl = getImageUrl(imagePath);
+  if (!primaryUrl) return null;
+  
+  // If path doesn't include /team/ or /project/, try fallback paths for old images
+  if (!imagePath.includes('/team/') && !imagePath.includes('/project/') && imagePath.includes('/uploads/images/')) {
+    // Extract filename from path
+    const filename = imagePath.split('/').pop();
+    // Try team directory first (new location), then project (old location)
+    return {
+      primary: primaryUrl,
+      fallbacks: [
+        `${IMAGE_BASE_URL}/uploads/images/team/${filename}`,
+        `${IMAGE_BASE_URL}/uploads/images/project/${filename}`
+      ]
+    };
+  }
+  
+  return { primary: primaryUrl, fallbacks: [] };
+};
+
 export default function AboutUs({ navigateTo, currentPage }) {
   // SEO Integration
   useSEO('about');
@@ -41,34 +78,9 @@ export default function AboutUs({ navigateTo, currentPage }) {
   const [isTestimonialsVisible, setIsTestimonialsVisible] = useState(false);
   const [isTestimonialsHovered, setIsTestimonialsHovered] = useState(false);
   const [isTestimonialsSliding, setIsTestimonialsSliding] = useState(false);
+  const [teamMembers, setTeamMembers] = useState([]);
   const testimonialsSectionRef = useRef(null);
   const testimonialsSlideTimeoutRef = useRef(null);
-  const teamMembers = [
-    {
-      id: 1,
-      name: 'John Doe',
-      role: 'CEO',
-      description: 'Leading our vision with strategic direction and innovative thinking.'
-    },
-    {
-      id: 2,
-      name: 'Jane Smith',
-      role: 'CFO',
-      description: 'Managing financial operations and driving business growth strategies.'
-    },
-    {
-      id: 3,
-      name: 'Mike Johnson',
-      role: 'Frontend Developer',
-      description: 'Creating beautiful and responsive user interfaces with modern technologies.'
-    },
-    {
-      id: 4,
-      name: 'Sarah Williams',
-      role: 'Backend Developer',
-      description: 'Building robust and scalable server-side solutions and APIs.'
-    }
-  ];
 
   const goals = [
     {
@@ -139,6 +151,34 @@ export default function AboutUs({ navigateTo, currentPage }) {
 
   const topRowTestimonials = testimonials.slice(0, 3);
   const bottomRowTestimonials = testimonials.slice(3, 6);
+
+  // Fetch team members from API
+  useEffect(() => {
+    const fetchTeamMembers = async () => {
+      try {
+        const response = await teamAPI.getAllPublic();
+        if (response && response.data) {
+          console.log('Team members fetched:', response.data);
+          // Log image URLs for debugging
+          response.data.forEach(member => {
+            if (member.image) {
+              console.log(`Member ${member.name} image:`, {
+                original: member.image,
+                constructed: getImageUrl(member.image)
+              });
+            }
+          });
+          setTeamMembers(response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching team members:', error);
+        // Keep empty array on error
+        setTeamMembers([]);
+      }
+    };
+
+    fetchTeamMembers();
+  }, []);
 
   // Handle testimonials visibility
   useEffect(() => {
@@ -306,7 +346,7 @@ export default function AboutUs({ navigateTo, currentPage }) {
                   >
                     <div className="goal-card">
                       <div className="goal-icon-wrapper">
-                        <Image src={goal.icon} alt={goal.title} width={60} height={60} className="goal-icon" />
+                        <img src={goal.icon} alt={goal.title} width={60} height={60} className="goal-icon" />
                       </div>
                       <h3 className="goal-title">{goal.title}</h3>
                       <p className="goal-description">{goal.description}</p>
@@ -322,27 +362,85 @@ export default function AboutUs({ navigateTo, currentPage }) {
             <div className="team-section">
               <h2 className="section-subtitle">Our Team</h2>
               <div className="team-grid">
-                {teamMembers.map((member, index) => (
-                  <ScrollReveal
-                    key={member.id}
-                    animation="fadeUp"
-                    delay={0.1 + index * 0.05}
-                    duration={1.5}
-                    once={false}
-                    ready={!isLoading}
-                  >
-                    <div className="team-card">
-                      <div className="team-avatar">
-                        <div className="avatar-placeholder">
-                          {member.name.split(' ').map(n => n[0]).join('')}
+                {teamMembers.length > 0 ? (
+                  teamMembers.map((member, index) => (
+                    <ScrollReveal
+                      key={member.id}
+                      animation="fadeUp"
+                      delay={0.1 + index * 0.05}
+                      duration={1.5}
+                      once={false}
+                      ready={!isLoading}
+                    >
+                      <div className="team-card">
+                        <div className="team-avatar">
+                          {(() => {
+                            const hasImage = member.image && typeof member.image === 'string' && member.image.trim() !== '';
+                            if (!hasImage) {
+                              return (
+                                <div className="avatar-placeholder">
+                                  {member.name.split(' ').map(n => n[0]).join('')}
+                                </div>
+                              );
+                            }
+                            
+                            const imageUrls = getTeamImageUrl(member.image);
+                            if (!imageUrls) {
+                              return (
+                                <div className="avatar-placeholder">
+                                  {member.name.split(' ').map(n => n[0]).join('')}
+                                </div>
+                              );
+                            }
+                            
+                            return (
+                              <img
+                                src={imageUrls.primary}
+                                alt={member.name}
+                                className="team-avatar-image"
+                                style={{ 
+                                  width: '200px',
+                                  height: '200px',
+                                  objectFit: 'cover', 
+                                  borderRadius: '50%',
+                                  display: 'block'
+                                }}
+                                onError={(e) => {
+                                  // Try fallback URLs if primary fails
+                                  if (imageUrls.fallbacks && imageUrls.fallbacks.length > 0) {
+                                    const fallbackUrl = imageUrls.fallbacks.shift();
+                                    console.log('Trying fallback URL for', member.name, ':', fallbackUrl);
+                                    e.target.src = fallbackUrl;
+                                  } else {
+                                    console.error('Image load error for', member.name, ':', {
+                                      original: member.image,
+                                      constructed: imageUrls.primary,
+                                      IMAGE_BASE_URL
+                                    });
+                                    e.target.style.display = 'none';
+                                    if (e.target.parentElement) {
+                                      e.target.parentElement.innerHTML = `<div class="avatar-placeholder">${member.name.split(' ').map(n => n[0]).join('')}</div>`;
+                                    }
+                                  }
+                                }}
+                                onLoad={() => {
+                                  console.log('Image loaded successfully for', member.name, ':', imageUrls.primary);
+                                }}
+                              />
+                            );
+                          })()}
                         </div>
+                        <h3 className="team-name">{member.name}</h3>
+                        <p className="team-role">{member.role}</p>
+                        {member.bio && <p className="team-description">{member.bio}</p>}
                       </div>
-                      <h3 className="team-name">{member.name}</h3>
-                      <p className="team-role">{member.role}</p>
-                      <p className="team-description">{member.description}</p>
-                    </div>
-                  </ScrollReveal>
-                ))}
+                    </ScrollReveal>
+                  ))
+                ) : (
+                  <p style={{ textAlign: 'center', gridColumn: '1 / -1', color: '#666' }}>
+                    No team members available
+                  </p>
+                )}
               </div>
             </div>
           </ScrollReveal>

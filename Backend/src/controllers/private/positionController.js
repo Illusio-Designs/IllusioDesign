@@ -27,7 +27,7 @@ export const createPosition = async (req, res) => {
   try {
     const {
       title,
-      department,
+      experience,
       location,
       type,
       description,
@@ -41,7 +41,7 @@ export const createPosition = async (req, res) => {
     
     const newPosition = await Position.create({
       title,
-      department: department || null,
+      experience: experience || null,
       location: location || null,
       type: type || null,
       description: description || null,

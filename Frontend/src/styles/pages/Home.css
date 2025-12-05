@@ -1288,10 +1288,18 @@
   padding: 1.5rem;
   border-radius: 0 0 18px 18px;
   display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex: 1;
+  min-height: 120px;
+}
+
+.blog-title-wrapper {
+  display: flex;
   flex-direction: column;
   gap: 0.75rem;
   flex: 1;
-  min-height: 120px;
 }
 
 .blog-date {
@@ -1312,7 +1320,24 @@
   line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  flex: 1;
+}
+
+.blog-arrow {
+  font-size: 2rem;
+  color: #EC691F;
+  opacity: 0;
+  transform: translateX(-15px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 400;
+  flex-shrink: 0;
+}
+
+.blog-arrow.arrow-visible {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 /* Dark Theme Support */

@@ -39,6 +39,7 @@
 .form-actions {
   display: flex;
   justify-content: center;
+  gap: 12px;
   padding-top: 24px;
   border-top: 1px solid rgba(255, 255, 255, 0.2);
   margin-top: 24px;
@@ -66,6 +67,25 @@
   background: #cccccc;
   cursor: not-allowed;
   transform: none;
+}
+
+.cancel-btn {
+  padding: 15px 70px;
+  background: #6c757d;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Poppins', sans-serif;
+}
+
+.cancel-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  background: #5a6268;
 }
 
 .form-grid {

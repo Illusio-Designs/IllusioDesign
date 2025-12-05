@@ -4,52 +4,44 @@ import Footer from '@/components/Footer';
 import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
 import Loader from '@/components/Loader';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSEO } from '@/hooks/useSEO';
-
-const jobListings = [
-  {
-    id: 'graphic-designer',
-    title: 'Graphic Designer',
-    description: 'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a',
-    position: '1 Position',
-    workType: 'Work From Office',
-  },
-  {
-    id: 'ui-ux-designer',
-    title: 'UI/UX Designer',
-    description: 'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a',
-    position: '1 Positions',
-    workType: 'Work From Office',
-  },
-  {
-    id: 'frontend-developer',
-    title: 'Frontend Developer',
-    description: 'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a',
-    position: '1 Position',
-    workType: 'Work From Office',
-  },
-  {
-    id: 'digital-marketing',
-    title: 'Digital Marketing Specialist',
-    description: 'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a',
-    position: '1 Position',
-    workType: 'Work From Office',
-  },
-];
+import { positionAPI } from '@/services/api';
+import { toast } from 'react-toastify';
 
 export default function Career({ navigateTo, currentPage }) {
   // SEO Integration
   useSEO('career');
 
   const [isLoading, setIsLoading] = useState(true);
+  const [positions, setPositions] = useState([]);
+  const [loadingPositions, setLoadingPositions] = useState(true);
+
+  useEffect(() => {
+    fetchPositions();
+  }, []);
+
+  const fetchPositions = async () => {
+    try {
+      setLoadingPositions(true);
+      const result = await positionAPI.getAllPublic();
+      if (result.data) {
+        setPositions(result.data);
+      }
+    } catch (error) {
+      console.error('Error fetching positions:', error);
+      toast.error('Failed to load positions. Please try again later.');
+    } finally {
+      setLoadingPositions(false);
+    }
+  };
 
   const handleLoaderComplete = () => {
     setIsLoading(false);
   };
 
-  const handleApply = (jobId) => {
-    navigateTo('position-apply', jobId);
+  const handleApply = (positionId) => {
+    navigateTo('position-apply', positionId);
   };
 
   return (
@@ -83,31 +75,46 @@ export default function Career({ navigateTo, currentPage }) {
             </h1>
           </ScrollReveal>
           <div className="job-listings">
-            {jobListings.map((job, index) => (
-              <ScrollReveal
-                key={job.id}
-                as="div"
-                className="job-card"
-                animation="slideUp"
-                delay={0.1 + index * 0.05}
-                duration={1.5}
-                once={false}
-                ready={!isLoading}
-              >
-                <h3 className="job-title">{job.title}</h3>
-                <p className="job-description">{job.description}</p>
-                <div className="job-buttons">
-                  <button className="job-info-button">{job.position}</button>
-                  <button className="job-info-button">{job.workType}</button>
-                  <button 
-                    className="apply-button"
-                    onClick={() => handleApply(job.id)}
-                  >
-                    Apply Now
-                  </button>
-                </div>
-              </ScrollReveal>
-            ))}
+            {loadingPositions ? (
+              <div className="loading-positions">Loading positions...</div>
+            ) : positions.length === 0 ? (
+              <div className="no-positions">No positions available at the moment.</div>
+            ) : (
+              positions.map((position, index) => (
+                <ScrollReveal
+                  key={position.id}
+                  as="div"
+                  className="job-card"
+                  animation="slideUp"
+                  delay={0.1 + index * 0.05}
+                  duration={1.5}
+                  once={false}
+                  ready={!isLoading}
+                >
+                  <h3 className="job-title">{position.title}</h3>
+                  <p className="job-description">
+                    {position.description || 'Join our team and make a difference!'}
+                  </p>
+                  <div className="job-buttons">
+                    {position.experience && (
+                      <button className="job-info-button">{position.experience}</button>
+                    )}
+                    {position.location && (
+                      <button className="job-info-button">{position.location}</button>
+                    )}
+                    {position.type && (
+                      <button className="job-info-button">{position.type}</button>
+                    )}
+                    <button 
+                      className="apply-button"
+                      onClick={() => handleApply(position.id)}
+                    >
+                      Apply Now
+                    </button>
+                  </div>
+                </ScrollReveal>
+              ))
+            )}
           </div>
         </div>
       </section>

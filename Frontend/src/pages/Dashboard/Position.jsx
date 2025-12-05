@@ -21,7 +21,7 @@ export default function Position() {
   const fetchingRef = useRef(false);
   const [formData, setFormData] = useState({
     title: '',
-    department: '',
+    experience: '',
     location: '',
     type: '',
     description: '',
@@ -57,7 +57,7 @@ export default function Position() {
     setEditingPosition(null);
     setFormData({
       title: '',
-      department: '',
+      experience: '',
       location: '',
       type: '',
       description: '',
@@ -72,7 +72,7 @@ export default function Position() {
     setEditingPosition(position);
     setFormData({
       title: position.title || '',
-      department: position.department || '',
+      experience: position.experience || '',
       location: position.location || '',
       type: position.type || '',
       description: position.description || '',
@@ -118,9 +118,9 @@ export default function Position() {
   const columns = [
     { key: 'id', label: 'Sr. No.', render: (value, row, index) => index + 1 + (currentPage - 1) * itemsPerPage },
     { key: 'title', label: 'Title' },
-    { key: 'department', label: 'Department' },
-    { key: 'location', label: 'Location' },
-    { key: 'type', label: 'Type' },
+    { key: 'experience', label: 'Experience Required:', render: (value) => value || 'N/A' },
+    { key: 'location', label: 'Location', render: (value) => value || 'N/A' },
+    { key: 'type', label: 'Type', render: (value) => value || 'N/A' },
     { key: 'isActive', label: 'Status', render: (value) => value ? 'Active' : 'Inactive' }
   ];
 
@@ -178,8 +178,8 @@ export default function Position() {
             <input type="text" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} required />
           </div>
           <div className="form-group">
-            <label>Department</label>
-            <input type="text" value={formData.department} onChange={(e) => setFormData({ ...formData, department: e.target.value })} />
+            <label>Experience Required</label>
+            <input type="text" value={formData.experience} onChange={(e) => setFormData({ ...formData, experience: e.target.value })} placeholder="e.g., 2+ Years, 5+ Years, Fresher" />
           </div>
           <div className="form-group">
             <label>Location</label>
@@ -194,8 +194,8 @@ export default function Position() {
             <textarea value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} rows={5} />
           </div>
           <div className="form-group">
-            <label>Requirements</label>
-            <textarea value={formData.requirements} onChange={(e) => setFormData({ ...formData, requirements: e.target.value })} rows={5} />
+            <label>Software Skills</label>
+            <textarea value={formData.requirements} onChange={(e) => setFormData({ ...formData, requirements: e.target.value })} rows={5} placeholder="e.g., CorelDraw, Photoshop, Illustrator, Figma, React, etc." />
           </div>
           <div className="form-group">
             <label>
