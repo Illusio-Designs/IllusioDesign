@@ -13,7 +13,6 @@ export default function BlogDetail({ blogName, navigateTo, currentPage }) {
   const [currentBlog, setCurrentBlog] = useState(null);
   const [relatedPosts, setRelatedPosts] = useState([]);
   const [error, setError] = useState(null);
-  const hasFetched = useRef(false);
 
   // Set page context synchronously before any API calls (useLayoutEffect runs before paint)
   useLayoutEffect(() => {
@@ -96,10 +95,6 @@ export default function BlogDetail({ blogName, navigateTo, currentPage }) {
 
   // Fetch blog post from API
   useEffect(() => {
-    // Prevent double API calls (React StrictMode in development)
-    if (hasFetched.current) return;
-    hasFetched.current = true;
-
     let isMounted = true;
     const abortController = new AbortController();
 
@@ -108,9 +103,7 @@ export default function BlogDetail({ blogName, navigateTo, currentPage }) {
         // Fetch current blog by slug
         const response = await blogAPI.getBySlugPublic(blogName);
         
-        // Check if component is still mounted before updating state
-        if (!isMounted) return;
-        
+        // Process data regardless of mount status
         if (response && response.data) {
           const blog = response.data;
           
@@ -148,21 +141,23 @@ export default function BlogDetail({ blogName, navigateTo, currentPage }) {
             category: blog.category || ''
           };
 
-          setCurrentBlog(transformedBlog);
+          // Only update state if component is still mounted
+          if (isMounted) {
+            setCurrentBlog(transformedBlog);
 
-          // Apply SEO metadata directly from blog response
-          if (blog.seoTitle || blog.metaDescription) {
-            applySEOFromBlog({
-              seoTitle: blog.seoTitle,
-              metaDescription: blog.metaDescription,
-              seoUrl: blog.seoUrl
-            });
+            // Apply SEO metadata directly from blog response
+            if (blog.seoTitle || blog.metaDescription) {
+              applySEOFromBlog({
+                seoTitle: blog.seoTitle,
+                metaDescription: blog.metaDescription,
+                seoUrl: blog.seoUrl
+              });
+            }
           }
 
           // Fetch related posts (all published blogs except current one)
           try {
             const allBlogsResponse = await blogAPI.getAllPublic();
-            if (!isMounted) return;
             
             if (allBlogsResponse && allBlogsResponse.data) {
               const related = allBlogsResponse.data
@@ -174,18 +169,22 @@ export default function BlogDetail({ blogName, navigateTo, currentPage }) {
                   slug: b.slug || b.seoUrl || `blog-${b.id}`,
                   date: formatDate(b.date || b.publishDate || b.createdAt)
                 }));
-              setRelatedPosts(related);
+              if (isMounted) {
+                setRelatedPosts(related);
+              }
             }
           } catch (relatedError) {
-            if (!isMounted) return;
             console.error('Error fetching related posts:', relatedError);
-            setRelatedPosts([]);
+            if (isMounted) {
+              setRelatedPosts([]);
+            }
           }
         }
       } catch (error) {
-        if (!isMounted) return;
         console.error('Error fetching blog post:', error);
-        setError('Failed to load blog post. Please try again later.');
+        if (isMounted) {
+          setError('Failed to load blog post. Please try again later.');
+        }
       } finally {
         if (isMounted) {
           setIsLoading(false);

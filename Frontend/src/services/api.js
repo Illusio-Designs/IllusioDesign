@@ -28,14 +28,61 @@ export const checkBackendConnection = async () => {
 // Helper function for API calls
 const apiCall = async (endpoint, options = {}, isPublic = false, skipInterceptors = false) => {
   try {
-    const response = await interceptedFetch(`${API_BASE_URL}${endpoint}`, {
-      ...options
-    }, { isPublic, skipInterceptors });
+    // Use cache: 'no-store' to prevent 304 responses (this is a fetch option, not a header)
+    const fetchOptions = {
+      ...options,
+      cache: 'no-store',
+      headers: {
+        ...options.headers
+      }
+    };
 
-    const data = await response.json();
+    let response = await interceptedFetch(`${API_BASE_URL}${endpoint}`, fetchOptions, { isPublic, skipInterceptors });
+
+    // Handle 304 Not Modified - response has no body, retry with cache busting query param
+    if (response.status === 304) {
+      // Retry with timestamp query parameter to bust cache
+      const separator = endpoint.includes('?') ? '&' : '?';
+      const cacheBustUrl = `${API_BASE_URL}${endpoint}${separator}_t=${Date.now()}`;
+      response = await interceptedFetch(cacheBustUrl, fetchOptions, { isPublic, skipInterceptors });
+    }
+
+    // Parse response body
+    let data;
+    try {
+      // Check if response has content
+      const text = await response.text();
+      if (text && text.trim().length > 0) {
+        data = JSON.parse(text);
+      } else if (response.ok) {
+        // Empty but successful response - return empty data structure
+        console.warn('Empty response body for:', endpoint);
+        data = { data: [], success: true };
+      } else {
+        throw new Error(`Empty response body with status ${response.status}`);
+      }
+    } catch (parseError) {
+      if (parseError instanceof SyntaxError) {
+        console.error('JSON parse error for:', endpoint, parseError.message);
+        throw new Error('Invalid JSON response from server');
+      }
+      throw parseError;
+    }
 
     if (!response.ok) {
-      throw new Error(data.error || `HTTP error! status: ${response.status}`);
+      throw new Error(data?.error || `HTTP error! status: ${response.status}`);
+    }
+
+    // Debug logging in development
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`[API Success] ${endpoint}:`, {
+        status: response.status,
+        dataStructure: typeof data,
+        hasData: !!data,
+        dataKeys: data && typeof data === 'object' ? Object.keys(data) : 'N/A',
+        dataLength: Array.isArray(data) ? data.length : (data?.data && Array.isArray(data.data) ? data.data.length : 'N/A'),
+        fullData: data // Log full data for debugging
+      });
     }
 
     return data;

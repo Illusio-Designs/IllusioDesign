@@ -21,7 +21,6 @@ export default function Blog({ navigateTo, currentPage }) {
   const [isLoading, setIsLoading] = useState(true);
   const [blogPosts, setBlogPosts] = useState([]);
   const [hoveredBlog, setHoveredBlog] = useState(null);
-  const hasFetched = useRef(false);
 
   const handleLoaderComplete = () => {
     setIsLoading(false);
@@ -41,8 +40,7 @@ export default function Blog({ navigateTo, currentPage }) {
       try {
         const response = await blogAPI.getAllPublic();
         
-        // Check if component is still mounted before updating state
-        if (!isMounted) return;
+        // Process data regardless of mount status
         if (response && response.data) {
           // Transform API data to match component structure
           const transformedPosts = response.data.map((post) => {
@@ -80,12 +78,16 @@ export default function Blog({ navigateTo, currentPage }) {
               image: imageUrl,
             };
           });
-          setBlogPosts(transformedPosts);
+          // Only update state if component is still mounted
+          if (isMounted) {
+            setBlogPosts(transformedPosts);
+          }
         }
       } catch (error) {
-        if (!isMounted) return;
         console.error('Error fetching blog posts:', error);
-        setBlogPosts([]);
+        if (isMounted) {
+          setBlogPosts([]);
+        }
       }
     };
 

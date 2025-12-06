@@ -307,6 +307,27 @@
   animation: related-slide-right-to-left 60s linear infinite;
 }
 
+/* Single item - disable animation and center */
+.related-projects-slider.single-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.related-projects-track.single-item {
+  animation: none;
+  width: 100%;
+  justify-content: center;
+}
+
+.related-projects-slider:hover .related-projects-track {
+  animation-play-state: paused;
+}
+
+.related-projects-slider.single-item:hover .related-projects-track {
+  animation-play-state: unset;
+}
+
 @keyframes related-slide-right-to-left {
   0% {
     transform: translateX(0);
@@ -314,10 +335,6 @@
   100% {
     transform: translateX(-50%);
   }
-}
-
-.related-projects-slider:hover .related-projects-track {
-  animation-play-state: paused;
 }
 
 .related-project-card {

@@ -22,31 +22,30 @@ export default function Career({ navigateTo, currentPage }) {
   const [isLoading, setIsLoading] = useState(true);
   const [positions, setPositions] = useState([]);
   const [loadingPositions, setLoadingPositions] = useState(true);
-  const hasFetched = useRef(false);
 
   useEffect(() => {
-    // Prevent double API calls (React StrictMode in development)
-    if (hasFetched.current) return;
-    hasFetched.current = true;
-
     let isMounted = true;
     const abortController = new AbortController();
 
     const fetchPositions = async () => {
       try {
-        setLoadingPositions(true);
+        if (isMounted) {
+          setLoadingPositions(true);
+        }
         const result = await positionAPI.getAllPublic();
         
-        // Check if component is still mounted before updating state
-        if (!isMounted) return;
-        
+        // Process data regardless of mount status
         if (result.data) {
-          setPositions(result.data);
+          // Only update state if component is still mounted
+          if (isMounted) {
+            setPositions(result.data);
+          }
         }
       } catch (error) {
-        if (!isMounted) return;
         console.error('Error fetching positions:', error);
-        toast.error('Failed to load positions. Please try again later.');
+        if (isMounted) {
+          toast.error('Failed to load positions. Please try again later.');
+        }
       } finally {
         if (isMounted) {
           setLoadingPositions(false);
@@ -123,9 +122,6 @@ export default function Career({ navigateTo, currentPage }) {
                     {position.description || 'Join our team and make a difference!'}
                   </p>
                   <div className="job-buttons">
-                    {position.experience && (
-                      <button className="job-info-button">{position.experience}</button>
-                    )}
                     {position.location && (
                       <button className="job-info-button">{position.location}</button>
                     )}

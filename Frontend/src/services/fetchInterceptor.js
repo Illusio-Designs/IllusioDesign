@@ -358,15 +358,34 @@ if (process.env.NODE_ENV === 'development') {
   addResponseInterceptor(async (response, config) => {
     const clonedResponse = response.clone();
     try {
-      const data = await clonedResponse.json();
-      console.log(`[API Response] ${config.method} ${config.url}`, {
-        status: response.status,
-        data
-      });
+      // Handle 304 Not Modified - empty body
+      if (response.status === 304) {
+        console.log(`[API Response] ${config.method} ${config.url}`, {
+          status: response.status,
+          data: '[304 Not Modified - Empty body]'
+        });
+        return response;
+      }
+      
+      // Try to parse JSON
+      const text = await clonedResponse.text();
+      if (text && text.trim().length > 0) {
+        const data = JSON.parse(text);
+        console.log(`[API Response] ${config.method} ${config.url}`, {
+          status: response.status,
+          data
+        });
+      } else {
+        console.log(`[API Response] ${config.method} ${config.url}`, {
+          status: response.status,
+          data: '[Empty response body]'
+        });
+      }
     } catch (e) {
       console.log(`[API Response] ${config.method} ${config.url}`, {
         status: response.status,
-        data: '[Non-JSON response]'
+        data: '[Non-JSON or parse error]',
+        error: e.message
       });
     }
     return response;

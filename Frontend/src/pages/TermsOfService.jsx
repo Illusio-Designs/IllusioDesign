@@ -21,7 +21,6 @@ export default function TermsOfService({ navigateTo, currentPage }) {
   const [isLoading, setIsLoading] = useState(true);
   const [termsOfService, setTermsOfService] = useState(null);
   const [error, setError] = useState(null);
-  const hasFetched = useRef(false);
 
   const handleLoaderComplete = () => {
     setIsLoading(false);
@@ -29,10 +28,6 @@ export default function TermsOfService({ navigateTo, currentPage }) {
 
   // Fetch terms of service from API
   useEffect(() => {
-    // Prevent double API calls (React StrictMode in development)
-    if (hasFetched.current) return;
-    hasFetched.current = true;
-
     let isMounted = true;
     const abortController = new AbortController();
 
@@ -40,16 +35,18 @@ export default function TermsOfService({ navigateTo, currentPage }) {
       try {
         const response = await termsOfServiceAPI.getPublic();
         
-        // Check if component is still mounted before updating state
-        if (!isMounted) return;
-        
+        // Process data regardless of mount status
         if (response && response.data) {
-          setTermsOfService(response.data);
+          // Only update state if component is still mounted
+          if (isMounted) {
+            setTermsOfService(response.data);
+          }
         }
       } catch (err) {
-        if (!isMounted) return;
         console.error('Error fetching terms of service:', err);
-        setError(err.message || 'Failed to load terms of service');
+        if (isMounted) {
+          setError(err.message || 'Failed to load terms of service');
+        }
       }
     };
 

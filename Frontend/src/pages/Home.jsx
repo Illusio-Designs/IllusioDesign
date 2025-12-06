@@ -170,58 +170,126 @@ export default function Home({ navigateTo, currentPage }) {
   const servicesSectionRef = useRef(null);
   const testimonialsSectionRef = useRef(null);
   const testimonialsSlideTimeoutRef = useRef(null);
-  const hasFetchedProjects = useRef(false);
-  const hasFetchedBlogs = useRef(false);
 
   // Fetch projects from API
   useEffect(() => {
-    // Prevent double API calls (React StrictMode in development)
-    if (hasFetchedProjects.current) return;
-    hasFetchedProjects.current = true;
-
+    console.log('🎬 Starting projects fetch useEffect');
     let isMounted = true;
     const abortController = new AbortController();
 
     const fetchProjects = async () => {
       try {
+        console.log('🚀 FETCHING PROJECTS...');
         const response = await caseStudyAPI.getAllPublic();
+        console.log('📥 PROJECTS RESPONSE RECEIVED:', response);
         
-        // Check if component is still mounted before updating state
-        if (!isMounted) return;
+        // Process data regardless of mount status - React will handle cleanup
+        // The early return was preventing data from being set due to StrictMode remounting
         
-        if (response && response.data) {
-          // Transform API data to match component structure
-          const transformedProjects = response.data.map((project) => {
-            // Handle image URL - use NEXT_PUBLIC_IMAGE_URL
-            let imageUrl = project.image || '/images/placeholder.webp';
-            if (project.image) {
-              if (project.image.startsWith('http')) {
-                // Already a full URL
-                imageUrl = project.image;
-              } else if (project.image.startsWith('/uploads/')) {
-                // Backend upload path - prepend IMAGE URL
-                const IMAGE_BASE_URL = process.env.NEXT_PUBLIC_IMAGE_URL || 'https://api.illusiodesigns.agency';
-                imageUrl = `${IMAGE_BASE_URL}${project.image}`;
-              } else if (!project.image.startsWith('/')) {
-                // Relative path without leading slash
-                const IMAGE_BASE_URL = process.env.NEXT_PUBLIC_IMAGE_URL || 'https://api.illusiodesigns.agency';
-                imageUrl = `${IMAGE_BASE_URL}/${project.image}`;
+        // CRITICAL DEBUG - Log everything with full details
+        console.log('🔍 FULL RESPONSE:', response);
+        console.log('🔍 Response type:', typeof response);
+        console.log('🔍 Response constructor:', response?.constructor?.name);
+        console.log('🔍 Is response array?', Array.isArray(response));
+        console.log('🔍 Response keys:', response && typeof response === 'object' ? Object.keys(response) : 'N/A');
+        console.log('🔍 Response.data exists?', 'data' in (response || {}));
+        console.log('🔍 Response.data:', response?.data);
+        console.log('🔍 Response.data type:', typeof response?.data);
+        console.log('🔍 Is response.data array?', Array.isArray(response?.data));
+        console.log('🔍 response.data length:', response?.data?.length);
+        
+        // Extract data - handle both { data: [...] } and direct array
+        let projectsData = null;
+        if (Array.isArray(response)) {
+          projectsData = response;
+          console.log('✅ Response is direct array');
+        } else if (response && typeof response === 'object' && 'data' in response) {
+          projectsData = response.data;
+          console.log('✅ Extracted from response.data');
+        } else {
+          console.error('❌ UNEXPECTED RESPONSE STRUCTURE:', response);
+          projectsData = [];
+        }
+        
+        console.log('🔍 Extracted projectsData:', projectsData);
+        console.log('🔍 projectsData type:', typeof projectsData);
+        console.log('🔍 projectsData is array?', Array.isArray(projectsData));
+        console.log('🔍 projectsData length:', projectsData?.length);
+        console.log('🔍 projectsData value:', JSON.stringify(projectsData, null, 2));
+        
+        if (Array.isArray(projectsData) && projectsData.length > 0) {
+          console.log('✅ Valid projects data found, transforming...');
+          try {
+            // Transform API data to match component structure
+            const transformedProjects = projectsData.map((project) => {
+              if (!project) {
+                console.warn('Invalid project item:', project);
+                return null;
               }
-            }
+              
+              // Handle image URL - use NEXT_PUBLIC_IMAGE_URL
+              let imageUrl = project.image || '/images/placeholder.webp';
+              if (project.image) {
+                if (project.image.startsWith('http')) {
+                  // Already a full URL
+                  imageUrl = project.image;
+                } else if (project.image.startsWith('/uploads/')) {
+                  // Backend upload path - prepend IMAGE URL
+                  const IMAGE_BASE_URL = process.env.NEXT_PUBLIC_IMAGE_URL || 'https://api.illusiodesigns.agency';
+                  imageUrl = `${IMAGE_BASE_URL}${project.image}`;
+                } else if (!project.image.startsWith('/')) {
+                  // Relative path without leading slash
+                  const IMAGE_BASE_URL = process.env.NEXT_PUBLIC_IMAGE_URL || 'https://api.illusiodesigns.agency';
+                  imageUrl = `${IMAGE_BASE_URL}/${project.image}`;
+                }
+              }
+              
+              return {
+                id: project.id,
+                title: project.title,
+                image: imageUrl,
+              };
+            }).filter(p => p !== null); // Remove any null items
             
-            return {
-              id: project.id,
-              title: project.title,
-              image: imageUrl,
-            };
+            // Only update state if component is still mounted
+            if (isMounted) {
+              setProjects(transformedProjects);
+              console.log('✅ Projects set successfully:', transformedProjects.length, 'items');
+              console.log('✅ Projects data:', transformedProjects);
+            } else {
+              console.log('⚠️ Component unmounted, but data was:', transformedProjects.length, 'items');
+            }
+          } catch (transformError) {
+            console.error('❌ Error transforming projects:', transformError);
+            console.error('❌ Transform error stack:', transformError.stack);
+            console.error('❌ Project data that failed:', projectsData);
+            if (isMounted) {
+              setProjects([]);
+            }
+          }
+        } else {
+          console.error('❌ NO VALID PROJECTS DATA FOUND!');
+          console.error('❌ Response:', response);
+          console.error('❌ projectsData:', projectsData);
+          console.error('❌ projectsData is array?', Array.isArray(projectsData));
+          console.error('❌ projectsData length:', projectsData?.length);
+          console.error('❌ Condition check:', {
+            isArray: Array.isArray(projectsData),
+            hasLength: projectsData?.length > 0,
+            projectsData
           });
-          setProjects(transformedProjects);
+          if (isMounted) {
+            setProjects([]);
+          }
         }
       } catch (error) {
-        if (!isMounted) return;
-        console.error('Error fetching projects:', error);
-        // Fallback to empty array on error
-        setProjects([]);
+        console.error('❌ ERROR FETCHING PROJECTS:', error);
+        console.error('❌ Error message:', error.message);
+        console.error('❌ Error stack:', error.stack);
+        // Fallback to empty array on error - only if mounted
+        if (isMounted) {
+          setProjects([]);
+        }
       }
     };
 
@@ -236,64 +304,139 @@ export default function Home({ navigateTo, currentPage }) {
 
   // Fetch blog posts from API
   useEffect(() => {
-    // Prevent double API calls (React StrictMode in development)
-    if (hasFetchedBlogs.current) return;
-    hasFetchedBlogs.current = true;
-
+    console.log('🎬 Starting blogs fetch useEffect');
     let isMounted = true;
     const abortController = new AbortController();
 
     const fetchBlogPosts = async () => {
       try {
+        console.log('🚀 FETCHING BLOGS...');
         const response = await blogAPI.getAllPublic();
+        console.log('📥 BLOGS RESPONSE RECEIVED:', response);
         
-        // Check if component is still mounted before updating state
-        if (!isMounted) return;
+        // Process data regardless of mount status - React will handle cleanup
+        // The early return was preventing data from being set due to StrictMode remounting
         
-        if (response && response.data) {
-          // Transform API data to match component structure
-          // Limit to 3 posts for home page
-          const transformedPosts = response.data.slice(0, 3).map((post) => {
-            // Format date
-            const formatDate = (dateString) => {
-              if (!dateString) return '';
-              const date = new Date(dateString);
-              const months = ['January', 'February', 'March', 'April', 'May', 'June', 
-                            'July', 'August', 'September', 'October', 'November', 'December'];
-              return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
-            };
-
-            // Handle image URL - use NEXT_PUBLIC_IMAGE_URL
-            let imageUrl = post.image || null;
-            if (post.image) {
-              if (post.image.startsWith('http')) {
-                // Already a full URL
-                imageUrl = post.image;
-              } else if (post.image.startsWith('/uploads/')) {
-                // Backend upload path - prepend IMAGE URL
-                const IMAGE_BASE_URL = process.env.NEXT_PUBLIC_IMAGE_URL || 'https://api.illusiodesigns.agency';
-                imageUrl = `${IMAGE_BASE_URL}${post.image}`;
-              } else if (!post.image.startsWith('/')) {
-                // Relative path without leading slash
-                const IMAGE_BASE_URL = process.env.NEXT_PUBLIC_IMAGE_URL || 'https://api.illusiodesigns.agency';
-                imageUrl = `${IMAGE_BASE_URL}/${post.image}`;
+        // CRITICAL DEBUG - Log everything with full details
+        console.log('🔍 FULL RESPONSE:', response);
+        console.log('🔍 Response type:', typeof response);
+        console.log('🔍 Response constructor:', response?.constructor?.name);
+        console.log('🔍 Is response array?', Array.isArray(response));
+        console.log('🔍 Response keys:', response && typeof response === 'object' ? Object.keys(response) : 'N/A');
+        console.log('🔍 Response.data exists?', 'data' in (response || {}));
+        console.log('🔍 Response.data:', response?.data);
+        console.log('🔍 Response.data type:', typeof response?.data);
+        console.log('🔍 Is response.data array?', Array.isArray(response?.data));
+        console.log('🔍 response.data length:', response?.data?.length);
+        
+        // Extract data - handle both { data: [...] } and direct array
+        let blogsData = null;
+        if (Array.isArray(response)) {
+          blogsData = response;
+          console.log('✅ Response is direct array');
+        } else if (response && typeof response === 'object' && 'data' in response) {
+          blogsData = response.data;
+          console.log('✅ Extracted from response.data');
+        } else {
+          console.error('❌ UNEXPECTED RESPONSE STRUCTURE:', response);
+          blogsData = [];
+        }
+        
+        console.log('🔍 Extracted blogsData:', blogsData);
+        console.log('🔍 blogsData type:', typeof blogsData);
+        console.log('🔍 blogsData is array?', Array.isArray(blogsData));
+        console.log('🔍 blogsData length:', blogsData?.length);
+        console.log('🔍 blogsData value:', JSON.stringify(blogsData, null, 2));
+        
+        if (Array.isArray(blogsData) && blogsData.length > 0) {
+          console.log('✅ Valid blogs data found, transforming...');
+          try {
+            // Transform API data to match component structure
+            // Limit to 3 posts for home page
+            const transformedPosts = blogsData.slice(0, 3).map((post) => {
+              if (!post) {
+                console.warn('Invalid blog post item:', post);
+                return null;
               }
-            }
+              
+              // Format date
+              const formatDate = (dateString) => {
+                if (!dateString) return '';
+                try {
+                  const date = new Date(dateString);
+                  const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                                'July', 'August', 'September', 'October', 'November', 'December'];
+                  return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+                } catch (e) {
+                  console.warn('Date format error:', dateString, e);
+                  return '';
+                }
+              };
 
-            return {
-              id: post.id,
-              date: formatDate(post.date || post.publishDate || post.createdAt),
-              title: post.title,
-              slug: post.slug || post.seoUrl || `blog-${post.id}`,
-              image: imageUrl,
-            };
+              // Handle image URL - use NEXT_PUBLIC_IMAGE_URL
+              let imageUrl = post.image || null;
+              if (post.image) {
+                if (post.image.startsWith('http')) {
+                  // Already a full URL
+                  imageUrl = post.image;
+                } else if (post.image.startsWith('/uploads/')) {
+                  // Backend upload path - prepend IMAGE URL
+                  const IMAGE_BASE_URL = process.env.NEXT_PUBLIC_IMAGE_URL || 'https://api.illusiodesigns.agency';
+                  imageUrl = `${IMAGE_BASE_URL}${post.image}`;
+                } else if (!post.image.startsWith('/')) {
+                  // Relative path without leading slash
+                  const IMAGE_BASE_URL = process.env.NEXT_PUBLIC_IMAGE_URL || 'https://api.illusiodesigns.agency';
+                  imageUrl = `${IMAGE_BASE_URL}/${post.image}`;
+                }
+              }
+
+              return {
+                id: post.id,
+                date: formatDate(post.date || post.publishDate || post.createdAt),
+                title: post.title,
+                slug: post.slug || post.seoUrl || `blog-${post.id}`,
+                image: imageUrl,
+              };
+            }).filter(p => p !== null); // Remove any null items
+            
+            // Only update state if component is still mounted
+            if (isMounted) {
+              setBlogPosts(transformedPosts);
+              console.log('✅ Blog posts set successfully:', transformedPosts.length, 'items');
+              console.log('✅ Blog posts data:', transformedPosts);
+            } else {
+              console.log('⚠️ Component unmounted, but data was:', transformedPosts.length, 'items');
+            }
+          } catch (transformError) {
+            console.error('❌ Error transforming blog posts:', transformError);
+            console.error('❌ Transform error stack:', transformError.stack);
+            console.error('❌ Blog data that failed:', blogsData);
+            if (isMounted) {
+              setBlogPosts([]);
+            }
+          }
+        } else {
+          console.error('❌ NO VALID BLOG POSTS DATA FOUND!');
+          console.error('❌ Response:', response);
+          console.error('❌ blogsData:', blogsData);
+          console.error('❌ blogsData is array?', Array.isArray(blogsData));
+          console.error('❌ blogsData length:', blogsData?.length);
+          console.error('❌ Condition check:', {
+            isArray: Array.isArray(blogsData),
+            hasLength: blogsData?.length > 0,
+            blogsData
           });
-          setBlogPosts(transformedPosts);
+          if (isMounted) {
+            setBlogPosts([]);
+          }
         }
       } catch (error) {
-        if (!isMounted) return;
-        console.error('Error fetching blog posts:', error);
-        setBlogPosts([]);
+        console.error('❌ ERROR FETCHING BLOG POSTS:', error);
+        console.error('❌ Error message:', error.message);
+        console.error('❌ Error stack:', error.stack);
+        if (isMounted) {
+          setBlogPosts([]);
+        }
       }
     };
 
@@ -493,9 +636,9 @@ export default function Home({ navigateTo, currentPage }) {
               Case Studies
             </SplitText>
           </ScrollReveal>
-          <div className="case-studies-slider">
-            <div className="case-studies-track">
-              {projects.length > 0 && projects.map((project, index) => (
+          <div className={`case-studies-slider ${projects.length === 1 ? 'single-item' : ''}`}>
+            <div className={`case-studies-track ${projects.length === 1 ? 'single-item' : ''}`}>
+              {projects.length > 0 ? projects.map((project, index) => (
                 <a 
                   key={project.id} 
                   href={`/case-study-detail?item=${encodeURIComponent(project.id.toString())}`}
@@ -525,7 +668,11 @@ export default function Home({ navigateTo, currentPage }) {
                     </span>
                   </div>
                 </a>
-              ))}
+              )) : (
+                <div style={{ padding: '20px', textAlign: 'center', color: '#999' }}>
+                  {process.env.NODE_ENV === 'development' ? 'No projects to display' : ''}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -696,7 +843,7 @@ export default function Home({ navigateTo, currentPage }) {
             </SplitText>
           </ScrollReveal>
           <div className="blog-grid">
-            {blogPosts.length > 0 && blogPosts.map((post, index) => (
+            {blogPosts.length > 0 ? blogPosts.map((post, index) => (
               <ScrollReveal
                 key={post.id}
                 as="div"
@@ -748,7 +895,11 @@ export default function Home({ navigateTo, currentPage }) {
                   </div>
                 </a>
               </ScrollReveal>
-            ))}
+            )) : (
+              <div style={{ padding: '20px', textAlign: 'center', color: '#999', gridColumn: '1 / -1' }}>
+                {process.env.NODE_ENV === 'development' ? 'No blog posts to display' : ''}
+              </div>
+            )}
           </div>
         </div>
       </section>

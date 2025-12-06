@@ -131,7 +131,6 @@ export default function ServiceDetail({ serviceName, navigateTo, currentPage }) 
   const processFlowRef = useRef(null);
   const [lineProgress, setLineProgress] = useState(0);
   const [hoveredProject, setHoveredProject] = useState(null);
-  const hasFetched = useRef({});
 
   const handleLoaderComplete = () => {
     setIsLoading(false);
@@ -139,10 +138,6 @@ export default function ServiceDetail({ serviceName, navigateTo, currentPage }) 
 
   // Fetch projects from API based on service category
   useEffect(() => {
-    // Prevent double API calls for the same service (React StrictMode in development)
-    if (hasFetched.current[serviceName]) return;
-    hasFetched.current[serviceName] = true;
-
     let isMounted = true;
     const abortController = new AbortController();
 
@@ -210,14 +205,15 @@ export default function ServiceDetail({ serviceName, navigateTo, currentPage }) 
             };
           });
 
-          // Check if component is still mounted before updating state
-          if (!isMounted) return;
-          
-          setRelatedProjects(transformedProjects);
+          // Only update state if component is still mounted
+          if (isMounted) {
+            setRelatedProjects(transformedProjects);
+          }
       } catch (error) {
-        if (!isMounted) return;
         console.error('Error fetching projects:', error);
-        setRelatedProjects([]);
+        if (isMounted) {
+          setRelatedProjects([]);
+        }
       }
     };
 
@@ -400,8 +396,8 @@ export default function ServiceDetail({ serviceName, navigateTo, currentPage }) 
                     </SplitText>
                   </h2>
                 </ScrollReveal>
-                <div className="related-projects-slider">
-                  <div className="related-projects-track">
+                <div className={`related-projects-slider ${relatedProjects.length === 1 ? 'single-item' : ''}`}>
+                  <div className={`related-projects-track ${relatedProjects.length === 1 ? 'single-item' : ''}`}>
                     {relatedProjects.map((project) => (
                       <a
                         key={project.id}

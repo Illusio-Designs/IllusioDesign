@@ -21,7 +21,6 @@ export default function PrivacyPolicy({ navigateTo, currentPage }) {
   const [isLoading, setIsLoading] = useState(true);
   const [privacyPolicy, setPrivacyPolicy] = useState(null);
   const [error, setError] = useState(null);
-  const hasFetched = useRef(false);
 
   const handleLoaderComplete = () => {
     setIsLoading(false);
@@ -29,10 +28,6 @@ export default function PrivacyPolicy({ navigateTo, currentPage }) {
 
   // Fetch privacy policy from API
   useEffect(() => {
-    // Prevent double API calls (React StrictMode in development)
-    if (hasFetched.current) return;
-    hasFetched.current = true;
-
     let isMounted = true;
     const abortController = new AbortController();
 
@@ -40,16 +35,18 @@ export default function PrivacyPolicy({ navigateTo, currentPage }) {
       try {
         const response = await privacyPolicyAPI.getPublic();
         
-        // Check if component is still mounted before updating state
-        if (!isMounted) return;
-        
+        // Process data regardless of mount status
         if (response && response.data) {
-          setPrivacyPolicy(response.data);
+          // Only update state if component is still mounted
+          if (isMounted) {
+            setPrivacyPolicy(response.data);
+          }
         }
       } catch (err) {
-        if (!isMounted) return;
         console.error('Error fetching privacy policy:', err);
-        setError(err.message || 'Failed to load privacy policy');
+        if (isMounted) {
+          setError(err.message || 'Failed to load privacy policy');
+        }
       }
     };
 

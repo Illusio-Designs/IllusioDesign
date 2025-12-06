@@ -87,7 +87,6 @@ export default function AboutUs({ navigateTo, currentPage }) {
   const [teamMembers, setTeamMembers] = useState([]);
   const testimonialsSectionRef = useRef(null);
   const testimonialsSlideTimeoutRef = useRef(null);
-  const hasFetched = useRef(false);
 
   const goals = [
     {
@@ -161,10 +160,6 @@ export default function AboutUs({ navigateTo, currentPage }) {
 
   // Fetch team members from API
   useEffect(() => {
-    // Prevent double API calls (React StrictMode in development)
-    if (hasFetched.current) return;
-    hasFetched.current = true;
-
     let isMounted = true;
     const abortController = new AbortController();
 
@@ -172,9 +167,7 @@ export default function AboutUs({ navigateTo, currentPage }) {
       try {
         const response = await teamAPI.getAllPublic();
         
-        // Check if component is still mounted before updating state
-        if (!isMounted) return;
-        
+        // Process data regardless of mount status
         if (response && response.data) {
           console.log('Team members fetched:', response.data);
           // Log image URLs for debugging
@@ -186,13 +179,17 @@ export default function AboutUs({ navigateTo, currentPage }) {
               });
             }
           });
-          setTeamMembers(response.data);
+          // Only update state if component is still mounted
+          if (isMounted) {
+            setTeamMembers(response.data);
+          }
         }
       } catch (error) {
-        if (!isMounted) return;
         console.error('Error fetching team members:', error);
-        // Keep empty array on error
-        setTeamMembers([]);
+        // Keep empty array on error - only if mounted
+        if (isMounted) {
+          setTeamMembers([]);
+        }
       }
     };
 

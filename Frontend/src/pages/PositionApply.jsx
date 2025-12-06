@@ -34,7 +34,6 @@ export default function PositionApply({ positionId, navigateTo, currentPage }) {
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const hasFetched = useRef(false);
 
   // Helper function to create SEO-friendly page name from position title
   const createSEOPageName = (title) => {
@@ -48,32 +47,32 @@ export default function PositionApply({ positionId, navigateTo, currentPage }) {
   useEffect(() => {
     if (!positionId) return;
 
-    // Prevent double API calls (React StrictMode in development)
-    if (hasFetched.current) return;
-    hasFetched.current = true;
-
     let isMounted = true;
     const abortController = new AbortController();
 
     const fetchPosition = async () => {
       try {
-        setLoadingPosition(true);
+        if (isMounted) {
+          setLoadingPosition(true);
+        }
         const result = await positionAPI.getByIdPublic(positionId);
         
-        // Check if component is still mounted before updating state
-        if (!isMounted) return;
-        
+        // Process data regardless of mount status
         if (result.data) {
-          setPosition(result.data);
-          
-          // Set SEO page name based on position title
-          const seoName = createSEOPageName(result.data.title);
-          setSeoPageName(seoName);
+          // Only update state if component is still mounted
+          if (isMounted) {
+            setPosition(result.data);
+            
+            // Set SEO page name based on position title
+            const seoName = createSEOPageName(result.data.title);
+            setSeoPageName(seoName);
+          }
         }
       } catch (error) {
-        if (!isMounted) return;
         console.error('Error fetching position:', error);
-        toast.error('Failed to load position details. Please try again.');
+        if (isMounted) {
+          toast.error('Failed to load position details. Please try again.');
+        }
       } finally {
         if (isMounted) {
           setLoadingPosition(false);

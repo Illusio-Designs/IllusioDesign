@@ -378,6 +378,27 @@
   animation: slide-right-to-left 60s linear infinite;
 }
 
+/* Single item - disable animation and center */
+.case-studies-slider.single-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.case-studies-track.single-item {
+  animation: none;
+  width: 100%;
+  justify-content: center;
+}
+
+.case-studies-slider:hover .case-studies-track {
+  animation-play-state: paused;
+}
+
+.case-studies-slider.single-item:hover .case-studies-track {
+  animation-play-state: unset;
+}
+
 @keyframes slide-right-to-left {
   0% {
     transform: translateX(0);
@@ -385,10 +406,6 @@
   100% {
     transform: translateX(-50%);
   }
-}
-
-.case-studies-slider:hover .case-studies-track {
-  animation-play-state: paused;
 }
 
 .case-study-card {

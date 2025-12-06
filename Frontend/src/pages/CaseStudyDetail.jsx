@@ -12,7 +12,6 @@ export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage
   const [isLoading, setIsLoading] = useState(true);
   const [currentProject, setCurrentProject] = useState(null);
   const [error, setError] = useState(null);
-  const hasFetched = useRef(false);
 
   // Set page context synchronously before any API calls (useLayoutEffect runs before paint)
   useLayoutEffect(() => {
@@ -105,10 +104,6 @@ export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage
 
   // Fetch case study from API
   useEffect(() => {
-    // Prevent double API calls (React StrictMode in development)
-    if (hasFetched.current) return;
-    hasFetched.current = true;
-
     let isMounted = true;
     const abortController = new AbortController();
 
@@ -116,17 +111,16 @@ export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage
       try {
         const projectId = parseInt(caseStudyName, 10);
         if (isNaN(projectId)) {
-          if (!isMounted) return;
-          setError('Invalid case study ID');
-          setIsLoading(false);
+          if (isMounted) {
+            setError('Invalid case study ID');
+            setIsLoading(false);
+          }
           return;
         }
 
         const response = await caseStudyAPI.getByIdPublic(projectId);
         
-        // Check if component is still mounted before updating state
-        if (!isMounted) return;
-        
+        // Process data regardless of mount status
         if (response && response.data) {
           const project = response.data;
           
@@ -216,21 +210,25 @@ export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage
             additionalImages: additionalImages.length > 0 ? additionalImages : [imageUrl] // Fallback to main image if no additional images
           };
 
-          setCurrentProject(transformedProject);
-          
-          // Apply SEO metadata directly from case study response
-          if (project.seoTitle || project.metaDescription) {
-            applySEOFromCaseStudy({
-              seoTitle: project.seoTitle,
-              metaDescription: project.metaDescription,
-              seoUrl: project.seoUrl
-            });
+          // Only update state if component is still mounted
+          if (isMounted) {
+            setCurrentProject(transformedProject);
+            
+            // Apply SEO metadata directly from case study response
+            if (project.seoTitle || project.metaDescription) {
+              applySEOFromCaseStudy({
+                seoTitle: project.seoTitle,
+                metaDescription: project.metaDescription,
+                seoUrl: project.seoUrl
+              });
+            }
           }
         }
       } catch (error) {
-        if (!isMounted) return;
         console.error('Error fetching case study:', error);
-        setError('Failed to load case study. Please try again later.');
+        if (isMounted) {
+          setError('Failed to load case study. Please try again later.');
+        }
       } finally {
         if (isMounted) {
           setIsLoading(false);

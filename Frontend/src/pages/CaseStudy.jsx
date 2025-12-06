@@ -24,7 +24,6 @@ export default function CaseStudy({ navigateTo, currentPage }) {
   const [animatedProjects, setAnimatedProjects] = useState(new Set());
   const [projects, setProjects] = useState([]);
   const projectRefs = useRef([]);
-  const hasFetched = useRef({});
   const fetchInProgress = useRef(false);
 
   // Helper function to clean strings from escaped characters
@@ -54,13 +53,12 @@ export default function CaseStudy({ navigateTo, currentPage }) {
 
   // Fetch projects from API based on selected category
   useEffect(() => {
-    // Prevent double API calls for the same category (React StrictMode in development)
+    // Prevent concurrent fetches for the same category
     const categoryKey = `category-${activeCategory}`;
-    if (fetchInProgress.current || hasFetched.current[categoryKey]) {
+    if (fetchInProgress.current) {
       return;
     }
     fetchInProgress.current = true;
-    hasFetched.current[categoryKey] = true;
 
     let isMounted = true;
     const abortController = new AbortController();
@@ -71,8 +69,7 @@ export default function CaseStudy({ navigateTo, currentPage }) {
         const apiCategory = categoryMap[activeCategory] || activeCategory;
         const response = await caseStudyAPI.getAllPublic(apiCategory);
         
-        // Check if component is still mounted before updating state
-        if (!isMounted) return;
+        // Process data regardless of mount status
         if (response && response.data) {
           // Transform API data to match component structure
           const transformedProjects = response.data.map((project) => {
@@ -150,12 +147,16 @@ export default function CaseStudy({ navigateTo, currentPage }) {
               industry: project.industry || ''
             };
           });
-          setProjects(transformedProjects);
+          // Only update state if component is still mounted
+          if (isMounted) {
+            setProjects(transformedProjects);
+          }
         }
       } catch (error) {
-        if (!isMounted) return;
         console.error('Error fetching projects:', error);
-        setProjects([]);
+        if (isMounted) {
+          setProjects([]);
+        }
       } finally {
         fetchInProgress.current = false;
       }
