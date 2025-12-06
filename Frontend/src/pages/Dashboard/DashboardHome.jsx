@@ -43,12 +43,9 @@ export default function DashboardHome() {
   return (
     <div className="dashboard-home">
       <div className="page-header">
-        <button className="back-btn">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </button>
-        <h1 className="page-title">Dashboard</h1>
+        <div className="page-header-left">
+          <h1 className="page-title">Dashboard</h1>
+        </div>
       </div>
 
       {loading ? (

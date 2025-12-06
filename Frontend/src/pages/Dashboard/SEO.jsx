@@ -155,24 +155,20 @@ export default function SEO() {
     <div className="seo-page">
       <div className="page-header">
         <div className="page-header-left">
-          <div className="page-title-wrapper">
-            <button className="back-btn" onClick={handleBack}>
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" strokeWidth="1.5"/>
-              </svg>
-            </button>
-            <h1 className="page-title">SEO</h1>
-          </div>
-          {showTable && !loading && (
+          <h1 className="page-title">SEO</h1>
+        </div>
+        {showTable && !loading && (
+          <div className="page-header-right">
             <div className="page-add-button-wrapper">
-              <button className="add-btn-inline" onClick={handleAdd} title="Add New">
+              <button className="add-btn-inline" onClick={handleAdd}>
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M10 4.16667V15.8333M4.16667 10H15.8333" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
+                <span>Add New SEO</span>
               </button>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       <div className="content-card">

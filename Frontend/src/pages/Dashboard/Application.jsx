@@ -222,14 +222,7 @@ export default function Application() {
     <div className="application-page">
       <div className="page-header">
         <div className="page-header-left">
-          <div className="page-title-wrapper">
-            <button className="back-btn" onClick={handleBack}>
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" strokeWidth="1.5"/>
-              </svg>
-            </button>
-            <h1 className="page-title">Application</h1>
-          </div>
+          <h1 className="page-title">Application</h1>
         </div>
       </div>
 

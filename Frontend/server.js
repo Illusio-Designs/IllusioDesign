@@ -6,6 +6,11 @@ const { createServer } = require('http');
 const { parse } = require('url');
 const next = require('next');
 
+// Change to the directory where server.js is located
+// This ensures Next.js can find next.config.js and the src/app directory
+const serverDir = __dirname;
+process.chdir(serverDir);
+
 const dev = process.env.NODE_ENV !== 'production';
 const hostname = process.env.HOSTNAME || 'localhost';
 const port = process.env.PORT || 3000;
