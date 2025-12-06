@@ -4,17 +4,24 @@ import Footer from '@/components/Footer';
 import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
 import Loader from '@/components/Loader';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { useSEO } from '@/hooks/useSEO';
 import { blogAPI } from '@/services/api';
+import { setPageContext } from '@/services/fetchInterceptor';
 
 export default function Blog({ navigateTo, currentPage }) {
   // SEO Integration
   useSEO('blog');
 
+  // Set page context synchronously before any API calls (useLayoutEffect runs before paint)
+  useLayoutEffect(() => {
+    setPageContext('blog');
+  }, []);
+
   const [isLoading, setIsLoading] = useState(true);
   const [blogPosts, setBlogPosts] = useState([]);
   const [hoveredBlog, setHoveredBlog] = useState(null);
+  const hasFetched = useRef(false);
 
   const handleLoaderComplete = () => {
     setIsLoading(false);
@@ -27,9 +34,15 @@ export default function Blog({ navigateTo, currentPage }) {
 
   // Fetch blog posts from API
   useEffect(() => {
+    let isMounted = true;
+    const abortController = new AbortController();
+
     const fetchBlogPosts = async () => {
       try {
         const response = await blogAPI.getAllPublic();
+        
+        // Check if component is still mounted before updating state
+        if (!isMounted) return;
         if (response && response.data) {
           // Transform API data to match component structure
           const transformedPosts = response.data.map((post) => {
@@ -70,12 +83,19 @@ export default function Blog({ navigateTo, currentPage }) {
           setBlogPosts(transformedPosts);
         }
       } catch (error) {
+        if (!isMounted) return;
         console.error('Error fetching blog posts:', error);
         setBlogPosts([]);
       }
     };
 
     fetchBlogPosts();
+
+    // Cleanup function
+    return () => {
+      isMounted = false;
+      abortController.abort();
+    };
   }, []);
 
   return (

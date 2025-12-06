@@ -4,9 +4,10 @@ import Footer from '@/components/Footer';
 import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
 import Loader from '@/components/Loader';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useLayoutEffect } from 'react';
 import { useSEO } from '@/hooks/useSEO';
 import { caseStudyAPI } from '@/services/api';
+import { setPageContext } from '@/services/fetchInterceptor';
 
 const serviceData = {
   'branding': {
@@ -118,6 +119,11 @@ export default function ServiceDetail({ serviceName, navigateTo, currentPage }) 
   // SEO Integration
   useSEO('service-detail');
 
+  // Set page context synchronously before any API calls (useLayoutEffect runs before paint)
+  useLayoutEffect(() => {
+    setPageContext('service-detail');
+  }, []);
+
   const [isLoading, setIsLoading] = useState(true);
   const [relatedProjects, setRelatedProjects] = useState([]);
   const service = serviceData[serviceName] || serviceData['branding'];
@@ -125,6 +131,7 @@ export default function ServiceDetail({ serviceName, navigateTo, currentPage }) 
   const processFlowRef = useRef(null);
   const [lineProgress, setLineProgress] = useState(0);
   const [hoveredProject, setHoveredProject] = useState(null);
+  const hasFetched = useRef({});
 
   const handleLoaderComplete = () => {
     setIsLoading(false);
@@ -132,6 +139,13 @@ export default function ServiceDetail({ serviceName, navigateTo, currentPage }) 
 
   // Fetch projects from API based on service category
   useEffect(() => {
+    // Prevent double API calls for the same service (React StrictMode in development)
+    if (hasFetched.current[serviceName]) return;
+    hasFetched.current[serviceName] = true;
+
+    let isMounted = true;
+    const abortController = new AbortController();
+
     const fetchProjects = async () => {
       try {
         let filteredProjects = [];
@@ -196,14 +210,24 @@ export default function ServiceDetail({ serviceName, navigateTo, currentPage }) 
             };
           });
 
+          // Check if component is still mounted before updating state
+          if (!isMounted) return;
+          
           setRelatedProjects(transformedProjects);
       } catch (error) {
+        if (!isMounted) return;
         console.error('Error fetching projects:', error);
         setRelatedProjects([]);
       }
     };
 
     fetchProjects();
+
+    // Cleanup function
+    return () => {
+      isMounted = false;
+      abortController.abort();
+    };
   }, [serviceName]);
 
   // Scroll to top when service changes

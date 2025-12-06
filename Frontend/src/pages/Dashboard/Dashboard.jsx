@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
+import { setPageContext } from '@/services/fetchInterceptor';
 import DashboardLayout from '@/components/Dashboard/DashboardLayout';
 import DashboardHome from './DashboardHome';
 import Blog from './Blog';
@@ -21,6 +22,11 @@ export default function Dashboard({ initialPage }) {
   const pathname = usePathname();
   const [currentPage, setCurrentPage] = useState(initialPage || 'dashboard');
 
+  // Set dashboard context on mount
+  useEffect(() => {
+    setPageContext('dashboard');
+  }, []);
+
   useEffect(() => {
     // Sync page state with URL
     if (pathname) {
@@ -28,12 +34,14 @@ export default function Dashboard({ initialPage }) {
       if (pathParts[0] === 'dashboard') {
         const page = pathParts[1] || 'dashboard';
         setCurrentPage(page);
+        setPageContext('dashboard'); // Set dashboard context for all dashboard pages
       }
     }
   }, [pathname]);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
+    setPageContext('dashboard'); // Set dashboard context for all dashboard pages
     // Update URL without full page reload
     const newPath = page === 'dashboard' ? '/dashboard' : `/dashboard/${page}`;
     router.push(newPath, { scroll: false });

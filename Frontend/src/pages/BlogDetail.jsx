@@ -4,18 +4,91 @@ import Footer from '@/components/Footer';
 import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
 import Loader from '@/components/Loader';
-import { useState, useEffect } from 'react';
-import { useSEO } from '@/hooks/useSEO';
+import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { blogAPI } from '@/services/api';
+import { setPageContext } from '@/services/fetchInterceptor';
 
 export default function BlogDetail({ blogName, navigateTo, currentPage }) {
-  // SEO Integration
-  useSEO('blog-detail');
-
   const [isLoading, setIsLoading] = useState(true);
   const [currentBlog, setCurrentBlog] = useState(null);
   const [relatedPosts, setRelatedPosts] = useState([]);
   const [error, setError] = useState(null);
+  const hasFetched = useRef(false);
+
+  // Set page context synchronously before any API calls (useLayoutEffect runs before paint)
+  useLayoutEffect(() => {
+    setPageContext('blog-detail');
+  }, []);
+
+  // Helper function to apply SEO metadata from blog data
+  const applySEOFromBlog = (seoData) => {
+    if (!seoData) return;
+
+    // Update document title
+    if (seoData.seoTitle) {
+      document.title = seoData.seoTitle;
+    }
+
+    // Update meta description
+    let metaDescription = document.querySelector('meta[name="description"]');
+    if (!metaDescription) {
+      metaDescription = document.createElement('meta');
+      metaDescription.setAttribute('name', 'description');
+      document.head.appendChild(metaDescription);
+    }
+    if (seoData.metaDescription) {
+      metaDescription.setAttribute('content', seoData.metaDescription);
+    }
+
+    // Update Open Graph tags
+    const ogTags = {
+      'og:title': seoData.seoTitle,
+      'og:description': seoData.metaDescription,
+      'og:type': 'article',
+      'og:url': typeof window !== 'undefined' ? window.location.href : null
+    };
+
+    Object.entries(ogTags).forEach(([property, content]) => {
+      if (content) {
+        let ogTag = document.querySelector(`meta[property="${property}"]`);
+        if (!ogTag) {
+          ogTag = document.createElement('meta');
+          ogTag.setAttribute('property', property);
+          document.head.appendChild(ogTag);
+        }
+        ogTag.setAttribute('content', content);
+      }
+    });
+
+    // Update Twitter Card tags
+    if (seoData.seoTitle) {
+      let twitterCard = document.querySelector('meta[name="twitter:card"]');
+      if (!twitterCard) {
+        twitterCard = document.createElement('meta');
+        twitterCard.setAttribute('name', 'twitter:card');
+        twitterCard.setAttribute('content', 'summary_large_image');
+        document.head.appendChild(twitterCard);
+      }
+
+      let twitterTitle = document.querySelector('meta[name="twitter:title"]');
+      if (!twitterTitle) {
+        twitterTitle = document.createElement('meta');
+        twitterTitle.setAttribute('name', 'twitter:title');
+        document.head.appendChild(twitterTitle);
+      }
+      twitterTitle.setAttribute('content', seoData.seoTitle);
+
+      if (seoData.metaDescription) {
+        let twitterDescription = document.querySelector('meta[name="twitter:description"]');
+        if (!twitterDescription) {
+          twitterDescription = document.createElement('meta');
+          twitterDescription.setAttribute('name', 'twitter:description');
+          document.head.appendChild(twitterDescription);
+        }
+        twitterDescription.setAttribute('content', seoData.metaDescription);
+      }
+    }
+  };
 
   const handleLoaderComplete = () => {
     setIsLoading(false);
@@ -23,10 +96,21 @@ export default function BlogDetail({ blogName, navigateTo, currentPage }) {
 
   // Fetch blog post from API
   useEffect(() => {
+    // Prevent double API calls (React StrictMode in development)
+    if (hasFetched.current) return;
+    hasFetched.current = true;
+
+    let isMounted = true;
+    const abortController = new AbortController();
+
     const fetchBlogPost = async () => {
       try {
         // Fetch current blog by slug
         const response = await blogAPI.getBySlugPublic(blogName);
+        
+        // Check if component is still mounted before updating state
+        if (!isMounted) return;
+        
         if (response && response.data) {
           const blog = response.data;
           
@@ -66,9 +150,20 @@ export default function BlogDetail({ blogName, navigateTo, currentPage }) {
 
           setCurrentBlog(transformedBlog);
 
+          // Apply SEO metadata directly from blog response
+          if (blog.seoTitle || blog.metaDescription) {
+            applySEOFromBlog({
+              seoTitle: blog.seoTitle,
+              metaDescription: blog.metaDescription,
+              seoUrl: blog.seoUrl
+            });
+          }
+
           // Fetch related posts (all published blogs except current one)
           try {
             const allBlogsResponse = await blogAPI.getAllPublic();
+            if (!isMounted) return;
+            
             if (allBlogsResponse && allBlogsResponse.data) {
               const related = allBlogsResponse.data
                 .filter(b => b.id !== blog.id && b.published)
@@ -82,19 +177,29 @@ export default function BlogDetail({ blogName, navigateTo, currentPage }) {
               setRelatedPosts(related);
             }
           } catch (relatedError) {
+            if (!isMounted) return;
             console.error('Error fetching related posts:', relatedError);
             setRelatedPosts([]);
           }
         }
       } catch (error) {
+        if (!isMounted) return;
         console.error('Error fetching blog post:', error);
         setError('Failed to load blog post. Please try again later.');
       } finally {
-        setIsLoading(false);
+        if (isMounted) {
+          setIsLoading(false);
+        }
       }
     };
 
     fetchBlogPost();
+
+    // Cleanup function
+    return () => {
+      isMounted = false;
+      abortController.abort();
+    };
   }, [blogName]);
 
   // Show error or loading state

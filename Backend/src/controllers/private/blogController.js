@@ -1,4 +1,5 @@
 import Blog from '../../models/Blog.js';
+import SEO from '../../models/SEO.js';
 
 export const getAllBlogs = async (req, res) => {
   try {
@@ -9,6 +10,12 @@ export const getAllBlogs = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+};
+
+// Helper function to create SEO page name from blog ID
+const createSEOPageName = (blogId) => {
+  if (!blogId) return null;
+  return `blog-${blogId}`;
 };
 
 export const getBlogById = async (req, res) => {
@@ -79,6 +86,41 @@ export const createBlog = async (req, res) => {
       published: published !== undefined ? (published === 'true' || published === true) : true
     });
     
+    // Create SEO entry automatically
+    if (blog.id && (seoTitle || metaDescription)) {
+      try {
+        const seoPageName = createSEOPageName(blog.id);
+        if (seoPageName) {
+          // Check if SEO entry already exists
+          const existingSEO = await SEO.findOne({ where: { page: seoPageName } });
+          
+          if (existingSEO) {
+            // Update existing SEO entry
+            await existingSEO.update({
+              title: seoTitle || title,
+              description: metaDescription || content ? content.substring(0, 160) : null,
+              ogTitle: seoTitle || title,
+              ogDescription: metaDescription || content ? content.substring(0, 160) : null,
+              ogImage: image || null
+            });
+          } else {
+            // Create new SEO entry
+            await SEO.create({
+              page: seoPageName,
+              title: seoTitle || title,
+              description: metaDescription || content ? content.substring(0, 160) : null,
+              ogTitle: seoTitle || title,
+              ogDescription: metaDescription || content ? content.substring(0, 160) : null,
+              ogImage: image || null
+            });
+          }
+        }
+      } catch (seoError) {
+        // Log error but don't fail the blog creation
+        console.error('Error creating SEO entry:', seoError);
+      }
+    }
+    
     res.status(201).json({ data: blog });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -117,7 +159,64 @@ export const updateBlog = async (req, res) => {
       return res.status(404).json({ error: 'Blog post not found' });
     }
     
+    // Store old ID before update (ID shouldn't change, but just in case)
+    const blogId = blog.id;
+    const oldSeoPageName = createSEOPageName(blogId);
+    
     await blog.update(updates);
+    
+    // Refresh blog to get updated data
+    await blog.reload();
+    
+    // Update SEO entry automatically
+    const finalSeoTitle = updates.seoTitle !== undefined ? updates.seoTitle : blog.seoTitle;
+    const finalMetaDescription = updates.metaDescription !== undefined ? updates.metaDescription : blog.metaDescription;
+    const finalImage = updates.image !== undefined ? updates.image : blog.image;
+    const finalTitle = updates.title || blog.title;
+    const finalContent = updates.content || blog.content;
+    
+    if (blog.id && (finalSeoTitle || finalMetaDescription)) {
+      try {
+        const newSeoPageName = createSEOPageName(blog.id);
+        if (newSeoPageName) {
+          // If blog ID changed (shouldn't happen, but handle it)
+          if (oldSeoPageName && oldSeoPageName !== newSeoPageName) {
+            const oldSEO = await SEO.findOne({ where: { page: oldSeoPageName } });
+            if (oldSEO) {
+              await oldSEO.destroy();
+            }
+          }
+          
+          // Check if SEO entry already exists
+          const existingSEO = await SEO.findOne({ where: { page: newSeoPageName } });
+          
+          if (existingSEO) {
+            // Update existing SEO entry
+            await existingSEO.update({
+              title: finalSeoTitle || finalTitle,
+              description: finalMetaDescription || (finalContent ? finalContent.substring(0, 160) : null),
+              ogTitle: finalSeoTitle || finalTitle,
+              ogDescription: finalMetaDescription || (finalContent ? finalContent.substring(0, 160) : null),
+              ogImage: finalImage || null
+            });
+          } else {
+            // Create new SEO entry
+            await SEO.create({
+              page: newSeoPageName,
+              title: finalSeoTitle || finalTitle,
+              description: finalMetaDescription || (finalContent ? finalContent.substring(0, 160) : null),
+              ogTitle: finalSeoTitle || finalTitle,
+              ogDescription: finalMetaDescription || (finalContent ? finalContent.substring(0, 160) : null),
+              ogImage: finalImage || null
+            });
+          }
+        }
+      } catch (seoError) {
+        // Log error but don't fail the blog update
+        console.error('Error updating SEO entry:', seoError);
+      }
+    }
+    
     res.json({ data: blog });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -131,6 +230,22 @@ export const deleteBlog = async (req, res) => {
     
     if (!blog) {
       return res.status(404).json({ error: 'Blog post not found' });
+    }
+    
+    // Delete associated SEO entry
+    if (blog.id) {
+      try {
+        const seoPageName = createSEOPageName(blog.id);
+        if (seoPageName) {
+          const seoEntry = await SEO.findOne({ where: { page: seoPageName } });
+          if (seoEntry) {
+            await seoEntry.destroy();
+          }
+        }
+      } catch (seoError) {
+        // Log error but don't fail the blog deletion
+        console.error('Error deleting SEO entry:', seoError);
+      }
     }
     
     await blog.destroy();

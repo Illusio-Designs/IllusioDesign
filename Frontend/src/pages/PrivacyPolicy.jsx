@@ -4,17 +4,24 @@ import Footer from '@/components/Footer';
 import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
 import Loader from '@/components/Loader';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { useSEO } from '@/hooks/useSEO';
 import { privacyPolicyAPI } from '@/services/api';
+import { setPageContext } from '@/services/fetchInterceptor';
 
 export default function PrivacyPolicy({ navigateTo, currentPage }) {
   // SEO Integration
   useSEO('privacy');
 
+  // Set page context synchronously before any API calls (useLayoutEffect runs before paint)
+  useLayoutEffect(() => {
+    setPageContext('privacy');
+  }, []);
+
   const [isLoading, setIsLoading] = useState(true);
   const [privacyPolicy, setPrivacyPolicy] = useState(null);
   const [error, setError] = useState(null);
+  const hasFetched = useRef(false);
 
   const handleLoaderComplete = () => {
     setIsLoading(false);
@@ -22,19 +29,37 @@ export default function PrivacyPolicy({ navigateTo, currentPage }) {
 
   // Fetch privacy policy from API
   useEffect(() => {
+    // Prevent double API calls (React StrictMode in development)
+    if (hasFetched.current) return;
+    hasFetched.current = true;
+
+    let isMounted = true;
+    const abortController = new AbortController();
+
     const fetchPrivacyPolicy = async () => {
       try {
         const response = await privacyPolicyAPI.getPublic();
+        
+        // Check if component is still mounted before updating state
+        if (!isMounted) return;
+        
         if (response && response.data) {
           setPrivacyPolicy(response.data);
         }
       } catch (err) {
+        if (!isMounted) return;
         console.error('Error fetching privacy policy:', err);
         setError(err.message || 'Failed to load privacy policy');
       }
     };
 
     fetchPrivacyPolicy();
+
+    // Cleanup function
+    return () => {
+      isMounted = false;
+      abortController.abort();
+    };
   }, []);
 
   // Format date helper

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import '@/styles/pages/Home.css';
 import Image from 'next/image';
 import Header from '@/components/Header';
@@ -12,6 +12,7 @@ import Loader from '@/components/Loader';
 import { BackgroundRippleEffect } from '@/components/ui/background-ripple-effect';
 import { useSEO } from '@/hooks/useSEO';
 import { caseStudyAPI, blogAPI } from '@/services/api';
+import { setPageContext } from '@/services/fetchInterceptor';
 
 // Star Rating Component
 const StarRating = () => {
@@ -151,6 +152,11 @@ export default function Home({ navigateTo, currentPage }) {
   // SEO Integration
   useSEO('home');
 
+  // Set page context synchronously before any API calls (useLayoutEffect runs before paint)
+  useLayoutEffect(() => {
+    setPageContext('home');
+  }, []);
+
   const [isLoading, setIsLoading] = useState(true);
   const [isServicesVisible, setIsServicesVisible] = useState(false);
   const [isTestimonialsVisible, setIsTestimonialsVisible] = useState(false);
@@ -164,12 +170,25 @@ export default function Home({ navigateTo, currentPage }) {
   const servicesSectionRef = useRef(null);
   const testimonialsSectionRef = useRef(null);
   const testimonialsSlideTimeoutRef = useRef(null);
+  const hasFetchedProjects = useRef(false);
+  const hasFetchedBlogs = useRef(false);
 
   // Fetch projects from API
   useEffect(() => {
+    // Prevent double API calls (React StrictMode in development)
+    if (hasFetchedProjects.current) return;
+    hasFetchedProjects.current = true;
+
+    let isMounted = true;
+    const abortController = new AbortController();
+
     const fetchProjects = async () => {
       try {
         const response = await caseStudyAPI.getAllPublic();
+        
+        // Check if component is still mounted before updating state
+        if (!isMounted) return;
+        
         if (response && response.data) {
           // Transform API data to match component structure
           const transformedProjects = response.data.map((project) => {
@@ -199,6 +218,7 @@ export default function Home({ navigateTo, currentPage }) {
           setProjects(transformedProjects);
         }
       } catch (error) {
+        if (!isMounted) return;
         console.error('Error fetching projects:', error);
         // Fallback to empty array on error
         setProjects([]);
@@ -206,13 +226,30 @@ export default function Home({ navigateTo, currentPage }) {
     };
 
     fetchProjects();
+
+    // Cleanup function
+    return () => {
+      isMounted = false;
+      abortController.abort();
+    };
   }, []);
 
   // Fetch blog posts from API
   useEffect(() => {
+    // Prevent double API calls (React StrictMode in development)
+    if (hasFetchedBlogs.current) return;
+    hasFetchedBlogs.current = true;
+
+    let isMounted = true;
+    const abortController = new AbortController();
+
     const fetchBlogPosts = async () => {
       try {
         const response = await blogAPI.getAllPublic();
+        
+        // Check if component is still mounted before updating state
+        if (!isMounted) return;
+        
         if (response && response.data) {
           // Transform API data to match component structure
           // Limit to 3 posts for home page
@@ -254,12 +291,19 @@ export default function Home({ navigateTo, currentPage }) {
           setBlogPosts(transformedPosts);
         }
       } catch (error) {
+        if (!isMounted) return;
         console.error('Error fetching blog posts:', error);
         setBlogPosts([]);
       }
     };
 
     fetchBlogPosts();
+
+    // Cleanup function
+    return () => {
+      isMounted = false;
+      abortController.abort();
+    };
   }, []);
 
   useEffect(() => {

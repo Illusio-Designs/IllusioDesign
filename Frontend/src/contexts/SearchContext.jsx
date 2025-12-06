@@ -2,7 +2,14 @@
 
 import { createContext, useContext, useState } from 'react';
 
-const SearchContext = createContext();
+// Default value for SSR safety
+const defaultContextValue = {
+  searchQuery: '',
+  updateSearch: () => {},
+  clearSearch: () => {},
+};
+
+const SearchContext = createContext(defaultContextValue);
 
 export function SearchProvider({ children }) {
   const [searchQuery, setSearchQuery] = useState('');
@@ -24,9 +31,7 @@ export function SearchProvider({ children }) {
 
 export function useSearch() {
   const context = useContext(SearchContext);
-  if (!context) {
-    throw new Error('useSearch must be used within a SearchProvider');
-  }
-  return context;
+  // Return context or default value (for SSR safety)
+  return context || defaultContextValue;
 }
 

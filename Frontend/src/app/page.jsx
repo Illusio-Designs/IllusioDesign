@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useLayoutEffect } from 'react';
 import { usePathname } from 'next/navigation';
+import { setPageContext } from '@/services/fetchInterceptor';
 import Home from '@/pages/Home';
 // import Services from '@/pages/Services';
 import AboutUs from '@/pages/AboutUs';
@@ -23,6 +24,23 @@ export default function Page() {
   const [currentPage, setCurrentPage] = useState('home');
   const [currentItem, setCurrentItem] = useState('');
 
+  // Set page context synchronously before first render (useLayoutEffect runs before paint)
+  useLayoutEffect(() => {
+    if (typeof window !== 'undefined') {
+      const path = window.location.pathname;
+      
+      // Don't handle dashboard routes here - they're handled by Next.js App Router
+      if (path.startsWith('/dashboard') || path.startsWith('/login') || path.startsWith('/register')) {
+        return;
+      }
+      
+      const page = path === '/' || path === '/home' 
+        ? 'home' 
+        : path.substring(1).split('?')[0];
+      setPageContext(page);
+    }
+  }, []);
+
   // Initialize from URL on mount
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -39,10 +57,12 @@ export default function Page() {
       if (path === '/' || path === '/home') {
         setCurrentPage('home');
         setCurrentItem('');
+        setPageContext('home');
       } else {
         const page = path.substring(1).split('?')[0]; // Remove leading slash and query params
         setCurrentPage(page);
         if (item) setCurrentItem(item);
+        setPageContext(page);
       }
     }
   }, []);
@@ -63,10 +83,12 @@ export default function Page() {
       if (path === '/' || path === '/home') {
         setCurrentPage('home');
         setCurrentItem('');
+        setPageContext('home');
       } else {
         const page = path.substring(1).split('?')[0]; // Remove leading slash and query params
         setCurrentPage(page);
         if (item) setCurrentItem(item || '');
+        setPageContext(page);
       }
       window.scrollTo(0, 0);
     };
@@ -84,6 +106,7 @@ export default function Page() {
   const navigateTo = (page, item = '') => {
     setCurrentPage(page);
     setCurrentItem(item);
+    setPageContext(page); // Update page context for interceptors
     
     // Update URL
     const url = page === 'home' ? '/' : `/${page}${item ? `?item=${encodeURIComponent(item)}` : ''}`;

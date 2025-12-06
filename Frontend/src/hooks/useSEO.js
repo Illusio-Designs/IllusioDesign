@@ -17,6 +17,11 @@ export const useSEO = (pageName) => {
         const seoData = response.data;
 
         if (seoData) {
+          // Debug: Log SEO data (only in development)
+          if (process.env.NODE_ENV === 'development') {
+            console.log(`✅ SEO loaded for page: ${pageName}`, seoData);
+          }
+          
           // Update document title
           if (seoData.title) {
             document.title = seoData.title;
@@ -105,8 +110,11 @@ export const useSEO = (pageName) => {
           }
         }
       } catch (error) {
-        // Silently fail if SEO data is not found - use default metadata
-        console.log(`SEO data not found for page: ${pageName}`);
+        // Log error if SEO data is not found
+        console.warn(`⚠️ SEO data not found for page: ${pageName}`);
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('Error details:', error);
+        }
       }
     };
 

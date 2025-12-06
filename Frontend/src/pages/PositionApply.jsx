@@ -4,19 +4,26 @@ import Footer from '@/components/Footer';
 import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
 import Loader from '@/components/Loader';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { useSEO } from '@/hooks/useSEO';
 import { positionAPI, applicationAPI } from '@/services/api';
+import { setPageContext } from '@/services/fetchInterceptor';
 import { toast } from 'react-toastify';
 
 export default function PositionApply({ positionId, navigateTo, currentPage }) {
-  // SEO Integration
-  useSEO('position-apply');
-
   const [isLoading, setIsLoading] = useState(true);
   const [position, setPosition] = useState(null);
   const [loadingPosition, setLoadingPosition] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [seoPageName, setSeoPageName] = useState(null);
+
+  // SEO Integration - dynamic based on position name
+  useSEO(seoPageName);
+
+  // Set page context synchronously before any API calls (useLayoutEffect runs before paint)
+  useLayoutEffect(() => {
+    setPageContext('position-apply');
+  }, []);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -27,27 +34,61 @@ export default function PositionApply({ positionId, navigateTo, currentPage }) {
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const hasFetched = useRef(false);
+
+  // Helper function to create SEO-friendly page name from position title
+  const createSEOPageName = (title) => {
+    if (!title) return null;
+    return `position-apply-${title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')}`;
+  };
 
   useEffect(() => {
-    if (positionId) {
-      fetchPosition();
-    }
-  }, [positionId]);
+    if (!positionId) return;
 
-  const fetchPosition = async () => {
-    try {
-      setLoadingPosition(true);
-      const result = await positionAPI.getByIdPublic(positionId);
-      if (result.data) {
-        setPosition(result.data);
+    // Prevent double API calls (React StrictMode in development)
+    if (hasFetched.current) return;
+    hasFetched.current = true;
+
+    let isMounted = true;
+    const abortController = new AbortController();
+
+    const fetchPosition = async () => {
+      try {
+        setLoadingPosition(true);
+        const result = await positionAPI.getByIdPublic(positionId);
+        
+        // Check if component is still mounted before updating state
+        if (!isMounted) return;
+        
+        if (result.data) {
+          setPosition(result.data);
+          
+          // Set SEO page name based on position title
+          const seoName = createSEOPageName(result.data.title);
+          setSeoPageName(seoName);
+        }
+      } catch (error) {
+        if (!isMounted) return;
+        console.error('Error fetching position:', error);
+        toast.error('Failed to load position details. Please try again.');
+      } finally {
+        if (isMounted) {
+          setLoadingPosition(false);
+        }
       }
-    } catch (error) {
-      console.error('Error fetching position:', error);
-      toast.error('Failed to load position details. Please try again.');
-    } finally {
-      setLoadingPosition(false);
-    }
-  };
+    };
+
+    fetchPosition();
+
+    // Cleanup function
+    return () => {
+      isMounted = false;
+      abortController.abort();
+    };
+  }, [positionId]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

@@ -4,13 +4,19 @@ import Footer from '@/components/Footer';
 import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
 import Loader from '@/components/Loader';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { useSEO } from '@/hooks/useSEO';
 import { caseStudyAPI } from '@/services/api';
+import { setPageContext } from '@/services/fetchInterceptor';
 
 export default function CaseStudy({ navigateTo, currentPage }) {
   // SEO Integration
   useSEO('case-study');
+
+  // Set page context synchronously before any API calls (useLayoutEffect runs before paint)
+  useLayoutEffect(() => {
+    setPageContext('case-study');
+  }, []);
 
   const [isLoading, setIsLoading] = useState(true);
   const [hoveredProject, setHoveredProject] = useState(null);
@@ -18,6 +24,8 @@ export default function CaseStudy({ navigateTo, currentPage }) {
   const [animatedProjects, setAnimatedProjects] = useState(new Set());
   const [projects, setProjects] = useState([]);
   const projectRefs = useRef([]);
+  const hasFetched = useRef({});
+  const fetchInProgress = useRef(false);
 
   // Helper function to clean strings from escaped characters
   const cleanString = (str) => {
@@ -46,11 +54,25 @@ export default function CaseStudy({ navigateTo, currentPage }) {
 
   // Fetch projects from API based on selected category
   useEffect(() => {
+    // Prevent double API calls for the same category (React StrictMode in development)
+    const categoryKey = `category-${activeCategory}`;
+    if (fetchInProgress.current || hasFetched.current[categoryKey]) {
+      return;
+    }
+    fetchInProgress.current = true;
+    hasFetched.current[categoryKey] = true;
+
+    let isMounted = true;
+    const abortController = new AbortController();
+
     const fetchProjects = async () => {
       try {
         // Get category value for API (map UI key to API value)
         const apiCategory = categoryMap[activeCategory] || activeCategory;
         const response = await caseStudyAPI.getAllPublic(apiCategory);
+        
+        // Check if component is still mounted before updating state
+        if (!isMounted) return;
         if (response && response.data) {
           // Transform API data to match component structure
           const transformedProjects = response.data.map((project) => {
@@ -131,12 +153,22 @@ export default function CaseStudy({ navigateTo, currentPage }) {
           setProjects(transformedProjects);
         }
       } catch (error) {
+        if (!isMounted) return;
         console.error('Error fetching projects:', error);
         setProjects([]);
+      } finally {
+        fetchInProgress.current = false;
       }
     };
 
     fetchProjects();
+
+    // Cleanup function
+    return () => {
+      isMounted = false;
+      fetchInProgress.current = false;
+      abortController.abort();
+    };
   }, [activeCategory]);
 
   // Projects are already filtered by API, so use them directly

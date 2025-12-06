@@ -937,7 +937,7 @@
 
 .testimonial-static-grid:hover .static-card-4, .testimonial-static-grid.is-hovered .static-card-4 {
   top: 50%;
-  left: 92%;
+  left: 3.25%;
   right: auto;
   bottom: auto;
   transform: translate(-200px, 100px) rotate(0deg) scale(1);
@@ -955,7 +955,7 @@
 
 .testimonial-static-grid:hover .static-card-6, .testimonial-static-grid.is-hovered .static-card-6 {
   top: 50%;
-  left: -28%;
+  left: 60%;
   right: auto;
   bottom: auto;
   transform: translate(100px, 100px) rotate(0deg) scale(1);

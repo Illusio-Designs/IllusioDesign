@@ -4,37 +4,64 @@ import Footer from '@/components/Footer';
 import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
 import Loader from '@/components/Loader';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { useSEO } from '@/hooks/useSEO';
 import { positionAPI } from '@/services/api';
+import { setPageContext } from '@/services/fetchInterceptor';
 import { toast } from 'react-toastify';
 
 export default function Career({ navigateTo, currentPage }) {
   // SEO Integration
   useSEO('career');
 
+  // Set page context synchronously before any API calls (useLayoutEffect runs before paint)
+  useLayoutEffect(() => {
+    setPageContext('career');
+  }, []);
+
   const [isLoading, setIsLoading] = useState(true);
   const [positions, setPositions] = useState([]);
   const [loadingPositions, setLoadingPositions] = useState(true);
+  const hasFetched = useRef(false);
 
   useEffect(() => {
-    fetchPositions();
-  }, []);
+    // Prevent double API calls (React StrictMode in development)
+    if (hasFetched.current) return;
+    hasFetched.current = true;
 
-  const fetchPositions = async () => {
-    try {
-      setLoadingPositions(true);
-      const result = await positionAPI.getAllPublic();
-      if (result.data) {
-        setPositions(result.data);
+    let isMounted = true;
+    const abortController = new AbortController();
+
+    const fetchPositions = async () => {
+      try {
+        setLoadingPositions(true);
+        const result = await positionAPI.getAllPublic();
+        
+        // Check if component is still mounted before updating state
+        if (!isMounted) return;
+        
+        if (result.data) {
+          setPositions(result.data);
+        }
+      } catch (error) {
+        if (!isMounted) return;
+        console.error('Error fetching positions:', error);
+        toast.error('Failed to load positions. Please try again later.');
+      } finally {
+        if (isMounted) {
+          setLoadingPositions(false);
+        }
       }
-    } catch (error) {
-      console.error('Error fetching positions:', error);
-      toast.error('Failed to load positions. Please try again later.');
-    } finally {
-      setLoadingPositions(false);
-    }
-  };
+    };
+
+    fetchPositions();
+
+    // Cleanup function
+    return () => {
+      isMounted = false;
+      abortController.abort();
+    };
+  }, []);
 
   const handleLoaderComplete = () => {
     setIsLoading(false);

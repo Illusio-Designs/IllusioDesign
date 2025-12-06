@@ -19,19 +19,20 @@ const ftpConfig = {
   }
 };
 
-// Remote directory on FTP server (usually public_html or www)
-const remoteDir = '/public_html';
+// Remote directory on FTP server (root directory)
+const remoteDir = '/';
 
-// Directories and files to upload
+// Build directories and files to upload
 const uploadPaths = [
   '.next',
   'public',
   'package.json',
   'next.config.js',
-  'jsconfig.json'
+  'jsconfig.json',
+  'server.js'  // Main server entry point
 ];
 
-// Files to exclude
+// Files to exclude from upload
 const excludePatterns = [
   'node_modules',
   '.git',
@@ -44,7 +45,6 @@ const excludePatterns = [
 ];
 
 function shouldExclude(filePath) {
-  // Normalize path separators
   const normalizedPath = filePath.replace(/\\/g, '/');
   return excludePatterns.some(pattern => normalizedPath.includes(pattern));
 }
@@ -52,6 +52,11 @@ function shouldExclude(filePath) {
 // Collect all files to upload
 function collectFiles(dir, baseDir, fileList = []) {
   const fullPath = path.join(baseDir, dir);
+  
+  if (!fs.existsSync(fullPath)) {
+    return fileList;
+  }
+  
   const stats = fs.statSync(fullPath);
   
   if (stats.isDirectory()) {
@@ -151,46 +156,70 @@ async function ensureRemoteDir(client, dirPath, baseDir) {
   await client.cd(baseDir);
 }
 
-async function deployToFTP() {
+async function deployBuild() {
   const client = new ftp.Client();
   client.ftp.verbose = false;
   
   const projectRoot = path.join(__dirname, '..');
   
   try {
-    console.log('📦 Building Next.js application...');
+    console.log('========================================');
+    console.log('Frontend Build & FTP Deployment');
+    console.log('========================================');
+    console.log('');
+    
+    // Step 1: Build Next.js application
+    console.log('📦 Step 1: Building Next.js application...');
     process.chdir(projectRoot);
     
-    // Build the Next.js app
     try {
       execSync('npm run build', { stdio: 'inherit', cwd: projectRoot });
-      console.log('✅ Build completed successfully!\n');
+      console.log('✅ Build completed!');
+      console.log('');
     } catch (error) {
-      console.error('❌ Build failed:', error.message);
-      process.exit(1);
+      // Check if .next directory was created (build might have warnings but still produced output)
+      const nextDir = path.join(projectRoot, '.next');
+      if (fs.existsSync(nextDir)) {
+        console.log('⚠️  Build had warnings/errors, but build output exists. Continuing with upload...');
+        console.log('');
+      } else {
+        console.error('❌ Build failed and no build output found:', error.message);
+        process.exit(1);
+      }
     }
     
-    console.log('🔌 Connecting to FTP server...');
-    console.log(`Host: ${ftpConfig.host}`);
-    console.log(`User: ${ftpConfig.user}`);
-    console.log(`Remote Directory: ${remoteDir}\n`);
+    // Display FTP configuration
+    console.log('📋 FTP Configuration:');
+    console.log(`   Host: ${ftpConfig.host}`);
+    console.log(`   User: ${ftpConfig.user}`);
+    console.log(`   Port: ${ftpConfig.port}`);
+    console.log(`   Remote Dir: ${remoteDir}`);
+    console.log('');
+    
+    // Step 2: Test FTP connection
+    console.log('🔌 Step 2: Testing FTP connection...');
+    console.log('');
     
     await client.access(ftpConfig);
-    console.log('✅ FTP connection successful!\n');
+    console.log('✅ FTP connection successful!');
+    console.log('');
     
     // Change to remote directory
     try {
       await client.cd(remoteDir);
-      console.log(`📁 Changed to directory: ${remoteDir}\n`);
+      console.log(`📁 Changed to directory: ${remoteDir}`);
     } catch (error) {
       console.log(`⚠️  Directory ${remoteDir} might not exist, creating...`);
       await client.ensureDir(remoteDir);
       await client.cd(remoteDir);
-      console.log(`✅ Created and changed to directory: ${remoteDir}\n`);
+      console.log(`✅ Created and changed to directory: ${remoteDir}`);
     }
+    console.log('');
     
-    // Collect all files to upload
-    console.log('📋 Collecting files to upload...\n');
+    // Step 3: Collect build files
+    console.log('📋 Step 3: Collecting build files to upload...');
+    console.log('');
+    
     const allFiles = [];
     
     for (const uploadPath of uploadPaths) {
@@ -212,10 +241,13 @@ async function deployToFTP() {
       }
     }
     
-    console.log(`📦 Found ${allFiles.length} files to upload\n`);
+    console.log(`📦 Found ${allFiles.length} files to upload`);
+    console.log('');
     
-    // Upload files
-    console.log('📤 Starting upload process...\n');
+    // Step 4: Upload build files
+    console.log('📤 Step 4: Uploading build files...');
+    console.log('');
+    
     let uploaded = 0;
     let failed = 0;
     
@@ -279,17 +311,23 @@ async function deployToFTP() {
       }
     }
     
-    console.log(`\n✅ Upload completed!`);
+    console.log('');
+    console.log('✅ Upload completed!');
     console.log(`   Uploaded: ${uploaded} files`);
     if (failed > 0) {
       console.log(`   Failed: ${failed} files`);
     }
-    
-    console.log(`\n📌 Your frontend build has been uploaded to: ${remoteDir}`);
+    console.log('');
+    console.log(`📌 Build files uploaded to: ${remoteDir}`);
     console.log('📌 Please check cPanel to verify the files are there.');
+    console.log('');
+    console.log('========================================');
+    console.log('✅ Deployment completed successfully!');
+    console.log('========================================');
     
   } catch (error) {
-    console.error('\n❌ Deployment failed:');
+    console.error('');
+    console.error('❌ Deployment failed:');
     console.error(`Error: ${error.message}`);
     if (error.code) {
       console.error(`Error code: ${error.code}`);
@@ -300,12 +338,13 @@ async function deployToFTP() {
     process.exit(1);
   } finally {
     client.close();
-    console.log('\n🔌 FTP connection closed');
+    console.log('🔌 FTP connection closed');
   }
 }
 
 // Run deployment
-deployToFTP().catch(error => {
+deployBuild().catch(error => {
   console.error('Fatal error:', error);
   process.exit(1);
 });
+

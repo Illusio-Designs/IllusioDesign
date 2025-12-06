@@ -15,7 +15,7 @@ export const checkBackendConnection = async () => {
   try {
     const response = await interceptedFetch(`${API_BASE_URL.replace('/api', '')}/health`, {
       method: 'GET'
-    }, { isPublic: true, skipAuth: true });
+    }, { isPublic: true, skipAuth: true, skipInterceptors: true });
     if (response.ok) {
       return { connected: true };
     }
@@ -26,11 +26,11 @@ export const checkBackendConnection = async () => {
 };
 
 // Helper function for API calls
-const apiCall = async (endpoint, options = {}, isPublic = false) => {
+const apiCall = async (endpoint, options = {}, isPublic = false, skipInterceptors = false) => {
   try {
     const response = await interceptedFetch(`${API_BASE_URL}${endpoint}`, {
       ...options
-    }, { isPublic });
+    }, { isPublic, skipInterceptors });
 
     const data = await response.json();
 
@@ -61,9 +61,12 @@ export const blogAPI = {
     method: 'DELETE'
   }),
   // Public APIs
-  getAllPublic: () => apiCall('/public/blogs', {}, true),
-  getBySlugPublic: (slug) => apiCall(`/public/blogs/slug/${slug}`, {}, true),
-  getByIdPublic: (id) => apiCall(`/public/blogs/${id}`, {}, true)
+  // getAllPublic - use interceptors (page-aware: intercepted on blog/home pages, skipped on blog-detail)
+  getAllPublic: () => apiCall('/public/blogs', {}, true, false),
+  // getBySlugPublic - use interceptors (main API for blog-detail page)
+  getBySlugPublic: (slug) => apiCall(`/public/blogs/slug/${slug}`, {}, true, false),
+  // getByIdPublic - use interceptors (main API for blog-detail page)
+  getByIdPublic: (id) => apiCall(`/public/blogs/${id}`, {}, true, false)
 };
 
 // Case Study APIs
@@ -82,11 +85,13 @@ export const caseStudyAPI = {
     method: 'DELETE'
   }),
   // Public APIs
+  // getAllPublic - use interceptors (page-aware: intercepted on case-study/home pages, skipped on case-study-detail)
   getAllPublic: (category) => {
     const queryParams = category ? `?category=${encodeURIComponent(category)}` : '';
-    return apiCall(`/public/case-studies${queryParams}`, {}, false);
+    return apiCall(`/public/case-studies${queryParams}`, {}, false, false);
   },
-  getByIdPublic: (id) => apiCall(`/public/case-studies/${id}`, {}, false)
+  // getByIdPublic - use interceptors (main API for case-study-detail page)
+  getByIdPublic: (id) => apiCall(`/public/case-studies/${id}`, {}, false, false)
 };
 
 // Position APIs
@@ -105,8 +110,10 @@ export const positionAPI = {
     method: 'DELETE'
   }),
   // Public APIs
-  getAllPublic: () => apiCall('/public/positions', {}, true),
-  getByIdPublic: (id) => apiCall(`/public/positions/${id}`, {}, true)
+  // getAllPublic - use interceptors (page-aware: intercepted on career page)
+  getAllPublic: () => apiCall('/public/positions', {}, true, false),
+  // getByIdPublic - use interceptors (main API for position-apply page)
+  getByIdPublic: (id) => apiCall(`/public/positions/${id}`, {}, true, false)
 };
 
 // Application APIs
@@ -126,7 +133,7 @@ export const applicationAPI = {
       const response = await interceptedFetch(`${API_BASE_URL}/public/applications`, {
         method: 'POST',
         body: formData
-      }, { isPublic: true, skipAuth: true });
+      }, { isPublic: true, skipAuth: true, skipInterceptors: true });
 
       const data = await response.json();
 
@@ -153,11 +160,11 @@ export const contactAPI = {
   delete: (id) => apiCall(`/private/contact-messages/${id}`, {
     method: 'DELETE'
   }),
-  // Public API - Create contact message
+  // Public API - Create contact message - skip interceptors for simple public calls
   create: (data) => apiCall('/public/contact', {
     method: 'POST',
     body: JSON.stringify(data)
-  }, true)
+  }, true, true)
 };
 
 // Team APIs
@@ -175,8 +182,8 @@ export const teamAPI = {
   delete: (id) => apiCall(`/private/team/${id}`, {
     method: 'DELETE'
   }),
-  // Public API
-  getAllPublic: () => apiCall('/public/team', {}, true)
+  // Public API - use interceptors (page-aware: intercepted on about/home pages)
+  getAllPublic: () => apiCall('/public/team', {}, true, false)
 };
 
 // SEO APIs
@@ -194,8 +201,8 @@ export const seoAPI = {
   delete: (id) => apiCall(`/private/seo/${id}`, {
     method: 'DELETE'
   }),
-  // Public API
-  getByPagePublic: (page) => apiCall(`/public/seo/${page}`, {}, true)
+  // Public API - skip interceptors for simple public calls
+  getByPagePublic: (page) => apiCall(`/public/seo/${page}`, {}, true, true)
 };
 
 // Dashboard APIs
@@ -313,8 +320,8 @@ export const privacyPolicyAPI = {
   delete: (id) => apiCall(`/private/privacy-policy/${id}`, {
     method: 'DELETE'
   }),
-  // Public API
-  getPublic: () => apiCall('/public/privacy-policy', {}, true)
+  // Public API - use interceptors (page-aware: intercepted on privacy page)
+  getPublic: () => apiCall('/public/privacy-policy', {}, true, false)
 };
 
 // Terms of Service APIs
@@ -332,8 +339,8 @@ export const termsOfServiceAPI = {
   delete: (id) => apiCall(`/private/terms-of-service/${id}`, {
     method: 'DELETE'
   }),
-  // Public API
-  getPublic: () => apiCall('/public/terms-of-service', {}, true)
+  // Public API - use interceptors (page-aware: intercepted on terms page)
+  getPublic: () => apiCall('/public/terms-of-service', {}, true, false)
 };
 
 export default API_BASE_URL;

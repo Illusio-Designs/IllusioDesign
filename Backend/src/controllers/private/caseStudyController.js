@@ -1,4 +1,5 @@
 import CaseStudy from '../../models/CaseStudy.js';
+import SEO from '../../models/SEO.js';
 
 export const getAllCaseStudies = async (req, res) => {
   try {
@@ -9,6 +10,15 @@ export const getAllCaseStudies = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+};
+
+// Helper function to create SEO-friendly page name from project title
+const createSEOPageName = (title) => {
+  if (!title) return null;
+  return `case-study-${title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')}`;
 };
 
 export const getCaseStudyById = async (req, res) => {
@@ -105,6 +115,41 @@ export const createCaseStudy = async (req, res) => {
       seoUrl: seoUrl || null
     });
     
+    // Create SEO entry automatically
+    if (title && (seoTitle || metaDescription)) {
+      try {
+        const seoPageName = createSEOPageName(title);
+        if (seoPageName) {
+          // Check if SEO entry already exists
+          const existingSEO = await SEO.findOne({ where: { page: seoPageName } });
+          
+          if (existingSEO) {
+            // Update existing SEO entry
+            await existingSEO.update({
+              title: seoTitle || title,
+              description: metaDescription || description || null,
+              ogTitle: seoTitle || title,
+              ogDescription: metaDescription || description || null,
+              ogImage: image || null
+            });
+          } else {
+            // Create new SEO entry
+            await SEO.create({
+              page: seoPageName,
+              title: seoTitle || title,
+              description: metaDescription || description || null,
+              ogTitle: seoTitle || title,
+              ogDescription: metaDescription || description || null,
+              ogImage: image || null
+            });
+          }
+        }
+      } catch (seoError) {
+        // Log error but don't fail the case study creation
+        console.error('Error creating SEO entry:', seoError);
+      }
+    }
+    
     res.status(201).json({ data: caseStudy });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -188,7 +233,64 @@ export const updateCaseStudy = async (req, res) => {
       updates.published = updates.published === 'true' || updates.published === true;
     }
     
+    // Store old title before update to handle SEO entry migration
+    const oldTitle = caseStudy.title;
+    const oldSeoPageName = oldTitle ? createSEOPageName(oldTitle) : null;
+    
     await caseStudy.update(updates);
+    
+    // Refresh case study to get updated data
+    await caseStudy.reload();
+    
+    // Update SEO entry automatically
+    const finalTitle = updates.title || caseStudy.title;
+    const finalSeoTitle = updates.seoTitle !== undefined ? updates.seoTitle : caseStudy.seoTitle;
+    const finalMetaDescription = updates.metaDescription !== undefined ? updates.metaDescription : caseStudy.metaDescription;
+    const finalImage = updates.image !== undefined ? updates.image : caseStudy.image;
+    const finalDescription = updates.description !== undefined ? updates.description : caseStudy.description;
+    
+    if (finalTitle && (finalSeoTitle || finalMetaDescription)) {
+      try {
+        const newSeoPageName = createSEOPageName(finalTitle);
+        if (newSeoPageName) {
+          // If title changed, delete old SEO entry
+          if (oldSeoPageName && oldSeoPageName !== newSeoPageName) {
+            const oldSEO = await SEO.findOne({ where: { page: oldSeoPageName } });
+            if (oldSEO) {
+              await oldSEO.destroy();
+            }
+          }
+          
+          // Check if SEO entry already exists (with new page name)
+          const existingSEO = await SEO.findOne({ where: { page: newSeoPageName } });
+          
+          if (existingSEO) {
+            // Update existing SEO entry
+            await existingSEO.update({
+              title: finalSeoTitle || finalTitle,
+              description: finalMetaDescription || finalDescription || null,
+              ogTitle: finalSeoTitle || finalTitle,
+              ogDescription: finalMetaDescription || finalDescription || null,
+              ogImage: finalImage || null
+            });
+          } else {
+            // Create new SEO entry
+            await SEO.create({
+              page: newSeoPageName,
+              title: finalSeoTitle || finalTitle,
+              description: finalMetaDescription || finalDescription || null,
+              ogTitle: finalSeoTitle || finalTitle,
+              ogDescription: finalMetaDescription || finalDescription || null,
+              ogImage: finalImage || null
+            });
+          }
+        }
+      } catch (seoError) {
+        // Log error but don't fail the case study update
+        console.error('Error updating SEO entry:', seoError);
+      }
+    }
+    
     res.json({ data: caseStudy });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -202,6 +304,22 @@ export const deleteCaseStudy = async (req, res) => {
     
     if (!caseStudy) {
       return res.status(404).json({ error: 'Case study not found' });
+    }
+    
+    // Delete associated SEO entry
+    if (caseStudy.title) {
+      try {
+        const seoPageName = createSEOPageName(caseStudy.title);
+        if (seoPageName) {
+          const seoEntry = await SEO.findOne({ where: { page: seoPageName } });
+          if (seoEntry) {
+            await seoEntry.destroy();
+          }
+        }
+      } catch (seoError) {
+        // Log error but don't fail the case study deletion
+        console.error('Error deleting SEO entry:', seoError);
+      }
     }
     
     await caseStudy.destroy();

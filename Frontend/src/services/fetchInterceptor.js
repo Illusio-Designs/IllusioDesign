@@ -7,6 +7,129 @@
 const requestInterceptors = [];
 const responseInterceptors = [];
 
+// Current page context - tracks which page the user is on
+let currentPageContext = null;
+
+/**
+ * Set the current page context
+ * @param {string} page - The current page identifier (e.g., 'home', 'blog', 'blog-detail')
+ */
+export const setPageContext = (page) => {
+  currentPageContext = page;
+};
+
+/**
+ * Get the current page context
+ * @returns {string|null} The current page identifier
+ */
+export const getPageContext = () => {
+  return currentPageContext;
+};
+
+/**
+ * Map API endpoint to page context
+ * @param {string} url - API endpoint URL
+ * @returns {string|null} The page context that matches this endpoint
+ */
+const getPageContextFromUrl = (url) => {
+  if (!url) return null;
+  
+  // Check for blog detail (slug-based) - must check before general blog endpoint
+  if (url.includes('/public/blogs/slug/')) {
+    return 'blog-detail';
+  }
+  
+  // Check for blog detail (ID-based)
+  if (url.match(/\/public\/blogs\/\d+$/)) {
+    return 'blog-detail';
+  }
+  
+  // Check for case study detail (ID-based)
+  if (url.match(/\/public\/case-studies\/\d+$/)) {
+    return 'case-study-detail';
+  }
+  
+  // Check for position detail (ID-based)
+  if (url.match(/\/public\/positions\/\d+$/)) {
+    return 'position-apply';
+  }
+  
+  // Check for home page API calls FIRST (team, case studies list, blogs list for home page)
+  // This must be checked before general endpoint mappings
+  const isTeamCall = url.includes('/public/team');
+  const isCaseStudyListCall = url.includes('/public/case-studies') && !url.match(/\/public\/case-studies\/\d+$/);
+  const isBlogListCall = url.includes('/public/blogs') && !url.includes('/slug/') && !url.match(/\/public\/blogs\/\d+$/);
+  
+  if (isTeamCall || isCaseStudyListCall || isBlogListCall) {
+    // If we're on home page, these are home page calls
+    if (currentPageContext === 'home') {
+      return 'home';
+    }
+    // If we're on service-detail page, case studies calls are for service-detail
+    if (currentPageContext === 'service-detail' && isCaseStudyListCall) {
+      return 'service-detail';
+    }
+  }
+  
+  // Map API endpoints to page contexts
+  const endpointMappings = {
+    '/public/blogs': 'blog',
+    '/public/case-studies': 'case-study',
+    '/public/positions': 'career',
+    '/public/contact': 'contact',
+    '/public/team': 'about',
+    '/public/privacy-policy': 'privacy',
+    '/public/terms-of-service': 'terms',
+    '/public/applications': 'position-apply',
+    '/public/positions/': 'position-apply', // Position detail API
+    '/private/dashboard/stats': 'dashboard',
+    '/private/dashboard/profile': 'dashboard',
+    '/private/blogs': 'dashboard',
+    '/private/case-studies': 'dashboard',
+    '/private/positions': 'dashboard',
+    '/private/applications': 'dashboard',
+    '/private/contact-messages': 'dashboard',
+    '/private/team': 'dashboard',
+    '/private/seo': 'dashboard',
+    '/private/admin/users': 'dashboard',
+    '/private/privacy-policy': 'dashboard',
+    '/private/terms-of-service': 'dashboard'
+  };
+
+  // Check for exact matches
+  for (const [endpoint, page] of Object.entries(endpointMappings)) {
+    if (url.includes(endpoint)) {
+      return page;
+    }
+  }
+
+  return null;
+};
+
+/**
+ * Check if interceptors should run for this API call
+ * @param {string} url - API endpoint URL
+ * @param {boolean} skipInterceptors - Explicit skip flag
+ * @returns {boolean} True if interceptors should run
+ */
+const shouldRunInterceptors = (url, skipInterceptors) => {
+  // If explicitly skipped, don't run
+  if (skipInterceptors) return false;
+
+  // Get the page context for this API endpoint
+  const endpointPageContext = getPageContextFromUrl(url);
+
+  // If endpoint doesn't map to any page, don't run interceptors (skip unknown endpoints)
+  if (!endpointPageContext) return false;
+
+  // If no page context is set yet, don't run interceptors (wait for page context to be set)
+  // Note: This doesn't prevent the API call itself, only the interceptors
+  if (!currentPageContext) return false;
+
+  // Only run interceptors if the endpoint matches the current page context
+  return endpointPageContext === currentPageContext;
+};
+
 /**
  * Add a request interceptor
  * @param {Function} interceptor - Function that receives (config) and returns modified config
@@ -117,10 +240,11 @@ const applyResponseInterceptors = async (response, config) => {
  * @param {Object} interceptorOptions - Additional options for interceptors
  * @param {boolean} interceptorOptions.isPublic - If true, skip auth token injection
  * @param {boolean} interceptorOptions.skipAuth - If true, skip auth token injection
+ * @param {boolean} interceptorOptions.skipInterceptors - If true, skip request/response interceptors
  * @returns {Promise<Response>} Fetch response
  */
 export const interceptedFetch = async (url, options = {}, interceptorOptions = {}) => {
-  const { isPublic = false, skipAuth = false } = interceptorOptions;
+  const { isPublic = false, skipAuth = false, skipInterceptors = false } = interceptorOptions;
 
   // Build initial config
   let config = {
@@ -147,8 +271,10 @@ export const interceptedFetch = async (url, options = {}, interceptorOptions = {
     delete config.headers['Content-Type'];
   }
 
-  // Apply request interceptors
-  config = await applyRequestInterceptors(config);
+  // Apply request interceptors only if they should run for this page context
+  if (shouldRunInterceptors(config.url, skipInterceptors)) {
+    config = await applyRequestInterceptors(config);
+  }
 
   // Extract URL and fetch options from config
   const { url: finalUrl, ...fetchOptions } = config;
@@ -160,8 +286,10 @@ export const interceptedFetch = async (url, options = {}, interceptorOptions = {
     // Clone response for error handling (response can only be read once)
     const responseClone = response.clone();
 
-    // Apply response interceptors
-    response = await applyResponseInterceptors(response, config);
+    // Apply response interceptors only if they should run for this page context
+    if (shouldRunInterceptors(config.url, skipInterceptors)) {
+      response = await applyResponseInterceptors(response, config);
+    }
 
     // Handle 401 Unauthorized
     if (response.status === 401) {

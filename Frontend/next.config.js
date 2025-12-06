@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // Enable standalone output for easier deployment
+  output: 'standalone',
   images: {
     remotePatterns: [
       {
@@ -25,6 +27,10 @@ const nextConfig = {
         destination: '/',
       },
     ];
+  },
+  // Ensure proper handling of dynamic routes
+  experimental: {
+    missingSuspenseWithCSRBailout: false,
   },
 };
 

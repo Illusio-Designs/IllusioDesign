@@ -6,9 +6,10 @@ import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
 import Loader from '@/components/Loader';
 import Counter from '@/components/Counter';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { useSEO } from '@/hooks/useSEO';
 import { teamAPI } from '@/services/api';
+import { setPageContext } from '@/services/fetchInterceptor';
 
 // Star Rating Component
 const StarRating = () => {
@@ -74,6 +75,11 @@ export default function AboutUs({ navigateTo, currentPage }) {
   // SEO Integration
   useSEO('about');
 
+  // Set page context synchronously before any API calls (useLayoutEffect runs before paint)
+  useLayoutEffect(() => {
+    setPageContext('about');
+  }, []);
+
   const [isLoading, setIsLoading] = useState(true);
   const [isTestimonialsVisible, setIsTestimonialsVisible] = useState(false);
   const [isTestimonialsHovered, setIsTestimonialsHovered] = useState(false);
@@ -81,6 +87,7 @@ export default function AboutUs({ navigateTo, currentPage }) {
   const [teamMembers, setTeamMembers] = useState([]);
   const testimonialsSectionRef = useRef(null);
   const testimonialsSlideTimeoutRef = useRef(null);
+  const hasFetched = useRef(false);
 
   const goals = [
     {
@@ -154,9 +161,20 @@ export default function AboutUs({ navigateTo, currentPage }) {
 
   // Fetch team members from API
   useEffect(() => {
+    // Prevent double API calls (React StrictMode in development)
+    if (hasFetched.current) return;
+    hasFetched.current = true;
+
+    let isMounted = true;
+    const abortController = new AbortController();
+
     const fetchTeamMembers = async () => {
       try {
         const response = await teamAPI.getAllPublic();
+        
+        // Check if component is still mounted before updating state
+        if (!isMounted) return;
+        
         if (response && response.data) {
           console.log('Team members fetched:', response.data);
           // Log image URLs for debugging
@@ -171,6 +189,7 @@ export default function AboutUs({ navigateTo, currentPage }) {
           setTeamMembers(response.data);
         }
       } catch (error) {
+        if (!isMounted) return;
         console.error('Error fetching team members:', error);
         // Keep empty array on error
         setTeamMembers([]);
@@ -178,6 +197,12 @@ export default function AboutUs({ navigateTo, currentPage }) {
     };
 
     fetchTeamMembers();
+
+    // Cleanup function
+    return () => {
+      isMounted = false;
+      abortController.abort();
+    };
   }, []);
 
   // Handle testimonials visibility

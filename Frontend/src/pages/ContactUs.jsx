@@ -4,14 +4,20 @@ import Footer from '@/components/Footer';
 import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
 import Loader from '@/components/Loader';
-import { useState } from 'react';
+import { useState, useEffect, useLayoutEffect } from 'react';
 import { useSEO } from '@/hooks/useSEO';
 import { contactAPI } from '@/services/api';
+import { setPageContext } from '@/services/fetchInterceptor';
 import { toast } from 'react-toastify';
 
 export default function ContactUs({ navigateTo, currentPage }) {
   // SEO Integration
   useSEO('contact');
+
+  // Set page context synchronously before any API calls (useLayoutEffect runs before paint)
+  useLayoutEffect(() => {
+    setPageContext('contact');
+  }, []);
 
   const [isLoading, setIsLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
