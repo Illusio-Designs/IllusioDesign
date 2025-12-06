@@ -7,17 +7,16 @@ import { FiMaximize, FiMinimize } from 'react-icons/fi';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSearch } from '@/contexts/SearchContext';
 import { contactAPI, applicationAPI } from '@/services/api';
+import Tooltip from '@/components/common/Tooltip';
 import '@/styles/components/Dashboard/DashboardHeader.css';
 
-export default function DashboardHeader({ currentPage, onPageChange }) {
+export default function DashboardHeader({ currentPage, onPageChange, onSidebarToggle }) {
   const { searchQuery, updateSearch } = useSearch();
   const { logout, user } = useAuth();
   const router = useRouter();
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showMessages, setShowMessages] = useState(false);
-  const [showSiteUpdateDropdown, setShowSiteUpdateDropdown] = useState(false);
-  const [showBusinessDropdown, setShowBusinessDropdown] = useState(false);
   const [localSearchQuery, setLocalSearchQuery] = useState('');
   const [contactMessages, setContactMessages] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -27,8 +26,6 @@ export default function DashboardHeader({ currentPage, onPageChange }) {
   const profileRef = useRef(null);
   const notificationRef = useRef(null);
   const messagesRef = useRef(null);
-  const siteUpdateRef = useRef(null);
-  const businessRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -37,12 +34,6 @@ export default function DashboardHeader({ currentPage, onPageChange }) {
       }
       if (notificationRef.current && !notificationRef.current.contains(event.target)) {
         setShowNotifications(false);
-      }
-      if (siteUpdateRef.current && !siteUpdateRef.current.contains(event.target)) {
-        setShowSiteUpdateDropdown(false);
-      }
-      if (businessRef.current && !businessRef.current.contains(event.target)) {
-        setShowBusinessDropdown(false);
       }
       if (messagesRef.current && !messagesRef.current.contains(event.target)) {
         setShowMessages(false);
@@ -149,6 +140,7 @@ export default function DashboardHeader({ currentPage, onPageChange }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery]);
 
+  // Site update items for reference (used in sidebar)
   const siteUpdateItems = [
     { label: 'Blog', page: 'blog' },
     { label: 'Project', page: 'case-study' },
@@ -230,85 +222,19 @@ export default function DashboardHeader({ currentPage, onPageChange }) {
           Home
         </button>
         
-        <div className="nav-item-dropdown" ref={siteUpdateRef}>
-          <button
-            className={`nav-item ${siteUpdateItems.some(item => item.page === currentPage) ? 'active' : ''}`}
-            onClick={() => setShowSiteUpdateDropdown(!showSiteUpdateDropdown)}
-          >
-            Site Update
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
-          {showSiteUpdateDropdown && (
-            <div className="dropdown-menu">
-              {siteUpdateItems.map((item) => (
-                <button
-                  key={item.page}
-                  className={`dropdown-item ${currentPage === item.page ? 'active' : ''}`}
-                  onClick={() => {
-                    onPageChange(item.page);
-                    setShowSiteUpdateDropdown(false);
-                  }}
-                >
-                  {item.label}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
+        <button
+          className={`nav-item ${siteUpdateItems.some(item => item.page === currentPage) ? 'active' : ''}`}
+          onClick={() => onSidebarToggle && onSidebarToggle('site-update')}
+        >
+          Site Update
+        </button>
 
-        <div className="nav-item-dropdown" ref={businessRef}>
-          <button
-            className={`nav-item ${['application', 'contact', 'privacy-policy', 'terms-of-service'].includes(currentPage) ? 'active' : ''}`}
-            onClick={() => setShowBusinessDropdown(!showBusinessDropdown)}
-          >
-            Business
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
-          {showBusinessDropdown && (
-            <div className="dropdown-menu">
-              <button
-                className={`dropdown-item ${currentPage === 'application' ? 'active' : ''}`}
-                onClick={() => {
-                  onPageChange('application');
-                  setShowBusinessDropdown(false);
-                }}
-              >
-                Applications
-              </button>
-              <button
-                className={`dropdown-item ${currentPage === 'contact' ? 'active' : ''}`}
-                onClick={() => {
-                  onPageChange('contact');
-                  setShowBusinessDropdown(false);
-                }}
-              >
-                Contact Messages
-              </button>
-              <button
-                className={`dropdown-item ${currentPage === 'privacy-policy' ? 'active' : ''}`}
-                onClick={() => {
-                  onPageChange('privacy-policy');
-                  setShowBusinessDropdown(false);
-                }}
-              >
-                Privacy Policy
-              </button>
-              <button
-                className={`dropdown-item ${currentPage === 'terms-of-service' ? 'active' : ''}`}
-                onClick={() => {
-                  onPageChange('terms-of-service');
-                  setShowBusinessDropdown(false);
-                }}
-              >
-                Terms of Service
-              </button>
-            </div>
-          )}
-        </div>
+        <button
+          className={`nav-item ${['application', 'contact', 'privacy-policy', 'terms-of-service'].includes(currentPage) ? 'active' : ''}`}
+          onClick={() => onSidebarToggle && onSidebarToggle('business')}
+        >
+          Business
+        </button>
       </nav>
 
       <div className="header-right">
@@ -328,26 +254,28 @@ export default function DashboardHeader({ currentPage, onPageChange }) {
           />
         </form>
 
-        <button
-          className="header-icon-btn"
-          onClick={handleToggleFullscreen}
-          title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
-        >
-          {isFullscreen ? <FiMinimize size={20} /> : <FiMaximize size={20} />}
-        </button>
-
-        <div className="notification-dropdown" ref={notificationRef}>
+        <Tooltip text={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"} position="bottom">
           <button
             className="header-icon-btn"
-            onClick={() => setShowNotifications(!showNotifications)}
-            title="Notifications"
+            onClick={handleToggleFullscreen}
           >
+            {isFullscreen ? <FiMinimize size={20} /> : <FiMaximize size={20} />}
+          </button>
+        </Tooltip>
+
+        <div className="notification-dropdown" ref={notificationRef}>
+          <Tooltip text="Notifications" position="bottom">
+            <button
+              className="header-icon-btn"
+              onClick={() => setShowNotifications(!showNotifications)}
+            >
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M15 6.66667C15 5.34058 14.4732 4.06881 13.5355 3.13113C12.5979 2.19345 11.3261 1.66667 10 1.66667C8.67392 1.66667 7.40215 2.19345 6.46447 3.13113C5.52678 4.06881 5 5.34058 5 6.66667C5 12.5 2.5 14.1667 2.5 14.1667H17.5C17.5 14.1667 15 12.5 15 6.66667Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               <path d="M11.4417 17.5C11.1435 17.8313 10.7656 18.0833 10.3433 18.2337C9.92099 18.3841 9.46618 18.4282 9.02333 18.3621C8.58048 18.296 8.16312 18.1218 7.80948 17.8554C7.45585 17.589 7.17673 17.2387 6.99667 16.8333" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
             {totalNotificationCount > 0 && <span className="icon-badge">{totalNotificationCount}</span>}
           </button>
+          </Tooltip>
           {showNotifications && (
             <div className="notification-panel">
               <div className="notification-header">
@@ -420,10 +348,11 @@ export default function DashboardHeader({ currentPage, onPageChange }) {
         </div>
 
         <div className="profile-dropdown" ref={profileRef}>
-          <button
-            className="profile-btn"
-            onClick={() => setShowProfileDropdown(!showProfileDropdown)}
-          >
+          <Tooltip text="Profile" position="bottom">
+            <button
+              className="profile-btn"
+              onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+            >
             {user?.image ? (
               <img
                 src={user.image}
@@ -436,6 +365,7 @@ export default function DashboardHeader({ currentPage, onPageChange }) {
               </div>
             )}
           </button>
+          </Tooltip>
           {showProfileDropdown && (
             <div className={`profile-menu ${showProfileDropdown ? 'show' : ''}`}>
               <div className="profile-menu-header">
@@ -466,13 +396,13 @@ export default function DashboardHeader({ currentPage, onPageChange }) {
                 My Profile
               </button>
               <button
-                className="profile-menu-item"
+                className="profile-menu-item logout-item"
                 onClick={handleLogout}
               >
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M12.5 15L17.5 10L12.5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M17.5 10H5.83333" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M5.83333 2.5H9.16667C10.0871 2.5 10.8333 3.24619 10.8333 4.16667V15.8333C10.8333 16.7538 10.0871 17.5 9.16667 17.5H5.83333" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M17.5 10H7.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M7.5 2.5H4.16667C3.24619 2.5 2.5 3.24619 2.5 4.16667V15.8333C2.5 16.7538 3.24619 17.5 4.16667 17.5H7.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
                 Logout
               </button>

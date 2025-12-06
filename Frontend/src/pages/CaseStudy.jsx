@@ -19,6 +19,7 @@ export default function CaseStudy({ navigateTo, currentPage }) {
   }, []);
 
   const [isLoading, setIsLoading] = useState(true);
+  const [dataLoaded, setDataLoaded] = useState(false);
   const [hoveredProject, setHoveredProject] = useState(null);
   const [activeCategory, setActiveCategory] = useState('web');
   const [animatedProjects, setAnimatedProjects] = useState(new Set());
@@ -150,12 +151,21 @@ export default function CaseStudy({ navigateTo, currentPage }) {
           // Only update state if component is still mounted
           if (isMounted) {
             setProjects(transformedProjects);
+            setDataLoaded(true);
+            // If loader animation is done, hide it
+            if (!isLoading) {
+              setIsLoading(false);
+            }
           }
         }
       } catch (error) {
         console.error('Error fetching projects:', error);
         if (isMounted) {
           setProjects([]);
+          setDataLoaded(true);
+          if (!isLoading) {
+            setIsLoading(false);
+          }
         }
       } finally {
         fetchInProgress.current = false;
@@ -225,14 +235,26 @@ export default function CaseStudy({ navigateTo, currentPage }) {
   }, [displayProjects, animatedProjects]);
 
   const handleLoaderComplete = () => {
-    setIsLoading(false);
+    // Only hide loader when data is loaded
+    if (dataLoaded) {
+      setIsLoading(false);
+    }
   };
+
+  // Hide loader when data is loaded
+  useEffect(() => {
+    if (dataLoaded && !isLoading) {
+      setIsLoading(false);
+    }
+  }, [dataLoaded, isLoading]);
 
   return (
     <>
       {isLoading && <Loader onComplete={handleLoaderComplete} />}
-      <Header navigateTo={navigateTo} currentPage={currentPage} />
-      <section className="projects-section" id="case-study">
+      {!isLoading && (
+        <>
+          <Header navigateTo={navigateTo} currentPage={currentPage} />
+          <section className="projects-section" id="case-study">
         <ScrollReveal animation="fadeUp" delay={0.1} duration={1.5} ready={!isLoading}>
           <h1 className="section-title">
             <SplitText splitBy="words" animation="fadeUp" delay={0.1} trigger="onScroll" as="span">
@@ -356,6 +378,8 @@ export default function CaseStudy({ navigateTo, currentPage }) {
         </div>
       </section>
       <Footer navigateTo={navigateTo} />
+        </>
+      )}
     </>
   );
 }

@@ -7,6 +7,7 @@ import { useSearch } from '@/contexts/SearchContext';
 import Table from '@/components/common/Table';
 import Modal from '@/components/common/Modal';
 import Pagination from '@/components/common/Pagination';
+import Loader from '@/components/common/Loader';
 import '@/styles/pages/Dashboard/shared.css';
 import '@/styles/pages/Dashboard/Contact.css';
 
@@ -25,12 +26,7 @@ export default function Contact() {
   useEffect(() => {
     if (fetchingRef.current) return;
     fetchMessages();
-  }, [currentPage]);
-
-  // Reset to page 1 when search query changes
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchQuery]);
+  }, [currentPage, searchQuery]);
 
   const fetchMessages = async () => {
     if (fetchingRef.current) return;
@@ -156,11 +152,11 @@ export default function Contact() {
       <div className="content-card">
         {showTable ? (
           <>
-            <h2 className="content-card-title">Contact Messages</h2>
             {loading ? (
-              <div className="loading">Loading...</div>
+              <Loader size="large" />
             ) : (
               <>
+                <h2 className="content-card-title">Contact Messages</h2>
                 <Table columns={columns} data={paginatedData} onDelete={handleDelete} onEdit={handleEdit} />
                 {totalPages > 1 && (
                   <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />

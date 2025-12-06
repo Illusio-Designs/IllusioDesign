@@ -7,6 +7,7 @@ import { useSearch } from '@/contexts/SearchContext';
 import Table from '@/components/common/Table';
 import Modal from '@/components/common/Modal';
 import Pagination from '@/components/common/Pagination';
+import Loader from '@/components/common/Loader';
 import '@/styles/pages/Dashboard/shared.css';
 import '@/styles/pages/Dashboard/Position.css';
 
@@ -33,12 +34,7 @@ export default function Position() {
   useEffect(() => {
     if (fetchingRef.current) return;
     fetchPositions();
-  }, [currentPage]);
-
-  // Reset to page 1 when search query changes
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchQuery]);
+  }, [currentPage, searchQuery]);
 
   const fetchPositions = async () => {
     if (fetchingRef.current) return;
@@ -174,11 +170,11 @@ export default function Position() {
       <div className="content-card">
         {showTable ? (
           <>
-            <h2 className="content-card-title">Position</h2>
             {loading ? (
-              <div className="loading">Loading...</div>
+              <Loader size="large" />
             ) : (
               <>
+                <h2 className="content-card-title">Position</h2>
                 <Table columns={columns} data={paginatedData} onEdit={handleEdit} onDelete={handleDelete} />
                 {totalPages > 1 && (
                   <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />

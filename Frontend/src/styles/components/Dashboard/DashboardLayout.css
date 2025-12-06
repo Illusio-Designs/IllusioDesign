@@ -37,11 +37,29 @@ body:has(.dashboard-layout) .theme-toggle-wrapper,
   z-index: 0;
 }
 
+.dashboard-content-wrapper {
+  display: flex;
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  gap: 24px;
+  align-items: flex-start;
+}
+
 .dashboard-main {
   flex: 1;
   padding: 24px;
   overflow-y: auto;
   position: relative;
   z-index: 1;
+  transition: all 0.3s ease;
+  min-width: 0;
+}
+
+.dashboard-main.with-sidebar {
+  margin-left: 0;
 }
 

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { applicationAPI, contactAPI } from '@/services/api';
+import Loader from '@/components/common/Loader';
 import '@/styles/pages/Dashboard/shared.css';
 import '@/styles/pages/Dashboard/DashboardHome.css';
 
@@ -49,7 +50,7 @@ export default function DashboardHome() {
       </div>
 
       {loading ? (
-        <div style={{ textAlign: 'center', padding: '40px' }}>Loading stats...</div>
+        <Loader size="large" />
       ) : (
         <div className="stats-grid">
           <div className="stat-card">

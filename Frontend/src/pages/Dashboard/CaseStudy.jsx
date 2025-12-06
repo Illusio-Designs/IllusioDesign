@@ -7,6 +7,7 @@ import { useSearch } from '@/contexts/SearchContext';
 import Table from '@/components/common/Table';
 import Modal from '@/components/common/Modal';
 import Pagination from '@/components/common/Pagination';
+import Loader from '@/components/common/Loader';
 import '@/styles/pages/Dashboard/shared.css';
 import '@/styles/pages/Dashboard/CaseStudy.css';
 
@@ -144,12 +145,7 @@ export default function CaseStudy() {
   useEffect(() => {
     if (fetchingRef.current) return;
     fetchCaseStudies();
-  }, [currentPage]);
-
-  // Reset to page 1 when search query changes
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchQuery]);
+  }, [currentPage, searchQuery]);
 
   const fetchCaseStudies = async () => {
     if (fetchingRef.current) return;
@@ -428,11 +424,11 @@ export default function CaseStudy() {
       <div className="content-card">
         {showTable ? (
           <>
-            <h2 className="content-card-title">Project</h2>
             {loading ? (
-              <div className="loading">Loading...</div>
+              <Loader size="large" />
             ) : (
               <>
+                <h2 className="content-card-title">Project</h2>
                 <Table
                   columns={columns}
                   data={paginatedData}

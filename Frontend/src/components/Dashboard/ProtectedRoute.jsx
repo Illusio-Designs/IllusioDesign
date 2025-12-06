@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import Login from '@/pages/Dashboard/Login';
+import Loader from '@/components/Loader';
 
 export default function ProtectedRoute({ children, requiredRole = 'user' }) {
   const router = useRouter();
@@ -20,16 +21,7 @@ export default function ProtectedRoute({ children, requiredRole = 'user' }) {
   }, [isAuthenticated, isAdmin, loading, requiredRole, router]);
 
   if (loading) {
-    return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh' 
-      }}>
-        <div>Loading...</div>
-      </div>
-    );
+    return <Loader />;
   }
 
   if (!isAuthenticated()) {

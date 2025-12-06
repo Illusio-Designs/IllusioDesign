@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import Table from '@/components/common/Table';
 import Modal from '@/components/common/Modal';
 import Pagination from '@/components/common/Pagination';
+import Loader from '@/components/common/Loader';
 import '@/styles/pages/Dashboard/shared.css';
 import '@/styles/pages/Dashboard/TermsOfService.css';
 
@@ -154,11 +155,11 @@ export default function TermsOfService() {
       <div className="content-card">
         {showTable ? (
           <>
-            <h2 className="content-card-title">Terms of Service</h2>
             {loading ? (
-              <div className="loading">Loading...</div>
+              <Loader size="large" />
             ) : (
               <>
+                <h2 className="content-card-title">Terms of Service</h2>
                 <Table
                   columns={columns}
                   data={paginatedData}

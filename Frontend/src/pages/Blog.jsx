@@ -21,9 +21,13 @@ export default function Blog({ navigateTo, currentPage }) {
   const [isLoading, setIsLoading] = useState(true);
   const [blogPosts, setBlogPosts] = useState([]);
   const [hoveredBlog, setHoveredBlog] = useState(null);
+  const [dataLoaded, setDataLoaded] = useState(false);
 
   const handleLoaderComplete = () => {
-    setIsLoading(false);
+    // Only hide loader when data is loaded
+    if (dataLoaded) {
+      setIsLoading(false);
+    }
   };
 
   const handleBlogClick = (e, slug) => {
@@ -81,12 +85,21 @@ export default function Blog({ navigateTo, currentPage }) {
           // Only update state if component is still mounted
           if (isMounted) {
             setBlogPosts(transformedPosts);
+            setDataLoaded(true);
+            // If loader animation is done, hide it
+            if (!isLoading) {
+              setIsLoading(false);
+            }
           }
         }
       } catch (error) {
         console.error('Error fetching blog posts:', error);
         if (isMounted) {
           setBlogPosts([]);
+          setDataLoaded(true);
+          if (!isLoading) {
+            setIsLoading(false);
+          }
         }
       }
     };
@@ -100,11 +113,20 @@ export default function Blog({ navigateTo, currentPage }) {
     };
   }, []);
 
+  // Hide loader when data is loaded
+  useEffect(() => {
+    if (dataLoaded && !isLoading) {
+      setIsLoading(false);
+    }
+  }, [dataLoaded, isLoading]);
+
   return (
     <>
       {isLoading && <Loader onComplete={handleLoaderComplete} />}
-      <Header navigateTo={navigateTo} currentPage={currentPage} />
-      <section className="blog-section" id="blog">
+      {!isLoading && (
+        <>
+          <Header navigateTo={navigateTo} currentPage={currentPage} />
+          <section className="blog-section" id="blog">
         <div className="container">
           <ScrollReveal as="div" animation="fadeUp" duration={1.5} once={false} ready={!isLoading}>
             <h1 className="section-title">
@@ -185,6 +207,8 @@ export default function Blog({ navigateTo, currentPage }) {
         </div>
       </section>
       <Footer navigateTo={navigateTo} />
+        </>
+      )}
     </>
   );
 }
