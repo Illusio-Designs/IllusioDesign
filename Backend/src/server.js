@@ -21,7 +21,8 @@ const PORT = process.env.PORT || 5000;
 const defaultOrigins = [
   'http://localhost:3000', 
   'http://localhost:3001',
-  'https://illusio-design.vercel.app'
+  'https://illusiodesigns.agency',
+  'http://illusiodesigns.agency'
 ];
 
 const envOrigins = process.env.FRONTEND_URL 
