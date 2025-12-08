@@ -34,7 +34,7 @@
   padding: 0;
   margin: 0;
   margin-bottom: 2.5rem;
-  line-height: 4
+  line-height: 4;
 }
 
 .terms-block a:hover {
@@ -78,13 +78,231 @@
   margin-bottom: 0.5rem;
 }
 
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .terms-section {
+    padding: 5rem 4rem;
+  }
+
+  .terms-container .section-title,
+  .terms-container h1 {
+    font-size: 3rem;
+  }
+
+  .terms-block h3 {
+    font-size: 1.3rem;
+  }
+
+  .terms-block p {
+    font-size: 0.95rem;
+  }
+}
+
 @media (max-width: 768px) {
   .terms-section {
-    padding: 3rem 2rem;
+    padding: 4rem 3rem;
   }
   
   .terms-container .section-title,
   .terms-container h1 {
     font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .last-updated {
+    font-size: 0.85rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .terms-block {
+    margin-bottom: 2rem;
+    line-height: 3.5;
+  }
+
+  .terms-block h3 {
+    font-size: 1.2rem;
+  }
+
+  .terms-block p {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    margin-bottom: 0.875rem;
+  }
+
+  .terms-block ul {
+    padding-left: 1.25rem;
+    line-height: 1.7;
+  }
+
+  .terms-block ul li {
+    margin-bottom: 0.4rem;
+  }
+}
+
+@media (max-width: 426px) {
+  .terms-section {
+    padding: 3rem 2rem;
+  }
+
+  .terms-container .section-title,
+  .terms-container h1 {
+    font-size: 2rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .last-updated {
+    font-size: 0.8rem;
+    margin-bottom: 2rem;
+  }
+
+  .terms-block {
+    margin-bottom: 1.75rem;
+    line-height: 3;
+  }
+
+  .terms-block h3 {
+    font-size: 1.1rem;
+  }
+
+  .terms-block p {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    margin-bottom: 0.75rem;
+  }
+
+  .terms-block ul {
+    padding-left: 1rem;
+    line-height: 1.6;
+  }
+
+  .terms-block ul li {
+    margin-bottom: 0.35rem;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 384px) {
+  .terms-section {
+    padding: 2.5rem 1.75rem;
+  }
+
+  .terms-container .section-title,
+  .terms-container h1 {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .last-updated {
+    font-size: 0.75rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .terms-block {
+    margin-bottom: 1.5rem;
+    line-height: 2.8;
+  }
+
+  .terms-block h3 {
+    font-size: 1rem;
+  }
+
+  .terms-block p {
+    font-size: 0.8rem;
+    line-height: 1.55;
+    margin-bottom: 0.7rem;
+  }
+
+  .terms-block ul {
+    padding-left: 0.875rem;
+    line-height: 1.55;
+  }
+
+  .terms-block ul li {
+    margin-bottom: 0.3rem;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 375px) {
+  .terms-section {
+    padding: 2.25rem 1.5rem;
+  }
+
+  .terms-container .section-title,
+  .terms-container h1 {
+    font-size: 1.65rem;
+    margin-bottom: 0.875rem;
+  }
+
+  .last-updated {
+    font-size: 0.7rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .terms-block {
+    margin-bottom: 1.25rem;
+    line-height: 2.5;
+  }
+
+  .terms-block h3 {
+    font-size: 0.95rem;
+  }
+
+  .terms-block p {
+    font-size: 0.75rem;
+    line-height: 1.5;
+    margin-bottom: 0.65rem;
+  }
+
+  .terms-block ul {
+    padding-left: 0.75rem;
+    line-height: 1.5;
+  }
+
+  .terms-block ul li {
+    margin-bottom: 0.25rem;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 320px) {
+  .terms-section {
+    padding: 2rem 1.25rem;
+  }
+
+  .terms-container .section-title,
+  .terms-container h1 {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .last-updated {
+    font-size: 0.65rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .terms-block {
+    margin-bottom: 1rem;
+    line-height: 2.2;
+  }
+
+  .terms-block h3 {
+    font-size: 0.9rem;
+  }
+
+  .terms-block p {
+    font-size: 0.7rem;
+    line-height: 1.45;
+    margin-bottom: 0.6rem;
+  }
+
+  .terms-block ul {
+    padding-left: 0.625rem;
+    line-height: 1.45;
+  }
+
+  .terms-block ul li {
+    margin-bottom: 0.2rem;
+    font-size: 0.7rem;
   }
 }
