@@ -37,6 +37,9 @@ export const getCaseStudyById = async (req, res) => {
 
 export const createCaseStudy = async (req, res) => {
   try {
+    // Ensure UTF-8 encoding for response
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    
     const {
       title,
       description,
@@ -59,8 +62,12 @@ export const createCaseStudy = async (req, res) => {
       published,
       seoTitle,
       metaDescription,
+      seoKeywords,
       seoUrl
     } = req.body;
+    
+    // Ensure description is properly decoded as UTF-8 string to preserve emojis
+    const decodedDescription = description ? String(description) : null;
     
     // Handle main image - use webpPath if available (from convertToWebP middleware)
     let image = null;
@@ -92,7 +99,7 @@ export const createCaseStudy = async (req, res) => {
     
     const caseStudy = await CaseStudy.create({
       title,
-      description: description || null,
+      description: decodedDescription || null, // Use decoded description to preserve emojis
       image: image || null,
       link: link || null,
       category: category || services || null,
@@ -112,6 +119,7 @@ export const createCaseStudy = async (req, res) => {
       published: published !== undefined ? (published === 'true' || published === true) : true,
       seoTitle: seoTitle || null,
       metaDescription: metaDescription || null,
+      seoKeywords: seoKeywords || null,
       seoUrl: seoUrl || null
     });
     
@@ -158,8 +166,16 @@ export const createCaseStudy = async (req, res) => {
 
 export const updateCaseStudy = async (req, res) => {
   try {
+    // Ensure UTF-8 encoding for response
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    
     const { id } = req.params;
     const updates = { ...req.body };
+    
+    // Ensure description is properly decoded as UTF-8 string if present
+    if (updates.description !== undefined) {
+      updates.description = updates.description ? String(updates.description) : null;
+    }
     
     // Get case study first to access current data
     const caseStudy = await CaseStudy.findByPk(id);

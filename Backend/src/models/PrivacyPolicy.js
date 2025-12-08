@@ -8,7 +8,9 @@ const PrivacyPolicy = sequelize.define('PrivacyPolicy', {
     autoIncrement: true
   },
   content: {
-    type: DataTypes.TEXT,
+    type: DataTypes.TEXT('long'), // Use TEXT with explicit length for better emoji support
+    charset: 'utf8mb4',
+    collate: 'utf8mb4_unicode_ci',
     allowNull: false
   },
   lastUpdated: {
@@ -17,7 +19,9 @@ const PrivacyPolicy = sequelize.define('PrivacyPolicy', {
   }
 }, {
   tableName: 'privacy_policy',
-  timestamps: true
+  timestamps: true,
+  charset: 'utf8mb4',
+  collate: 'utf8mb4_unicode_ci'
 });
 
 export default PrivacyPolicy;

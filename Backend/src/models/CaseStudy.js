@@ -12,7 +12,9 @@ const CaseStudy = sequelize.define('CaseStudy', {
     allowNull: false
   },
   description: {
-    type: DataTypes.TEXT
+    type: DataTypes.TEXT('long'), // Use TEXT with explicit length for better emoji support
+    charset: 'utf8mb4',
+    collate: 'utf8mb4_unicode_ci'
   },
   image: {
     type: DataTypes.STRING
@@ -89,6 +91,9 @@ const CaseStudy = sequelize.define('CaseStudy', {
   seoUrl: {
     type: DataTypes.STRING
   },
+  seoKeywords: {
+    type: DataTypes.TEXT
+  },
   additionalImages: {
     type: DataTypes.TEXT,
     get() {
@@ -105,7 +110,9 @@ const CaseStudy = sequelize.define('CaseStudy', {
   }
 }, {
   tableName: 'case_studies',
-  timestamps: true
+  timestamps: true,
+  charset: 'utf8mb4',
+  collate: 'utf8mb4_unicode_ci'
 });
 
 export default CaseStudy;

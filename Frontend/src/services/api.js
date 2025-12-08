@@ -358,10 +358,12 @@ export const privacyPolicyAPI = {
   getById: (id) => apiCall(`/private/privacy-policy/${id}`),
   create: (data) => apiCall('/private/privacy-policy', {
     method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   }),
   update: (id, data) => apiCall(`/private/privacy-policy/${id}`, {
     method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   }),
   delete: (id) => apiCall(`/private/privacy-policy/${id}`, {
@@ -377,10 +379,12 @@ export const termsOfServiceAPI = {
   getById: (id) => apiCall(`/private/terms-of-service/${id}`),
   create: (data) => apiCall('/private/terms-of-service', {
     method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   }),
   update: (id, data) => apiCall(`/private/terms-of-service/${id}`, {
     method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   }),
   delete: (id) => apiCall(`/private/terms-of-service/${id}`, {

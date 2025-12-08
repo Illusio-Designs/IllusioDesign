@@ -34,7 +34,9 @@ const Blog = sequelize.define('Blog', {
     }
   },
   content: {
-    type: DataTypes.TEXT
+    type: DataTypes.TEXT('long'), // Use TEXT with explicit length for better emoji support
+    charset: 'utf8mb4',
+    collate: 'utf8mb4_unicode_ci'
   },
   image: {
     type: DataTypes.STRING
@@ -54,13 +56,18 @@ const Blog = sequelize.define('Blog', {
   seoUrl: {
     type: DataTypes.STRING
   },
+  seoKeywords: {
+    type: DataTypes.TEXT
+  },
   published: {
     type: DataTypes.BOOLEAN,
     defaultValue: true
   }
 }, {
   tableName: 'blogs',
-  timestamps: true
+  timestamps: true,
+  charset: 'utf8mb4',
+  collate: 'utf8mb4_unicode_ci'
 });
 
 export default Blog;

@@ -77,7 +77,7 @@ export default function Header({ navigateTo, currentPage }) {
           <ul>
             <li className="services-nav-item">
               <a 
-                href="/service-detail"
+                href="/services"
                 onClick={(e) => { e.preventDefault(); setIsServicesOpen(!isServicesOpen); }}
                 onMouseEnter={() => setIsServicesOpen(true)}
                 className={activePage === 'services' ? 'active' : ''}

@@ -40,6 +40,7 @@
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .theme-toggle-btn:hover .toggle-container {
@@ -63,7 +64,7 @@
 }
 
 .theme-toggle-btn.is-light .toggle-slider {
-  transform: translateX(45px);
+  transform: translateX(41px);
   box-shadow: 0 3px 10px rgba(236, 105, 31, 0.5), 2px 2px 8px rgba(236, 105, 31, 0.3);
 }
 
@@ -101,9 +102,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 10px;
+  padding: 0 4px;
   z-index: 1;
   pointer-events: none;
+  box-sizing: border-box;
 }
 
 .icon-moon,

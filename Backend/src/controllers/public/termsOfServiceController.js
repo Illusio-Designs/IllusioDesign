@@ -2,8 +2,12 @@ import TermsOfService from '../../models/TermsOfService.js';
 
 export const getTermsOfService = async (req, res) => {
   try {
+    // Ensure UTF-8 encoding for response to preserve emojis
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    
     const termsOfService = await TermsOfService.findAll({
-      order: [['createdAt', 'DESC']],
+      // Use updatedAt to always serve the latest edited terms
+      order: [['updatedAt', 'DESC']],
       limit: 1
     });
     

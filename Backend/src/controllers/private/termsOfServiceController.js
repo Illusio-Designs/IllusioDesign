@@ -2,6 +2,9 @@ import TermsOfService from '../../models/TermsOfService.js';
 
 export const getAllTermsOfService = async (req, res) => {
   try {
+    // Ensure UTF-8 encoding for response to preserve emojis
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    
     const termsOfService = await TermsOfService.findAll({
       order: [['createdAt', 'DESC']]
     });
@@ -14,6 +17,9 @@ export const getAllTermsOfService = async (req, res) => {
 
 export const getTermsOfServiceById = async (req, res) => {
   try {
+    // Ensure UTF-8 encoding for response to preserve emojis
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    
     const { id } = req.params;
     const termsOfService = await TermsOfService.findByPk(id);
     
@@ -29,14 +35,20 @@ export const getTermsOfServiceById = async (req, res) => {
 
 export const createTermsOfService = async (req, res) => {
   try {
+    // Ensure UTF-8 encoding for response
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    
     const { content } = req.body;
     
     if (!content) {
       return res.status(400).json({ error: 'Content is required' });
     }
     
+    // Ensure content is properly decoded as UTF-8 string to preserve emojis
+    const decodedContent = content ? String(content) : '';
+    
     const termsOfService = await TermsOfService.create({
-      content,
+      content: decodedContent, // Use decoded content to preserve emojis
       lastUpdated: new Date()
     });
     
@@ -51,6 +63,9 @@ export const createTermsOfService = async (req, res) => {
 
 export const updateTermsOfService = async (req, res) => {
   try {
+    // Ensure UTF-8 encoding for response
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    
     const { id } = req.params;
     const { content } = req.body;
     
@@ -59,8 +74,11 @@ export const updateTermsOfService = async (req, res) => {
       return res.status(404).json({ error: 'Terms of Service not found' });
     }
     
+    // Ensure content is properly decoded as UTF-8 string if present
+    const decodedContent = content !== undefined ? String(content) : content;
+    
     await termsOfService.update({
-      content,
+      content: decodedContent, // Use decoded content to preserve emojis
       lastUpdated: new Date()
     });
     

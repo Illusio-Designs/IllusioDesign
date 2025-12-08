@@ -4,6 +4,8 @@
 
 const { createServer } = require('http');
 const { parse } = require('url');
+const path = require('path');
+const fs = require('fs');
 const next = require('next');
 
 // Change to the directory where server.js is located
@@ -11,9 +13,31 @@ const next = require('next');
 const serverDir = __dirname;
 process.chdir(serverDir);
 
-const dev = process.env.NODE_ENV !== 'production';
+// Verify that src/app directory exists
+const srcAppDir = path.join(serverDir, 'src', 'app');
+const appDirCheck = path.join(serverDir, 'app');
+
+if (!fs.existsSync(srcAppDir) && !fs.existsSync(appDirCheck)) {
+  console.error('❌ Error: Could not find app directory!');
+  console.error('Looking for:', srcAppDir);
+  console.error('Or:', appDirCheck);
+  console.error('Current working directory:', process.cwd());
+  console.error('Server.js directory:', serverDir);
+  console.error('\nPlease ensure the src directory with app folder is deployed.');
+  process.exit(1);
+}
+
+console.log('✅ Found app directory at:', fs.existsSync(srcAppDir) ? srcAppDir : appDirCheck);
+
+// Force production mode for live deployment
+// In cPanel, set Application mode to "Production" to set NODE_ENV=production
+const dev = false; // Always use production mode on server
 const hostname = process.env.HOSTNAME || 'localhost';
 const port = process.env.PORT || 3000;
+
+console.log(`🚀 Starting in ${dev ? 'development' : 'production'} mode`);
+console.log(`📁 Working directory: ${process.cwd()}`);
+console.log(`📦 .next directory exists: ${fs.existsSync(path.join(serverDir, '.next'))}`);
 
 // Initialize Next.js app
 const app = next({ dev, hostname, port });

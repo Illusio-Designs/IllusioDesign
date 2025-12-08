@@ -360,7 +360,7 @@ export default function CaseStudy({ navigateTo, currentPage }) {
                     </div>
                   )}
                   <a 
-                    href={`/case-study-detail?item=${encodeURIComponent(project.id.toString())}`}
+                    href={`/case-studies/${project.id}`}
                     className={`explore-button ${hoveredProject === project.id ? 'hovered' : ''}`}
                     onClick={(e) => {
                       e.preventDefault();

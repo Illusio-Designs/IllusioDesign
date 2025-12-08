@@ -115,7 +115,7 @@ export default function Career({ navigateTo, currentPage }) {
             </h1>
           </ScrollReveal>
           <div className="job-listings">
-            {loadingPositions ? (
+            {!dataLoaded ? (
               <div className="loading-positions">Loading positions...</div>
             ) : positions.length === 0 ? (
               <div className="no-positions">No positions available at the moment.</div>

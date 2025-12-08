@@ -34,6 +34,18 @@
   padding: 0;
   margin: 0;
   margin-bottom: 2.5rem;
+  line-height: 4;
+}
+
+.privacy-block a:hover {
+  color: #EC691F;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.privacy-block h2, 
+.privacy-block h3 {
+  font-weight: 300;
 }
 
 .privacy-block:last-child {
@@ -43,10 +55,8 @@
 .privacy-block h3 {
   color: #333;
   font-size: 1.4rem;
-  font-weight: bold;
   padding: 0;
   margin: 0;
-  margin-bottom: 1rem;
 }
 
 .privacy-block p {

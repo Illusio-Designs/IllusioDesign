@@ -6,6 +6,7 @@ import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
 import Loader from '@/components/Loader';
 import Counter from '@/components/Counter';
+import Modal from '@/components/common/Modal';
 import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { useSEO } from '@/hooks/useSEO';
 import { teamAPI } from '@/services/api';
@@ -29,6 +30,38 @@ const StarRating = () => {
             fill="#EC691F"
           />
         </svg>
+      ))}
+    </div>
+  );
+};
+
+// Star Rating Input Component for Review Form
+const StarRatingInput = ({ value, onChange }) => {
+  return (
+    <div className="rating-input">
+      {[...Array(5)].map((_, index) => (
+        <button
+          key={index}
+          type="button"
+          className="star-btn"
+          onClick={() => onChange(index + 1)}
+          onMouseEnter={() => {
+            // Optional: Add hover effect
+          }}
+        >
+          <svg
+            width="32"
+            height="32"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+              fill={index < value ? "#EC691F" : "#E5E5E5"}
+            />
+          </svg>
+        </button>
       ))}
     </div>
   );
@@ -81,12 +114,13 @@ export default function AboutUs({ navigateTo, currentPage }) {
   }, []);
 
   const [isLoading, setIsLoading] = useState(true);
-  const [isTestimonialsVisible, setIsTestimonialsVisible] = useState(false);
-  const [isTestimonialsHovered, setIsTestimonialsHovered] = useState(false);
-  const [isTestimonialsSliding, setIsTestimonialsSliding] = useState(false);
   const [teamMembers, setTeamMembers] = useState([]);
-  const testimonialsSectionRef = useRef(null);
-  const testimonialsSlideTimeoutRef = useRef(null);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [reviewForm, setReviewForm] = useState({
+    rating: 5,
+    quote: '',
+    client: '',
+  });
 
   const goals = [
     {
@@ -155,8 +189,6 @@ export default function AboutUs({ navigateTo, currentPage }) {
     },
   ];
 
-  const topRowTestimonials = testimonials.slice(0, 3);
-  const bottomRowTestimonials = testimonials.slice(3, 6);
 
   // Fetch team members from API
   useEffect(() => {
@@ -202,54 +234,6 @@ export default function AboutUs({ navigateTo, currentPage }) {
     };
   }, []);
 
-  // Handle testimonials visibility
-  useEffect(() => {
-    if (!testimonialsSectionRef.current) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          setIsTestimonialsVisible(entry.isIntersecting);
-        });
-      },
-      {
-        threshold: 0.2,
-        rootMargin: '-50px 0px',
-      }
-    );
-
-    observer.observe(testimonialsSectionRef.current);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
-
-  // Handle testimonials hover and sliding
-  useEffect(() => {
-    if (isTestimonialsHovered) {
-      // Clear any existing timeout
-      if (testimonialsSlideTimeoutRef.current) {
-        clearTimeout(testimonialsSlideTimeoutRef.current);
-      }
-      // Set sliding state after 2 seconds when hovered
-      testimonialsSlideTimeoutRef.current = setTimeout(() => {
-        setIsTestimonialsSliding(true);
-      }, 2000);
-    } else {
-      // Reset both sliding and hover states when not hovered
-      setIsTestimonialsSliding(false);
-      if (testimonialsSlideTimeoutRef.current) {
-        clearTimeout(testimonialsSlideTimeoutRef.current);
-      }
-    }
-
-    return () => {
-      if (testimonialsSlideTimeoutRef.current) {
-        clearTimeout(testimonialsSlideTimeoutRef.current);
-      }
-    };
-  }, [isTestimonialsHovered]);
 
   const handleLoaderComplete = () => {
     setIsLoading(false);
@@ -469,7 +453,7 @@ export default function AboutUs({ navigateTo, currentPage }) {
 
           {/* What Our Clients Say */}
           <ScrollReveal animation="fadeUp" delay={0.5} duration={1.5} once={false} ready={!isLoading}>
-            <section ref={testimonialsSectionRef} className="testimonials-section">
+            <section className="testimonials-section">
               <div className="container testimonials-container">
                 <ScrollReveal as="div" animation="fadeUp" duration={1.5} once={false} ready={!isLoading}>
                   <SplitText
@@ -485,31 +469,30 @@ export default function AboutUs({ navigateTo, currentPage }) {
                   </SplitText>
                 </ScrollReveal>
 
-                {!isTestimonialsSliding ? (
-                  <div
-                    className={`testimonial-static-grid ${isTestimonialsHovered ? 'is-hovered' : ''}`}
-                    onMouseEnter={() => setIsTestimonialsHovered(true)}
-                    onMouseLeave={() => setIsTestimonialsHovered(false)}
-                  >
-                    {testimonials.map((testimonial, index) => (
-                      <article key={testimonial.id} className={`testimonial-card static-card-${index + 1}`}>
-                        <StarRating />
-                        <p className="testimonial-text">&quot;{testimonial.quote}&quot;</p>
-                        <div className="testimonial-signature">
-                          <h1 className="client-name">{testimonial.client}</h1>
-                        </div>
-                      </article>
-                    ))}
+                <div className="testimonials-wrapper">
+                  {/* Left Sidebar */}
+                  <div className="testimonials-sidebar">
+                    <div className="rating-summary">
+                    <h3 className="rating-text">
+                  Rated 4.93/5 based on current reviews
+                </h3>
+                <p className="trusted-text">Trusted globally by clients</p>
+                      <button 
+                        className="share-experience-btn"
+                        onClick={() => setIsReviewModalOpen(true)}
+                      >
+                        Share Your Experience
+                      </button>
+                    </div>
                   </div>
-                ) : (
-                  <div 
-                    className="testimonial-marquee is-sliding"
-                    onMouseLeave={() => setIsTestimonialsHovered(false)}
-                  >
-                    <div className="marquee-row marquee-row--top">
-                      <div className="marquee-track">
-                        {[...topRowTestimonials, ...topRowTestimonials].map((testimonial, index) => (
-                          <article key={`${testimonial.id}-top-${index}`} className="testimonial-card">
+
+                  {/* Right Side - 2 Independent Scrolling Columns */}
+                  <div className="testimonials-columns">
+                    {/* Column 1 */}
+                    <div className="testimonial-column testimonial-column-1">
+                      <div className="testimonial-column-track">
+                        {[...testimonials, ...testimonials].map((testimonial, index) => (
+                          <article key={`col1-${testimonial.id}-${index}`} className="testimonial-card">
                             <StarRating />
                             <p className="testimonial-text">&quot;{testimonial.quote}&quot;</p>
                             <div className="testimonial-signature">
@@ -519,10 +502,12 @@ export default function AboutUs({ navigateTo, currentPage }) {
                         ))}
                       </div>
                     </div>
-                    <div className="marquee-row marquee-row--bottom">
-                      <div className="marquee-track">
-                        {[...bottomRowTestimonials, ...bottomRowTestimonials].map((testimonial, index) => (
-                          <article key={`${testimonial.id}-bottom-${index}`} className="testimonial-card">
+
+                    {/* Column 2 */}
+                    <div className="testimonial-column testimonial-column-2">
+                      <div className="testimonial-column-track">
+                        {[...testimonials, ...testimonials].map((testimonial, index) => (
+                          <article key={`col2-${testimonial.id}-${index}`} className="testimonial-card">
                             <StarRating />
                             <p className="testimonial-text">&quot;{testimonial.quote}&quot;</p>
                             <div className="testimonial-signature">
@@ -533,7 +518,7 @@ export default function AboutUs({ navigateTo, currentPage }) {
                       </div>
                     </div>
                   </div>
-                )}
+                </div>
               </div>
             </section>
           </ScrollReveal>
@@ -541,6 +526,59 @@ export default function AboutUs({ navigateTo, currentPage }) {
       </section>
 
      
+
+      {/* Review Modal */}
+      <Modal 
+        isOpen={isReviewModalOpen} 
+        onClose={() => {
+          setIsReviewModalOpen(false);
+          setReviewForm({ rating: 5, quote: '', client: '' });
+        }}
+        title="Share Your Experience"
+        size="large"
+      >
+        <form 
+          className="review-form"
+          onSubmit={(e) => {
+            e.preventDefault();
+            // Handle form submission here
+            console.log('Review submitted:', reviewForm);
+            setIsReviewModalOpen(false);
+            setReviewForm({ rating: 5, quote: '', client: '' });
+          }}
+        >
+          <div className="form-group">
+            <label>Your Rating</label>
+            <StarRatingInput 
+              value={reviewForm.rating} 
+              onChange={(rating) => setReviewForm({ ...reviewForm, rating })}
+            />
+          </div>
+          <div className="form-group">
+            <label>Your Review</label>
+            <textarea
+              value={reviewForm.quote}
+              onChange={(e) => setReviewForm({ ...reviewForm, quote: e.target.value })}
+              placeholder="Share your experience with us..."
+              rows={6}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>Your Name & Title</label>
+            <input
+              type="text"
+              value={reviewForm.client}
+              onChange={(e) => setReviewForm({ ...reviewForm, client: e.target.value })}
+              placeholder="e.g., John Doe, Founder, Company Name"
+              required
+            />
+          </div>
+          <div className="form-actions">
+            <button type="submit" className="submit-btn">Submit Review</button>
+          </div>
+        </form>
+      </Modal>
 
       <Footer navigateTo={navigateTo} />
     </>

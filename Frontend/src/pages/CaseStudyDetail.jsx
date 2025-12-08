@@ -7,6 +7,8 @@ import Loader from '@/components/Loader';
 import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { caseStudyAPI } from '@/services/api';
 import { setPageContext } from '@/services/fetchInterceptor';
+import { normalizeContentForDisplay } from '@/utils/contentNormalizer';
+import DOMPurify from 'dompurify';
 
 export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage }) {
   const [isLoading, setIsLoading] = useState(true);
@@ -372,17 +374,135 @@ export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage
               {/* Show description after the boxes if there are more than 3 results */}
               {currentProject.results.length > 3 && (
                 <div style={{ marginTop: '2rem' }}>
-                  <p style={{ color: '#666', lineHeight: '1.6' }}>
-                    {currentProject.description || 'The platform delivers exceptional results through innovative design and user-focused solutions.'}
-                  </p>
+                  {(() => {
+                    const description = currentProject.description || 'The platform delivers exceptional results through innovative design and user-focused solutions.';
+                    // Normalize content first
+                    let contentString = normalizeContentForDisplay(description);
+                    
+                    // Sanitize content on client side only
+                    let sanitizedContent = contentString;
+                    if (typeof window !== 'undefined') {
+                      try {
+                        // Use DOMPurify if available
+                        const purify = typeof DOMPurify !== 'undefined' && DOMPurify ? DOMPurify : (window.DOMPurify || null);
+                        
+                        if (purify && typeof purify.sanitize === 'function') {
+                          // More permissive DOMPurify config to preserve TipTap formatting and emojis
+                          sanitizedContent = purify.sanitize(contentString, {
+                            ALLOWED_TAGS: [
+                              'p', 'br', 'strong', 'em', 'u', 's', 'strike', 'del', 'ins',
+                              'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+                              'ul', 'ol', 'li',
+                              'a', 'img',
+                              'blockquote', 'pre', 'code',
+                              'div', 'span',
+                              'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td',
+                              'b', 'i', 'sub', 'sup', 'small',
+                              'hr', 'bdo', 'bdi'
+                            ],
+                            ALLOWED_ATTR: [
+                              'href', 'src', 'alt', 'title', 'class', 'style', 
+                              'target', 'width', 'height', 'rel', 'colspan', 'rowspan',
+                              'id', 'dir', 'lang', 'align', 'valign'
+                            ],
+                            ALLOW_DATA_ATTR: false,
+                            KEEP_CONTENT: true, // Preserves all text content including emojis and Unicode characters
+                            USE_PROFILES: { html: true },
+                            RETURN_DOM: false,
+                            RETURN_DOM_FRAGMENT: false,
+                            RETURN_TRUSTED_TYPE: false,
+                            FORBID_TAGS: ['script', 'iframe', 'object', 'embed', 'form'],
+                            FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover'],
+                            ALLOWED_URI_REGEXP: /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|sms|cid|xmpp):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i
+                          });
+                          
+                          // Fallback to original if sanitization removed everything
+                          if (!sanitizedContent || sanitizedContent.trim().length === 0) {
+                            sanitizedContent = contentString;
+                          }
+                        } else {
+                          sanitizedContent = contentString;
+                        }
+                      } catch (error) {
+                        console.error('Error sanitizing content:', error);
+                        sanitizedContent = contentString;
+                      }
+                    }
+                    
+                    return (
+                      <div 
+                        style={{ color: '#666', lineHeight: '1.6' }}
+                        dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+                      />
+                    );
+                  })()}
                 </div>
               )}
               {/* If 3 or fewer results, show description */}
               {currentProject.results.length <= 3 && currentProject.description && (
                 <div style={{ marginTop: '2rem' }}>
-                  <p style={{ color: '#666', lineHeight: '1.6' }}>
-                    {currentProject.description}
-                  </p>
+                  {(() => {
+                    const description = currentProject.description;
+                    // Normalize content first
+                    let contentString = normalizeContentForDisplay(description);
+                    
+                    // Sanitize content on client side only
+                    let sanitizedContent = contentString;
+                    if (typeof window !== 'undefined') {
+                      try {
+                        // Use DOMPurify if available
+                        const purify = typeof DOMPurify !== 'undefined' && DOMPurify ? DOMPurify : (window.DOMPurify || null);
+                        
+                        if (purify && typeof purify.sanitize === 'function') {
+                          // More permissive DOMPurify config to preserve TipTap formatting and emojis
+                          sanitizedContent = purify.sanitize(contentString, {
+                            ALLOWED_TAGS: [
+                              'p', 'br', 'strong', 'em', 'u', 's', 'strike', 'del', 'ins',
+                              'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+                              'ul', 'ol', 'li',
+                              'a', 'img',
+                              'blockquote', 'pre', 'code',
+                              'div', 'span',
+                              'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td',
+                              'b', 'i', 'sub', 'sup', 'small',
+                              'hr', 'bdo', 'bdi'
+                            ],
+                            ALLOWED_ATTR: [
+                              'href', 'src', 'alt', 'title', 'class', 'style', 
+                              'target', 'width', 'height', 'rel', 'colspan', 'rowspan',
+                              'id', 'dir', 'lang', 'align', 'valign'
+                            ],
+                            ALLOW_DATA_ATTR: false,
+                            KEEP_CONTENT: true, // Preserves all text content including emojis and Unicode characters
+                            USE_PROFILES: { html: true },
+                            RETURN_DOM: false,
+                            RETURN_DOM_FRAGMENT: false,
+                            RETURN_TRUSTED_TYPE: false,
+                            FORBID_TAGS: ['script', 'iframe', 'object', 'embed', 'form'],
+                            FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover'],
+                            ALLOWED_URI_REGEXP: /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|sms|cid|xmpp):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i
+                          });
+                          
+                          // Fallback to original if sanitization removed everything
+                          if (!sanitizedContent || sanitizedContent.trim().length === 0) {
+                            sanitizedContent = contentString;
+                          }
+                        } else {
+                          sanitizedContent = contentString;
+                        }
+                      } catch (error) {
+                        console.error('Error sanitizing content:', error);
+                        sanitizedContent = contentString;
+                      }
+                    }
+                    
+                    return (
+                      <div 
+                        style={{ color: '#666', lineHeight: '1.6' }}
+                        dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+                      />
+                    );
+                  })()}
                 </div>
               )}
             </ScrollReveal>

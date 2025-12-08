@@ -12,7 +12,23 @@ const sequelize = new Sequelize(
         dialect: process.env.DB_DIALECT || 'mysql',
         logging: process.env.NODE_ENV === 'development' ? console.log : false,
         dialectOptions: {
-            charset: 'utf8mb4'
+            charset: 'utf8mb4',
+            collate: 'utf8mb4_unicode_ci',
+            // Ensure connection uses UTF-8
+            connectTimeout: 60000,
+            // Additional options for proper UTF-8 handling
+            typeCast: function (field, next) {
+                if (field.type === 'VAR_STRING' || field.type === 'STRING' || field.type === 'TEXT') {
+                    return field.string();
+                }
+                return next();
+            }
+        },
+        define: {
+            charset: 'utf8mb4',
+            collate: 'utf8mb4_unicode_ci',
+            // Ensure all string fields use utf8mb4
+            timestamps: true
         },
         pool: {
             max: 5,
@@ -26,7 +42,11 @@ const sequelize = new Sequelize(
 const connectDB = async () => {
   try {
     await sequelize.authenticate();
-    console.log('✅ Database connection established successfully.');
+    // Set connection charset to utf8mb4 for emoji support
+    await sequelize.query("SET NAMES 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'");
+    await sequelize.query("SET CHARACTER SET utf8mb4");
+    await sequelize.query("SET character_set_connection=utf8mb4");
+    console.log('✅ Database connection established successfully with utf8mb4 charset.');
   } catch (error) {
     console.error('❌ Unable to connect to the database:', error);
     throw error;

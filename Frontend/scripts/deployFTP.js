@@ -19,16 +19,19 @@ const ftpConfig = {
   }
 };
 
-// Remote directory on FTP server (usually public_html or www)
-const remoteDir = '/public_html';
+// Remote directory on FTP server - deploy directly to Website folder in home directory
+const remoteDir = '/';
 
 // Directories and files to upload
 const uploadPaths = [
   '.next',
+  'src', // Required: contains the app directory for Next.js
   'public',
   'package.json',
+  'package-lock.json', // Helps ensure correct dependencies
   'next.config.js',
-  'jsconfig.json'
+  'jsconfig.json',
+  'server.js' // Custom server entry point
 ];
 
 // Files to exclude
@@ -178,16 +181,27 @@ async function deployToFTP() {
     await client.access(ftpConfig);
     console.log('✅ FTP connection successful!\n');
     
-    // Change to remote directory
+    // Change to remote directory - ensure Website folder exists
     try {
+      // First, go to root to ensure we're starting from the right place
+      await client.cd('/');
+      // Try to change to Website directory
       await client.cd(remoteDir);
       console.log(`📁 Changed to directory: ${remoteDir}\n`);
     } catch (error) {
       console.log(`⚠️  Directory ${remoteDir} might not exist, creating...`);
+      // Go to root first
+      await client.cd('/');
+      // Create the Website directory
       await client.ensureDir(remoteDir);
+      // Change into it
       await client.cd(remoteDir);
       console.log(`✅ Created and changed to directory: ${remoteDir}\n`);
     }
+    
+    // Verify we're in the right directory
+    const currentDir = await client.pwd();
+    console.log(`📍 Current FTP directory: ${currentDir}\n`);
     
     // Collect all files to upload
     console.log('📋 Collecting files to upload...\n');
@@ -214,17 +228,40 @@ async function deployToFTP() {
     
     console.log(`📦 Found ${allFiles.length} files to upload\n`);
     
+    // Pre-create all required directories to ensure they exist
+    console.log('📁 Creating directory structure...\n');
+    const directoriesToCreate = new Set();
+    for (const file of allFiles) {
+      const remoteDirPath = file.remotePath.substring(0, file.remotePath.lastIndexOf('/'));
+      if (remoteDirPath) {
+        directoriesToCreate.add(remoteDirPath);
+      }
+    }
+    
+    // Create all directories
+    await client.cd('/');
+    await client.cd(remoteDir);
+    for (const dirPath of directoriesToCreate) {
+      try {
+        await ensureRemoteDir(client, dirPath, remoteDir);
+      } catch (error) {
+        console.log(`⚠️  Warning: Could not create directory ${dirPath}: ${error.message}`);
+      }
+    }
+    console.log(`✅ Created ${directoriesToCreate.size} directories\n`);
+    
     // Upload files
     console.log('📤 Starting upload process...\n');
     let uploaded = 0;
     let failed = 0;
+    const failedFiles = [];
     
     for (const file of allFiles) {
       try {
         // Ensure parent directory exists before uploading
         const remoteDirPath = file.remotePath.substring(0, file.remotePath.lastIndexOf('/'));
         if (remoteDirPath) {
-          // Create the full directory path
+          // Create the full directory path (in case it wasn't created above)
           await ensureRemoteDir(client, remoteDirPath, remoteDir);
         }
         
@@ -237,10 +274,11 @@ async function deployToFTP() {
         let retries = 3;
         while (retries > 0) {
           try {
-            // Ensure we're in the right directory before uploading
+            // Always ensure we're in the Website directory before uploading
+            await client.cd('/');
             await client.cd(remoteDir);
             
-            // Upload the file
+            // Upload the file - remotePath is relative to current directory (Website)
             await client.uploadFrom(file.localPath, file.remotePath);
             uploaded++;
             // Small delay to prevent overwhelming the server
@@ -276,6 +314,7 @@ async function deployToFTP() {
       } catch (error) {
         console.error(`❌ Failed to upload: ${file.remotePath} - ${error.message}`);
         failed++;
+        failedFiles.push({ path: file.remotePath, error: error.message });
       }
     }
     
@@ -283,6 +322,59 @@ async function deployToFTP() {
     console.log(`   Uploaded: ${uploaded} files`);
     if (failed > 0) {
       console.log(`   Failed: ${failed} files`);
+      console.log(`\n⚠️  Failed files:`);
+      failedFiles.slice(0, 10).forEach(f => {
+        console.log(`   - ${f.path}: ${f.error}`);
+      });
+      if (failedFiles.length > 10) {
+        console.log(`   ... and ${failedFiles.length - 10} more`);
+      }
+    }
+    
+    // Verify critical directories exist
+    console.log(`\n🔍 Verifying critical directories...`);
+    try {
+      await client.cd('/');
+      await client.cd(remoteDir);
+      
+      const dirsToCheck = ['src', 'src/app', '.next', 'public'];
+      for (const dir of dirsToCheck) {
+        try {
+          // Try to list the directory to verify it exists
+          await client.list(dir);
+          console.log(`   ✅ ${dir} exists`);
+        } catch (e) {
+          // If list fails, try to cd into it
+          try {
+            await client.cd(dir);
+            await client.cd('..');
+            console.log(`   ✅ ${dir} exists`);
+          } catch (e2) {
+            console.log(`   ❌ ${dir} is missing!`);
+          }
+        }
+      }
+      
+      // Verify critical files exist
+      console.log(`\n🔍 Verifying critical files...`);
+      const filesToCheck = [
+        'server.js',
+        'package.json',
+        'next.config.js',
+        '.next/BUILD_ID',
+        '.next/build-manifest.json'
+      ];
+      
+      for (const file of filesToCheck) {
+        try {
+          await client.size(file);
+          console.log(`   ✅ ${file} exists`);
+        } catch (e) {
+          console.log(`   ❌ ${file} is missing!`);
+        }
+      }
+    } catch (error) {
+      console.log(`   ⚠️  Could not verify: ${error.message}`);
     }
     
     console.log(`\n📌 Your frontend build has been uploaded to: ${remoteDir}`);

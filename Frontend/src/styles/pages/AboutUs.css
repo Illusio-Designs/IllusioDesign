@@ -285,6 +285,11 @@
 
 .about-container .testimonials-section {
   padding: 0;
+  margin-left: -6rem;
+  margin-right: -6rem;
+  width: calc(100% + 12rem);
+  background-color: rgba(236, 105, 31, 0.08);
+  padding: 2rem 6rem;
 }
 
 /* Responsive Design */
@@ -323,6 +328,13 @@
   .goals-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
+  }
+
+  .about-container .testimonials-section {
+    margin-left: -2rem;
+    margin-right: -2rem;
+    width: calc(100% + 4rem);
+    padding: 2rem 2rem;
   }
 }
 
@@ -382,6 +394,13 @@
   .team-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
+  }
+
+  .about-container .testimonials-section {
+    margin-left: -1rem;
+    margin-right: -1rem;
+    width: calc(100% + 2rem);
+    padding: 2rem 1rem;
   }
 
   .goal-card,

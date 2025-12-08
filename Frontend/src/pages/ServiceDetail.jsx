@@ -401,7 +401,7 @@ export default function ServiceDetail({ serviceName, navigateTo, currentPage }) 
                     {relatedProjects.map((project) => (
                       <a
                         key={project.id}
-                        href={`/case-study-detail?item=${encodeURIComponent(project.id.toString())}`}
+                        href={`/case-studies/${project.id}`}
                         className="related-project-card"
                         onClick={(e) => {
                           e.preventDefault();

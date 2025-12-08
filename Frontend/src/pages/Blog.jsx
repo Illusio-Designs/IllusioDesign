@@ -35,6 +35,19 @@ export default function Blog({ navigateTo, currentPage }) {
     navigateTo('blog-detail', slug);
   };
 
+  // Ensure slug is URL-friendly (handles spaces and special chars)
+  const formatSlug = (slug) => {
+    if (!slug) return '';
+    return slug
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, '-') // Replace spaces with hyphens
+      .replace(/[^\w\-]+/g, '') // Remove special characters except hyphens
+      .replace(/\-\-+/g, '-') // Replace multiple hyphens with single hyphen
+      .replace(/^-+/, '') // Remove leading hyphens
+      .replace(/-+$/, ''); // Remove trailing hyphens
+  };
+
   // Fetch blog posts from API
   useEffect(() => {
     let isMounted = true;
@@ -164,7 +177,7 @@ export default function Blog({ navigateTo, currentPage }) {
                 ready={!isLoading}
               >
                 <a 
-                  href={`/blog-detail?item=${encodeURIComponent(post.slug)}`}
+                  href={`/blog/${formatSlug(post.slug)}`}
                   className="blog-card"
                   onClick={(e) => handleBlogClick(e, post.slug)}
                   onMouseEnter={() => setHoveredBlog(post.id)}

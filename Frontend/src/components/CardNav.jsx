@@ -2,6 +2,7 @@
 
 import { useRef, useEffect } from 'react';
 import '@/styles/components/CardNav.css';
+import { serviceNameToSlug } from '@/utils/urlSlug';
 
 const CardNav = ({ items, onNavigate, isOpen, onClose }) => {
   const cardRef = useRef(null);
@@ -32,10 +33,12 @@ const CardNav = ({ items, onNavigate, isOpen, onClose }) => {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="card-nav-grid">
-          {items.map((item, index) => (
+          {items.map((item, index) => {
+            const slug = serviceNameToSlug(item.serviceName);
+            return (
             <a
               key={index}
-              href={`/service-detail?item=${item.serviceName}`}
+              href={`/services/${slug}`}
               className="card-nav-item"
               onClick={(e) => {
                 e.preventDefault();
@@ -60,7 +63,8 @@ const CardNav = ({ items, onNavigate, isOpen, onClose }) => {
               </div>
               <div className="card-nav-arrow">→</div>
             </a>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>

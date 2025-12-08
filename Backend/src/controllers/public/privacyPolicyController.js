@@ -2,8 +2,12 @@ import PrivacyPolicy from '../../models/PrivacyPolicy.js';
 
 export const getPrivacyPolicy = async (req, res) => {
   try {
+    // Ensure UTF-8 encoding for response to preserve emojis
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    
     const privacyPolicy = await PrivacyPolicy.findAll({
-      order: [['createdAt', 'DESC']],
+      // Use updatedAt to always serve the latest edited policy
+      order: [['updatedAt', 'DESC']],
       limit: 1
     });
     

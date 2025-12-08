@@ -34,6 +34,9 @@ export const getBlogById = async (req, res) => {
 
 export const createBlog = async (req, res) => {
   try {
+    // Ensure UTF-8 encoding for response
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    
     const { 
       title, 
       slug, 
@@ -45,9 +48,13 @@ export const createBlog = async (req, res) => {
       publishDate,
       seoTitle,
       metaDescription,
+      seoKeywords,
       seoUrl,
       published 
     } = req.body;
+    
+    // Ensure content is properly decoded as UTF-8 string
+    const decodedContent = content ? String(content) : '';
     
     const image = req.file ? (req.file.webpPath || `/uploads/images/blog/${req.file.filename}`) : req.body.image;
     
@@ -76,12 +83,13 @@ export const createBlog = async (req, res) => {
       date: date || new Date().toISOString().split('T')[0],
       category: category || null,
       tags: tagsArray,
-      content: content || '',
+      content: decodedContent, // Use decoded content to preserve emojis
       image: image || null,
       author: author || null,
       publishDate: publishDate || date || new Date().toISOString().split('T')[0],
       seoTitle: seoTitle || null,
       metaDescription: metaDescription || null,
+      seoKeywords: seoKeywords || null,
       seoUrl: seoUrl || blogSlug,
       published: published !== undefined ? (published === 'true' || published === true) : true
     });
@@ -129,8 +137,21 @@ export const createBlog = async (req, res) => {
 
 export const updateBlog = async (req, res) => {
   try {
+    // Ensure UTF-8 encoding for response
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    
     const { id } = req.params;
     const updates = { ...req.body };
+    
+    // Ensure content is properly decoded as UTF-8 string if present
+    if (updates.content !== undefined) {
+      updates.content = String(updates.content);
+    }
+    
+    // Handle seoKeywords if present
+    if (updates.seoKeywords !== undefined) {
+      updates.seoKeywords = String(updates.seoKeywords);
+    }
     
     if (req.file) {
       updates.image = req.file.webpPath || `/uploads/images/blog/${req.file.filename}`;

@@ -8,6 +8,12 @@ import Table from '@/components/common/Table';
 import Modal from '@/components/common/Modal';
 import Pagination from '@/components/common/Pagination';
 import Loader from '@/components/common/Loader';
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Link from '@tiptap/extension-link';
+import Image from '@tiptap/extension-image';
+import Placeholder from '@tiptap/extension-placeholder';
+import { normalizeContentForSave } from '@/utils/contentNormalizer';
 import '@/styles/pages/Dashboard/shared.css';
 import '@/styles/pages/Dashboard/CaseStudy.css';
 
@@ -135,12 +141,86 @@ export default function CaseStudy() {
     clientName: '',
     seoTitle: '',
     metaDescription: '',
+    seoKeywords: '',
     seoUrl: '',
     image: null,
     additionalImages: []
   });
   const [currentMainImage, setCurrentMainImage] = useState(null);
   const [currentAdditionalImages, setCurrentAdditionalImages] = useState([]);
+  const [isClient, setIsClient] = useState(false);
+
+  // Ensure we're on client side before initializing editor
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // TipTap editor instance - only create on client side
+  const editor = useEditor(
+    {
+      immediatelyRender: false,
+      extensions: [
+        StarterKit.configure({
+          heading: {
+            levels: [1, 2, 3],
+          },
+        }),
+        Link.configure({
+          openOnClick: false,
+          HTMLAttributes: {
+            target: '_blank',
+            rel: 'noopener noreferrer',
+          },
+        }),
+        Image,
+        Placeholder.configure({
+          placeholder: 'Write your project description here...',
+        }),
+      ],
+      content: formData.description || '',
+      editorProps: {
+        attributes: {
+          class: 'tiptap-editor',
+        },
+        // Preserve all Unicode characters including emojis when pasting
+        transformPastedHTML: (html) => {
+          // Return HTML as-is to preserve emojis and all Unicode characters
+          return html;
+        },
+      },
+      onUpdate: ({ editor }) => {
+        // Use getHTML() which preserves Unicode characters including emojis
+        // TipTap automatically preserves all Unicode characters in HTML output
+        const html = editor.getHTML();
+        setFormData({ ...formData, description: html });
+      },
+    },
+    [isClient]
+  );
+
+  // Update editor content when formData.description changes
+  // Use a ref to prevent infinite loops and ensure we only update when needed
+  const isUpdatingEditorRef = useRef(false);
+  useEffect(() => {
+    if (editor && formData.description !== editor.getHTML() && !isUpdatingEditorRef.current) {
+      isUpdatingEditorRef.current = true;
+      editor.commands.setContent(formData.description || '');
+      // Reset flag after a short delay to allow editor to update
+      setTimeout(() => {
+        isUpdatingEditorRef.current = false;
+      }, 100);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formData.description]);
+
+  // Cleanup editor on unmount
+  useEffect(() => {
+    return () => {
+      if (editor) {
+        editor.destroy();
+      }
+    };
+  }, [editor]);
 
   useEffect(() => {
     if (fetchingRef.current) return;
@@ -184,10 +264,14 @@ export default function CaseStudy() {
       clientName: '',
       seoTitle: '',
       metaDescription: '',
+      seoKeywords: '',
       seoUrl: '',
       image: null,
       additionalImages: []
     });
+    if (editor) {
+      editor.commands.setContent('');
+    }
     setCurrentMainImage(null);
     setCurrentAdditionalImages([]);
     setIsModalOpen(true);
@@ -213,11 +297,14 @@ export default function CaseStudy() {
       clientName: caseStudy.clientName || caseStudy.projectName || '',
       seoTitle: caseStudy.seoTitle || '',
       metaDescription: caseStudy.metaDescription || '',
+      seoKeywords: caseStudy.seoKeywords || '',
       seoUrl: caseStudy.seoUrl || '',
       image: null,
       additionalImages: [],
       additionalImagesToKeep: Array.isArray(caseStudy.additionalImages) ? caseStudy.additionalImages : []
     });
+    // Don't directly set editor content here - let useEffect handle it after formData is set
+    // This prevents race conditions where onUpdate fires with stale formData
     // Set current images for display
     // Ensure image path is correct
     const mainImagePath = caseStudy.image || null;
@@ -265,6 +352,10 @@ export default function CaseStudy() {
               // Store as array of strings, each line is a result
               formDataToSend.append(key, JSON.stringify(lines));
             }
+          } else if (key === 'description') {
+            // Normalize double <br> tags in description before saving
+            const normalizedDescription = normalizeContentForSave(formData[key]);
+            formDataToSend.append(key, normalizedDescription);
           } else if (key === 'industries') {
             // Map industries to industry for backend
             formDataToSend.append('industry', formData[key]);
@@ -486,20 +577,117 @@ export default function CaseStudy() {
 
               <div className="form-group">
                 <label>Description</label>
-                <div className="rich-text-editor">
-                  <div className="editor-toolbar">
-                    <button type="button" className="toolbar-btn"><strong>B</strong></button>
-                    <button type="button" className="toolbar-btn"><em>I</em></button>
-                    <button type="button" className="toolbar-btn"><u>U</u></button>
-                    <button type="button" className="toolbar-btn">Heading</button>
-                    <button type="button" className="toolbar-btn">Subheading</button>
-                  </div>
-                  <textarea
-                    className="editor-content"
-                    value={formData.description}
-                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    rows={10}
-                  />
+                <div className="rich-text-editor-wrapper">
+                  {isClient && editor && (
+                    <>
+                      {/* Toolbar */}
+                      <div className="tiptap-toolbar">
+                        <button
+                          type="button"
+                          onClick={() => editor.chain().focus().toggleBold().run()}
+                          className={editor.isActive('bold') ? 'is-active' : ''}
+                          title="Bold"
+                        >
+                          <strong>B</strong>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => editor.chain().focus().toggleItalic().run()}
+                          className={editor.isActive('italic') ? 'is-active' : ''}
+                          title="Italic"
+                        >
+                          <em>I</em>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => editor.chain().focus().toggleStrike().run()}
+                          className={editor.isActive('strike') ? 'is-active' : ''}
+                          title="Strike"
+                        >
+                          <s>S</s>
+                        </button>
+                        <div className="toolbar-divider"></div>
+                        <button
+                          type="button"
+                          onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+                          className={editor.isActive('heading', { level: 1 }) ? 'is-active' : ''}
+                          title="Heading 1"
+                        >
+                          H1
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+                          className={editor.isActive('heading', { level: 2 }) ? 'is-active' : ''}
+                          title="Heading 2"
+                        >
+                          H2
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+                          className={editor.isActive('heading', { level: 3 }) ? 'is-active' : ''}
+                          title="Heading 3"
+                        >
+                          H3
+                        </button>
+                        <div className="toolbar-divider"></div>
+                        <button
+                          type="button"
+                          onClick={() => editor.chain().focus().toggleBulletList().run()}
+                          className={editor.isActive('bulletList') ? 'is-active' : ''}
+                          title="Bullet List"
+                        >
+                          •
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => editor.chain().focus().toggleOrderedList().run()}
+                          className={editor.isActive('orderedList') ? 'is-active' : ''}
+                          title="Numbered List"
+                        >
+                          1.
+                        </button>
+                        <div className="toolbar-divider"></div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const url = window.prompt('Enter URL:');
+                            if (url) {
+                              editor.chain().focus().setLink({ href: url }).run();
+                            }
+                          }}
+                          className={editor.isActive('link') ? 'is-active' : ''}
+                          title="Link"
+                        >
+                          🔗
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const url = window.prompt('Enter image URL:');
+                            if (url) {
+                              editor.chain().focus().setImage({ src: url }).run();
+                            }
+                          }}
+                          title="Image"
+                        >
+                          🖼️
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => editor.chain().focus().unsetLink().run()}
+                          className={editor.isActive('link') ? '' : 'disabled'}
+                          title="Remove Link"
+                          disabled={!editor.isActive('link')}
+                        >
+                          Unlink
+                        </button>
+                      </div>
+                      {/* Editor Content */}
+                      <EditorContent editor={editor} />
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -881,6 +1069,16 @@ export default function CaseStudy() {
                   value={formData.metaDescription}
                   onChange={(e) => setFormData({ ...formData, metaDescription: e.target.value })}
                   rows={3}
+                />
+              </div>
+
+              <div className="form-group">
+                <label>SEO Keywords</label>
+                <textarea
+                  value={formData.seoKeywords}
+                  onChange={(e) => setFormData({ ...formData, seoKeywords: e.target.value })}
+                  rows={3}
+                  placeholder="Comma separated keywords"
                 />
               </div>
 

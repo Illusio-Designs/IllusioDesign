@@ -10,7 +10,7 @@
 
 .blog-detail-layout {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 1fr;
   gap: 3rem;
   margin-top: 3rem;
 }
@@ -55,13 +55,180 @@
 
 .blog-body-text {
   color: #2D2C2B;
-  line-height: 1.8;
+  width: 100%;
+  font-size: 20px;
+}
+
+.blog-content-html {
+  width: 100%;
+  color: #2D2C2B;
+  display: block;
+  visibility: visible;
+  opacity: 1;
+}
+
+.blog-content-html p {
+  color: #2D2C2B;
+}
+
+
+.blog-content-html h1,
+.blog-content-html h2,
+.blog-content-html h3,
+.blog-content-html h4,
+.blog-content-html h5,
+.blog-content-html h6 {
+  color: #2D2C2B;
+  font-weight: 600;
+  margin: 1.5rem 0 1rem 0;
+  line-height: 1.4;
+}
+
+.blog-content-html h1 { font-size: 2rem; }
+.blog-content-html h2 { font-size: 1.75rem; }
+.blog-content-html h3 { font-size: 1.5rem; }
+.blog-content-html h4 { font-size: 1.25rem; }
+.blog-content-html h5 { font-size: 1.1rem; }
+.blog-content-html h6 { font-size: 1rem; }
+
+.blog-content-html ul,
+.blog-content-html ol {
+  margin: 1rem 0;
+  padding-left: 2rem;
+  color: #2D2C2B;
+}
+
+.blog-content-html li {
+  margin: 0.5rem 0;
+  color: #2D2C2B;
+  list-style-position: outside;
+}
+
+/* Preserve emoji and special characters */
+.blog-content-html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  unicode-bidi: embed;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Ensure emojis and special characters display correctly */
+.blog-content-html * {
+  font-family: inherit;
+}
+
+.blog-content-html a {
+  color: #EC691F;
+  text-decoration: underline;
+}
+
+.blog-content-html a:hover {
+  color: #d45a15;
+}
+
+.blog-content-html img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+}
+
+.blog-content-html blockquote {
+  border-left: 4px solid #EC691F;
+  padding-left: 1.5rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+  color: #666;
+}
+
+.blog-content-html strong {
+  font-weight: 600;
+  color: #2D2C2B;
+}
+
+.blog-content-html em {
+  font-style: italic;
+}
+
+.blog-content-html code {
+  background: #f5f5f5;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+}
+
+.blog-content-html pre {
+  background: #f5f5f5;
+  padding: 1rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.blog-content-html pre code {
+  background: none;
+  padding: 0;
+}
+
+.blog-content-html table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  border: 1px solid #e0e0e0;
+  font-size: inherit;
+}
+
+.blog-content-html table th,
+.blog-content-html table td {
+  padding: 0.75rem;
+  text-align: left;
+  border: 1px solid #e0e0e0;
+  vertical-align: top;
+}
+
+.blog-content-html table th {
+  background-color: #f5f5f5;
+  font-weight: 600;
+  color: #2D2C2B;
+}
+
+.blog-content-html table td {
+  color: #2D2C2B;
+}
+
+/* Preserve spacing for lists with checkmarks/emojis */
+.blog-content-html ul[class*="ql-"],
+.blog-content-html ol[class*="ql-"] {
+  padding-left: 2.5rem;
+}
+
+/* Preserve inline styles from Quill */
+.blog-content-html [style*="color"] {
+  color: inherit !important;
+}
+
+.blog-content-html [style*="font-size"] {
+  font-size: inherit !important;
+}
+
+/* Ensure emojis in headings */
+.blog-content-html h1,
+.blog-content-html h2,
+.blog-content-html h3,
+.blog-content-html h4,
+.blog-content-html h5,
+.blog-content-html h6 {
+  font-family: inherit;
+  white-space: pre-wrap;
 }
 
 .blog-body-text p {
   margin: 0 0 1.5rem 0;
-  font-size: 1rem;
+  font-size: 17px;
   color: #2D2C2B;
+  line-height: 1.5;
 }
 
 .blog-body-text p:last-child {
@@ -144,8 +311,46 @@
 
 /* Dark Theme Support */
 body.dark-theme .blog-body-text,
-body.dark-theme .blog-body-text p {
+body.dark-theme .blog-body-text p,
+body.dark-theme .blog-content-html,
+body.dark-theme .blog-content-html p,
+body.dark-theme .blog-content-html li {
   color: #FAF9F6;
+}
+
+body.dark-theme .blog-content-html h1,
+body.dark-theme .blog-content-html h2,
+body.dark-theme .blog-content-html h3,
+body.dark-theme .blog-content-html h4,
+body.dark-theme .blog-content-html h5,
+body.dark-theme .blog-content-html h6 {
+  color: #FAF9F6;
+}
+
+body.dark-theme .blog-content-html code,
+body.dark-theme .blog-content-html pre {
+  background: #2a2a2a;
+  color: #FAF9F6;
+}
+
+body.dark-theme .blog-content-html blockquote {
+  border-left-color: #EC691F;
+  color: #ccc;
+}
+
+body.dark-theme .blog-content-html table {
+  border-color: #444;
+}
+
+body.dark-theme .blog-content-html table th {
+  background-color: #2a2a2a;
+  color: #FAF9F6;
+  border-color: #444;
+}
+
+body.dark-theme .blog-content-html table td {
+  color: #FAF9F6;
+  border-color: #444;
 }
 
 body.dark-theme .blog-date {

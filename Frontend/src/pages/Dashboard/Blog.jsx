@@ -9,6 +9,12 @@ import Table from '@/components/common/Table';
 import Modal from '@/components/common/Modal';
 import Pagination from '@/components/common/Pagination';
 import Loader from '@/components/common/Loader';
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Link from '@tiptap/extension-link';
+import Image from '@tiptap/extension-image';
+import Placeholder from '@tiptap/extension-placeholder';
+import { normalizeContentForSave } from '@/utils/contentNormalizer';
 import '@/styles/pages/Dashboard/shared.css';
 import '@/styles/pages/Dashboard/Blog.css';
 
@@ -48,10 +54,84 @@ export default function Blog() {
     publishDate: '',
     seoTitle: '',
     metaDescription: '',
+    seoKeywords: '',
     seoUrl: '',
     image: null
   });
   const [currentMainImage, setCurrentMainImage] = useState(null);
+  const [isClient, setIsClient] = useState(false);
+
+  // Ensure we're on client side before initializing editor
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // TipTap editor instance - only create on client side
+  const editor = useEditor(
+    {
+      immediatelyRender: false, // Prevent SSR hydration mismatch - this is the key fix
+      extensions: [
+        StarterKit.configure({
+          heading: {
+            levels: [1, 2, 3],
+          },
+        }),
+        Link.configure({
+          openOnClick: false,
+          HTMLAttributes: {
+            target: '_blank',
+            rel: 'noopener noreferrer',
+          },
+        }),
+        Image,
+        Placeholder.configure({
+          placeholder: 'Write your blog content here...',
+        }),
+      ],
+      content: formData.content || '',
+      editorProps: {
+        attributes: {
+          class: 'tiptap-editor',
+        },
+        // Preserve all Unicode characters including emojis when pasting
+        transformPastedHTML: (html) => {
+          // Return HTML as-is to preserve emojis and all Unicode characters
+          return html;
+        },
+      },
+      onUpdate: ({ editor }) => {
+        // Use getHTML() which preserves Unicode characters including emojis
+        // TipTap automatically preserves all Unicode characters in HTML output
+        const html = editor.getHTML();
+        setFormData({ ...formData, content: html });
+      },
+    },
+    [isClient] // Only create when isClient is true
+  );
+
+  // Update editor content when formData.content changes (e.g., when editing)
+  // Use a ref to prevent infinite loops and ensure we only update when needed
+  const isUpdatingEditorRef = useRef(false);
+  useEffect(() => {
+    if (editor && formData.content !== editor.getHTML() && !isUpdatingEditorRef.current) {
+      isUpdatingEditorRef.current = true;
+      editor.commands.setContent(formData.content || '');
+      // Reset flag after a short delay to allow editor to update
+      setTimeout(() => {
+        isUpdatingEditorRef.current = false;
+      }, 100);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formData.content]);
+
+  // Cleanup editor on unmount
+  useEffect(() => {
+    return () => {
+      if (editor) {
+        editor.destroy();
+      }
+    };
+  }, [editor]);
 
   useEffect(() => {
     if (fetchingRef.current) return;
@@ -89,9 +169,13 @@ export default function Blog() {
       publishDate: new Date().toISOString().split('T')[0],
       seoTitle: '',
       metaDescription: '',
+      seoKeywords: '',
       seoUrl: '',
       image: null
     });
+    if (editor) {
+      editor.commands.setContent('');
+    }
     setCurrentMainImage(null);
     setIsModalOpen(true);
     setShowTable(false);
@@ -99,20 +183,42 @@ export default function Blog() {
 
   const handleEdit = (blog) => {
     setEditingBlog(blog);
+    const blogContent = blog.content || '';
+    
+    // Format date properly for date inputs (YYYY-MM-DD)
+    const formatDate = (dateValue) => {
+      if (!dateValue) return '';
+      if (typeof dateValue === 'string') {
+        // If it's already in YYYY-MM-DD format, return as is
+        if (dateValue.match(/^\d{4}-\d{2}-\d{2}$/)) {
+          return dateValue;
+        }
+        // Try to parse and format
+        const date = new Date(dateValue);
+        if (!isNaN(date.getTime())) {
+          return date.toISOString().split('T')[0];
+        }
+      }
+      return '';
+    };
+    
     setFormData({
       title: blog.title || '',
       slug: blog.slug || '',
-      date: blog.date || '',
+      date: formatDate(blog.date) || new Date().toISOString().split('T')[0],
       category: blog.category || '',
-      tags: Array.isArray(blog.tags) ? blog.tags.join(', ') : blog.tags || '',
-      content: blog.content || '',
+      tags: Array.isArray(blog.tags) ? blog.tags.join(', ') : (blog.tags || ''),
+      content: blogContent,
       author: blog.author || '',
-      publishDate: blog.publishDate || blog.date || '',
+      publishDate: formatDate(blog.publishDate || blog.date) || new Date().toISOString().split('T')[0],
       seoTitle: blog.seoTitle || '',
       metaDescription: blog.metaDescription || '',
+      seoKeywords: blog.seoKeywords || '',
       seoUrl: blog.seoUrl || blog.slug || '',
       image: null
     });
+    // Don't directly set editor content here - let useEffect handle it after formData is set
+    // This prevents race conditions where onUpdate fires with stale formData
     // Set current image for display
     const mainImagePath = blog.image || null;
     setCurrentMainImage(mainImagePath);
@@ -137,10 +243,25 @@ export default function Blog() {
     e.preventDefault();
     try {
       const formDataToSend = new FormData();
+      
+      // Always include content field (even if empty), preserving UTF-8 encoding for emojis
       Object.keys(formData).forEach(key => {
-        if (key !== 'image' && formData[key] !== null && formData[key] !== '') {
+        if (key === 'content') {
+          // Always append content, preserving UTF-8 encoding for emojis and Unicode characters
+          // Normalize double <br> tags to single <br> tags
+          const content = normalizeContentForSave(formData[key] || '');
+          // Ensure content is properly encoded as UTF-8
+          formDataToSend.append(key, content);
+        } else if (key !== 'image' && formData[key] !== null && formData[key] !== '') {
           formDataToSend.append(key, formData[key]);
         }
+      });
+      
+      // Debug: Log content being sent
+      console.log('Submitting blog with content:', {
+        hasContent: !!formData.content,
+        contentLength: formData.content?.length,
+        contentPreview: formData.content?.substring(0, 200)
       });
       
       // Add main image
@@ -294,41 +415,117 @@ export default function Blog() {
 
               <div className="form-group">
                 <label>Content</label>
-                <div className="rich-text-editor">
-                  <div className="editor-toolbar">
-                    <button type="button" className="toolbar-btn">
-                      <strong>B</strong>
-                    </button>
-                    <button type="button" className="toolbar-btn">
-                      <em>I</em>
-                    </button>
-                    <button type="button" className="toolbar-btn">
-                      <u>U</u>
-                    </button>
-                    <button type="button" className="toolbar-btn">
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                        <path d="M6 8L8 10L10 8" stroke="currentColor" strokeWidth="1.5"/>
-                      </svg>
-                    </button>
-                    <button type="button" className="toolbar-btn">Heading</button>
-                    <button type="button" className="toolbar-btn">Subheading</button>
-                    <button type="button" className="toolbar-btn">
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                        <path d="M3 4H13M3 8H13M3 12H8" stroke="currentColor" strokeWidth="1.5"/>
-                      </svg>
-                    </button>
-                    <button type="button" className="toolbar-btn">
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                        <path d="M3 4H13M3 8H13M3 12H8" stroke="currentColor" strokeWidth="1.5"/>
-                      </svg>
-                    </button>
-                  </div>
-                  <textarea
-                    className="editor-content"
-                    value={formData.content}
-                    onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                    rows={10}
-                  />
+                <div className="rich-text-editor-wrapper">
+                  {isClient && editor && (
+                    <>
+                      {/* Toolbar */}
+                      <div className="tiptap-toolbar">
+                        <button
+                          type="button"
+                          onClick={() => editor.chain().focus().toggleBold().run()}
+                          className={editor.isActive('bold') ? 'is-active' : ''}
+                          title="Bold"
+                        >
+                          <strong>B</strong>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => editor.chain().focus().toggleItalic().run()}
+                          className={editor.isActive('italic') ? 'is-active' : ''}
+                          title="Italic"
+                        >
+                          <em>I</em>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => editor.chain().focus().toggleStrike().run()}
+                          className={editor.isActive('strike') ? 'is-active' : ''}
+                          title="Strike"
+                        >
+                          <s>S</s>
+                        </button>
+                        <div className="toolbar-divider"></div>
+                        <button
+                          type="button"
+                          onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+                          className={editor.isActive('heading', { level: 1 }) ? 'is-active' : ''}
+                          title="Heading 1"
+                        >
+                          H1
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+                          className={editor.isActive('heading', { level: 2 }) ? 'is-active' : ''}
+                          title="Heading 2"
+                        >
+                          H2
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+                          className={editor.isActive('heading', { level: 3 }) ? 'is-active' : ''}
+                          title="Heading 3"
+                        >
+                          H3
+                        </button>
+                        <div className="toolbar-divider"></div>
+                        <button
+                          type="button"
+                          onClick={() => editor.chain().focus().toggleBulletList().run()}
+                          className={editor.isActive('bulletList') ? 'is-active' : ''}
+                          title="Bullet List"
+                        >
+                          •
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => editor.chain().focus().toggleOrderedList().run()}
+                          className={editor.isActive('orderedList') ? 'is-active' : ''}
+                          title="Numbered List"
+                        >
+                          1.
+                        </button>
+                        <div className="toolbar-divider"></div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const url = window.prompt('Enter URL:');
+                            if (url) {
+                              editor.chain().focus().setLink({ href: url }).run();
+                            }
+                          }}
+                          className={editor.isActive('link') ? 'is-active' : ''}
+                          title="Link"
+                        >
+                          🔗
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const url = window.prompt('Enter image URL:');
+                            if (url) {
+                              editor.chain().focus().setImage({ src: url }).run();
+                            }
+                          }}
+                          title="Image"
+                        >
+                          🖼️
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => editor.chain().focus().unsetLink().run()}
+                          className={editor.isActive('link') ? '' : 'disabled'}
+                          title="Remove Link"
+                          disabled={!editor.isActive('link')}
+                        >
+                          Unlink
+                        </button>
+                      </div>
+                      {/* Editor Content */}
+                      <EditorContent editor={editor} />
+                    </>
+                  )}
                 </div>
               </div>
             </div>
@@ -488,6 +685,16 @@ export default function Blog() {
                   value={formData.metaDescription}
                   onChange={(e) => setFormData({ ...formData, metaDescription: e.target.value })}
                   rows={3}
+                />
+              </div>
+
+              <div className="form-group">
+                <label>SEO Keywords</label>
+                <textarea
+                  value={formData.seoKeywords}
+                  onChange={(e) => setFormData({ ...formData, seoKeywords: e.target.value })}
+                  rows={3}
+                  placeholder="Comma separated keywords"
                 />
               </div>
 

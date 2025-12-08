@@ -39,10 +39,10 @@ export default function Footer({ navigateTo }) {
             <div className="footer-section">
               <h3>Services</h3>
               <ul>
-                <li><a href="/service-detail?item=branding" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('service-detail', 'branding'); }}>Branding & Design</a></li>
-                <li><a href="/service-detail?item=web-app" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('service-detail', 'web-app'); }}>Web & App Development</a></li>
-                <li><a href="/service-detail?item=marketing" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('service-detail', 'marketing'); }}>Digital Marketing</a></li>
-                <li><a href="/service-detail?item=b2b" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('service-detail', 'b2b'); }}>B2B & Custom Solutions</a></li>
+                <li><a href="/services/branding-design" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('service-detail', 'branding'); }}>Branding & Design</a></li>
+                <li><a href="/services/web-app-development" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('service-detail', 'web-app'); }}>Web & App Development</a></li>
+                <li><a href="/services/digital-marketing" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('service-detail', 'marketing'); }}>Digital Marketing</a></li>
+                <li><a href="/services/b2b-custom-solutions" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('service-detail', 'b2b'); }}>B2B & Custom Solutions</a></li>
               </ul>
             </div>
             <div className="footer-section">
