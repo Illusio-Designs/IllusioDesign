@@ -8,7 +8,8 @@
 .team-page,
 .application-page,
 .contact-page,
-.users-page {
+.users-page,
+.reviews-page {
   display: flex;
   flex-direction: column;
   gap: 16px;

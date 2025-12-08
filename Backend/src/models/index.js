@@ -8,6 +8,7 @@ import Team from './Team.js';
 import SEO from './SEO.js';
 import PrivacyPolicy from './PrivacyPolicy.js';
 import TermsOfService from './TermsOfService.js';
+import Review from './Review.js';
 
 // Define associations
 Application.belongsTo(Position, { foreignKey: 'positionId', as: 'position' });
@@ -23,6 +24,7 @@ export {
   Team,
   SEO,
   PrivacyPolicy,
-  TermsOfService
+  TermsOfService,
+  Review
 };
 

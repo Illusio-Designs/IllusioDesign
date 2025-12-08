@@ -73,6 +73,15 @@ export default function Sidebar({
           <path d="M10 11.6667C6.85786 11.6667 4.16667 13.2381 4.16667 15.2083V17.5H15.8333V15.2083C15.8333 13.2381 13.1421 11.6667 10 11.6667Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
       )
+    },
+    { 
+      label: 'Reviews', 
+      page: 'reviews',
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 2L12.2451 7.90983L18.5106 8.90983L14.1327 13.0902L15.8779 19.0902L10 15.5L4.12215 19.0902L5.86729 13.0902L1.48937 8.90983L7.75486 7.90983L10 2Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      )
     }
   ];
 

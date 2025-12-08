@@ -139,3 +139,19 @@
   background: #FFFFFF6E;
 }
 
+.approve-btn {
+  color: #10b981;
+}
+
+.approve-btn:hover {
+  background: rgba(16, 185, 129, 0.2);
+}
+
+.decline-btn {
+  color: #ef4444;
+}
+
+.decline-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+}
+

@@ -12,7 +12,7 @@ export default function DashboardLayout({ children, currentPage, onPageChange })
 
   // Determine sidebar type based on current page and maintain sidebar state
   useEffect(() => {
-    const siteUpdatePages = ['blog', 'case-study', 'project', 'position', 'team', 'seo', 'users'];
+    const siteUpdatePages = ['blog', 'case-study', 'project', 'position', 'team', 'seo', 'users', 'reviews'];
     const businessPages = ['application', 'contact', 'privacy-policy', 'terms-of-service'];
     
     // Only update sidebar if we're navigating to a page that belongs to a sidebar category

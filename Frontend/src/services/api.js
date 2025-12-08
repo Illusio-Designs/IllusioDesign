@@ -394,5 +394,28 @@ export const termsOfServiceAPI = {
   getPublic: () => apiCall('/public/terms-of-service', {}, true, false)
 };
 
+// Review APIs
+export const reviewAPI = {
+  // Private APIs (admin)
+  getAll: () => apiCall('/private/reviews'),
+  getById: (id) => apiCall(`/private/reviews/${id}`),
+  approve: (id) => apiCall(`/private/reviews/${id}/approve`, {
+    method: 'PUT'
+  }),
+  decline: (id) => apiCall(`/private/reviews/${id}/decline`, {
+    method: 'PUT'
+  }),
+  delete: (id) => apiCall(`/private/reviews/${id}`, {
+    method: 'DELETE'
+  }),
+  // Public APIs
+  submit: (data) => apiCall('/public/reviews', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  }, true, true), // Public endpoint, skip interceptors
+  getAllPublic: () => apiCall('/public/reviews', {}, true, false) // Use interceptors for caching
+};
+
 export default API_BASE_URL;
 

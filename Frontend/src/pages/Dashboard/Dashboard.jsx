@@ -16,6 +16,7 @@ import Users from './Users';
 import Profile from './Profile';
 import PrivacyPolicy from './PrivacyPolicy';
 import TermsOfService from './TermsOfService';
+import Reviews from './Reviews';
 
 export default function Dashboard({ initialPage }) {
   const router = useRouter();
@@ -69,6 +70,8 @@ export default function Dashboard({ initialPage }) {
         return <SEO />;
       case 'users':
         return <Users />;
+      case 'reviews':
+        return <Reviews />;
       case 'profile':
         return <Profile />;
       case 'privacy-policy':

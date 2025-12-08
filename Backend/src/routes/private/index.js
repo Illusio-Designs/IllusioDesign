@@ -12,8 +12,10 @@ import { getAllContactMessages, getContactMessageById } from '../../controllers/
 import { getAllTeamMembers, getTeamMemberById } from '../../controllers/private/teamController.js';
 import { getAllSEO, getSEOByPage } from '../../controllers/private/seoController.js';
 import { getAllUsers, getUserById } from '../../controllers/private/adminController.js';
+import { getAllReviews, getReviewById } from '../../controllers/private/reviewController.js';
 import privacyPolicyRoutes from './privacyPolicy.js';
 import termsOfServiceRoutes from './termsOfService.js';
+import reviewRoutes from './review.js';
 
 // Import controllers and middleware for write operations (accessible to all authenticated users)
 import { createCaseStudy, updateCaseStudy, deleteCaseStudy } from '../../controllers/private/caseStudyController.js';
@@ -53,6 +55,8 @@ router.get('/team', getAllTeamMembers);
 router.get('/team/:id', getTeamMemberById);
 router.get('/seo', getAllSEO);
 router.get('/seo/page/:page', getSEOByPage);
+router.get('/reviews', getAllReviews);
+router.get('/reviews/:id', getReviewById);
 
 // User read routes (authenticated users can view users) - must come before admin routes
 router.get('/admin/users', getAllUsers);
@@ -106,5 +110,8 @@ router.delete('/admin/images/:filename', isAdmin, deleteImage);
 // Privacy Policy and Terms of Service routes
 router.use('/privacy-policy', privacyPolicyRoutes);
 router.use('/terms-of-service', termsOfServiceRoutes);
+
+// Review routes
+router.use('/reviews', reviewRoutes);
 
 export default router;

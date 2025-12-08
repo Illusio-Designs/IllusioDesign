@@ -147,7 +147,8 @@ export default function DashboardHeader({ currentPage, onPageChange, onSidebarTo
     { label: 'Position', page: 'position' },
     { label: 'Team', page: 'team' },
     { label: 'SEO', page: 'seo' },
-    { label: 'Users', page: 'users' }
+    { label: 'Users', page: 'users' },
+    { label: 'Reviews', page: 'reviews' }
   ];
 
   const handleLogout = () => {

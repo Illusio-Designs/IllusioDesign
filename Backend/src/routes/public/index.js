@@ -8,6 +8,7 @@ import seoRoutes from './seo.js';
 import applicationRoutes from './application.js';
 import privacyPolicyRoutes from './privacyPolicy.js';
 import termsOfServiceRoutes from './termsOfService.js';
+import reviewRoutes from './review.js';
 
 const router = express.Router();
 
@@ -20,5 +21,6 @@ router.use('/seo', seoRoutes);
 router.use('/applications', applicationRoutes);
 router.use('/privacy-policy', privacyPolicyRoutes);
 router.use('/terms-of-service', termsOfServiceRoutes);
+router.use('/reviews', reviewRoutes);
 
 export default router;

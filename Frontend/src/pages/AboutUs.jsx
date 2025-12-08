@@ -9,11 +9,12 @@ import Counter from '@/components/Counter';
 import Modal from '@/components/common/Modal';
 import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { useSEO } from '@/hooks/useSEO';
-import { teamAPI } from '@/services/api';
+import { teamAPI, reviewAPI } from '@/services/api';
 import { setPageContext } from '@/services/fetchInterceptor';
+import { toast } from 'react-toastify';
 
-// Star Rating Component
-const StarRating = () => {
+// Star Rating Component - displays specific rating
+const StarRating = ({ rating = 5 }) => {
   return (
     <div className="rating">
       {[...Array(5)].map((_, index) => (
@@ -27,7 +28,7 @@ const StarRating = () => {
         >
           <path
             d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
-            fill="#EC691F"
+            fill={index < rating ? "#EC691F" : "#E5E5E5"}
           />
         </svg>
       ))}
@@ -115,7 +116,9 @@ export default function AboutUs({ navigateTo, currentPage }) {
 
   const [isLoading, setIsLoading] = useState(true);
   const [teamMembers, setTeamMembers] = useState([]);
+  const [reviews, setReviews] = useState([]);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [isSubmittingReview, setIsSubmittingReview] = useState(false);
   const [reviewForm, setReviewForm] = useState({
     rating: 5,
     quote: '',
@@ -156,38 +159,12 @@ export default function AboutUs({ navigateTo, currentPage }) {
     { id: 'experience', value: 7, label: 'Years of Experience', suffix: '+' },
   ];
 
-  const testimonials = [
-    {
-      id: 'card-1',
-      quote: 'Illusio Designs transformed our brand identity and built a website that truly reflects who we are.',
-      client: 'Rajesh, Founder, Vivera Lights',
-    },
-    {
-      id: 'card-2',
-      quote: 'From concept to launch, their team was supportive and creative. Highly recommended.',
-      client: 'Kunal, Director, Gold B2B Pvt.',
-    },
-    {
-      id: 'card-3',
-      quote: 'From concept to launch, their team was supportive and creative. Highly recommended.',
-      client: 'Kunal, Director, Gold B2B Pvt.',
-    },
-    {
-      id: 'card-4',
-      quote: 'Illusio Designs transformed our brand identity and built a website that truly reflects who we are.',
-      client: 'Rajesh, Founder, Vivera Lights',
-    },
-    {
-      id: 'card-5',
-      quote: 'From concept to launch, their team was supportive and creative. Highly recommended.',
-      client: 'Kunal, Director, Gold B2B Pvt.',
-    },
-    {
-      id: 'card-6',
-      quote: 'Illusio Designs transformed our brand identity and built a website that truly reflects who we are.',
-      client: 'Rajesh, Founder, Vivera Lights',
-    },
-  ];
+  // Calculate average rating from reviews
+  const calculateAverageRating = (reviews) => {
+    if (!reviews || reviews.length === 0) return 4.93;
+    const sum = reviews.reduce((acc, review) => acc + review.rating, 0);
+    return (sum / reviews.length).toFixed(2);
+  };
 
 
   // Fetch team members from API
@@ -228,6 +205,35 @@ export default function AboutUs({ navigateTo, currentPage }) {
     fetchTeamMembers();
 
     // Cleanup function
+    return () => {
+      isMounted = false;
+      abortController.abort();
+    };
+  }, []);
+
+  // Fetch reviews from API
+  useEffect(() => {
+    let isMounted = true;
+    const abortController = new AbortController();
+
+    const fetchReviews = async () => {
+      try {
+        const response = await reviewAPI.getAllPublic();
+        if (response && response.data && Array.isArray(response.data)) {
+          if (isMounted) {
+            setReviews(response.data);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching reviews:', error);
+        if (isMounted) {
+          setReviews([]);
+        }
+      }
+    };
+
+    fetchReviews();
+
     return () => {
       isMounted = false;
       abortController.abort();
@@ -473,10 +479,10 @@ export default function AboutUs({ navigateTo, currentPage }) {
                   {/* Left Sidebar */}
                   <div className="testimonials-sidebar">
                     <div className="rating-summary">
-                    <h3 className="rating-text">
-                  Rated 4.93/5 based on current reviews
-                </h3>
-                <p className="trusted-text">Trusted globally by clients</p>
+                      <h3 className="rating-text">
+                        Rated {calculateAverageRating(reviews)}/5 based on {reviews.length} {reviews.length === 1 ? 'review' : 'reviews'}
+                      </h3>
+                      <p className="trusted-text">Trusted globally by clients</p>
                       <button 
                         className="share-experience-btn"
                         onClick={() => setIsReviewModalOpen(true)}
@@ -487,37 +493,45 @@ export default function AboutUs({ navigateTo, currentPage }) {
                   </div>
 
                   {/* Right Side - 2 Independent Scrolling Columns */}
-                  <div className="testimonials-columns">
-                    {/* Column 1 */}
-                    <div className="testimonial-column testimonial-column-1">
-                      <div className="testimonial-column-track">
-                        {[...testimonials, ...testimonials].map((testimonial, index) => (
-                          <article key={`col1-${testimonial.id}-${index}`} className="testimonial-card">
-                            <StarRating />
-                            <p className="testimonial-text">&quot;{testimonial.quote}&quot;</p>
-                            <div className="testimonial-signature">
-                              <h1 className="client-name">{testimonial.client}</h1>
-                            </div>
-                          </article>
-                        ))}
+                  {reviews.length > 0 ? (
+                    <div className="testimonials-columns">
+                      {/* Column 1 */}
+                      <div className="testimonial-column testimonial-column-1">
+                        <div className="testimonial-column-track">
+                          {[...reviews, ...reviews].map((review, index) => (
+                            <article key={`col1-${review.id}-${index}`} className="testimonial-card">
+                              <StarRating rating={review.rating} />
+                              <p className="testimonial-text">&quot;{review.quote}&quot;</p>
+                              <div className="testimonial-signature">
+                                <h1 className="client-name">{review.client}</h1>
+                              </div>
+                            </article>
+                          ))}
+                        </div>
                       </div>
-                    </div>
 
-                    {/* Column 2 */}
-                    <div className="testimonial-column testimonial-column-2">
-                      <div className="testimonial-column-track">
-                        {[...testimonials, ...testimonials].map((testimonial, index) => (
-                          <article key={`col2-${testimonial.id}-${index}`} className="testimonial-card">
-                            <StarRating />
-                            <p className="testimonial-text">&quot;{testimonial.quote}&quot;</p>
-                            <div className="testimonial-signature">
-                              <h1 className="client-name">{testimonial.client}</h1>
-                            </div>
-                          </article>
-                        ))}
+                      {/* Column 2 */}
+                      <div className="testimonial-column testimonial-column-2">
+                        <div className="testimonial-column-track">
+                          {[...reviews, ...reviews].map((review, index) => (
+                            <article key={`col2-${review.id}-${index}`} className="testimonial-card">
+                              <StarRating rating={review.rating} />
+                              <p className="testimonial-text">&quot;{review.quote}&quot;</p>
+                              <div className="testimonial-signature">
+                                <h1 className="client-name">{review.client}</h1>
+                              </div>
+                            </article>
+                          ))}
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  ) : (
+                    <div className="testimonials-columns">
+                      <div style={{ padding: '40px', textAlign: 'center', color: '#999', gridColumn: '1 / -1' }}>
+                        No reviews yet. Be the first to share your experience!
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </section>
@@ -539,12 +553,24 @@ export default function AboutUs({ navigateTo, currentPage }) {
       >
         <form 
           className="review-form"
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
-            // Handle form submission here
-            console.log('Review submitted:', reviewForm);
-            setIsReviewModalOpen(false);
-            setReviewForm({ rating: 5, quote: '', client: '' });
+            setIsSubmittingReview(true);
+            try {
+              await reviewAPI.submit({
+                rating: reviewForm.rating,
+                quote: reviewForm.quote.trim(),
+                client: reviewForm.client.trim()
+              });
+              toast.success('Review submitted successfully! It will be reviewed before being published.');
+              setIsReviewModalOpen(false);
+              setReviewForm({ rating: 5, quote: '', client: '' });
+            } catch (error) {
+              console.error('Error submitting review:', error);
+              toast.error(error.message || 'Failed to submit review. Please try again.');
+            } finally {
+              setIsSubmittingReview(false);
+            }
           }}
         >
           <div className="form-group">
@@ -575,7 +601,9 @@ export default function AboutUs({ navigateTo, currentPage }) {
             />
           </div>
           <div className="form-actions">
-            <button type="submit" className="submit-btn">Submit Review</button>
+            <button type="submit" className="submit-btn" disabled={isSubmittingReview}>
+              {isSubmittingReview ? 'Submitting...' : 'Submit Review'}
+            </button>
           </div>
         </form>
       </Modal>
