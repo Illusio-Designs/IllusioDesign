@@ -62,8 +62,19 @@ export const createBlog = async (req, res) => {
       return res.status(400).json({ error: 'Title is required' });
     }
     
-    // Generate slug from title if not provided
-    const blogSlug = slug || title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    // Generate slug from title if not provided or empty
+    let blogSlug = slug && slug.trim() ? slug.trim() : null;
+    if (!blogSlug) {
+      // Generate slug from title
+      blogSlug = title
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, '-') // Replace spaces with hyphens
+        .replace(/[^\w\-]+/g, '') // Remove special characters except hyphens
+        .replace(/\-\-+/g, '-') // Replace multiple hyphens with single hyphen
+        .replace(/^-+/, '') // Remove leading hyphens
+        .replace(/-+$/, ''); // Remove trailing hyphens
+    }
     
     // Check if slug already exists
     const existingBlog = await Blog.findOne({ where: { slug: blogSlug } });
@@ -165,6 +176,18 @@ export const updateBlog = async (req, res) => {
     // Handle boolean fields
     if (updates.published !== undefined) {
       updates.published = updates.published === 'true' || updates.published === true;
+    }
+    
+    // Auto-generate slug from title if title is being updated and slug is empty or not provided
+    if (updates.title && (!updates.slug || !updates.slug.trim())) {
+      updates.slug = updates.title
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, '-') // Replace spaces with hyphens
+        .replace(/[^\w\-]+/g, '') // Remove special characters except hyphens
+        .replace(/\-\-+/g, '-') // Replace multiple hyphens with single hyphen
+        .replace(/^-+/, '') // Remove leading hyphens
+        .replace(/-+$/, ''); // Remove trailing hyphens
     }
     
     // Check slug uniqueness if slug is being updated

@@ -15,6 +15,7 @@ import Link from '@tiptap/extension-link';
 import Image from '@tiptap/extension-image';
 import Placeholder from '@tiptap/extension-placeholder';
 import { normalizeContentForSave } from '@/utils/contentNormalizer';
+import { toSlug } from '@/utils/urlSlug';
 import '@/styles/pages/Dashboard/shared.css';
 import '@/styles/pages/Dashboard/Blog.css';
 
@@ -58,6 +59,8 @@ export default function Blog() {
     seoUrl: '',
     image: null
   });
+  const [originalTitle, setOriginalTitle] = useState('');
+  const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false);
   const [currentMainImage, setCurrentMainImage] = useState(null);
   const [isClient, setIsClient] = useState(false);
 
@@ -173,6 +176,8 @@ export default function Blog() {
       seoUrl: '',
       image: null
     });
+    setOriginalTitle('');
+    setIsSlugManuallyEdited(false);
     if (editor) {
       editor.commands.setContent('');
     }
@@ -202,6 +207,8 @@ export default function Blog() {
       return '';
     };
     
+    setOriginalTitle(blog.title || '');
+    setIsSlugManuallyEdited(false);
     setFormData({
       title: blog.title || '',
       slug: blog.slug || '',
@@ -252,6 +259,12 @@ export default function Blog() {
           const content = normalizeContentForSave(formData[key] || '');
           // Ensure content is properly encoded as UTF-8
           formDataToSend.append(key, content);
+        } else if (key === 'slug') {
+          // Always include slug, generate from title if empty
+          const slugToSend = formData.slug && formData.slug.trim() 
+            ? formData.slug.trim() 
+            : toSlug(formData.title || '');
+          formDataToSend.append(key, slugToSend);
         } else if (key !== 'image' && formData[key] !== null && formData[key] !== '') {
           formDataToSend.append(key, formData[key]);
         }
@@ -389,9 +402,37 @@ export default function Blog() {
                 <input
                   type="text"
                   value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  onChange={(e) => {
+                    const newTitle = e.target.value;
+                    // Auto-generate slug from title only if:
+                    // 1. Creating new blog (no editingBlog), OR
+                    // 2. Title changed from original AND slug hasn't been manually edited
+                    if (!editingBlog || (!isSlugManuallyEdited && newTitle !== originalTitle)) {
+                      const newSlug = toSlug(newTitle);
+                      setFormData({ ...formData, title: newTitle, slug: newSlug });
+                    } else {
+                      setFormData({ ...formData, title: newTitle });
+                    }
+                  }}
                   required
                 />
+              </div>
+
+              <div className="form-group">
+                <label>Slug (URL-friendly)</label>
+                <input
+                  type="text"
+                  value={formData.slug}
+                  onChange={(e) => {
+                    setIsSlugManuallyEdited(true);
+                    setFormData({ ...formData, slug: toSlug(e.target.value) });
+                  }}
+                  placeholder="Auto-generated from title"
+                  required
+                />
+                <small style={{ color: '#666', fontSize: '12px', marginTop: '4px', display: 'block' }}>
+                  This will be used in the URL. Auto-generated from title, but you can edit it.
+                </small>
               </div>
 
               <div className="form-group">
