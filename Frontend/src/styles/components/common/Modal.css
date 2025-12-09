@@ -122,3 +122,16 @@
   flex-direction: column;
 }
 
+@media (max-width: 768px) {
+  .modal-large {
+    max-width: 500px;
+    width: 60%;
+}
+}
+
+@media (max-width: 426px) {
+  .modal-large {
+    max-width: 500px;
+    width: 100%;
+}
+}
