@@ -191,7 +191,7 @@ export default function Blog({ navigateTo, currentPage }) {
                         alt={post.title}
                         style={{
                           width: '100%',
-                          height: '100%',
+                          height: 'auto',
                           objectFit: 'cover',
                           display: 'block'
                         }}
