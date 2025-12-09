@@ -295,61 +295,251 @@
 /* Responsive Design */
 @media (max-width: 1024px) {
   .about-section {
-    padding: 5rem 2rem;
+    padding: 5rem 4rem;
   }
 
   .about-section .section-title {
-    font-size: 40px;
+    font-size: 42px;
+    margin-bottom: 3.5rem;
   }
 
   .section-subtitle {
-    font-size: 2rem;
+    font-size: 2.2rem;
+    margin-bottom: 2.5rem;
   }
 
   .about-intro {
-    padding: 0 0 3rem 0;
+    padding: 0 0 4rem 0;
+  }
+
+  .about-intro p {
+    font-size: 1.1rem;
+    margin-bottom: 1.25rem;
   }
 
   .about-stats-section {
-    padding: 0 0 3rem 0;
+    padding: 0 0 4rem 0;
   }
 
   .vision-mission-grid {
-    grid-template-columns: 1fr;
     gap: 2rem;
-    padding: 0 0 3rem 0;
+    padding: 0 0 4rem 0;
   }
 
-  .team-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
+  .about-card {
+    padding: 2.5rem 2rem;
+  }
+
+  .card-title {
+    font-size: 1.65rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .card-description {
+    font-size: 0.98rem;
+  }
+
+  .goals-section {
+    padding: 0 0 4rem 0;
   }
 
   .goals-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
+    gap: 1.75rem;
+  }
+
+  .goal-card {
+    padding: 2.25rem 1.75rem;
+  }
+
+  .goal-icon {
+    width: 55px;
+    height: 55px;
+  }
+
+  .goal-title {
+    font-size: 1.4rem;
+    margin-bottom: 0.875rem;
+  }
+
+  .goal-description {
+    font-size: 0.92rem;
+  }
+
+  .team-section {
+    padding: 0 0 4rem 0;
+  }
+
+  .team-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.75rem;
+  }
+
+  .team-card {
+    padding: 2.25rem 1.75rem;
+  }
+
+  .team-avatar-image {
+    width: 180px !important;
+    height: 180px !important;
+  }
+
+  .avatar-placeholder {
+    width: 80px;
+    height: 80px;
+    font-size: 1.6rem;
+  }
+
+  .team-name {
+    font-size: 1.15rem;
+  }
+
+  .team-role {
+    font-size: 0.9rem;
+  }
+
+  .team-description {
+    font-size: 0.85rem;
   }
 
   .about-container .testimonials-section {
-    margin-left: -2rem;
-    margin-right: -2rem;
-    width: calc(100% + 4rem);
-    padding: 2rem 2rem;
+    margin-left: -4rem;
+    margin-right: -4rem;
+    width: calc(100% + 8rem);
+    padding: 2rem 4rem;
   }
 }
 
 @media (max-width: 768px) {
   .about-section {
-    padding: 4rem 1rem;
+    padding: 4rem 3rem;
   }
 
   .about-section .section-title {
-    font-size: 32px;
+    font-size: 36px;
     margin-bottom: 3rem;
   }
 
   .section-subtitle {
-    font-size: 1.75rem;
+    font-size: 1.9rem;
+    margin-bottom: 2.25rem;
+  }
+
+  .about-intro {
+    padding: 0 0 3.5rem 0;
+  }
+
+  .about-intro p {
+    font-size: 1rem;
+    margin-bottom: 1.1rem;
+    line-height: 1.75;
+  }
+
+  .about-stats-section {
+    padding: 0 0 3.5rem 0;
+  }
+
+  .vision-mission-grid {
+    padding: 0 0 3.5rem 0;
+    gap: 1.75rem;
+  }
+
+  .about-card {
+    padding: 2rem 1.75rem;
+  }
+
+  .card-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .card-description {
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+
+  .goals-section {
+    padding: 0 0 3.5rem 0;
+  }
+
+  .goals-grid {
+    gap: 1.5rem;
+  }
+
+  .goal-card {
+    padding: 2rem 1.75rem;
+  }
+
+  .goal-icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .goal-title {
+    font-size: 1.35rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .goal-description {
+    font-size: 0.9rem;
+  }
+
+  .team-section {
+    padding: 0 0 3.5rem 0;
+  }
+
+  .team-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .team-card {
+    padding: 2rem 1.75rem;
+  }
+
+  .team-avatar-image {
+    width: 160px !important;
+    height: 160px !important;
+  }
+
+  .avatar-placeholder {
+    width: 75px;
+    height: 75px;
+    font-size: 1.5rem;
+  }
+
+  .team-name {
+    font-size: 1.1rem;
+  }
+
+  .team-role {
+    font-size: 0.875rem;
+  }
+
+  .team-description {
+    font-size: 0.85rem;
+  }
+
+  .about-container .testimonials-section {
+    margin-left: -3rem;
+    margin-right: -3rem;
+    width: calc(100% + 6rem);
+    padding: 1.75rem 3rem;
+  }
+}
+
+@media (max-width: 426px) {
+  .about-section {
+    padding: 3rem 2rem;
+  }
+
+  .about-section .section-title {
+    font-size: 28px;
+    margin-bottom: 2.5rem;
+  }
+
+  .section-subtitle {
+    font-size: 1.6rem;
     margin-bottom: 2rem;
   }
 
@@ -358,7 +548,9 @@
   }
 
   .about-intro p {
-    font-size: 1rem;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    line-height: 1.7;
   }
 
   .about-stats-section {
@@ -366,46 +558,488 @@
   }
 
   .vision-mission-grid {
+    grid-template-columns: 1fr;
     padding: 0 0 3rem 0;
+    gap: 1.5rem;
   }
 
   .about-card {
-    padding: 2rem 1.5rem;
+    padding: 1.75rem 1.5rem;
+    border-radius: 16px;
   }
 
   .card-title {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
+    margin-bottom: 0.875rem;
   }
 
   .card-description {
-    font-size: 0.95rem;
+    font-size: 0.88rem;
+    line-height: 1.6;
   }
 
-  .goals-section,
-  .team-section {
+  .goals-section {
     padding: 0 0 3rem 0;
   }
 
   .goals-grid {
     grid-template-columns: 1fr;
-    gap: 1.5rem;
+    gap: 1.25rem;
+  }
+
+  .goal-card {
+    padding: 1.75rem 1.5rem;
+    border-radius: 16px;
+  }
+
+  .goal-icon-wrapper {
+    margin-bottom: 1.25rem;
+  }
+
+  .goal-icon {
+    width: 45px;
+    height: 45px;
+  }
+
+  .goal-title {
+    font-size: 1.2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .goal-description {
+    font-size: 0.85rem;
+    line-height: 1.6;
   }
 
   .team-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+    gap: 1.25rem;
+  }
+
+  .team-card {
+    padding: 1rem;
+    border-radius: 16px;
+  }
+
+  .team-avatar {
+    margin-bottom: 1.25rem;
+  }
+
+  .team-avatar-image {
+    width: 120px !important;
+    height: 120px !important;
+}
+
+  .avatar-placeholder {
+    width: 70px;
+    height: 70px;
+    font-size: 1.4rem;
+  }
+
+  .team-name {
+    font-size: 1.05rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .team-role {
+    font-size: 0.85rem;
+    margin-bottom: 0.875rem;
+  }
+
+  .team-description {
+    font-size: 0.8rem;
+    line-height: 1.55;
   }
 
   .about-container .testimonials-section {
-    margin-left: -1rem;
-    margin-right: -1rem;
-    width: calc(100% + 2rem);
-    padding: 2rem 1rem;
+    margin-left: -2rem;
+    margin-right: -2rem;
+    width: calc(100% + 4rem);
+    padding: 1.5rem 2rem;
+  }
+}
+
+@media (max-width: 384px) {
+  .about-section {
+    padding: 2.5rem 1.75rem 5rem 1.75rem;
   }
 
-  .goal-card,
+  .about-section .section-title {
+    font-size: 26px;
+    margin-bottom: 2.25rem;
+  }
+
+  .section-subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .about-intro {
+    padding: 0 0 2.5rem 0;
+  }
+
+  .about-intro p {
+    font-size: 0.85rem;
+    margin-bottom: 0.875rem;
+    line-height: 1.65;
+  }
+
+  .about-stats-section {
+    padding: 0 0 2.5rem 0;
+  }
+
+
+
+  .vision-mission-grid {
+    padding: 0 0 2.5rem 0;
+    gap: 1.25rem;
+  }
+
+  .about-card {
+    padding: 1.5rem 1.25rem;
+    border-radius: 14px;
+  }
+
+  .card-title {
+    font-size: 1.2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .card-description {
+    font-size: 0.83rem;
+    line-height: 1.55;
+  }
+
+  .goals-section {
+    padding: 0 0 2.5rem 0;
+  }
+
+  .goals-grid {
+    gap: 1.1rem;
+  }
+
+  .goal-card {
+    padding: 1.5rem 1.25rem;
+    border-radius: 14px;
+  }
+
+  .goal-icon-wrapper {
+    margin-bottom: 1.1rem;
+  }
+
+  .goal-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .goal-title {
+    font-size: 1.1rem;
+    margin-bottom: 0.7rem;
+  }
+
+  .goal-description {
+    font-size: 0.8rem;
+    line-height: 1.55;
+  }
+
+  .team-section {
+    padding: 0 0 2.5rem 0;
+  }
+
+  .team-grid {
+    gap: 1.1rem;
+  }
+
   .team-card {
-    padding: 2rem;
+    border-radius: 14px;
+  }
+
+  .team-avatar {
+    margin-bottom: 1.1rem;
+  }
+
+  .team-avatar-image {
+    width: 100px !important;
+    height: 100px !important;
+  }
+
+  .avatar-placeholder {
+    width: 65px;
+    height: 65px;
+    font-size: 1.3rem;
+  }
+
+  .team-name {
+    font-size: 1rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .team-role {
+    font-size: 0.8rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .team-description {
+    font-size: 0.75rem;
+    line-height: 1.5;
+  }
+
+  .about-container .testimonials-section {
+    margin-left: -1.75rem;
+    margin-right: -1.75rem;
+    width: calc(100% + 3.5rem);
+    padding: 1.25rem 1.75rem;
+  }
+}
+
+@media (max-width: 375px) {
+  .about-section {
+    padding: 2.25rem 1.5rem 4.5rem 1.5rem;
+  }
+
+  .about-section .section-title {
+    font-size: 24px;
+    margin-bottom: 2rem;
+  }
+
+  .section-subtitle {
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .about-intro {
+    padding: 0 0 2.25rem 0;
+  }
+
+  .about-intro p {
+    font-size: 0.8rem;
+    margin-bottom: 0.8rem;
+    line-height: 1.6;
+  }
+
+  .about-stats-section {
+    padding: 0 0 2.25rem 0;
+  }
+
+  .vision-mission-grid {
+    padding: 0 0 2.25rem 0;
+    gap: 1.1rem;
+  }
+
+  .about-card {
+    padding: 1.4rem 1.1rem;
+    border-radius: 12px;
+  }
+
+  .card-title {
+    font-size: 1.15rem;
+    margin-bottom: 0.7rem;
+  }
+
+  .card-description {
+    font-size: 0.8rem;
+    line-height: 1.5;
+  }
+
+  .goals-section {
+    padding: 0 0 2.25rem 0;
+  }
+
+  .goals-grid {
+    gap: 1rem;
+  }
+
+  .goal-card {
+    padding: 1.4rem 1.1rem;
+    border-radius: 12px;
+  }
+
+  .goal-icon-wrapper {
+    margin-bottom: 1rem;
+  }
+
+  .goal-icon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .goal-title {
+    font-size: 1.05rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .goal-description {
+    font-size: 0.78rem;
+    line-height: 1.5;
+  }
+
+  .team-section {
+    padding: 0 0 2.25rem 0;
+  }
+
+  .team-grid {
+    gap: 1rem;
+  }
+
+  .team-card {
+    border-radius: 12px;
+  }
+
+  .team-avatar {
+    margin-bottom: 1rem;
+  }
+
+  .avatar-placeholder {
+    width: 60px;
+    height: 60px;
+    font-size: 1.2rem;
+  }
+
+  .team-name {
+    font-size: 0.95rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .team-role {
+    font-size: 0.78rem;
+    margin-bottom: 0.7rem;
+  }
+
+  .team-description {
+    font-size: 0.73rem;
+    line-height: 1.45;
+  }
+
+  .about-container .testimonials-section {
+    margin-left: -1.5rem;
+    margin-right: -1.5rem;
+    width: calc(100% + 3rem);
+    padding: 1.1rem 1.5rem;
+  }
+}
+
+@media (max-width: 320px) {
+  .about-section {
+    padding: 2rem 1.25rem 4rem 1.25rem;
+  }
+
+  .about-section .section-title {
+    font-size: 22px;
+    margin-bottom: 1.75rem;
+  }
+
+  .section-subtitle {
+    font-size: 1.3rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .about-intro {
+    padding: 0 0 2rem 0;
+  }
+
+  .about-intro p {
+    font-size: 0.75rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.55;
+  }
+
+  .about-stats-section {
+    padding: 0 0 2rem 0;
+  }
+
+  .vision-mission-grid {
+    padding: 0 0 2rem 0;
+    gap: 1rem;
+  }
+
+  .about-card {
+    padding: 1.25rem 1rem;
+    border-radius: 10px;
+  }
+
+  .card-title {
+    font-size: 1.1rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .card-description {
+    font-size: 0.75rem;
+    line-height: 1.45;
+  }
+
+  .goals-section {
+    padding: 0 0 2rem 0;
+  }
+
+  .goals-grid {
+    gap: 0.875rem;
+  }
+
+  .goal-card {
+    padding: 1.25rem 1rem;
+    border-radius: 10px;
+  }
+
+  .goal-icon-wrapper {
+    margin-bottom: 0.875rem;
+  }
+
+  .goal-icon {
+    width: 35px;
+    height: 35px;
+  }
+
+  .goal-title {
+    font-size: 1rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .goal-description {
+    font-size: 0.73rem;
+    line-height: 1.45;
+  }
+
+  .team-section {
+    padding: 0 0 2rem 0;
+  }
+
+  .team-grid {
+    gap: 0.875rem;
+  }
+
+  .team-card {
+    border-radius: 10px;
+  }
+
+  .team-avatar {
+    margin-bottom: 0.875rem;
+  }
+
+  .avatar-placeholder {
+    width: 55px;
+    height: 55px;
+    font-size: 1.1rem;
+  }
+
+  .team-name {
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .team-role {
+    font-size: 0.75rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .team-description {
+    font-size: 0.7rem;
+    line-height: 1.4;
+  }
+
+  .about-container .testimonials-section {
+    margin-left: -1.25rem;
+    margin-right: -1.25rem;
+    width: calc(100% + 2.5rem);
+    padding: 1rem 1.25rem;
   }
 }
 

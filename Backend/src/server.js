@@ -22,7 +22,9 @@ const defaultOrigins = [
   'http://localhost:3000', 
   'http://localhost:3001',
   'https://illusiodesigns.agency',
-  'http://illusiodesigns.agency'
+  'http://illusiodesigns.agency',
+  'https://www.illusiodesigns.agency',
+  'http://www.illusiodesigns.agency'
 ];
 
 const envOrigins = process.env.FRONTEND_URL 
