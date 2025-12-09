@@ -3,9 +3,11 @@
 import { useState } from 'react';
 import '@/styles/components/Header.css';
 import CardNav from '@/components/CardNav';
+import { useTheme } from '@/hooks/useTheme';
 
 export default function Header({ navigateTo, currentPage }) {
   const [isServicesOpen, setIsServicesOpen] = useState(false);
+  const isDark = useTheme();
 
   // Map detail pages to their parent pages for active state
   const getActivePage = () => {
@@ -70,7 +72,11 @@ export default function Header({ navigateTo, currentPage }) {
       <div className="header-container">
         <a href="/" onClick={(e) => { e.preventDefault(); navigateTo('home'); }} style={{ cursor: 'pointer', textDecoration: 'none' }}>
           <div className="logo" style={{ cursor: 'pointer' }}>
-            <img src="/images/IllusioDesignfulllogo.webp" alt="Illusio Designs" className="logo-image" />
+            <img 
+              src={isDark ? "/images/Illusio Design Logo WHITE.webp" : "/images/IllusioDesignfulllogo.webp"} 
+              alt="Illusio Designs" 
+              className="logo-image" 
+            />
           </div>
         </a>
         <nav className="nav">

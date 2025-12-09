@@ -1,7 +1,11 @@
+'use client';
+
 import '@/styles/components/Footer.css';
 import ScrollReveal from '@/components/ScrollReveal';
+import { useTheme } from '@/hooks/useTheme';
 
 export default function Footer({ navigateTo }) {
+  const isDark = useTheme();
   return (
     <footer className="footer">
       {/* CTA Section */}
@@ -28,7 +32,7 @@ export default function Footer({ navigateTo }) {
               <a href="/" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('home'); }} style={{ textDecoration: 'none', display: 'block' }}>
                 <div className="footer-logo">
                   <img 
-                    src="/images/IllusioDesignfulllogo.webp" 
+                    src={isDark ? "/images/Illusio Design Logo WHITE.webp" : "/images/IllusioDesignfulllogo.webp"} 
                     alt="Illusio Designs" 
                     className="footer-logo-image"
                     style={{ cursor: 'pointer' }}
