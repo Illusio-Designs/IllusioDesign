@@ -306,3 +306,19 @@
     font-size: 0.7rem;
   }
 }
+
+.dark-theme .terms-block h3 {
+  color: #FAF9F6;
+}
+
+.dark-theme .terms-block p {
+  color: #FAF9F6;
+}
+
+.dark-theme .terms-block ul {
+  color: #FAF9F6;
+}
+
+.dark-theme .terms-block ul li {
+  color: #FAF9F6;
+}
