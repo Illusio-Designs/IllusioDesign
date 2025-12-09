@@ -206,8 +206,11 @@ body.dark-theme .card-nav-description {
   }
 
   .card-nav-grid {
-    grid-template-columns: 1fr;
     gap: 1rem;
+  }
+
+  .card-nav-grid a {
+    padding: 1.5rem !important;
   }
 
   .card-nav-item {

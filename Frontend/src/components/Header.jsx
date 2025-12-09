@@ -1,12 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import '@/styles/components/Header.css';
 import CardNav from '@/components/CardNav';
 import { useTheme } from '@/hooks/useTheme';
 
 export default function Header({ navigateTo, currentPage }) {
   const [isServicesOpen, setIsServicesOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const isDark = useTheme();
 
   // Map detail pages to their parent pages for active state
@@ -23,6 +24,27 @@ export default function Header({ navigateTo, currentPage }) {
   };
 
   const activePage = getActivePage();
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+    setIsServicesOpen(false);
+  }, [currentPage]);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+    setIsServicesOpen(false);
+  };
+
+  const handleNavClick = (path, serviceName = null) => {
+    if (serviceName) {
+      navigateTo(path, serviceName);
+    } else {
+      navigateTo(path);
+    }
+    setIsMobileMenuOpen(false);
+    setIsServicesOpen(false);
+  };
 
   const servicesItems = [
     {
@@ -68,7 +90,7 @@ export default function Header({ navigateTo, currentPage }) {
   ];
 
   return (
-    <header className="header">
+    <header className={`header ${isMobileMenuOpen ? 'menu-open' : ''}`}>
       <div className="header-container">
         <a href="/" onClick={(e) => { e.preventDefault(); navigateTo('home'); }} style={{ cursor: 'pointer', textDecoration: 'none' }}>
           <div className="logo" style={{ cursor: 'pointer' }}>
@@ -79,20 +101,31 @@ export default function Header({ navigateTo, currentPage }) {
             />
           </div>
         </a>
-        <nav className="nav">
+        <nav className={`nav ${isMobileMenuOpen ? 'nav-open' : ''}`}>
           <ul>
             <li className="services-nav-item">
               <a 
                 href="/services"
-                onClick={(e) => { e.preventDefault(); setIsServicesOpen(!isServicesOpen); }}
-                onMouseEnter={() => setIsServicesOpen(true)}
+                onClick={(e) => { 
+                  e.preventDefault(); 
+                  if (window.innerWidth <= 768) {
+                    setIsServicesOpen(!isServicesOpen);
+                  } else {
+                    setIsServicesOpen(!isServicesOpen);
+                  }
+                }}
+                onMouseEnter={() => {
+                  if (window.innerWidth > 768) {
+                    setIsServicesOpen(true);
+                  }
+                }}
                 className={activePage === 'services' ? 'active' : ''}
               >
                 Services
               </a>
               <CardNav
                 items={servicesItems}
-                onNavigate={(path, serviceName) => navigateTo(path, serviceName)}
+                onNavigate={(path, serviceName) => handleNavClick(path, serviceName)}
                 isOpen={isServicesOpen}
                 onClose={() => setIsServicesOpen(false)}
               />
@@ -100,7 +133,7 @@ export default function Header({ navigateTo, currentPage }) {
             <li>
               <a 
                 href="/case-study"
-                onClick={(e) => { e.preventDefault(); navigateTo('case-study'); }}
+                onClick={(e) => { e.preventDefault(); handleNavClick('case-study'); }}
                 className={activePage === 'case-study' ? 'active' : ''}
               >
                 Case Study
@@ -109,7 +142,7 @@ export default function Header({ navigateTo, currentPage }) {
             <li>
               <a 
                 href="/about"
-                onClick={(e) => { e.preventDefault(); navigateTo('about'); }}
+                onClick={(e) => { e.preventDefault(); handleNavClick('about'); }}
                 className={activePage === 'about' ? 'active' : ''}
               >
                 About Us
@@ -118,7 +151,7 @@ export default function Header({ navigateTo, currentPage }) {
             <li>
               <a 
                 href="/career"
-                onClick={(e) => { e.preventDefault(); navigateTo('career'); }}
+                onClick={(e) => { e.preventDefault(); handleNavClick('career'); }}
                 className={activePage === 'career' ? 'active' : ''}
               >
                 Career
@@ -127,15 +160,40 @@ export default function Header({ navigateTo, currentPage }) {
             <li>
               <a 
                 href="/blog"
-                onClick={(e) => { e.preventDefault(); navigateTo('blog'); }}
+                onClick={(e) => { e.preventDefault(); handleNavClick('blog'); }}
                 className={activePage === 'blog' ? 'active' : ''}
               >
                 Blog
               </a>
             </li>
+            <li className="mobile-engage-button-item">
+              <a 
+                href="/contact" 
+                onClick={(e) => { e.preventDefault(); handleNavClick('contact'); }} 
+                className="mobile-engage-button"
+              >
+                Let&apos;s Engage
+              </a>
+            </li>
           </ul>
         </nav>
-        <a href="/contact" onClick={(e) => { e.preventDefault(); navigateTo('contact'); }} className="engage-button" style={{ textDecoration: 'none' }}>Let&apos;s Engage</a>
+        <a 
+          href="/contact" 
+          onClick={(e) => { e.preventDefault(); handleNavClick('contact'); }} 
+          className="engage-button desktop-engage-button" 
+          style={{ textDecoration: 'none' }}
+        >
+          Let&apos;s Engage
+        </a>
+        <button 
+          className={`burger-menu ${isMobileMenuOpen ? 'burger-open' : ''}`}
+          onClick={toggleMobileMenu}
+          aria-label="Toggle menu"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
       </div>
     </header>
   );
