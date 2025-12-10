@@ -77,20 +77,26 @@ export default function CaseStudy() {
     }
   };
 
-  // Helper to parse results array and return clean newline-separated string
+  // Helper to parse results array and return HTML string for editor
   const parseResultsField = (field) => {
     if (!field) return '';
     try {
       let resultsArray = field;
       
-      // If it's a string, try to parse as JSON
+      // If it's a string, check if it's HTML (contains HTML tags)
       if (typeof field === 'string') {
+        // Check if it's HTML content (from rich text editor)
+        if (field.includes('<p>') || field.includes('<ul>') || field.includes('<ol>') || field.includes('<li>') || field.includes('<div>')) {
+          return field; // Return HTML as is
+        }
+        
+        // If it's JSON array string, parse it
         if (field.trim().startsWith('[') || field.includes('\\')) {
           try {
             resultsArray = JSON.parse(field);
           } catch (e) {
-            // If not JSON, return cleaned string
-            return cleanString(field);
+            // If not JSON, return as is (might be plain text)
+            return field;
           }
         } else {
           // Simple string, return as is
@@ -98,9 +104,9 @@ export default function CaseStudy() {
         }
       }
       
-      // Handle array
+      // Handle array - convert to HTML list
       if (Array.isArray(resultsArray)) {
-        return resultsArray.map(result => {
+        const items = resultsArray.map(result => {
           // If result is a string, use it
           if (typeof result === 'string') {
             return cleanString(result);
@@ -110,7 +116,12 @@ export default function CaseStudy() {
             return cleanString(result.title || result.description || '');
           }
           return '';
-        }).filter(r => r).join('\n');
+        }).filter(r => r);
+        
+        // Convert array to HTML list
+        if (items.length > 0) {
+          return `<ul>${items.map(item => `<li>${item}</li>`).join('')}</ul>`;
+        }
       }
       
       return '';
@@ -137,6 +148,7 @@ export default function CaseStudy() {
     techStack: '',
     timeline: '',
     results: '',
+    conclusion: '',
     location: '',
     clientName: '',
     seoTitle: '',
@@ -155,7 +167,7 @@ export default function CaseStudy() {
     setIsClient(true);
   }, []);
 
-  // TipTap editor instance - only create on client side
+  // TipTap editor instance for description - only create on client side
   const editor = useEditor(
     {
       immediatelyRender: false,
@@ -198,6 +210,92 @@ export default function CaseStudy() {
     [isClient]
   );
 
+  // TipTap editor instance for results - only create on client side
+  const resultsEditor = useEditor(
+    {
+      immediatelyRender: false,
+      extensions: [
+        StarterKit.configure({
+          heading: {
+            levels: [1, 2, 3],
+          },
+        }),
+        Link.configure({
+          openOnClick: false,
+          HTMLAttributes: {
+            target: '_blank',
+            rel: 'noopener noreferrer',
+          },
+        }),
+        Image,
+        Placeholder.configure({
+          placeholder: 'Write your project results here...',
+        }),
+      ],
+      content: formData.results || '',
+      editorProps: {
+        attributes: {
+          class: 'tiptap-editor',
+        },
+        // Preserve all Unicode characters including emojis when pasting
+        transformPastedHTML: (html) => {
+          // Return HTML as-is to preserve emojis and all Unicode characters
+          return html;
+        },
+      },
+      onUpdate: ({ editor }) => {
+        // Use getHTML() which preserves Unicode characters including emojis
+        // TipTap automatically preserves all Unicode characters in HTML output
+        const html = editor.getHTML();
+        setFormData({ ...formData, results: html });
+      },
+    },
+    [isClient]
+  );
+
+  // TipTap editor instance for conclusion - only create on client side
+  const conclusionEditor = useEditor(
+    {
+      immediatelyRender: false,
+      extensions: [
+        StarterKit.configure({
+          heading: {
+            levels: [1, 2, 3],
+          },
+        }),
+        Link.configure({
+          openOnClick: false,
+          HTMLAttributes: {
+            target: '_blank',
+            rel: 'noopener noreferrer',
+          },
+        }),
+        Image,
+        Placeholder.configure({
+          placeholder: 'Write your project conclusion here...',
+        }),
+      ],
+      content: formData.conclusion || '',
+      editorProps: {
+        attributes: {
+          class: 'tiptap-editor',
+        },
+        // Preserve all Unicode characters including emojis when pasting
+        transformPastedHTML: (html) => {
+          // Return HTML as-is to preserve emojis and all Unicode characters
+          return html;
+        },
+      },
+      onUpdate: ({ editor }) => {
+        // Use getHTML() which preserves Unicode characters including emojis
+        // TipTap automatically preserves all Unicode characters in HTML output
+        const html = editor.getHTML();
+        setFormData({ ...formData, conclusion: html });
+      },
+    },
+    [isClient]
+  );
+
   // Update editor content when formData.description changes
   // Use a ref to prevent infinite loops and ensure we only update when needed
   const isUpdatingEditorRef = useRef(false);
@@ -213,14 +311,48 @@ export default function CaseStudy() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData.description]);
 
-  // Cleanup editor on unmount
+  // Update results editor content when formData.results changes
+  const isUpdatingResultsEditorRef = useRef(false);
+  useEffect(() => {
+    if (resultsEditor && formData.results !== resultsEditor.getHTML() && !isUpdatingResultsEditorRef.current) {
+      isUpdatingResultsEditorRef.current = true;
+      resultsEditor.commands.setContent(formData.results || '');
+      // Reset flag after a short delay to allow editor to update
+      setTimeout(() => {
+        isUpdatingResultsEditorRef.current = false;
+      }, 100);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formData.results]);
+
+  // Update conclusion editor content when formData.conclusion changes
+  const isUpdatingConclusionEditorRef = useRef(false);
+  useEffect(() => {
+    if (conclusionEditor && formData.conclusion !== conclusionEditor.getHTML() && !isUpdatingConclusionEditorRef.current) {
+      isUpdatingConclusionEditorRef.current = true;
+      conclusionEditor.commands.setContent(formData.conclusion || '');
+      // Reset flag after a short delay to allow editor to update
+      setTimeout(() => {
+        isUpdatingConclusionEditorRef.current = false;
+      }, 100);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formData.conclusion]);
+
+  // Cleanup editors on unmount
   useEffect(() => {
     return () => {
       if (editor) {
         editor.destroy();
       }
+      if (resultsEditor) {
+        resultsEditor.destroy();
+      }
+      if (conclusionEditor) {
+        conclusionEditor.destroy();
+      }
     };
-  }, [editor]);
+  }, [editor, resultsEditor, conclusionEditor]);
 
   useEffect(() => {
     if (fetchingRef.current) return;
@@ -260,6 +392,7 @@ export default function CaseStudy() {
       techStack: '',
       timeline: '',
       results: '',
+      conclusion: '',
       location: '',
       clientName: '',
       seoTitle: '',
@@ -271,6 +404,12 @@ export default function CaseStudy() {
     });
     if (editor) {
       editor.commands.setContent('');
+    }
+    if (resultsEditor) {
+      resultsEditor.commands.setContent('');
+    }
+    if (conclusionEditor) {
+      conclusionEditor.commands.setContent('');
     }
     setCurrentMainImage(null);
     setCurrentAdditionalImages([]);
@@ -293,6 +432,7 @@ export default function CaseStudy() {
       techStack: parseArrayField(caseStudy.techStack),
       timeline: caseStudy.timeline || caseStudy.duration || '',
       results: parseResultsField(caseStudy.results),
+      conclusion: caseStudy.conclusion || '',
       location: caseStudy.location || '',
       clientName: caseStudy.clientName || caseStudy.projectName || '',
       seoTitle: caseStudy.seoTitle || '',
@@ -345,12 +485,22 @@ export default function CaseStudy() {
               formDataToSend.append(key, JSON.stringify(array));
             }
           } else if (key === 'results') {
-            // Convert newline-separated string to array of strings (just lines, no title/description)
+            // Handle results as HTML (from rich text editor) - store as HTML like description
+            // This preserves all formatting, emojis, and structure
             const value = formData[key].trim();
             if (value) {
-              const lines = value.split('\n').map(line => line.trim()).filter(line => line);
-              // Store as array of strings, each line is a result
-              formDataToSend.append(key, JSON.stringify(lines));
+              // Normalize HTML content before saving (same as description)
+              const normalizedResults = normalizeContentForSave(value);
+              formDataToSend.append(key, normalizedResults);
+            }
+          } else if (key === 'conclusion') {
+            // Handle conclusion as HTML (from rich text editor) - store as HTML like description
+            // This preserves all formatting, emojis, and structure
+            const value = formData[key].trim();
+            if (value) {
+              // Normalize HTML content before saving (same as description)
+              const normalizedConclusion = normalizeContentForSave(value);
+              formDataToSend.append(key, normalizedConclusion);
             }
           } else if (key === 'description') {
             // Normalize double <br> tags in description before saving
@@ -747,15 +897,234 @@ export default function CaseStudy() {
 
               <div className="form-group">
                 <label>Results</label>
-                <textarea
-                  value={formData.results}
-                  onChange={(e) => setFormData({ ...formData, results: e.target.value })}
-                  rows={5}
-                  placeholder="One result per line&#10;e.g.,&#10;Increased Conversion Rate&#10;Better User Engagement&#10;Improved Performance"
-                />
-                <small style={{ color: '#666', fontSize: '12px', marginTop: '4px', display: 'block' }}>
-                  One result per line (just the result text, no title/description format needed)
-                </small>
+                <div className="rich-text-editor-wrapper">
+                  {isClient && resultsEditor && (
+                    <>
+                      {/* Toolbar */}
+                      <div className="tiptap-toolbar">
+                        <button
+                          type="button"
+                          onClick={() => resultsEditor.chain().focus().toggleBold().run()}
+                          className={resultsEditor.isActive('bold') ? 'is-active' : ''}
+                          title="Bold"
+                        >
+                          <strong>B</strong>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => resultsEditor.chain().focus().toggleItalic().run()}
+                          className={resultsEditor.isActive('italic') ? 'is-active' : ''}
+                          title="Italic"
+                        >
+                          <em>I</em>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => resultsEditor.chain().focus().toggleStrike().run()}
+                          className={resultsEditor.isActive('strike') ? 'is-active' : ''}
+                          title="Strike"
+                        >
+                          <s>S</s>
+                        </button>
+                        <div className="toolbar-divider"></div>
+                        <button
+                          type="button"
+                          onClick={() => resultsEditor.chain().focus().toggleHeading({ level: 1 }).run()}
+                          className={resultsEditor.isActive('heading', { level: 1 }) ? 'is-active' : ''}
+                          title="Heading 1"
+                        >
+                          H1
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => resultsEditor.chain().focus().toggleHeading({ level: 2 }).run()}
+                          className={resultsEditor.isActive('heading', { level: 2 }) ? 'is-active' : ''}
+                          title="Heading 2"
+                        >
+                          H2
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => resultsEditor.chain().focus().toggleHeading({ level: 3 }).run()}
+                          className={resultsEditor.isActive('heading', { level: 3 }) ? 'is-active' : ''}
+                          title="Heading 3"
+                        >
+                          H3
+                        </button>
+                        <div className="toolbar-divider"></div>
+                        <button
+                          type="button"
+                          onClick={() => resultsEditor.chain().focus().toggleBulletList().run()}
+                          className={resultsEditor.isActive('bulletList') ? 'is-active' : ''}
+                          title="Bullet List"
+                        >
+                          •
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => resultsEditor.chain().focus().toggleOrderedList().run()}
+                          className={resultsEditor.isActive('orderedList') ? 'is-active' : ''}
+                          title="Numbered List"
+                        >
+                          1.
+                        </button>
+                        <div className="toolbar-divider"></div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const url = window.prompt('Enter URL:');
+                            if (url) {
+                              resultsEditor.chain().focus().setLink({ href: url }).run();
+                            }
+                          }}
+                          className={resultsEditor.isActive('link') ? 'is-active' : ''}
+                          title="Link"
+                        >
+                          🔗
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const url = window.prompt('Enter image URL:');
+                            if (url) {
+                              resultsEditor.chain().focus().setImage({ src: url }).run();
+                            }
+                          }}
+                          title="Image"
+                        >
+                          🖼️
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => resultsEditor.chain().focus().unsetLink().run()}
+                          className={resultsEditor.isActive('link') ? '' : 'disabled'}
+                          title="Remove Link"
+                          disabled={!resultsEditor.isActive('link')}
+                        >
+                          Unlink
+                        </button>
+                      </div>
+                      {/* Editor Content */}
+                      <EditorContent editor={resultsEditor} />
+                    </>
+                  )}
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label>Conclusion</label>
+                <div className="rich-text-editor-wrapper">
+                  {isClient && conclusionEditor && (
+                    <>
+                      {/* Toolbar */}
+                      <div className="tiptap-toolbar">
+                        <button
+                          type="button"
+                          onClick={() => conclusionEditor.chain().focus().toggleBold().run()}
+                          className={conclusionEditor.isActive('bold') ? 'is-active' : ''}
+                          title="Bold"
+                        >
+                          <strong>B</strong>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => conclusionEditor.chain().focus().toggleItalic().run()}
+                          className={conclusionEditor.isActive('italic') ? 'is-active' : ''}
+                          title="Italic"
+                        >
+                          <em>I</em>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => conclusionEditor.chain().focus().toggleStrike().run()}
+                          className={conclusionEditor.isActive('strike') ? 'is-active' : ''}
+                          title="Strike"
+                        >
+                          <s>S</s>
+                        </button>
+                        <div className="toolbar-divider"></div>
+                        <button
+                          type="button"
+                          onClick={() => conclusionEditor.chain().focus().toggleHeading({ level: 1 }).run()}
+                          className={conclusionEditor.isActive('heading', { level: 1 }) ? 'is-active' : ''}
+                          title="Heading 1"
+                        >
+                          H1
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => conclusionEditor.chain().focus().toggleHeading({ level: 2 }).run()}
+                          className={conclusionEditor.isActive('heading', { level: 2 }) ? 'is-active' : ''}
+                          title="Heading 2"
+                        >
+                          H2
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => conclusionEditor.chain().focus().toggleHeading({ level: 3 }).run()}
+                          className={conclusionEditor.isActive('heading', { level: 3 }) ? 'is-active' : ''}
+                          title="Heading 3"
+                        >
+                          H3
+                        </button>
+                        <div className="toolbar-divider"></div>
+                        <button
+                          type="button"
+                          onClick={() => conclusionEditor.chain().focus().toggleBulletList().run()}
+                          className={conclusionEditor.isActive('bulletList') ? 'is-active' : ''}
+                          title="Bullet List"
+                        >
+                          •
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => conclusionEditor.chain().focus().toggleOrderedList().run()}
+                          className={conclusionEditor.isActive('orderedList') ? 'is-active' : ''}
+                          title="Numbered List"
+                        >
+                          1.
+                        </button>
+                        <div className="toolbar-divider"></div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const url = window.prompt('Enter URL:');
+                            if (url) {
+                              conclusionEditor.chain().focus().setLink({ href: url }).run();
+                            }
+                          }}
+                          className={conclusionEditor.isActive('link') ? 'is-active' : ''}
+                          title="Link"
+                        >
+                          🔗
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const url = window.prompt('Enter image URL:');
+                            if (url) {
+                              conclusionEditor.chain().focus().setImage({ src: url }).run();
+                            }
+                          }}
+                          title="Image"
+                        >
+                          🖼️
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => conclusionEditor.chain().focus().unsetLink().run()}
+                          className={conclusionEditor.isActive('link') ? '' : 'disabled'}
+                          title="Remove Link"
+                          disabled={!conclusionEditor.isActive('link')}
+                        >
+                          Unlink
+                        </button>
+                      </div>
+                      {/* Editor Content */}
+                      <EditorContent editor={conclusionEditor} />
+                    </>
+                  )}
+                </div>
               </div>
 
               <div className="form-group">

@@ -111,8 +111,15 @@ export default function CaseStudy({ navigateTo, currentPage }) {
                 try {
                   let resultsArray = project.results;
                   
-                  // If results is a string, try to parse it as JSON
+                  // If results is a string, check if it's HTML content
                   if (typeof resultsArray === 'string') {
+                    // Check if it's HTML content (from rich text editor)
+                    if (resultsArray.includes('<p>') || resultsArray.includes('<ul>') || resultsArray.includes('<ol>') || resultsArray.includes('<li>') || resultsArray.includes('<div>')) {
+                      // Return HTML string directly for rendering
+                      return resultsArray;
+                    }
+                    
+                    // Try to parse as JSON array
                     try {
                       resultsArray = JSON.parse(resultsArray);
                     } catch (e) {
@@ -122,9 +129,9 @@ export default function CaseStudy({ navigateTo, currentPage }) {
                     }
                   }
                   
-                  // Handle array of results - just strings now
+                  // Handle array of results - convert to HTML list for display
                   if (Array.isArray(resultsArray)) {
-                    return resultsArray.map(result => {
+                    const items = resultsArray.map(result => {
                       // If result is a string, use it directly
                       if (typeof result === 'string') {
                         return cleanString(result);
@@ -135,12 +142,17 @@ export default function CaseStudy({ navigateTo, currentPage }) {
                       }
                       return '';
                     }).filter(r => r);
+                    
+                    // Convert array to HTML list for consistent display
+                    if (items.length > 0) {
+                      return `<ul>${items.map(item => `<li>${item}</li>`).join('')}</ul>`;
+                    }
                   }
                   
-                  return [];
+                  return '';
                 } catch (e) {
                   console.error('Error parsing results:', e);
-                  return [];
+                  return '';
                 }
               })(),
               location: project.location || '',
@@ -346,19 +358,6 @@ export default function CaseStudy({ navigateTo, currentPage }) {
                       <span className="detail-value">{project.duration || project.timeline || 'N/A'}</span>
                     </div>
                   </div>
-                  {project.results && project.results.length > 0 && (
-                    <div className="project-results">
-                      <span className="detail-label">RESULTS</span>
-                      <ul className="results-list">
-                        {project.results.map((result, resultIndex) => {
-                          if (!result) return null;
-                          return (
-                            <li key={resultIndex}>{result}</li>
-                          );
-                        })}
-                      </ul>
-                    </div>
-                  )}
                   <a 
                     href={`/case-studies/${project.id}`}
                     className={`explore-button ${hoveredProject === project.id ? 'hovered' : ''}`}

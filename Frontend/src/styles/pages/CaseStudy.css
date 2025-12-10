@@ -273,7 +273,6 @@
   }
 
   .project-card-vertical {
-    grid-template-columns: 1fr;
     gap: 2rem;
     min-height: auto;
     padding: 2rem 0;
@@ -324,12 +323,37 @@
     font-size: 1.5rem;
   }
 
-  .project-buttons {
-    flex-direction: column;
-  }
 
   .project-details-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 426px) {
+  .projects-section {
+    padding: 2.5rem 1rem;
+  }
+  .projects-tabs {
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .project-card-vertical {
+    grid-template-columns: 1fr;
+    padding: 1.25rem 0;
+    gap: 1.5rem;
+  }
+  .project-buttons {
+    flex-direction: column;
+  }
+  .project-image-wrapper {
+    height: 220px;
+  }
+  .projects-section .section-title {
+    font-size: 24px;
+  }
+  .project-title-main {
+    font-size: 1.25rem;
   }
 }
 

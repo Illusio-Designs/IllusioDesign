@@ -49,6 +49,7 @@ export const createCaseStudy = async (req, res) => {
       techStack,
       timeline,
       results,
+      conclusion,
       location,
       projectName,
       overview,
@@ -68,6 +69,12 @@ export const createCaseStudy = async (req, res) => {
     
     // Ensure description is properly decoded as UTF-8 string to preserve emojis
     const decodedDescription = description ? String(description) : null;
+    
+    // Ensure results is properly decoded as UTF-8 string to preserve emojis and HTML
+    const decodedResults = results ? String(results) : null;
+    
+    // Ensure conclusion is properly decoded as UTF-8 string to preserve emojis and HTML
+    const decodedConclusion = conclusion ? String(conclusion) : null;
     
     // Handle main image - use webpPath if available (from convertToWebP middleware)
     let image = null;
@@ -106,7 +113,8 @@ export const createCaseStudy = async (req, res) => {
       tags: Array.isArray(tags) ? tags : (tags ? tags.split(',').map(t => t.trim()) : []),
       techStack: Array.isArray(techStack) ? techStack : (techStack ? techStack.split(',').map(t => t.trim()) : []),
       timeline: timeline || duration || null,
-      results: Array.isArray(results) ? results : (results ? results.split(',').map(t => t.trim()) : []),
+      results: decodedResults || null, // Store as HTML string directly (like description)
+      conclusion: decodedConclusion || null, // Store as HTML string directly (like description)
       location: location || null,
       projectName: projectName || null,
       overview: overview || description || null,
@@ -177,6 +185,16 @@ export const updateCaseStudy = async (req, res) => {
       updates.description = updates.description ? String(updates.description) : null;
     }
     
+    // Ensure results is properly decoded as UTF-8 string if present
+    if (updates.results !== undefined) {
+      updates.results = updates.results ? String(updates.results) : null;
+    }
+    
+    // Ensure conclusion is properly decoded as UTF-8 string if present
+    if (updates.conclusion !== undefined) {
+      updates.conclusion = updates.conclusion ? String(updates.conclusion) : null;
+    }
+    
     // Get case study first to access current data
     const caseStudy = await CaseStudy.findByPk(id);
     if (!caseStudy) {
@@ -237,9 +255,8 @@ export const updateCaseStudy = async (req, res) => {
     if (updates.techStack && typeof updates.techStack === 'string') {
       updates.techStack = updates.techStack.split(',').map(t => t.trim()).filter(t => t);
     }
-    if (updates.results && typeof updates.results === 'string') {
-      updates.results = updates.results.split(',').map(t => t.trim()).filter(t => t);
-    }
+    // Handle results as HTML string (like description) - preserve HTML content
+    // (Already handled above in the UTF-8 decoding section)
     if (updates.additionalImages && typeof updates.additionalImages === 'string') {
       updates.additionalImages = updates.additionalImages.split(',').map(t => t.trim()).filter(t => t);
     }

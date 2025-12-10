@@ -49,14 +49,48 @@ const CaseStudy = sequelize.define('CaseStudy', {
     type: DataTypes.STRING
   },
   results: {
-    type: DataTypes.TEXT,
+    type: DataTypes.TEXT('long'), // Use TEXT('long') like description for HTML content
+    charset: 'utf8mb4',
+    collate: 'utf8mb4_unicode_ci',
+    // Store as HTML string directly (like description) - handle both HTML and legacy array format
     get() {
       const value = this.getDataValue('results');
-      return value ? JSON.parse(value) : [];
+      if (!value) return null;
+      // If it's already a string, check if it's HTML or JSON
+      if (typeof value === 'string') {
+        // Check if it looks like HTML (contains HTML tags)
+        if (value.includes('<p>') || value.includes('<ul>') || value.includes('<ol>') || value.includes('<li>') || value.includes('<div>') || value.includes('<h1>') || value.includes('<h2>') || value.includes('<h3>') || value.includes('<br>') || value.includes('<strong>') || value.includes('<em>')) {
+          return value; // Return HTML string
+        }
+        // Check if it's JSON array (old format)
+        if (value.trim().startsWith('[') && value.trim().endsWith(']')) {
+          try {
+            return JSON.parse(value);
+          } catch (e) {
+            return value; // Return as string if JSON parse fails
+          }
+        }
+        return value; // Return as string (plain text or HTML without tags)
+      }
+      return value;
     },
     set(value) {
-      this.setDataValue('results', JSON.stringify(Array.isArray(value) ? value : []));
+      // Store as string directly - preserve HTML content
+      if (value === null || value === undefined) {
+        this.setDataValue('results', null);
+      } else if (Array.isArray(value)) {
+        // Legacy format: convert array to JSON string
+        this.setDataValue('results', JSON.stringify(value));
+      } else {
+        // Store as string directly (HTML or plain text)
+        this.setDataValue('results', String(value));
+      }
     }
+  },
+  conclusion: {
+    type: DataTypes.TEXT('long'), // Use TEXT('long') like description for HTML content
+    charset: 'utf8mb4',
+    collate: 'utf8mb4_unicode_ci'
   },
   location: {
     type: DataTypes.STRING
