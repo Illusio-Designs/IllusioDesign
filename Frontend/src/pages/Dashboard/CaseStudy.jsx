@@ -849,24 +849,6 @@ export default function CaseStudy() {
               </div>
 
               <div className="form-group">
-                <label>Year</label>
-                <input
-                  type="text"
-                  value={formData.year}
-                  onChange={(e) => setFormData({ ...formData, year: e.target.value })}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Industries</label>
-                <input
-                  type="text"
-                  value={formData.industries}
-                  onChange={(e) => setFormData({ ...formData, industries: e.target.value })}
-                />
-              </div>
-
-              <div className="form-group">
                 <label>Description</label>
                 <div className="rich-text-editor-wrapper">
                   {isClient && editor && (
@@ -1215,50 +1197,6 @@ export default function CaseStudy() {
               </div>
 
               <div className="form-group">
-                <label>Link (Project URL)</label>
-                <input
-                  type="url"
-                  value={formData.link}
-                  onChange={(e) => setFormData({ ...formData, link: e.target.value })}
-                  placeholder="https://example.com"
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Category (Project Type)</label>
-                <select
-                  value={formData.category}
-                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                >
-                  <option value="">Select Category</option>
-                  <option value="branding">Branding & Design</option>
-                  <option value="web">Web</option>
-                  <option value="app">App</option>
-                  <option value="b2b">B2B & Custom Solution</option>
-                </select>
-              </div>
-
-              <div className="form-group">
-                <label>Tags</label>
-                <input
-                  type="text"
-                  value={formData.tags}
-                  onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
-                  placeholder="Comma separated (e.g., Design, UI, UX)"
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Tech Stack</label>
-                <input
-                  type="text"
-                  value={formData.techStack}
-                  onChange={(e) => setFormData({ ...formData, techStack: e.target.value })}
-                  placeholder="Comma separated (e.g., React, Node.js, MongoDB)"
-                />
-              </div>
-
-              <div className="form-group">
                 <label>Results</label>
                 <div className="rich-text-editor-wrapper">
                   {isClient && resultsEditor && (
@@ -1374,120 +1312,87 @@ export default function CaseStudy() {
                 </div>
               </div>
 
+            </div>
+
+            <div className="form-column">
               <div className="form-group">
-                <label>Conclusion</label>
-                <div className="rich-text-editor-wrapper">
-                  {isClient && conclusionEditor && (
-                    <>
-                      {/* Toolbar */}
-                      <div className="tiptap-toolbar">
-                        <button
-                          type="button"
-                          onClick={() => conclusionEditor.chain().focus().toggleBold().run()}
-                          className={conclusionEditor.isActive('bold') ? 'is-active' : ''}
-                          title="Bold"
-                        >
-                          <strong>B</strong>
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => conclusionEditor.chain().focus().toggleItalic().run()}
-                          className={conclusionEditor.isActive('italic') ? 'is-active' : ''}
-                          title="Italic"
-                        >
-                          <em>I</em>
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => conclusionEditor.chain().focus().toggleStrike().run()}
-                          className={conclusionEditor.isActive('strike') ? 'is-active' : ''}
-                          title="Strike"
-                        >
-                          <s>S</s>
-                        </button>
-                        <div className="toolbar-divider"></div>
-                        <button
-                          type="button"
-                          onClick={() => conclusionEditor.chain().focus().toggleHeading({ level: 1 }).run()}
-                          className={conclusionEditor.isActive('heading', { level: 1 }) ? 'is-active' : ''}
-                          title="Heading 1"
-                        >
-                          H1
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => conclusionEditor.chain().focus().toggleHeading({ level: 2 }).run()}
-                          className={conclusionEditor.isActive('heading', { level: 2 }) ? 'is-active' : ''}
-                          title="Heading 2"
-                        >
-                          H2
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => conclusionEditor.chain().focus().toggleHeading({ level: 3 }).run()}
-                          className={conclusionEditor.isActive('heading', { level: 3 }) ? 'is-active' : ''}
-                          title="Heading 3"
-                        >
-                          H3
-                        </button>
-                        <div className="toolbar-divider"></div>
-                        <button
-                          type="button"
-                          onClick={() => conclusionEditor.chain().focus().toggleBulletList().run()}
-                          className={conclusionEditor.isActive('bulletList') ? 'is-active' : ''}
-                          title="Bullet List"
-                        >
-                          •
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => conclusionEditor.chain().focus().toggleOrderedList().run()}
-                          className={conclusionEditor.isActive('orderedList') ? 'is-active' : ''}
-                          title="Numbered List"
-                        >
-                          1.
-                        </button>
-                        <div className="toolbar-divider"></div>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const url = window.prompt('Enter URL:');
-                            if (url) {
-                              conclusionEditor.chain().focus().setLink({ href: url }).run();
-                            }
-                          }}
-                          className={conclusionEditor.isActive('link') ? 'is-active' : ''}
-                          title="Link"
-                        >
-                          🔗
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const url = window.prompt('Enter image URL:');
-                            if (url) {
-                              conclusionEditor.chain().focus().setImage({ src: url }).run();
-                            }
-                          }}
-                          title="Image"
-                        >
-                          🖼️
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => conclusionEditor.chain().focus().unsetLink().run()}
-                          className={conclusionEditor.isActive('link') ? '' : 'disabled'}
-                          title="Remove Link"
-                          disabled={!conclusionEditor.isActive('link')}
-                        >
-                          Unlink
-                        </button>
-                      </div>
-                      {/* Editor Content */}
-                      <EditorContent editor={conclusionEditor} />
-                    </>
-                  )}
-                </div>
+                <label>Year</label>
+                <input
+                  type="text"
+                  value={formData.year}
+                  onChange={(e) => setFormData({ ...formData, year: e.target.value })}
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Industries</label>
+                <input
+                  type="text"
+                  value={formData.industries}
+                  onChange={(e) => setFormData({ ...formData, industries: e.target.value })}
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Services</label>
+                <input
+                  type="text"
+                  value={formData.services}
+                  onChange={(e) => setFormData({ ...formData, services: e.target.value })}
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Category (Project Type)</label>
+                <select
+                  value={formData.category}
+                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                >
+                  <option value="">Select Category</option>
+                  <option value="branding">Branding & Design</option>
+                  <option value="web">Web</option>
+                  <option value="app">App</option>
+                  <option value="b2b">B2B & Custom Solution</option>
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label>Tags</label>
+                <input
+                  type="text"
+                  value={formData.tags}
+                  onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
+                  placeholder="Comma separated (e.g., Design, UI, UX)"
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Tech Stack</label>
+                <input
+                  type="text"
+                  value={formData.techStack}
+                  onChange={(e) => setFormData({ ...formData, techStack: e.target.value })}
+                  placeholder="Comma separated (e.g., React, Node.js, MongoDB)"
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Link (Project URL)</label>
+                <input
+                  type="url"
+                  value={formData.link}
+                  onChange={(e) => setFormData({ ...formData, link: e.target.value })}
+                  placeholder="https://example.com"
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Duration</label>
+                <input
+                  type="text"
+                  value={formData.duration}
+                  onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
+                />
               </div>
 
               <div className="form-group">
@@ -1509,9 +1414,7 @@ export default function CaseStudy() {
                   placeholder="Client name (e.g., Company Name)"
                 />
               </div>
-            </div>
 
-            <div className="form-column">
               <div className="form-group">
                 <label>Main Image (Feature Image)</label>
                 <div className="file-upload-area">
@@ -1769,21 +1672,119 @@ export default function CaseStudy() {
               </div>
 
               <div className="form-group">
-                <label>Services</label>
-                <input
-                  type="text"
-                  value={formData.services}
-                  onChange={(e) => setFormData({ ...formData, services: e.target.value })}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Duration</label>
-                <input
-                  type="text"
-                  value={formData.duration}
-                  onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
-                />
+                <label>Conclusion</label>
+                <div className="rich-text-editor-wrapper">
+                  {isClient && conclusionEditor && (
+                    <>
+                      {/* Toolbar */}
+                      <div className="tiptap-toolbar">
+                        <button
+                          type="button"
+                          onClick={() => conclusionEditor.chain().focus().toggleBold().run()}
+                          className={conclusionEditor.isActive('bold') ? 'is-active' : ''}
+                          title="Bold"
+                        >
+                          <strong>B</strong>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => conclusionEditor.chain().focus().toggleItalic().run()}
+                          className={conclusionEditor.isActive('italic') ? 'is-active' : ''}
+                          title="Italic"
+                        >
+                          <em>I</em>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => conclusionEditor.chain().focus().toggleStrike().run()}
+                          className={conclusionEditor.isActive('strike') ? 'is-active' : ''}
+                          title="Strike"
+                        >
+                          <s>S</s>
+                        </button>
+                        <div className="toolbar-divider"></div>
+                        <button
+                          type="button"
+                          onClick={() => conclusionEditor.chain().focus().toggleHeading({ level: 1 }).run()}
+                          className={conclusionEditor.isActive('heading', { level: 1 }) ? 'is-active' : ''}
+                          title="Heading 1"
+                        >
+                          H1
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => conclusionEditor.chain().focus().toggleHeading({ level: 2 }).run()}
+                          className={conclusionEditor.isActive('heading', { level: 2 }) ? 'is-active' : ''}
+                          title="Heading 2"
+                        >
+                          H2
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => conclusionEditor.chain().focus().toggleHeading({ level: 3 }).run()}
+                          className={conclusionEditor.isActive('heading', { level: 3 }) ? 'is-active' : ''}
+                          title="Heading 3"
+                        >
+                          H3
+                        </button>
+                        <div className="toolbar-divider"></div>
+                        <button
+                          type="button"
+                          onClick={() => conclusionEditor.chain().focus().toggleBulletList().run()}
+                          className={conclusionEditor.isActive('bulletList') ? 'is-active' : ''}
+                          title="Bullet List"
+                        >
+                          •
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => conclusionEditor.chain().focus().toggleOrderedList().run()}
+                          className={conclusionEditor.isActive('orderedList') ? 'is-active' : ''}
+                          title="Numbered List"
+                        >
+                          1.
+                        </button>
+                        <div className="toolbar-divider"></div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const url = window.prompt('Enter URL:');
+                            if (url) {
+                              conclusionEditor.chain().focus().setLink({ href: url }).run();
+                            }
+                          }}
+                          className={conclusionEditor.isActive('link') ? 'is-active' : ''}
+                          title="Link"
+                        >
+                          🔗
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const url = window.prompt('Enter image URL:');
+                            if (url) {
+                              conclusionEditor.chain().focus().setImage({ src: url }).run();
+                            }
+                          }}
+                          title="Image"
+                        >
+                          🖼️
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => conclusionEditor.chain().focus().unsetLink().run()}
+                          className={conclusionEditor.isActive('link') ? '' : 'disabled'}
+                          title="Remove Link"
+                          disabled={!conclusionEditor.isActive('link')}
+                        >
+                          Unlink
+                        </button>
+                      </div>
+                      {/* Editor Content */}
+                      <EditorContent editor={conclusionEditor} />
+                    </>
+                  )}
+                </div>
               </div>
 
               <div className="form-group">

@@ -21,19 +21,8 @@ const PositionApply = lazy(() => import('@/pages/PositionApply'));
 const Login = lazy(() => import('@/pages/Dashboard/Login'));
 const Register = lazy(() => import('@/pages/Dashboard/Register'));
 
-// Loading fallback component
-const PageLoader = () => (
-  <div style={{ 
-    display: 'flex', 
-    justifyContent: 'center', 
-    alignItems: 'center', 
-    minHeight: '50vh',
-    fontSize: '1rem',
-    color: 'var(--text-color, #333)'
-  }}>
-    Loading...
-  </div>
-);
+// Suspense fallback intentionally empty (no extra loading UI here)
+const PageLoader = () => null;
 
 export default function Page() {
   const pathname = usePathname();
