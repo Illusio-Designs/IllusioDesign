@@ -148,7 +148,6 @@ export default function CaseStudy() {
     category: '',
     tags: '',
     techStack: '',
-    timeline: '',
     results: '',
     conclusion: '',
     location: '',
@@ -514,7 +513,6 @@ export default function CaseStudy() {
       category: '',
       tags: '',
       techStack: '',
-      timeline: '',
       results: '',
       conclusion: '',
       location: '',
@@ -551,12 +549,11 @@ export default function CaseStudy() {
       challenges: caseStudy.challenges || '',
       solution: caseStudy.solution || '',
       services: caseStudy.services || caseStudy.category || '',
-      duration: caseStudy.duration || '',
+      duration: caseStudy.duration || caseStudy.timeline || '',
       link: caseStudy.link || '',
       category: caseStudy.category || '',
       tags: parseArrayField(caseStudy.tags),
       techStack: parseArrayField(caseStudy.techStack),
-      timeline: caseStudy.timeline || caseStudy.duration || '',
       results: parseResultsField(caseStudy.results),
       conclusion: caseStudy.conclusion || '',
       location: caseStudy.location || '',
@@ -1258,16 +1255,6 @@ export default function CaseStudy() {
                   value={formData.techStack}
                   onChange={(e) => setFormData({ ...formData, techStack: e.target.value })}
                   placeholder="Comma separated (e.g., React, Node.js, MongoDB)"
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Timeline</label>
-                <input
-                  type="text"
-                  value={formData.timeline}
-                  onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
-                  placeholder="e.g., 3 months, 6 weeks"
                 />
               </div>
 

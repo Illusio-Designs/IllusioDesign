@@ -49,7 +49,6 @@ export const createCaseStudy = async (req, res) => {
       category,
       tags,
       techStack,
-      timeline,
       results,
       conclusion,
       location,
@@ -122,7 +121,6 @@ export const createCaseStudy = async (req, res) => {
       category: category || services || null,
       tags: Array.isArray(tags) ? tags : (tags ? tags.split(',').map(t => t.trim()) : []),
       techStack: Array.isArray(techStack) ? techStack : (techStack ? techStack.split(',').map(t => t.trim()) : []),
-      timeline: timeline || duration || null,
       results: decodedResults || null, // Store as HTML string directly (like description)
       conclusion: decodedConclusion || null, // Store as HTML string directly (like description)
       location: location || null,
@@ -132,7 +130,7 @@ export const createCaseStudy = async (req, res) => {
       industry: industry || industries || null,
       year: year || null,
       services: services || category || null,
-      duration: duration || timeline || null,
+      duration: duration || null,
       additionalImages: additionalImagesArray,
       published: published !== undefined ? (published === 'true' || published === true) : true,
       seoTitle: seoTitle || null,

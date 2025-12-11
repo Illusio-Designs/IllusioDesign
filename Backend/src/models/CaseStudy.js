@@ -55,9 +55,6 @@ const CaseStudy = sequelize.define('CaseStudy', {
       this.setDataValue('techStack', JSON.stringify(Array.isArray(value) ? value : []));
     }
   },
-  timeline: {
-    type: DataTypes.STRING
-  },
   results: {
     type: DataTypes.TEXT('long'), // Use TEXT('long') like description for HTML content
     charset: 'utf8mb4',

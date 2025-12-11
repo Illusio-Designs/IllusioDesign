@@ -225,7 +225,6 @@ export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage
             techStack: Array.isArray(project.techStack) 
               ? project.techStack.map(tech => cleanString(tech)).filter(tech => tech)
               : (typeof project.techStack === 'string' ? project.techStack.split(',').map(t => cleanString(t)).filter(t => t) : []),
-            timeline: project.timeline || project.duration || '',
             duration: project.duration || project.timeline || '',
             services: project.services || project.category || '',
             conclusion: project.conclusion || '',

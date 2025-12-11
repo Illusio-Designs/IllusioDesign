@@ -105,7 +105,6 @@ export default function CaseStudy({ navigateTo, currentPage }) {
               techStack: Array.isArray(project.techStack) 
                 ? project.techStack.map(tech => cleanString(tech)).filter(t => t)
                 : (typeof project.techStack === 'string' ? project.techStack.split(',').map(t => cleanString(t)).filter(t => t) : []),
-              timeline: project.timeline || project.duration || '',
               duration: project.duration || project.timeline || '',
               services: project.services || project.category || '',
               results: (() => {
@@ -357,8 +356,8 @@ export default function CaseStudy({ navigateTo, currentPage }) {
                       </span>
                     </div>
                     <div className="project-detail-item">
-                      <span className="detail-label">TIMELINE</span>
-                      <span className="detail-value">{project.duration || project.timeline || 'N/A'}</span>
+                      <span className="detail-label">DURATION</span>
+                      <span className="detail-value">{project.duration || 'N/A'}</span>
                     </div>
                   </div>
                   <a 
