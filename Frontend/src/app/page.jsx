@@ -87,15 +87,15 @@ export default function Page() {
           window.history.replaceState({}, '', `/services/${cleanSlug}`);
         }
       } else if (path.startsWith('/positions/apply/') || path.startsWith('/careers/apply/')) {
-        // Handle clean URL format: /positions/apply/1 or /careers/apply/1
+        // Handle clean URL format: /positions/apply/<slug> or /careers/apply/<slug>
         const pathParts = path.split('/');
-        const positionId = pathParts[pathParts.length - 1];
+        const positionSlug = pathParts[pathParts.length - 1];
         setCurrentPage('position-apply');
-        setCurrentItem(positionId);
+        setCurrentItem(positionSlug);
         setPageContext('position-apply');
         // Redirect to clean URL if old format was used
         if (item && window.location.search) {
-          window.history.replaceState({}, '', `/positions/apply/${positionId}`);
+          window.history.replaceState({}, '', `/positions/apply/${positionSlug}`);
         }
       } else if (path.startsWith('/blog/') && path !== '/blog') {
         // Handle clean URL format: /blog/blog-slug-name
@@ -170,11 +170,11 @@ export default function Page() {
         setCurrentItem(serviceName);
         setPageContext('service-detail');
       } else if (path.startsWith('/positions/apply/') || path.startsWith('/careers/apply/')) {
-        // Handle clean URL format: /positions/apply/1 or /careers/apply/1
+        // Handle clean URL format: /positions/apply/<slug> or /careers/apply/<slug>
         const pathParts = path.split('/');
-        const positionId = pathParts[pathParts.length - 1];
+        const positionSlug = pathParts[pathParts.length - 1];
         setCurrentPage('position-apply');
-        setCurrentItem(positionId);
+        setCurrentItem(positionSlug);
         setPageContext('position-apply');
       } else if (path.startsWith('/blog/') && path !== '/blog') {
         // Handle clean URL format: /blog/blog-slug-name
@@ -222,7 +222,7 @@ export default function Page() {
       const slug = serviceNameToSlug(item);
       url = `/services/${slug}`;
     } else if (page === 'position-apply' && item) {
-      // Use clean URL format: /positions/apply/1
+      // Use clean URL format: /positions/apply/<slug>
       url = `/positions/apply/${item}`;
     } else if (page === 'blog-detail' && item) {
       // Use clean URL format: /blog/blog-slug-name
@@ -308,7 +308,7 @@ export default function Page() {
       case 'position-apply':
         return (
           <Suspense fallback={<PageLoader />}>
-            <PositionApply positionId={currentItem} navigateTo={navigateTo} currentPage={currentPage} />
+            <PositionApply positionSlug={currentItem} navigateTo={navigateTo} currentPage={currentPage} />
           </Suspense>
         );
       case 'login':

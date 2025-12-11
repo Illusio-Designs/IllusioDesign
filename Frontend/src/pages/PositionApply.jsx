@@ -10,7 +10,7 @@ import { positionAPI, applicationAPI } from '@/services/api';
 import { setPageContext } from '@/services/fetchInterceptor';
 import { toast } from 'react-toastify';
 
-export default function PositionApply({ positionId, navigateTo, currentPage }) {
+export default function PositionApply({ positionSlug, navigateTo, currentPage }) {
   const [isLoading, setIsLoading] = useState(true);
   const [position, setPosition] = useState(null);
   const [loadingPosition, setLoadingPosition] = useState(true);
@@ -45,7 +45,7 @@ export default function PositionApply({ positionId, navigateTo, currentPage }) {
   };
 
   useEffect(() => {
-    if (!positionId) return;
+    if (!positionSlug) return;
 
     let isMounted = true;
     const abortController = new AbortController();
@@ -55,7 +55,7 @@ export default function PositionApply({ positionId, navigateTo, currentPage }) {
         if (isMounted) {
           setLoadingPosition(true);
         }
-        const result = await positionAPI.getByIdPublic(positionId);
+        const result = await positionAPI.getBySlugPublic(positionSlug);
         
         // Process data regardless of mount status
         if (result.data) {
@@ -69,6 +69,20 @@ export default function PositionApply({ positionId, navigateTo, currentPage }) {
           }
         }
       } catch (error) {
+        // Fallback: if slug lookup fails and looks like an id, try id endpoint
+        if (!isNaN(Number(positionSlug))) {
+          try {
+            const fallback = await positionAPI.getByIdPublic(positionSlug);
+            if (fallback.data && isMounted) {
+              setPosition(fallback.data);
+              const seoName = createSEOPageName(fallback.data.title);
+              setSeoPageName(seoName);
+              return;
+            }
+          } catch (idError) {
+            console.error('Fallback fetch by id failed:', idError);
+          }
+        }
         console.error('Error fetching position:', error);
         if (isMounted) {
           toast.error('Failed to load position details. Please try again.');
@@ -87,7 +101,7 @@ export default function PositionApply({ positionId, navigateTo, currentPage }) {
       isMounted = false;
       abortController.abort();
     };
-  }, [positionId]);
+  }, [positionSlug]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -162,7 +176,7 @@ export default function PositionApply({ positionId, navigateTo, currentPage }) {
       return;
     }
 
-    if (!positionId || !position) {
+    if (!position) {
       toast.error('Position information is missing. Please try again.');
       return;
     }
@@ -172,7 +186,8 @@ export default function PositionApply({ positionId, navigateTo, currentPage }) {
       
       // Create FormData for file upload
       const submitFormData = new FormData();
-      submitFormData.append('positionId', positionId);
+      // Use actual position id from fetched data
+      submitFormData.append('positionId', position.id);
       submitFormData.append('name', formData.name.trim());
       submitFormData.append('email', formData.email.trim());
       submitFormData.append('contact', formData.contact.trim());

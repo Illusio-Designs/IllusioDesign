@@ -5,6 +5,19 @@ import SplitText from '@/components/SplitText';
 import ScrollReveal from '@/components/ScrollReveal';
 import Loader from '@/components/Loader';
 import { useEffect, useRef, useState, useLayoutEffect } from 'react';
+import {
+  SiReact,
+  SiNextdotjs,
+  SiNodedotjs,
+  SiReact as SiReactNative,
+  SiPhp,
+  SiFigma,
+  SiAdobeillustrator,
+  SiAdobephotoshop,
+  SiGoogleanalytics,
+  SiGoogleads,
+  SiMeta
+} from 'react-icons/si';
 import { useSEO } from '@/hooks/useSEO';
 import { caseStudyAPI } from '@/services/api';
 import { setPageContext } from '@/services/fetchInterceptor';
@@ -16,6 +29,11 @@ const serviceData = {
     processTitle: 'Where Identity Begins.',
     layoutType: 'branding',
     image: '/images/Branding&Designing.webp',
+    technologies: [
+      { label: 'Figma', icon: <SiFigma /> },
+      { label: 'Illustrator', icon: <SiAdobeillustrator /> },
+      { label: 'Photoshop', icon: <SiAdobephotoshop /> },
+    ],
     description: [
       'A powerful brand is the foundation of every successful business. We craft brand identities that not only look stunning but also communicate your story with clarity and purpose. From your logo to your visual elements, each component is thoughtfully designed to reflect your brand’s values and leave a strong impression on your audience.',
       'Our team blends strategy with creativity to build a complete identity system that works across every platform—digital, print, and social. Whether you\'re launching a new brand or refreshing an old one, we create cohesive visuals and guidelines that maintain consistency and help your brand stand out in a competitive market.',
@@ -34,6 +52,13 @@ const serviceData = {
     processTitle: 'Timeless Brand Identity.',
     layoutType: 'branding',
     image: '/images/web&app.webp',
+    technologies: [
+      { label: 'React', icon: <SiReact /> },
+      { label: 'Next.js', icon: <SiNextdotjs /> },
+      { label: 'Node.js', icon: <SiNodedotjs /> },
+      { label: 'React Native', icon: <SiReactNative /> },
+      { label: 'PHP', icon: <SiPhp /> },
+    ],
     description: [
       'Your website and app are the digital faces of your brand, and we build them with perfection in mind. Our focus is on blending beautiful designs with high performance, ensuring that every page feels smooth, modern, and user-friendly. Whether it’s a business website, an e-commerce store, or a full-featured mobile app—we deliver solutions tailored to your business needs.',
       'We use the latest technologies and clean code practices to create digital products that load fast, work on all devices, and scale with your growth. From UI/UX design to backend development, we ensure every project is secure, optimized, and built for long-term success.',
@@ -53,6 +78,11 @@ const serviceData = {
     processTitle: 'Packaging That Speaks.',
     layoutType: 'branding',
     image: '/images/digitalmarketing.webp',
+    technologies: [
+      { label: 'Google Ads', icon: <SiGoogleads /> },
+      { label: 'Meta Ads', icon: <SiMeta /> },
+      { label: 'Analytics', icon: <SiGoogleanalytics /> },
+    ],
     description: [
       'In a world where attention is the real currency, we help brands grow with strategies that cut through the noise. Our digital marketing approach blends creativity with data-driven insights, allowing your business to reach the right audience with the right message. From social media to paid ads, we ensure your brand stays visible and engaging.',
       'Every campaign is tailored to your goals—whether it’s brand building, lead generation, or increasing sales. We continuously optimize performance, track metrics, and refine strategies to deliver measurable results. With consistent execution and smart planning, we help your brand grow across all digital platforms.',
@@ -71,7 +101,13 @@ const serviceData = {
     title: ['Spark Your Digital', 'Presence!'],
     processTitle: 'Unified Digital Journeys.',
     layoutType: 'branding',
-    image: '/images/b2b.webp',  
+    image: '/images/b2b.webp',
+    technologies: [
+      { label: 'Node.js', icon: <SiNodedotjs /> },
+      { label: 'Next.js', icon: <SiNextdotjs /> },
+      { label: 'React', icon: <SiReact /> },
+      { label: 'PHP', icon: <SiPhp /> },
+    ],
     description: [
       'Every business operates differently, so we develop custom-built solutions designed to match your internal workflow and long-term goals. Whether it’s a CRM, ERP, portal, or automation tool, our systems streamline operations, improve efficiency, and help teams work smarter—not harder.',
       'We focus on building secure, scalable, and user-friendly platforms that simplify complex processes and enhance decision-making. With deep technical expertise and an understanding of business needs, we create digital infrastructure that supports growth and delivers real value to your organization.',
@@ -252,6 +288,7 @@ export default function ServiceDetail({ serviceName, navigateTo, currentPage }) 
     if (!processFlowRef.current) return;
 
     const updateProgress = () => {
+      if (!processFlowRef.current) return;
       const rect = processFlowRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
       const elementTop = rect.top;
@@ -331,6 +368,27 @@ export default function ServiceDetail({ serviceName, navigateTo, currentPage }) 
               </div>
             </ScrollReveal>
           </div>
+
+          {/* Technologies Section */}
+          {service.technologies && service.technologies.length > 0 && (
+            <div className="service-tech-section">
+              <ScrollReveal as="div" animation="fadeUp" delay={0.05} duration={1.2} once={false} ready={!isLoading}>
+                <div className="service-tech-header">
+                  <h2 className="section-title">Tech We Use</h2>
+                </div>
+                <div className="service-tech-grid">
+                  {service.technologies.map((tech, idx) => (
+                    <div className="service-tech-card" key={idx}>
+                      <span className="service-tech-icon" title={tech.label}>
+                        {tech.icon}
+                      </span>
+                      <span className="service-tech-name">{tech.label}</span>
+                    </div>
+                  ))}
+                </div>
+              </ScrollReveal>
+            </div>
+          )}
 
           {/* Our Process Section */}
           <div className="process-section">

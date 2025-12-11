@@ -60,6 +60,96 @@
   margin: 0;
 }
 
+/* Technologies Section */
+.service-tech-section {
+  margin-bottom: 4rem;
+}
+
+.service-tech-header {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.service-tech-label {
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #EC691F;
+  font-weight: 700;
+}
+
+.service-tech-title {
+  margin: 0;
+  font-size: 1.6rem;
+  color: #1f1f1f;
+  font-weight: 700;
+}
+
+.service-tech-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.25rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.service-tech-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  padding: 1.6rem 1.2rem;
+  border: 1px solid #f3e6dc;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #ffffff 0%, #fff8f2 40%, #ffffff 100%);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  min-height: 140px;
+}
+
+.service-tech-card:hover {
+  transform: translateY(-4px);
+  border-color: #ec691f44;
+  background: linear-gradient(145deg, #fff7ef 0%, #ffffff 60%, #fff0e2 100%);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.1);
+}
+
+.service-tech-icon {
+  font-size: 2rem;
+  color: #EC691F;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  background: radial-gradient(circle at 30% 30%, #ffe0c8, #fff5ec 65%, #ffffff 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 6px 14px rgba(236, 105, 31, 0.15);
+  transition: transform 0.2s ease;
+  transform: translateY(6px);
+}
+
+.service-tech-name {
+  font-weight: 600;
+  color: #1f1f1f;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  pointer-events: none;
+}
+
+.service-tech-card:hover .service-tech-name {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.service-tech-card:hover .service-tech-icon {
+  transform: translateY(-4px);
+}
+
 /* Our Process Section */
 .process-section {
   background: #EC691F;

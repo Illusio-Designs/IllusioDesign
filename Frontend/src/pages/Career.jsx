@@ -9,6 +9,7 @@ import { useSEO } from '@/hooks/useSEO';
 import { positionAPI } from '@/services/api';
 import { setPageContext } from '@/services/fetchInterceptor';
 import { toast } from 'react-toastify';
+import { toSlug } from '@/utils/urlSlug';
 
 export default function Career({ navigateTo, currentPage }) {
   // SEO Integration
@@ -78,8 +79,9 @@ export default function Career({ navigateTo, currentPage }) {
     }
   }, [dataLoaded, isLoading]);
 
-  const handleApply = (positionId) => {
-    navigateTo('position-apply', positionId);
+  const handleApply = (positionTitle) => {
+    const slug = toSlug(positionTitle);
+    navigateTo('position-apply', slug);
   };
 
   return (
@@ -144,7 +146,7 @@ export default function Career({ navigateTo, currentPage }) {
                     )}
                     <button 
                       className="apply-button"
-                      onClick={() => handleApply(position.id)}
+                      onClick={() => handleApply(position.title)}
                     >
                       Apply Now
                     </button>

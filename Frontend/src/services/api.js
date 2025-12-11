@@ -159,7 +159,9 @@ export const positionAPI = {
   // Public APIs
   // getAllPublic - use interceptors (page-aware: intercepted on career page)
   getAllPublic: () => apiCall('/public/positions', {}, true, false),
-  // getByIdPublic - use interceptors (main API for position-apply page)
+  // getBySlugPublic - use interceptors (main API for position-apply page)
+  getBySlugPublic: (slug) => apiCall(`/public/positions/slug/${slug}`, {}, true, false),
+  // Legacy fallback by id (kept for backward compatibility)
   getByIdPublic: (id) => apiCall(`/public/positions/${id}`, {}, true, false)
 };
 

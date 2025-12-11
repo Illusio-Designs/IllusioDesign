@@ -247,15 +247,15 @@ export const interceptedFetch = async (url, options = {}, interceptorOptions = {
   const { isPublic = false, skipAuth = false, skipInterceptors = false } = interceptorOptions;
 
   // Build initial config
+  // Merge options first so we don't accidentally overwrite defaults (like headers)
   let config = {
     url,
     method: options.method || 'GET',
+    ...options,
     headers: {
       'Content-Type': 'application/json',
-      ...options.headers
-    },
-    body: options.body,
-    ...options
+      ...(options.headers || {})
+    }
   };
 
   // Add auth token if not public and not skipped
