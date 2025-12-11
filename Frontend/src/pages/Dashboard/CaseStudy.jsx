@@ -135,7 +135,7 @@ export default function CaseStudy() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
   const fetchingRef = useRef(false);
-  const [formData, setFormData] = useState({
+  const initialFormData = {
     title: '',
     year: '',
     industries: '',
@@ -157,8 +157,11 @@ export default function CaseStudy() {
     seoKeywords: '',
     seoUrl: '',
     image: null,
-    additionalImages: []
-  });
+    additionalImages: [],
+    additionalImagesToKeep: []
+  };
+
+  const [formData, setFormData] = useState(initialFormData);
   const [currentMainImage, setCurrentMainImage] = useState(null);
   const [currentAdditionalImages, setCurrentAdditionalImages] = useState([]);
   const [isClient, setIsClient] = useState(false);
@@ -202,10 +205,9 @@ export default function CaseStudy() {
         },
       },
       onUpdate: ({ editor }) => {
-        // Use getHTML() which preserves Unicode characters including emojis
-        // TipTap automatically preserves all Unicode characters in HTML output
+        // Use functional update to avoid stale formData when resetting
         const html = editor.getHTML();
-        setFormData({ ...formData, description: html });
+        setFormData(prev => ({ ...prev, description: html }));
       },
     },
     [isClient]
@@ -245,10 +247,8 @@ export default function CaseStudy() {
         },
       },
       onUpdate: ({ editor }) => {
-        // Use getHTML() which preserves Unicode characters including emojis
-        // TipTap automatically preserves all Unicode characters in HTML output
         const html = editor.getHTML();
-        setFormData({ ...formData, results: html });
+        setFormData(prev => ({ ...prev, results: html }));
       },
     },
     [isClient]
@@ -288,10 +288,8 @@ export default function CaseStudy() {
         },
       },
       onUpdate: ({ editor }) => {
-        // Use getHTML() which preserves Unicode characters including emojis
-        // TipTap automatically preserves all Unicode characters in HTML output
         const html = editor.getHTML();
-        setFormData({ ...formData, challenges: html });
+        setFormData(prev => ({ ...prev, challenges: html }));
       },
     },
     [isClient]
@@ -331,10 +329,8 @@ export default function CaseStudy() {
         },
       },
       onUpdate: ({ editor }) => {
-        // Use getHTML() which preserves Unicode characters including emojis
-        // TipTap automatically preserves all Unicode characters in HTML output
         const html = editor.getHTML();
-        setFormData({ ...formData, solution: html });
+        setFormData(prev => ({ ...prev, solution: html }));
       },
     },
     [isClient]
@@ -374,10 +370,8 @@ export default function CaseStudy() {
         },
       },
       onUpdate: ({ editor }) => {
-        // Use getHTML() which preserves Unicode characters including emojis
-        // TipTap automatically preserves all Unicode characters in HTML output
         const html = editor.getHTML();
-        setFormData({ ...formData, conclusion: html });
+        setFormData(prev => ({ ...prev, conclusion: html }));
       },
     },
     [isClient]
@@ -501,28 +495,9 @@ export default function CaseStudy() {
   const handleAdd = () => {
     setEditingCaseStudy(null);
     setFormData({
-      title: '',
+      ...initialFormData,
       year: new Date().getFullYear().toString(),
-      industries: '',
-      description: '',
-      challenges: '',
-      solution: '',
-      services: '',
-      duration: '',
-      link: '',
-      category: '',
-      tags: '',
-      techStack: '',
-      results: '',
-      conclusion: '',
-      location: '',
-      clientName: '',
-      seoTitle: '',
-      metaDescription: '',
-      seoKeywords: '',
-      seoUrl: '',
-      image: null,
-      additionalImages: []
+      additionalImagesToKeep: []
     });
     if (editor) {
       editor.commands.setContent('');
@@ -533,6 +508,8 @@ export default function CaseStudy() {
     if (conclusionEditor) {
       conclusionEditor.commands.setContent('');
     }
+    // Reset any persisted additional images state
+    setFormData(prev => ({ ...prev, additionalImagesToKeep: [] }));
     setCurrentMainImage(null);
     setCurrentAdditionalImages([]);
     setIsModalOpen(true);

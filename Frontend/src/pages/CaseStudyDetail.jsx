@@ -401,23 +401,39 @@ export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage
           </ScrollReveal>
 
           {/* Description Section with Sticky Project Details */}
-          {currentProject.description && (
+          {(currentProject.description || currentProject.challenges) && (
             <ScrollReveal animation="fadeUp" delay={0.3} duration={1.5} trigger="onScroll" ready={!isLoading}>
               <div className="description-with-sidebar">
                 <div className="description-main">
-                  <div className="description-section">
-                    {(() => {
-                      const description = currentProject.description;
-                      const sanitizedContent = sanitizeHTMLContent(description);
-                      
-                      return (
-                        <div 
-                          className="description-content"
-                          dangerouslySetInnerHTML={{ __html: sanitizedContent }}
-                        />
-                      );
-                    })()}
-                  </div>
+                  {currentProject.description && (
+                    <div className="description-section">
+                      {(() => {
+                        const description = currentProject.description;
+                        const sanitizedContent = sanitizeHTMLContent(description);
+                        return (
+                          <div 
+                            className="description-content"
+                            dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+                          />
+                        );
+                      })()}
+                    </div>
+                  )}
+
+                  {currentProject.challenges && (
+                    <div className="description-section" style={{ marginTop: '2rem' }}>
+                      {(() => {
+                        const sanitizedContent = sanitizeHTMLContent(currentProject.challenges);
+                        return (
+                          <div
+                            className="description-content"
+                            style={{ maxWidth: '70%' }}
+                            dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+                          />
+                        );
+                      })()}
+                    </div>
+                  )}
                 </div>
                 <div className="sticky-sidebar">
                   <div className="project-details-sticky">

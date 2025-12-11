@@ -420,42 +420,82 @@ export default function ServiceDetail({ serviceName, navigateTo, currentPage }) 
                 </ScrollReveal>
                 <div className={`related-projects-slider ${relatedProjects.length === 1 ? 'single-item' : ''}`}>
                   <div className={`related-projects-track ${relatedProjects.length === 1 ? 'single-item' : ''}`}>
-                    {relatedProjects.map((project) => (
-                      <a
-                        key={project.id}
-                        href={`/case-studies/${project.seoUrl || (project.title ? toSlug(project.title) : project.id)}`}
-                        className="related-project-card"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          const slug = project.seoUrl || (project.title ? toSlug(project.title) : project.id.toString());
-                          navigateTo('case-study-detail', slug);
-                        }}
-                        onMouseEnter={() => setHoveredProject(project.id)}
-                        onMouseLeave={() => setHoveredProject(null)}
-                        style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
-                      >
-                        <div className="related-project-image-container">
-                          <img
-                            src={project.image}
-                            alt={project.title}
-                            className="related-project-image"
-                            onError={(e) => {
-                              e.target.style.display = 'none';
-                            }}
-                          />
-                        </div>
-                        <div className="related-project-title-container">
-                          <h3>{project.title}</h3>
-                          <span
-                            className={`related-project-arrow ${
-                              hoveredProject === project.id ? 'arrow-visible' : ''
-                            }`}
-                          >
-                            →
-                          </span>
-                        </div>
-                      </a>
-                    ))}
+                    <>
+                      {/* First set of cards */}
+                      {relatedProjects.map((project) => (
+                        <a
+                          key={`original-${project.id}`}
+                          href={`/case-studies/${project.seoUrl || (project.title ? toSlug(project.title) : project.id)}`}
+                          className="related-project-card"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            const slug = project.seoUrl || (project.title ? toSlug(project.title) : project.id.toString());
+                            navigateTo('case-study-detail', slug);
+                          }}
+                          onMouseEnter={() => setHoveredProject(project.id)}
+                          onMouseLeave={() => setHoveredProject(null)}
+                          style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
+                        >
+                          <div className="related-project-image-container">
+                            <img
+                              src={project.image}
+                              alt={project.title}
+                              className="related-project-image"
+                              onError={(e) => {
+                                e.target.style.display = 'none';
+                              }}
+                            />
+                          </div>
+                          <div className="related-project-title-container">
+                            <h3>{project.title}</h3>
+                            <span
+                              className={`related-project-arrow ${
+                                hoveredProject === project.id ? 'arrow-visible' : ''
+                              }`}
+                            >
+                              →
+                            </span>
+                          </div>
+                        </a>
+                      ))}
+                      {/* Duplicate set for seamless infinite loop */}
+                      {relatedProjects.map((project) => (
+                        <a
+                          key={`duplicate-${project.id}`}
+                          href={`/case-studies/${project.seoUrl || (project.title ? toSlug(project.title) : project.id)}`}
+                          className="related-project-card"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            const slug = project.seoUrl || (project.title ? toSlug(project.title) : project.id.toString());
+                            navigateTo('case-study-detail', slug);
+                          }}
+                          onMouseEnter={() => setHoveredProject(project.id)}
+                          onMouseLeave={() => setHoveredProject(null)}
+                          style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
+                        >
+                          <div className="related-project-image-container">
+                            <img
+                              src={project.image}
+                              alt={project.title}
+                              className="related-project-image"
+                              onError={(e) => {
+                                e.target.style.display = 'none';
+                              }}
+                            />
+                          </div>
+                          <div className="related-project-title-container">
+                            <h3>{project.title}</h3>
+                            <span
+                              className={`related-project-arrow ${
+                                hoveredProject === project.id ? 'arrow-visible' : ''
+                              }`}
+                            >
+                              →
+                            </span>
+                          </div>
+                        </a>
+                      ))}
+                    </>
                   </div>
                 </div>
               </div>

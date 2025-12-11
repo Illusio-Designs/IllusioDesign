@@ -730,38 +730,76 @@ export default function Home({ navigateTo, currentPage }) {
           </ScrollReveal>
           <div className={`case-studies-slider ${projects.length === 1 ? 'single-item' : ''}`}>
             <div className={`case-studies-track ${projects.length === 1 ? 'single-item' : ''}`}>
-              {projects.length > 0 ? projects.map((project, index) => (
-                <a 
-                  key={project.id} 
-                  href={`/case-studies/${project.seoUrl || (project.title ? toSlug(project.title) : project.id)}`}
-                  className="case-study-card"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    const slug = project.seoUrl || (project.title ? toSlug(project.title) : project.id.toString());
-                    navigateTo('case-study-detail', slug);
-                  }}
-                  onMouseEnter={() => setHoveredProject(project.id)}
-                  onMouseLeave={() => setHoveredProject(null)}
-                  style={{ cursor: 'pointer', textDecoration: 'none', color: 'inherit', display: 'block' }}
-                >
-                  <div className="case-study-image-container">
-                    <img
-                      src={project.image}
-                      alt={project.title}
-                      className="case-study-image"
-                      onError={(e) => {
-                        e.target.style.display = 'none';
+              {projects.length > 0 ? (
+                <>
+                  {/* First set of cards */}
+                  {projects.map((project, index) => (
+                    <a 
+                      key={`original-${project.id}`} 
+                      href={`/case-studies/${project.seoUrl || (project.title ? toSlug(project.title) : project.id)}`}
+                      className="case-study-card"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        const slug = project.seoUrl || (project.title ? toSlug(project.title) : project.id.toString());
+                        navigateTo('case-study-detail', slug);
                       }}
-                    />
-                  </div>
-                  <div className="case-study-title-container">
-                    <h3>{project.title}</h3>
-                    <span className={`case-study-arrow ${hoveredProject === project.id ? 'arrow-visible' : ''}`}>
-                      →
-                    </span>
-                  </div>
-                </a>
-              )) : (
+                      onMouseEnter={() => setHoveredProject(project.id)}
+                      onMouseLeave={() => setHoveredProject(null)}
+                      style={{ cursor: 'pointer', textDecoration: 'none', color: 'inherit', display: 'block' }}
+                    >
+                      <div className="case-study-image-container">
+                        <img
+                          src={project.image}
+                          alt={project.title}
+                          className="case-study-image"
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                          }}
+                        />
+                      </div>
+                      <div className="case-study-title-container">
+                        <h3>{project.title}</h3>
+                        <span className={`case-study-arrow ${hoveredProject === project.id ? 'arrow-visible' : ''}`}>
+                          →
+                        </span>
+                      </div>
+                    </a>
+                  ))}
+                  {/* Duplicate set for seamless infinite loop */}
+                  {projects.map((project, index) => (
+                    <a 
+                      key={`duplicate-${project.id}`} 
+                      href={`/case-studies/${project.seoUrl || (project.title ? toSlug(project.title) : project.id)}`}
+                      className="case-study-card"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        const slug = project.seoUrl || (project.title ? toSlug(project.title) : project.id.toString());
+                        navigateTo('case-study-detail', slug);
+                      }}
+                      onMouseEnter={() => setHoveredProject(project.id)}
+                      onMouseLeave={() => setHoveredProject(null)}
+                      style={{ cursor: 'pointer', textDecoration: 'none', color: 'inherit', display: 'block' }}
+                    >
+                      <div className="case-study-image-container">
+                        <img
+                          src={project.image}
+                          alt={project.title}
+                          className="case-study-image"
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                          }}
+                        />
+                      </div>
+                      <div className="case-study-title-container">
+                        <h3>{project.title}</h3>
+                        <span className={`case-study-arrow ${hoveredProject === project.id ? 'arrow-visible' : ''}`}>
+                          →
+                        </span>
+                      </div>
+                    </a>
+                  ))}
+                </>
+              ) : (
                 <div style={{ padding: '20px', textAlign: 'center', color: '#999' }}>
                   {process.env.NODE_ENV === 'development' ? 'No projects to display' : ''}
                 </div>
