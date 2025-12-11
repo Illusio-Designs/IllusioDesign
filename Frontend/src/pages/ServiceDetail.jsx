@@ -8,102 +8,118 @@ import { useEffect, useRef, useState, useLayoutEffect } from 'react';
 import { useSEO } from '@/hooks/useSEO';
 import { caseStudyAPI } from '@/services/api';
 import { setPageContext } from '@/services/fetchInterceptor';
+import { toSlug } from '@/utils/urlSlug';
 
 const serviceData = {
   'branding': {
     title: ['Carve Your Brand\'s', 'Iconic Mark.'],
     processTitle: 'Where Identity Begins.',
     layoutType: 'branding',
+    image: '/images/Branding&Designing.webp',
     description: [
-      'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text.',
-      'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.'
+      'A powerful brand is the foundation of every successful business. We craft brand identities that not only look stunning but also communicate your story with clarity and purpose. From your logo to your visual elements, each component is thoughtfully designed to reflect your brand’s values and leave a strong impression on your audience.',
+      'Our team blends strategy with creativity to build a complete identity system that works across every platform—digital, print, and social. Whether you\'re launching a new brand or refreshing an old one, we create cohesive visuals and guidelines that maintain consistency and help your brand stand out in a competitive market.',
     ],
     processSteps: [
-      { number: 1, title: 'Understand the Brand', position: 'top-right' },
-      { number: 2, title: 'Research & Inspiration', position: 'middle-right' },
-      { number: 3, title: 'Concept & Sketching', position: 'middle-left' },
-      { number: 4, title: 'Digital Drafting', position: 'bottom-left' },
-      { number: 5, title: 'Typography & Color', position: 'bottom-middle' },
-      { number: 6, title: 'Review & Feedback', position: 'bottom-right' },
+      { number: 1, title: 'Brand Discovery', position: 'top-right' },
+      { number: 2, title: 'Strategic Direction', position: 'middle-right' },
+      { number: 3, title: 'Visual Planning', position: 'middle-left' },
+      { number: 4, title: 'Identity Design', position: 'bottom-left' },
+      { number: 5, title: 'Brand Guidelines', position: 'bottom-middle' },
+      { number: 6, title: 'Final Delivery', position: 'bottom-right' },
     ],
   },
   'web-app': {
     title: ['Shape Your Brand,', 'Stand Out!'],
     processTitle: 'Timeless Brand Identity.',
     layoutType: 'branding',
+    image: '/images/web&app.webp',
     description: [
-      'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text.',
-      'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.'
+      'Your website and app are the digital faces of your brand, and we build them with perfection in mind. Our focus is on blending beautiful designs with high performance, ensuring that every page feels smooth, modern, and user-friendly. Whether it’s a business website, an e-commerce store, or a full-featured mobile app—we deliver solutions tailored to your business needs.',
+      'We use the latest technologies and clean code practices to create digital products that load fast, work on all devices, and scale with your growth. From UI/UX design to backend development, we ensure every project is secure, optimized, and built for long-term success.',
+      'We emphasize scalability, security, and performance across every platform we build. With clean code practices and modern frameworks, your website or app becomes a future-ready digital asset. From adding new modules to integrating complex systems, we ensure your product grows smoothly as your business expands.',
     ],
     processSteps: [
-      { number: 1, title: 'Discovery & Research', position: 'top-right' },
-      { number: 2, title: 'Strategy & Positioning', position: 'middle-right' },
-      { number: 3, title: 'Visual Direction', position: 'middle-left' },
-      { number: 4, title: 'Identity Design', position: 'bottom-left' },
-      { number: 5, title: 'Guidelines & Delivery', position: 'bottom-middle' },
-      { number: 6, title: 'Review & Feedback', position: 'bottom-right' },
+      { number: 1, title: 'Project Planning', position: 'top-right' },
+      { number: 2, title: 'UX Wireframing', position: 'middle-right' },
+      { number: 3, title: 'UI Designing', position: 'middle-left' },
+      { number: 4, title: 'Core Development', position: 'bottom-left' },
+      { number: 5, title: 'Quality Testing', position: 'bottom-middle' },
+      { number: 6, title: 'Live Deployment', position: 'bottom-right' },
     ],
   },
   'marketing': {
     title: ['Your Product, Our', 'Stunning Wrap!'],
     processTitle: 'Packaging That Speaks.',
     layoutType: 'branding',
+    image: '/images/digitalmarketing.webp',
     description: [
-      'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text.',
-      'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.'
+      'In a world where attention is the real currency, we help brands grow with strategies that cut through the noise. Our digital marketing approach blends creativity with data-driven insights, allowing your business to reach the right audience with the right message. From social media to paid ads, we ensure your brand stays visible and engaging.',
+      'Every campaign is tailored to your goals—whether it’s brand building, lead generation, or increasing sales. We continuously optimize performance, track metrics, and refine strategies to deliver measurable results. With consistent execution and smart planning, we help your brand grow across all digital platforms.',
+      'We don\'t believe in random posting or generic ads. Every marketing tactic is backed by insight, testing, and data-driven improvements. Our goal is to build long-lasting visibility and consistent growth, ensuring your brand stays relevant in a fast-changing digital landscape.',
     ],
     processSteps: [
-      { number: 1, title: 'Research & Understanding', position: 'top-right' },
-      { number: 2, title: 'Concept Development', position: 'middle-right' },
-      { number: 3, title: 'Design & Visualization', position: 'middle-left' },
-      { number: 4, title: 'Refine & Deliver', position: 'bottom-left' },
-      { number: 5, title: 'Final Handover', position: 'bottom-middle' },
-      { number: 6, title: 'Review & Feedback', position: 'bottom-right' },
+      { number: 1, title: 'Market Research', position: 'top-right' },
+      { number: 2, title: 'Campaign Planning', position: 'middle-right' },
+      { number: 3, title: 'Content Creation', position: 'middle-left' },
+      { number: 4, title: 'Ad Execution', position: 'bottom-left' },
+      { number: 5, title: 'Ad Optimization', position: 'bottom-middle' },
+      { number: 6, title: 'Analytics Reporting', position: 'bottom-right' },
     ],
   },
   'b2b': {
     title: ['Spark Your Digital', 'Presence!'],
     processTitle: 'Unified Digital Journeys.',
     layoutType: 'branding',
+    image: '/images/b2b.webp',  
     description: [
-      'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text.',
-      'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.'
+      'Every business operates differently, so we develop custom-built solutions designed to match your internal workflow and long-term goals. Whether it’s a CRM, ERP, portal, or automation tool, our systems streamline operations, improve efficiency, and help teams work smarter—not harder.',
+      'We focus on building secure, scalable, and user-friendly platforms that simplify complex processes and enhance decision-making. With deep technical expertise and an understanding of business needs, we create digital infrastructure that supports growth and delivers real value to your organization.',
+      'Beyond creating custom workflows, we help businesses streamline operations and reduce repetitive manual tasks. Our tailor-made solutions improve efficiency, accuracy and decision-making by integrating smart automation and easy-to-use dashboards. The result is a system built around your business — not the other way around.',
     ],
     processSteps: [
-      { number: 1, title: 'Discovery & Research', position: 'top-right' },
-      { number: 2, title: 'Frame & Design Pulse', position: 'middle-right' },
-      { number: 3, title: 'UI & Visual Design', position: 'middle-left' },
-      { number: 4, title: 'Proto & UX Design', position: 'bottom-left' },
-      { number: 5, title: 'Final Handover', position: 'bottom-middle' },
-      { number: 6, title: 'Review & Feedback', position: 'bottom-right' },
+      { number: 1, title: 'Business Analysis', position: 'top-right' },
+      { number: 2, title: 'Process Mapping', position: 'middle-right' },
+      { number: 3, title: 'System Architecture', position: 'middle-left' },
+      { number: 4, title: 'Module Development', position: 'bottom-left' },
+      { number: 5, title: 'API Integration', position: 'bottom-middle' },
+      { number: 6, title: 'System Deployment', position: 'bottom-right' },
     ],
   },
 };
 
 const otherServicesMap = {
   'branding': [
-    'Brand Identity',
-    'Packaging Design',
-    'Web & App Design',
-    'Web Redesign',
+    'Logo Design',
+    'UI/UX Design',
+    'Brand Identity System',
+    'Brand Guidelines',
+    'Packaging & Print Design',
+    'Creative Visuals & Social Media Branding',
   ],
   'web-app': [
-    'Logo Design',
-    'Packaging Design',
-    'Web & App Design',
-    'Web Redesign',
+    'Website Development',
+    'Mobile App Development (iOS & Android)',
+    'Landing Pages',
+    'Speed Optimization',
+    'E-Commerce Solutions',
+    'Admin Panels & Dashboards',
   ],
   'marketing': [
-    'Logo Design',
-    'Brand Identity',
-    'Web & App Design',
-    'Web Redesign',
+    'Social Media Management',
+    'Performance Marketing (Meta & Google Ads)',
+    'SEO Optimization',
+    'Content Strategy & Copywriting',
+    'Lead Generation',
+    'Email Marketing & Automation',
   ],
   'b2b': [
-    'Logo Design',
-    'Brand Identity',
-    'Packaging Design',
-    'Web Redesign',
+    'Custom Portals',
+    'Automation Systems',
+    'CRM & ERP Development',
+    'Reporting Dashboards',
+    'Data Integration & APIs',
+    'B2B eCommerce Solutions',
   ],
 };
 
@@ -296,7 +312,13 @@ export default function ServiceDetail({ serviceName, navigateTo, currentPage }) 
           <div className="service-content-layout">
             <ScrollReveal as="div" animation="fadeUp" delay={0.1} duration={1.5} once={false}>
               <div className="service-image-placeholder">
-                {/* Image placeholder */}
+                {service.image && (
+                  <img
+                    src={service.image}
+                    alt={`${serviceName || 'service'} visual`}
+                    className="service-image"
+                  />
+                )}
               </div>
             </ScrollReveal>
             <ScrollReveal as="div" animation="fadeUp" delay={0.15} duration={1.5} once={false} ready={!isLoading}>
@@ -401,11 +423,12 @@ export default function ServiceDetail({ serviceName, navigateTo, currentPage }) 
                     {relatedProjects.map((project) => (
                       <a
                         key={project.id}
-                        href={`/case-studies/${project.id}`}
+                        href={`/case-studies/${project.seoUrl || (project.title ? toSlug(project.title) : project.id)}`}
                         className="related-project-card"
                         onClick={(e) => {
                           e.preventDefault();
-                          navigateTo('case-study-detail', project.id.toString());
+                          const slug = project.seoUrl || (project.title ? toSlug(project.title) : project.id.toString());
+                          navigateTo('case-study-detail', slug);
                         }}
                         onMouseEnter={() => setHoveredProject(project.id)}
                         onMouseLeave={() => setHoveredProject(null)}

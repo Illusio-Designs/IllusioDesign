@@ -49,7 +49,7 @@ export default function Header({ navigateTo, currentPage }) {
   const servicesItems = [
     {
       title: 'Branding & Design',
-      description: 'Brand identity, guidelines, and creative systems that feel ownable.',
+      description: 'Build a brand that stands out with identity systems, visual guidelines, and impactful creatives tailored to your audience.',
       icon: '/Icons/Brandanddesign.webp',
       accent: '#EC691F',
       background: '#000000',
@@ -59,7 +59,7 @@ export default function Header({ navigateTo, currentPage }) {
     },
     {
       title: 'Web & App Development',
-      description: 'Product-ready web, mobile, and immersive experiences built to scale.',
+      description: 'Fast, scalable, and user-friendly digital products—from websites to mobile apps—crafted for real-world performance.',
       icon: '/Icons/Web&app.webp',
       accent: '#EC691F',
       background: '#000000',
@@ -69,7 +69,7 @@ export default function Header({ navigateTo, currentPage }) {
     },
     {
       title: 'Digital Marketing',
-      description: 'Lifecycle strategy across performance, content, and automation.',
+      description: 'Grow your business with performance-driven marketing strategies across SEO, social media, ads, automation, and content.',
       icon: '/Icons/digitalmarketing.webp',
       accent: '#EC691F',
       background: '#000000',
@@ -79,7 +79,7 @@ export default function Header({ navigateTo, currentPage }) {
     },
     {
       title: 'B2B & Custom Solutions',
-      description: 'Complex workflows, portals, and bespoke tools for ambitious teams.',
+      description: 'Custom-built portals, internal tools, automated workflows, and enterprise solutions to streamline operations.',
       icon: '/Icons/b2bsolution.webp',
       accent: '#EC691F',
       background: '#000000',
@@ -97,7 +97,9 @@ export default function Header({ navigateTo, currentPage }) {
             <img 
               src={isDark ? "/images/Illusio Design Logo WHITE.webp" : "/images/IllusioDesignfulllogo.webp"} 
               alt="Illusio Designs" 
-              className="logo-image" 
+              className="logo-image"
+              width="150"
+              height="40"
             />
           </div>
         </a>

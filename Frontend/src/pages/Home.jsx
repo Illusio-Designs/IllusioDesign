@@ -15,6 +15,7 @@ import { useSEO } from '@/hooks/useSEO';
 import { caseStudyAPI, blogAPI, reviewAPI } from '@/services/api';
 import { setPageContext } from '@/services/fetchInterceptor';
 import { toast } from 'react-toastify';
+import { toSlug } from '@/utils/urlSlug';
 
 // Star Rating Component - displays specific rating
 const StarRating = ({ rating = 5 }) => {
@@ -114,33 +115,33 @@ const stats = [
 const faqItems = [
   {
     id: 'faq-1',
-    question: 'What industries do you specialize in?',
-    answer: 'We work across various industries including e-commerce, healthcare, technology, finance, and B2B services. Our expertise spans from startups to established enterprises, helping businesses of all sizes achieve their digital goals.',
+    question: 'What services does Illusio Designs offer?',
+    answer: 'We provide complete digital solutions including Branding & Design, Web & App Development, Digital Marketing, and B2B & Custom Solutions tailored for startups, businesses, and enterprises.',
   },
   {
     id: 'faq-2',
-    question: 'Do you provide both design and development services?',
-    answer: 'Yes, we offer comprehensive design and development services under one roof. From initial brand identity and UI/UX design to full-stack development and deployment, we handle every aspect of your digital project.',
-  },
-  {
-    id: 'faq-3',
-    question: 'Do you build custom CRM or B2B dashboards?',
-    answer: 'Absolutely! We specialize in building custom B2B solutions including CRM systems, analytics dashboards, and enterprise applications tailored to your specific business needs and workflows.',
-  },
-  {
-    id: 'faq-4',
-    question: 'How long does a typical project take?',
+    question: 'How long does it take to complete a project?',
     answer: 'Project timelines vary based on scope and complexity. A simple website might take 4-6 weeks, while comprehensive projects with custom development can take 2-4 months. We provide detailed timelines during the initial consultation.',
   },
   {
+    id: 'faq-3',
+    question: 'Do you also handle branding from scratch?',
+    answer: 'Yes! We create full brand identities—logo, typography, color palette, packaging, brand guidelines, and everything needed to launch or refresh your brand.',
+  },
+  {
+    id: 'faq-4',
+    question: 'Will my website/app be fully responsive?',
+    answer: 'Yes, all our websites and apps are fully responsive and optimized for all devices. We ensure seamless user experience across desktops, tablets, and mobile phones.',
+  },
+  {
     id: 'faq-5',
-    question: "What's the process to get started?",
-    answer: 'Our process begins with a discovery call to understand your needs. We then provide a detailed proposal, timeline, and quote. Once approved, we move through design, development, testing, and launch phases with regular check-ins and updates.',
+    question: 'Can you work with international clients?',
+    answer: 'Yes, we work with clients across the globe. Communication is managed via WhatsApp, email, Zoom, or Google Meet.',
   },
   {
     id: 'faq-6',
-    question: 'Do you offer ongoing support after project delivery?',
-    answer: 'Yes, we offer maintenance and support packages to ensure your digital assets continue to perform optimally. This includes updates, security patches, content changes, and technical support as needed.',
+    question: "How do I get started with Illusio Designs?",
+    answer: 'It’s simple! Just reach out to us through WhatsApp, email, or our contact form. We’ll schedule a free consultation to discuss your project and explore how we can help you achieve your digital goals.',
   },
 ];
 
@@ -171,6 +172,7 @@ export default function Home({ navigateTo, currentPage }) {
   const [projects, setProjects] = useState([]);
   const [blogPosts, setBlogPosts] = useState([]);
   const [reviews, setReviews] = useState([]);
+  const [isConsentHidden, setIsConsentHidden] = useState(true);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [isSubmittingReview, setIsSubmittingReview] = useState(false);
   const [reviewForm, setReviewForm] = useState({
@@ -309,6 +311,15 @@ export default function Home({ navigateTo, currentPage }) {
       isMounted = false;
       abortController.abort();
     };
+  }, []);
+
+  // Check if consent was previously answered
+  useEffect(() => {
+    const consent = document.cookie
+      .split('; ')
+      .find((c) => c.startsWith('consentAccepted='))
+      ?.split('=')[1];
+    setIsConsentHidden(consent === 'yes' || consent === 'no');
   }, []);
 
   // Fetch blog posts from API
@@ -514,9 +525,100 @@ export default function Home({ navigateTo, currentPage }) {
     setIsLoading(false);
   };
 
+  const acceptConsent = async () => {
+    try {
+      await fetch('/api/consent-accept', { method: 'POST', credentials: 'include' });
+    } catch (error) {
+      console.error('Failed to persist consent acceptance:', error);
+    } finally {
+      setIsConsentHidden(true);
+    }
+  };
+
+  const declineConsent = () => {
+    // Store decline locally so we don't nag the user again immediately
+    const thirtyDays = 30 * 24 * 60 * 60;
+    document.cookie = [
+      'consentAccepted=no',
+      'path=/',
+      `max-age=${thirtyDays}`,
+      'samesite=lax'
+    ].join('; ');
+    setIsConsentHidden(true);
+  };
+
   return (
     <>
       {isLoading && <Loader onComplete={handleLoaderComplete} />}
+      {!isConsentHidden && (
+        <div
+          className="consent-banner"
+          style={{
+            background: '#FAF9F6',
+            color: '#2d2d2d',
+            border: '1px solid #EC691F',
+            padding: '18px 22px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '30px',
+            position: 'fixed',
+            bottom: 18,
+            left: 18,
+            right: 18,
+            zIndex: 1000,
+            borderRadius: '14px',
+            boxShadow: '0 18px 42px rgba(0,0,0,0.25)',
+            flexWrap: 'wrap',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            width: '30%',
+          }}
+        >
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 6, flex: 1, minWidth: 240 }}>
+            <span style={{ fontWeight: 800, fontSize: 16, letterSpacing: 0.1 }}>
+              Cookies & Experience
+            </span>
+            <span style={{ fontSize: 13, opacity: 0.92, lineHeight: 1.4 }}>
+              We use cookies to improve performance and tailor content. Accept to allow all, or decline to continue with essential cookies only.
+            </span>
+          </div>
+          <div style={{ display: 'flex', gap: 10, width: '100%' }}>
+            <button
+              onClick={declineConsent}
+              style={{
+                background: '#2d2d2d',
+                color: '#e2e8f0',
+                border: '1px solid rgba(255,255,255,0.2)',
+                padding: '10px 16px',
+                borderRadius: '10px',
+                cursor: 'pointer',
+                fontWeight: 700,
+                backdropFilter: 'blur(4px)',
+                width: '100%',
+              }}
+            >
+              Decline
+            </button>
+            <button
+              onClick={acceptConsent}
+              style={{
+                background: '#EC691F',
+                color: '#FAF9F6',
+                border: 'none',
+                padding: '10px 18px',
+                borderRadius: '10px',
+                cursor: 'pointer',
+                fontWeight: 800,
+                boxShadow: '0 12px 30px rgba(236,105,31,0.4)',
+                width: '100%',
+              }}
+            >
+              Accept
+            </button>
+          </div>
+        </div>
+      )}
       <div className="hero-background-wrapper">
         <BackgroundRippleEffect />
         <Header navigateTo={navigateTo} currentPage={currentPage} />
@@ -631,11 +733,12 @@ export default function Home({ navigateTo, currentPage }) {
               {projects.length > 0 ? projects.map((project, index) => (
                 <a 
                   key={project.id} 
-                  href={`/case-studies/${project.id}`}
+                  href={`/case-studies/${project.seoUrl || (project.title ? toSlug(project.title) : project.id)}`}
                   className="case-study-card"
                   onClick={(e) => {
                     e.preventDefault();
-                    navigateTo('case-study-detail', project.id.toString());
+                    const slug = project.seoUrl || (project.title ? toSlug(project.title) : project.id.toString());
+                    navigateTo('case-study-detail', slug);
                   }}
                   onMouseEnter={() => setHoveredProject(project.id)}
                   onMouseLeave={() => setHoveredProject(null)}

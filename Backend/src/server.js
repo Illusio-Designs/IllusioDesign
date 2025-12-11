@@ -16,6 +16,7 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const isProd = process.env.NODE_ENV === 'production';
 
 // Middleware
 const defaultOrigins = [
@@ -51,9 +52,12 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-// Ensure UTF-8 encoding for all responses
+// Ensure UTF-8 encoding for API responses (not static files)
 app.use((req, res, next) => {
-  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  // Skip Content-Type header for static file requests
+  if (!req.path.startsWith('/uploads') && !req.path.startsWith('/api/email-status')) {
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  }
   next();
 });
 
@@ -61,11 +65,49 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // Serve static files from uploads directory
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+// Static files (images) don't need cookies/credentials, so serve them with public CORS
+app.use('/uploads', (req, res, next) => {
+  // Override CORS for static files - no credentials needed
+  const origin = req.headers.origin;
+  if (origin && allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  } else {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+  }
+  res.setHeader('Access-Control-Allow-Credentials', 'false');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  // Cache static files for better performance
+  res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+  next();
+}, express.static(path.join(__dirname, '../uploads'), {
+  setHeaders: (res, path) => {
+    // Ensure proper content type for images
+    if (path.endsWith('.webp')) {
+      res.setHeader('Content-Type', 'image/webp');
+    } else if (path.endsWith('.png')) {
+      res.setHeader('Content-Type', 'image/png');
+    } else if (path.endsWith('.jpg') || path.endsWith('.jpeg')) {
+      res.setHeader('Content-Type', 'image/jpeg');
+    }
+  }
+}));
 
 // Routes
 app.use('/api/public', publicRoutes);
 app.use('/api/private', privateRoutes);
+
+// Lightweight endpoint to persist consent acceptance in a cookie
+app.post('/api/consent-accept', (req, res) => {
+  const thirtyDaysMs = 30 * 24 * 60 * 60 * 1000;
+  res.cookie('consentAccepted', 'yes', {
+    path: '/',
+    maxAge: thirtyDaysMs,
+    sameSite: 'lax',
+    secure: isProd,
+    httpOnly: false // readable by client to skip rendering the banner
+  });
+  res.sendStatus(204);
+});
 
 // Health check
 app.get('/health', (req, res) => {

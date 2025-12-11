@@ -1,4 +1,5 @@
 import '@/styles/pages/CaseStudy.css';
+import { toSlug } from '@/utils/urlSlug';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SplitText from '@/components/SplitText';
@@ -204,7 +205,9 @@ export default function CaseStudy({ navigateTo, currentPage }) {
   }, [activeCategory]);
 
   const handleProjectClick = (project) => {
-    navigateTo('case-study-detail', project.id.toString());
+    // Generate slug from title or use seoUrl if available
+    const slug = project.seoUrl || (project.title ? toSlug(project.title) : project.id.toString());
+    navigateTo('case-study-detail', slug);
   };
 
   // Trigger boom animation when project comes into view
@@ -359,7 +362,7 @@ export default function CaseStudy({ navigateTo, currentPage }) {
                     </div>
                   </div>
                   <a 
-                    href={`/case-studies/${project.id}`}
+                    href={`/case-studies/${project.seoUrl || (project.title ? toSlug(project.title) : project.id)}`}
                     className={`explore-button ${hoveredProject === project.id ? 'hovered' : ''}`}
                     onClick={(e) => {
                       e.preventDefault();

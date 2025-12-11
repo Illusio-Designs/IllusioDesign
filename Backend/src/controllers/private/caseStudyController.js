@@ -43,6 +43,8 @@ export const createCaseStudy = async (req, res) => {
     const {
       title,
       description,
+      challenges,
+      solution,
       link,
       category,
       tags,
@@ -69,6 +71,12 @@ export const createCaseStudy = async (req, res) => {
     
     // Ensure description is properly decoded as UTF-8 string to preserve emojis
     const decodedDescription = description ? String(description) : null;
+    
+    // Ensure challenges is properly decoded as UTF-8 string to preserve emojis and HTML
+    const decodedChallenges = challenges ? String(challenges) : null;
+    
+    // Ensure solution is properly decoded as UTF-8 string to preserve emojis and HTML
+    const decodedSolution = solution ? String(solution) : null;
     
     // Ensure results is properly decoded as UTF-8 string to preserve emojis and HTML
     const decodedResults = results ? String(results) : null;
@@ -107,6 +115,8 @@ export const createCaseStudy = async (req, res) => {
     const caseStudy = await CaseStudy.create({
       title,
       description: decodedDescription || null, // Use decoded description to preserve emojis
+      challenges: decodedChallenges || null, // Use decoded challenges to preserve emojis and HTML
+      solution: decodedSolution || null, // Use decoded solution to preserve emojis and HTML
       image: image || null,
       link: link || null,
       category: category || services || null,
@@ -183,6 +193,16 @@ export const updateCaseStudy = async (req, res) => {
     // Ensure description is properly decoded as UTF-8 string if present
     if (updates.description !== undefined) {
       updates.description = updates.description ? String(updates.description) : null;
+    }
+    
+    // Ensure challenges is properly decoded as UTF-8 string if present
+    if (updates.challenges !== undefined) {
+      updates.challenges = updates.challenges ? String(updates.challenges) : null;
+    }
+    
+    // Ensure solution is properly decoded as UTF-8 string if present
+    if (updates.solution !== undefined) {
+      updates.solution = updates.solution ? String(updates.solution) : null;
     }
     
     // Ensure results is properly decoded as UTF-8 string if present

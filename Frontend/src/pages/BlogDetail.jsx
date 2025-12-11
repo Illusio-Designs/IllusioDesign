@@ -275,23 +275,11 @@ export default function BlogDetail({ blogName, navigateTo, currentPage }) {
     };
   }, [blogName]);
 
-  // Show error or loading state
-  if (error || !currentBlog) {
+  // Show loading state until data is loaded
+  if (isLoading || !currentBlog) {
     return (
       <>
-        {isLoading && <Loader onComplete={handleLoaderComplete} />}
-        <Header navigateTo={navigateTo} currentPage={currentPage} />
-        <section className="blog-detail-section">
-          <div className="blog-detail-container">
-            <div style={{ padding: '2rem', textAlign: 'center' }}>
-              <h2>{error || 'Blog post not found'}</h2>
-              <button onClick={() => navigateTo('blog')} style={{ marginTop: '1rem', padding: '0.5rem 1rem' }}>
-                Back to Blog
-              </button>
-            </div>
-          </div>
-        </section>
-        <Footer navigateTo={navigateTo} />
+        <Loader onComplete={handleLoaderComplete} />
       </>
     );
   }
@@ -317,45 +305,26 @@ export default function BlogDetail({ blogName, navigateTo, currentPage }) {
             </h1>
           </ScrollReveal>
 
-          <div className="blog-detail-layout">
-            {/* Main Content Column */}
-            <div className="blog-main-content">
-              <div>
-                {(() => {
-                  console.log('🖼️ Rendering image:', {
-                    hasImage: !!currentBlog.image,
-                    imageValue: currentBlog.image,
-                    imageType: typeof currentBlog.image
-                  });
-                  
-                  if (currentBlog.image) {
-                    return (
-                      <div className="blog-image-container">
-                        <img 
-                          src={currentBlog.image} 
-                          alt={currentBlog.title}
-                          className="blog-detail-image"
-                          onError={(e) => {
-                            console.error('❌ Image failed to load:', currentBlog.image);
-                            e.target.style.display = 'none';
-                          }}
-                          onLoad={() => {
-                            console.log('✅ Image loaded successfully:', currentBlog.image);
-                          }}
-                        />
-                      </div>
-                    );
-                  } else {
-                    console.log('⚠️ No image found, showing placeholder');
-                    return <div className="blog-image-placeholder"></div>;
-                  }
-                })()}
-                <div className="blog-date">{currentBlog.date}</div>
-                {currentBlog.author && (
-                  <div className="blog-author" style={{ marginBottom: '1rem', color: '#666', fontSize: '0.9rem' }}>
-                    By {currentBlog.author}
-                  </div>
-                )}
+          {/* Hero Image */}
+          {currentBlog.image && (
+            <ScrollReveal animation="fadeUp" delay={0.2} duration={1.5} trigger="onScroll" ready={!isLoading}>
+              <div className="blog-hero-image">
+                <img 
+                  src={currentBlog.image} 
+                  alt={currentBlog.title}
+                  className="blog-detail-image"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                  }}
+                />
+              </div>
+            </ScrollReveal>
+          )}
+
+          {/* Content with Sticky Sidebar */}
+          <ScrollReveal animation="fadeUp" delay={0.3} duration={1.5} trigger="onScroll" ready={!isLoading}>
+            <div className="blog-content-with-sidebar">
+              <div className="blog-main-content">
                 <div className="blog-body-text">
                   {(() => {
                     const content = currentBlog?.content || '';
@@ -473,27 +442,46 @@ export default function BlogDetail({ blogName, navigateTo, currentPage }) {
                   })()}
                 </div>
               </div>
-            </div>
-
-            {/* Related Articles Column */}
-            {relatedPosts.length > 0 && (
-              <div className="blog-related-articles">
-                <ScrollReveal as="div" animation="fadeUp" delay={0.15} duration={1.5} once={false} ready={!isLoading}>
-                  {relatedPosts.map((post, index) => (
-                    <div 
-                      key={post.id} 
-                      className="related-article-card"
-                      onClick={() => navigateTo('blog-detail', post.slug)}
-                      style={{ cursor: 'pointer' }}
-                    >
-                      <div className="related-article-image"></div>
-                      <div className="related-article-title">{post.title}</div>
+              <div className="sticky-sidebar">
+                <div className="blog-details-sticky">
+                  {currentBlog.date && (
+                    <div className="blog-detail-row">
+                      <span className="blog-detail-label">Date</span>
+                      <span className="blog-detail-value">{currentBlog.date}</span>
                     </div>
-                  ))}
-                </ScrollReveal>
+                  )}
+                  {currentBlog.author && (
+                    <div className="blog-detail-row">
+                      <span className="blog-detail-label">Author</span>
+                      <span className="blog-detail-value">{currentBlog.author}</span>
+                    </div>
+                  )}
+                  {currentBlog.category && (
+                    <div className="blog-detail-row">
+                      <span className="blog-detail-label">Category</span>
+                      <span className="blog-detail-value">{currentBlog.category}</span>
+                    </div>
+                  )}
+                  {relatedPosts.length > 0 && (
+                    <div className="blog-detail-row">
+                      <span className="blog-detail-label">Related Posts</span>
+                      <div className="related-posts-list">
+                        {relatedPosts.map((post) => (
+                          <div 
+                            key={post.id} 
+                            className="related-post-item"
+                            onClick={() => navigateTo('blog-detail', post.slug)}
+                          >
+                            {post.title}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
-            )}
-          </div>
+            </div>
+          </ScrollReveal>
         </div>
       </section>
       <Footer navigateTo={navigateTo} />

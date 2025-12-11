@@ -1,3 +1,6 @@
+/* Import shared components styles */
+@import '../components/common/SharedComponents.css';
+
 /* Hero Background Wrapper - covers header to end of hero section */
 .hero-background-wrapper {
   position: relative;
@@ -993,17 +996,7 @@
   flex-shrink: 0;
 }
 
-.rating {
-  display: flex;
-  gap: 0.3rem;
-  align-items: center;
-}
-
-.rating svg {
-  width: 28px;
-  height: 28px;
-  flex-shrink: 0;
-}
+/* Rating styles moved to SharedComponents.css - keeping Home-specific overrides if needed */
 
 .testimonial-text {
   font-size: 15px;
@@ -1145,12 +1138,14 @@
 
 /* Column 1 - Scrolls down infinite */
 .testimonial-column-1 .testimonial-column-track {
-  animation: scroll-column-down 9s linear infinite;
+  animation: scroll-column-down 40s linear infinite;
+  will-change: transform;
 }
 
 /* Column 2 - Scrolls up infinite */
 .testimonial-column-2 .testimonial-column-track {
-  animation: scroll-column-up 8s linear infinite;
+  animation: scroll-column-up 40s linear infinite;
+  will-change: transform;
 }
 
 /* Pause on hover */
@@ -1177,13 +1172,13 @@
     transform: translateY(0);
   }
   100% {
-    transform: translateY(-50%);
+    transform: translateY(-100%);
   }
 }
 
 @keyframes scroll-column-up {
   0% {
-    transform: translateY(-50%);
+    transform: translateY(-100%);
   }
   100% {
     transform: translateY(0);
@@ -1199,30 +1194,7 @@
   width: 100%;
 }
 
-.rating-input {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
-.star-btn {
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.star-btn:hover {
-  transform: scale(1.1);
-}
-
-.star-btn:active {
-  transform: scale(0.95);
-}
+/* Rating-input and star-btn styles moved to SharedComponents.css */
 
 .review-form .form-group {
   display: flex;

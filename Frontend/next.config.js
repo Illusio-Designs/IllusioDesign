@@ -32,6 +32,7 @@ const nextConfig = {
   experimental: {
     missingSuspenseWithCSRBailout: false,
   },
+  // Enable production source maps so large first‑party bundles ship with maps
+  productionBrowserSourceMaps: true,
 };
-
-module.exports = nextConfig;
+export default nextConfig;

@@ -16,6 +16,16 @@ const CaseStudy = sequelize.define('CaseStudy', {
     charset: 'utf8mb4',
     collate: 'utf8mb4_unicode_ci'
   },
+  challenges: {
+    type: DataTypes.TEXT('long'), // Use TEXT with explicit length for better emoji support
+    charset: 'utf8mb4',
+    collate: 'utf8mb4_unicode_ci'
+  },
+  solution: {
+    type: DataTypes.TEXT('long'), // Use TEXT with explicit length for better emoji support
+    charset: 'utf8mb4',
+    collate: 'utf8mb4_unicode_ci'
+  },
   image: {
     type: DataTypes.STRING
   },

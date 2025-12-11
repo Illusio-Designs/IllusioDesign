@@ -42,7 +42,43 @@ export const getAllCaseStudies = async (req, res) => {
 
 export const getCaseStudyById = async (req, res) => {
   try {
-    const caseStudy = await CaseStudy.findByPk(req.params.id);
+    const identifier = req.params.id;
+    
+    // Try to find by ID first (for backward compatibility)
+    let caseStudy = await CaseStudy.findByPk(identifier);
+    
+    // If not found by ID, try to find by slug/seoUrl or title slug
+    if (!caseStudy) {
+      // Try seoUrl first
+      caseStudy = await CaseStudy.findOne({
+        where: {
+          seoUrl: identifier,
+          published: true
+        }
+      });
+      
+      // If still not found, try to match by title slug (convert title to slug and compare)
+      if (!caseStudy) {
+        const allCaseStudies = await CaseStudy.findAll({
+          where: { published: true }
+        });
+        
+        // Find case study where title converted to slug matches the identifier
+        caseStudy = allCaseStudies.find(cs => {
+          const titleSlug = cs.title
+            ? cs.title
+                .toLowerCase()
+                .trim()
+                .replace(/\s+/g, '-')
+                .replace(/[^\w\-]+/g, '')
+                .replace(/\-\-+/g, '-')
+                .replace(/^-+/, '')
+                .replace(/-+$/, '')
+            : '';
+          return titleSlug === identifier.toLowerCase();
+        });
+      }
+    }
     
     if (!caseStudy || caseStudy.published === false) {
       return res.status(404).json({ error: 'Case study not found' });

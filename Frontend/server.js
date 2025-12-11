@@ -2,15 +2,15 @@
 // This file is used to start the Next.js server on your hosting provider
 // Run with: node server.js
 
-const { createServer } = require('http');
-const { parse } = require('url');
-const path = require('path');
-const fs = require('fs');
-const next = require('next');
+import { createServer } from 'http';
+import { parse, fileURLToPath } from 'url';
+import path from 'path';
+import fs from 'fs';
+import next from 'next';
 
 // Change to the directory where server.js is located
 // This ensures Next.js can find next.config.js and the src/app directory
-const serverDir = __dirname;
+const serverDir = path.dirname(fileURLToPath(import.meta.url));
 process.chdir(serverDir);
 
 // Verify that src/app directory exists

@@ -1,5 +1,5 @@
 import '@/styles/pages/AboutUs.css';
-import '@/styles/pages/Home.css';
+import '@/styles/components/common/SharedComponents.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SplitText from '@/components/SplitText';
@@ -129,25 +129,25 @@ export default function AboutUs({ navigateTo, currentPage }) {
     {
       id: 1,
       title: 'Innovation',
-      description: 'Continuously push boundaries and explore new technologies to deliver cutting-edge solutions.',
+      description: 'Push boundaries, experiment with new technologies, and create solutions that stay ahead of the digital curve.',
       icon: '/Icons/Brandanddesign.webp'
     },
     {
       id: 2,
       title: 'Excellence',
-      description: 'Maintain the highest standards in every project, ensuring quality and attention to detail.',
+      description: 'Maintain the highest standards of quality, detail, and performance in every project we deliver.',
       icon: '/Icons/Web&app.webp'
     },
     {
       id: 3,
       title: 'Client Success',
-      description: 'Prioritize client goals and work collaboratively to achieve measurable business results.',
+      description: 'Understand client goals deeply and work collaboratively to achieve measurable results that matter.',
       icon: '/Icons/digitalmarketing.webp'
     },
     {
       id: 4,
       title: 'Growth',
-      description: 'Foster a culture of learning and development, both for our team and our clients.',
+      description: 'Empower continuous learning and development—for our team, our clients, and the brands we build.',
       icon: '/Icons/b2bsolution.webp'
     }
   ];
@@ -271,14 +271,10 @@ export default function AboutUs({ navigateTo, currentPage }) {
           <ScrollReveal animation="fadeUp" delay={0.15} duration={1.5} once={false} ready={!isLoading}>
             <div className="about-intro">
               <p>
-                At Illusio Designs, we are passionate about creating exceptional digital experiences. 
-                Our team of talented designers and developers work together to bring your ideas to life, 
-                transforming visions into reality through innovative design and cutting-edge technology.
+              Illusio Designs is a creative and technology-driven agency dedicated to building brands and digital experiences that leave a lasting impression. With a blend of strategy, design, and development, we help businesses grow, innovate, and connect with their audience.
               </p>
               <p>
-                With years of experience in the industry, we have helped numerous clients achieve 
-                their business goals through strategic design thinking, user-centered development, 
-                and data-driven digital marketing solutions.
+              Our team brings fresh ideas, modern design thinking, and technical expertise to every project. From branding to websites to enterprise systems—we deliver solutions that are visually stunning, performance-focused, and built for long-term success.
               </p>
             </div>
           </ScrollReveal>
@@ -322,9 +318,7 @@ export default function AboutUs({ navigateTo, currentPage }) {
                 <div className="about-card vision-card">
                   <h2 className="card-title">Our Vision</h2>
                   <p className="card-description">
-                    To be the leading digital design and development agency that transforms businesses 
-                    through innovative solutions, creating meaningful connections between brands and their 
-                    audiences.
+                  To become a trusted global agency that blends creativity and technology to shape the future of digital experiences.
                   </p>
                 </div>
               </ScrollReveal>
@@ -333,9 +327,7 @@ export default function AboutUs({ navigateTo, currentPage }) {
                 <div className="about-card mission-card">
                   <h2 className="card-title">Our Mission</h2>
                   <p className="card-description">
-                    To empower businesses with exceptional digital solutions that drive growth and success. 
-                    We combine creative excellence with technical expertise to deliver projects that exceed 
-                    expectations.
+                  To deliver innovative, user-focused, and scalable solutions that empower brands, simplify business processes, and create meaningful impact.
                   </p>
                 </div>
               </ScrollReveal>

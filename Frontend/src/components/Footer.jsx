@@ -35,6 +35,8 @@ export default function Footer({ navigateTo }) {
                     src={isDark ? "/images/Illusio Design Logo WHITE.webp" : "/images/IllusioDesignfulllogo.webp"} 
                     alt="Illusio Designs" 
                     className="footer-logo-image"
+                    width="225"
+                    height="60"
                     style={{ cursor: 'pointer' }}
                   />
                 </div>

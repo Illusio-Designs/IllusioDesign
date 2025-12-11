@@ -1,24 +1,39 @@
 'use client';
 
-import { useState, useEffect, useLayoutEffect } from 'react';
+import { useState, useEffect, useLayoutEffect, Suspense, lazy } from 'react';
 import { usePathname } from 'next/navigation';
 import { setPageContext } from '@/services/fetchInterceptor';
 import Home from '@/pages/Home';
-// import Services from '@/pages/Services';
-import AboutUs from '@/pages/AboutUs';
-import Career from '@/pages/Career';
-import Blog from '@/pages/Blog';
-import CaseStudy from '@/pages/CaseStudy';
-import ContactUs from '@/pages/ContactUs';
-import PrivacyPolicy from '@/pages/PrivacyPolicy';
-import TermsOfService from '@/pages/TermsOfService';
-import ServiceDetail from '@/pages/ServiceDetail';
-import CaseStudyDetail from '@/pages/CaseStudyDetail';
-import BlogDetail from '@/pages/BlogDetail';
-import PositionApply from '@/pages/PositionApply';
-import Login from '@/pages/Dashboard/Login';
-import Register from '@/pages/Dashboard/Register';
 import { serviceNameToSlug, slugToServiceName } from '@/utils/urlSlug';
+
+// Dynamic imports for code splitting - pages load only when needed
+const AboutUs = lazy(() => import('@/pages/AboutUs'));
+const Career = lazy(() => import('@/pages/Career'));
+const Blog = lazy(() => import('@/pages/Blog'));
+const CaseStudy = lazy(() => import('@/pages/CaseStudy'));
+const ContactUs = lazy(() => import('@/pages/ContactUs'));
+const PrivacyPolicy = lazy(() => import('@/pages/PrivacyPolicy'));
+const TermsOfService = lazy(() => import('@/pages/TermsOfService'));
+const ServiceDetail = lazy(() => import('@/pages/ServiceDetail'));
+const CaseStudyDetail = lazy(() => import('@/pages/CaseStudyDetail'));
+const BlogDetail = lazy(() => import('@/pages/BlogDetail'));
+const PositionApply = lazy(() => import('@/pages/PositionApply'));
+const Login = lazy(() => import('@/pages/Dashboard/Login'));
+const Register = lazy(() => import('@/pages/Dashboard/Register'));
+
+// Loading fallback component
+const PageLoader = () => (
+  <div style={{ 
+    display: 'flex', 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    minHeight: '50vh',
+    fontSize: '1rem',
+    color: 'var(--text-color, #333)'
+  }}>
+    Loading...
+  </div>
+);
 
 export default function Page() {
   const pathname = usePathname();
@@ -241,32 +256,84 @@ export default function Page() {
       // case 'services':
       //   return <Services navigateTo={navigateTo} currentPage={currentPage} />;  
       case 'about':
-        return <AboutUs navigateTo={navigateTo} currentPage={currentPage} />;
+        return (
+          <Suspense fallback={<PageLoader />}>
+            <AboutUs navigateTo={navigateTo} currentPage={currentPage} />
+          </Suspense>
+        );
       case 'career':
-        return <Career navigateTo={navigateTo} currentPage={currentPage} />;
+        return (
+          <Suspense fallback={<PageLoader />}>
+            <Career navigateTo={navigateTo} currentPage={currentPage} />
+          </Suspense>
+        );
       case 'blog':
-        return <Blog navigateTo={navigateTo} currentPage={currentPage} />;
+        return (
+          <Suspense fallback={<PageLoader />}>
+            <Blog navigateTo={navigateTo} currentPage={currentPage} />
+          </Suspense>
+        );
       case 'case-study':
-        return <CaseStudy navigateTo={navigateTo} currentPage={currentPage} />;
+        return (
+          <Suspense fallback={<PageLoader />}>
+            <CaseStudy navigateTo={navigateTo} currentPage={currentPage} />
+          </Suspense>
+        );
       case 'contact':
-        return <ContactUs navigateTo={navigateTo} currentPage={currentPage} />;
+        return (
+          <Suspense fallback={<PageLoader />}>
+            <ContactUs navigateTo={navigateTo} currentPage={currentPage} />
+          </Suspense>
+        );
       case 'privacy':
-        return <PrivacyPolicy navigateTo={navigateTo} currentPage={currentPage} />;
+        return (
+          <Suspense fallback={<PageLoader />}>
+            <PrivacyPolicy navigateTo={navigateTo} currentPage={currentPage} />
+          </Suspense>
+        );
       case 'terms':
-        return <TermsOfService navigateTo={navigateTo} currentPage={currentPage} />;
+        return (
+          <Suspense fallback={<PageLoader />}>
+            <TermsOfService navigateTo={navigateTo} currentPage={currentPage} />
+          </Suspense>
+        );
       case 'service-detail':
       case 'services':
-        return <ServiceDetail key={currentItem} serviceName={currentItem} navigateTo={navigateTo} currentPage={currentPage} />;
+        return (
+          <Suspense fallback={<PageLoader />}>
+            <ServiceDetail key={currentItem} serviceName={currentItem} navigateTo={navigateTo} currentPage={currentPage} />
+          </Suspense>
+        );
       case 'case-study-detail':
-        return <CaseStudyDetail caseStudyName={currentItem} navigateTo={navigateTo} currentPage={currentPage} />;
+        return (
+          <Suspense fallback={<PageLoader />}>
+            <CaseStudyDetail caseStudyName={currentItem} navigateTo={navigateTo} currentPage={currentPage} />
+          </Suspense>
+        );
       case 'blog-detail':
-        return <BlogDetail blogName={currentItem} navigateTo={navigateTo} currentPage={currentPage} />;
+        return (
+          <Suspense fallback={<PageLoader />}>
+            <BlogDetail blogName={currentItem} navigateTo={navigateTo} currentPage={currentPage} />
+          </Suspense>
+        );
       case 'position-apply':
-        return <PositionApply positionId={currentItem} navigateTo={navigateTo} currentPage={currentPage} />;
+        return (
+          <Suspense fallback={<PageLoader />}>
+            <PositionApply positionId={currentItem} navigateTo={navigateTo} currentPage={currentPage} />
+          </Suspense>
+        );
       case 'login':
-        return <Login navigateTo={navigateTo} />;
+        return (
+          <Suspense fallback={<PageLoader />}>
+            <Login navigateTo={navigateTo} />
+          </Suspense>
+        );
       case 'register':
-        return <Register navigateTo={navigateTo} />;
+        return (
+          <Suspense fallback={<PageLoader />}>
+            <Register navigateTo={navigateTo} />
+          </Suspense>
+        );
       default:
         return <Home navigateTo={navigateTo} currentPage={currentPage} />;
     }

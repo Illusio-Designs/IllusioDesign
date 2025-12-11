@@ -175,16 +175,8 @@ export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage
 
     const fetchCaseStudy = async () => {
       try {
-        const projectId = parseInt(caseStudyName, 10);
-        if (isNaN(projectId)) {
-          if (isMounted) {
-            setError('Invalid case study ID');
-            setIsLoading(false);
-          }
-          return;
-        }
-
-        const response = await caseStudyAPI.getByIdPublic(projectId);
+        // Use slug/identifier directly (can be ID or slug)
+        const response = await caseStudyAPI.getByIdPublic(caseStudyName);
         
         // Process data regardless of mount status
         if (response && response.data) {
@@ -223,6 +215,8 @@ export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage
             id: project.id,
             title: project.title,
             description: project.description || '',
+            challenges: project.challenges || '',
+            solution: project.solution || '',
             image: imageUrl,
             link: project.link || '#',
             tags: Array.isArray(project.tags) 
@@ -339,40 +333,11 @@ export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage
     }
   };
 
-  // Show error or loading state
-  if (error || !currentProject) {
+  // Show loading state until data is loaded
+  if (isLoading || !currentProject) {
     return (
       <>
-        {isLoading && <Loader onComplete={handleLoaderComplete} />}
-        <Header navigateTo={navigateTo} currentPage={currentPage} />
-        <section className="case-study-detail-section">
-          <div className="case-study-detail-container">
-            <div style={{ padding: '2rem', textAlign: 'center' }}>
-              <h2>{error || 'Case study not found'}</h2>
-              <button onClick={() => navigateTo('case-study')} style={{ marginTop: '1rem', padding: '0.5rem 1rem' }}>
-                Back to Case Studies
-              </button>
-            </div>
-          </div>
-        </section>
-        <Footer navigateTo={navigateTo} />
-      </>
-    );
-  }
-
-  if (!currentProject) {
-    return (
-      <>
-        {isLoading && <Loader onComplete={handleLoaderComplete} />}
-        <Header navigateTo={navigateTo} currentPage={currentPage} />
-        <section className="case-study-detail-section">
-          <div className="case-study-detail-container">
-            <div style={{ padding: '2rem', textAlign: 'center' }}>
-              <h2>Loading case study...</h2>
-            </div>
-          </div>
-        </section>
-        <Footer navigateTo={navigateTo} />
+        <Loader onComplete={handleLoaderComplete} />
       </>
     );
   }
@@ -436,28 +401,64 @@ export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage
             </div>
           </ScrollReveal>
 
-          {/* Challenge & Solution Section (Description) */}
+          {/* Description Section with Sticky Project Details */}
           {currentProject.description && (
             <ScrollReveal animation="fadeUp" delay={0.3} duration={1.5} trigger="onScroll" ready={!isLoading}>
-              <div className="description-section">
-                {(() => {
-                  const description = currentProject.description;
-                  // Use the same sanitization function to ensure consistency
-                  const sanitizedContent = sanitizeHTMLContent(description);
-                  
-                  return (
-                    <div 
-                      className="description-content"
-                      style={{ color: '#666', lineHeight: '1.6' }}
-                      dangerouslySetInnerHTML={{ __html: sanitizedContent }}
-                    />
-                  );
-                })()}
+              <div className="description-with-sidebar">
+                <div className="description-main">
+                  <div className="description-section">
+                    {(() => {
+                      const description = currentProject.description;
+                      const sanitizedContent = sanitizeHTMLContent(description);
+                      
+                      return (
+                        <div 
+                          className="description-content"
+                          dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+                        />
+                      );
+                    })()}
+                  </div>
+                </div>
+                <div className="sticky-sidebar">
+                  <div className="project-details-sticky">
+                    <div className="detail-row">
+                      <span className="detail-label">Client</span>
+                      <div className="detail-content">
+                        <span className="detail-value-bold">{currentProject.clientName || currentProject.title}</span>
+                        {currentProject.location && (
+                          <>
+                            <span style={{ margin: '0 0.5rem' }}>-</span>
+                            <span className="detail-value-bold">
+                              {currentProject.location}
+                            </span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="detail-row">
+                      <span className="detail-label">Services</span>
+                      <span className="detail-value-bold">
+                        {currentProject.services || 'N/A'}
+                      </span>
+                    </div>
+
+                    <div className="detail-row">
+                      <span className="detail-label">Technologies</span>
+                      <span className="detail-value-bold">
+                        {currentProject.techStack && currentProject.techStack.length > 0 
+                          ? currentProject.techStack.join(', ')
+                          : 'N/A'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </ScrollReveal>
           )}
 
-          {/* Additional Images Gallery - Between Description and Results */}
+          {/* Additional Images Gallery - Full Width */}
           {currentProject.additionalImages && currentProject.additionalImages.length > 0 && (
             <ScrollReveal animation="fadeUp" delay={0.35} duration={1.5} trigger="onScroll" ready={!isLoading}>
               <div className="case-study-gallery-grid">
@@ -502,414 +503,115 @@ export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage
             </ScrollReveal>
           )}
 
-          {/* Impact & Results Section */}
-          {currentProject.results && (
+          {/* Solution & Results Section - 2 Column Layout (50% 50%) */}
+          {(currentProject.solution || currentProject.results) && (
             <ScrollReveal animation="fadeUp" delay={0.4} duration={1.5} trigger="onScroll" ready={!isLoading}>
-              <div className="results-section">
-                  {(() => {
-                  const results = currentProject.results;
-                  if (!results) return null;
-                  
-                  // Use the same sanitization function as description to ensure emojis are preserved
-                  const sanitizedContent = sanitizeHTMLContent(results);
-                  
-                  return (
-                    <div 
-                      className="results-content"
-                      style={{ color: '#666', lineHeight: '1.6', width: '100%' }}
-                      dangerouslySetInnerHTML={{ __html: sanitizedContent }}
-                    />
-                  );
-                })()}
-              </div>
-            </ScrollReveal>
-          )}
-
-          {/* Conclusion Section */}
-          {currentProject.conclusion && (
-            <ScrollReveal animation="fadeUp" delay={0.5} duration={1.5} trigger="onScroll" ready={!isLoading}>
-              <div className="conclusion-section">
-                {(() => {
-                  const conclusion = currentProject.conclusion;
-                  if (!conclusion) return null;
-                  
-                  // Use the same sanitization function as results to ensure emojis are preserved
-                  const sanitizedContent = sanitizeHTMLContent(conclusion);
-                    
-                    return (
-                      <div 
-                      className="conclusion-content"
-                        style={{ color: '#666', lineHeight: '1.6' }}
-                        dangerouslySetInnerHTML={{ __html: sanitizedContent }}
-                      />
-                    );
-                  })()}
+              <div className="solution-results-grid">
+                {/* Left Column - Solution */}
+                <div className="solution-column">
+                  {currentProject.solution && (
+                    <div className="solution-section">
+                      {(() => {
+                        const solution = currentProject.solution;
+                        const sanitizedContent = sanitizeHTMLContent(solution);
+                        
+                        return (
+                          <div 
+                            className="solution-content"
+                            dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+                          />
+                        );
+                      })()}
+                    </div>
+                  )}
                 </div>
-            </ScrollReveal>
-          )}
 
-          {/* Project Details */}
-          <ScrollReveal animation="fadeUp" delay={0.6} duration={1.5} trigger="onScroll" ready={!isLoading}>
-            <div className="project-details-full">
-              <div className="detail-row">
-                <span className="detail-label">Client</span>
-                <div className="detail-content">
-                  <span className="detail-value-bold">{currentProject.clientName || currentProject.title}</span>
-                  {currentProject.location && (
-                    <>
-                      <span style={{ margin: '0 0.5rem' }}>-</span>
-                    <span className="detail-value-bold">
-                      {currentProject.location}
-                    </span>
-                    </>
+                {/* Right Column - Results */}
+                <div className="results-column">
+                  {currentProject.results && (
+                    <div className="results-section">
+                      {(() => {
+                        const results = currentProject.results;
+                        if (!results) return null;
+                        
+                        const sanitizedContent = sanitizeHTMLContent(results);
+                        
+                        return (
+                          <div 
+                            className="results-content"
+                            dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+                          />
+                        );
+                      })()}
+                    </div>
                   )}
                 </div>
               </div>
+            </ScrollReveal>
+          )}
 
-              <div className="detail-row">
-                <span className="detail-label">Services</span>
-                <span className="detail-value-bold">
-                  {currentProject.services || 'N/A'}
-                </span>
-              </div>
+          {/* Conclusion Section with Sticky Project Details */}
+          {currentProject.conclusion && (
+            <ScrollReveal animation="fadeUp" delay={0.5} duration={1.5} trigger="onScroll" ready={!isLoading}>
+              <div className="conclusion-with-sidebar">
+                <div className="conclusion-main">
+                  <div className="conclusion-section">
+                    {(() => {
+                      const conclusion = currentProject.conclusion;
+                      if (!conclusion) return null;
+                      
+                      const sanitizedContent = sanitizeHTMLContent(conclusion);
+                      
+                      return (
+                        <div 
+                          className="conclusion-content"
+                          dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+                        />
+                      );
+                    })()}
+                  </div>
+                </div>
+                <div className="sticky-sidebar">
+                  <div className="project-details-sticky">
+                    <div className="detail-row">
+                      <span className="detail-label">Client</span>
+                      <div className="detail-content">
+                        <span className="detail-value-bold">{currentProject.clientName || currentProject.title}</span>
+                        {currentProject.location && (
+                          <>
+                            <span style={{ margin: '0 0.5rem' }}>-</span>
+                            <span className="detail-value-bold">
+                              {currentProject.location}
+                            </span>
+                          </>
+                        )}
+                      </div>
+                    </div>
 
-              <div className="detail-row">
-                <span className="detail-label">Technologies</span>
-                <span className="detail-value-bold">
-                  {currentProject.techStack && currentProject.techStack.length > 0 
-                    ? currentProject.techStack.join(', ')
-                    : 'N/A'}
-                </span>
+                    <div className="detail-row">
+                      <span className="detail-label">Services</span>
+                      <span className="detail-value-bold">
+                        {currentProject.services || 'N/A'}
+                      </span>
+                    </div>
+
+                    <div className="detail-row">
+                      <span className="detail-label">Technologies</span>
+                      <span className="detail-value-bold">
+                        {currentProject.techStack && currentProject.techStack.length > 0 
+                          ? currentProject.techStack.join(', ')
+                          : 'N/A'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-          </ScrollReveal>
+            </ScrollReveal>
+          )}
 
         </div>
       </section>
       <Footer navigateTo={navigateTo} />
     </>
-  );
-
-
-
-
-  if (!currentProject) {
-
-    return (
-
-      <>
-
-        {isLoading && <Loader onComplete={handleLoaderComplete} />}
-
-        <Header navigateTo={navigateTo} currentPage={currentPage} />
-
-        <section className="case-study-detail-section">
-
-          <div className="case-study-detail-container">
-
-            <div style={{ padding: '2rem', textAlign: 'center' }}>
-
-              <h2>Loading case study...</h2>
-
-            </div>
-
-          </div>
-
-        </section>
-
-        <Footer navigateTo={navigateTo} />
-
-      </>
-
-    );
-
-  }
-
-
-
-  return (
-
-    <>
-
-      {isLoading && <Loader onComplete={handleLoaderComplete} />}
-
-      <Header navigateTo={navigateTo} currentPage={currentPage} />
-
-      <section className="case-study-detail-section">
-
-        <div className="case-study-detail-container">
-
-          {/* Top Section - Tags and Title */}
-
-          <ScrollReveal animation="fadeUp" delay={0.1} duration={1.5} trigger="onScroll" ready={!isLoading}>
-
-            <div className="case-study-header">
-
-              {(currentProject.tags && currentProject.tags.length > 0) || currentProject.industry ? (
-
-                <div className="project-tags">
-
-                  {currentProject.tags?.map((tag, tagIndex) => {
-
-                    const cleanTag = cleanString(tag);
-
-                    return cleanTag ? (
-
-                      <span key={tagIndex} className="project-tag">{cleanTag}</span>
-
-                    ) : null;
-
-                  })}
-
-                  {currentProject.industry && (
-
-                    <span className="project-tag">{cleanString(currentProject.industry).toUpperCase()}</span>
-
-                  )}
-
-                </div>
-
-              ) : null}
-
-              <h1 className="project-title-main">
-
-                <SplitText
-
-                  as="span"
-
-                  splitBy="words"
-
-                  animation="fadeUp"
-
-                  delay={0.05}
-
-                  trigger="onScroll"
-
-                  once={false}
-
-                >
-
-                  {currentProject.title}
-
-                </SplitText>
-
-              </h1>
-
-              {currentProject.link && currentProject.link !== '#' && (
-
-                <button 
-
-                  className="view-website-button"
-
-                  onClick={handleVisitSite}
-
-                >
-
-                  VIEW WEBSITE ↗
-
-                </button>
-
-              )}
-
-            </div>
-
-          </ScrollReveal>
-
-
-
-          {/* Full Screen Hero Image */}
-
-          <ScrollReveal animation="fadeUp" delay={0.2} duration={1.5} trigger="onScroll" ready={!isLoading}>
-
-            <div className="case-study-hero-image">
-
-              <img
-
-                src={currentProject.image}
-
-                alt={currentProject.title}
-
-                className="hero-image"
-
-                onError={(e) => {
-
-                  e.target.style.display = 'none';
-
-                }}
-
-              />
-
-            </div>
-
-          </ScrollReveal>
-
-
-
-          {/* Challenge & Solution Section (Description) */}
-          {currentProject.description && (
-            <ScrollReveal animation="fadeUp" delay={0.3} duration={1.5} trigger="onScroll" ready={!isLoading}>
-
-              <div className="description-section">
-                  {(() => {
-
-                  const description = currentProject.description;
-                  // Use the same sanitization function to ensure consistency
-                  const sanitizedContent = sanitizeHTMLContent(description);
-                    
-
-                    return (
-
-                      <div 
-
-                      className="description-content"
-                        style={{ color: '#666', lineHeight: '1.6' }}
-
-                        dangerouslySetInnerHTML={{ __html: sanitizedContent }}
-
-                      />
-
-                    );
-
-                  })()}
-
-                </div>
-
-            </ScrollReveal>
-          )}
-
-          {/* Impact & Results Section */}
-          {currentProject.results && (
-            <ScrollReveal animation="fadeUp" delay={0.4} duration={1.5} trigger="onScroll" ready={!isLoading}>
-              <div className="results-section">
-                  {(() => {
-
-                  const results = currentProject.results;
-                  if (!results) return null;
-                  
-                  // Use the same sanitization function as description to ensure emojis are preserved
-                  const sanitizedContent = sanitizeHTMLContent(results);
-                  
-                  return (
-                    <div 
-                      className="results-content"
-                      style={{ color: '#666', lineHeight: '1.6', width: '100%' }}
-                      dangerouslySetInnerHTML={{ __html: sanitizedContent }}
-                    />
-                  );
-                })()}
-              </div>
-            </ScrollReveal>
-          )}
-
-          {/* Conclusion Section */}
-          {currentProject.conclusion && (
-            <ScrollReveal animation="fadeUp" delay={0.5} duration={1.5} trigger="onScroll" ready={!isLoading}>
-              <div className="conclusion-section">
-                {(() => {
-                  const conclusion = currentProject.conclusion;
-                  if (!conclusion) return null;
-                  
-                  // Use the same sanitization function as results to ensure emojis are preserved
-                  const sanitizedContent = sanitizeHTMLContent(conclusion);
-                    
-
-                    return (
-
-                      <div 
-
-                      className="conclusion-content"
-                        style={{ color: '#666', lineHeight: '1.6' }}
-
-                        dangerouslySetInnerHTML={{ __html: sanitizedContent }}
-
-                      />
-
-                    );
-
-                  })()}
-
-                </div>
-
-            </ScrollReveal>
-
-          )}
-
-
-
-          {/* Project Details */}
-
-          <ScrollReveal animation="fadeUp" delay={0.6} duration={1.5} trigger="onScroll" ready={!isLoading}>
-            <div className="project-details-full">
-
-              <div className="detail-row">
-
-                <span className="detail-label">Client</span>
-
-                <div className="detail-content">
-
-                  <span className="detail-value-bold">{currentProject.clientName || currentProject.title}</span>
-                  {currentProject.location && (
-
-                    <>
-                      <span style={{ margin: '0 0.5rem' }}>-</span>
-                    <span className="detail-value-bold">
-
-                      {currentProject.location}
-
-                    </span>
-
-                    </>
-                  )}
-
-                </div>
-
-              </div>
-
-
-
-              <div className="detail-row">
-
-                <span className="detail-label">Services</span>
-
-                <span className="detail-value-bold">
-
-                  {currentProject.services || 'N/A'}
-
-                </span>
-
-              </div>
-
-
-
-              <div className="detail-row">
-
-                <span className="detail-label">Technologies</span>
-
-                <span className="detail-value-bold">
-
-                  {currentProject.techStack && currentProject.techStack.length > 0 
-
-                    ? currentProject.techStack.join(', ')
-
-                    : 'N/A'}
-
-                </span>
-
-              </div>
-
-            </div>
-
-          </ScrollReveal>
-
-
-
-        </div>
-
-      </section>
-
-      <Footer navigateTo={navigateTo} />
-
-    </>
-
   );
 }

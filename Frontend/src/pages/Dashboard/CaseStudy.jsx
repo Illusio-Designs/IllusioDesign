@@ -140,6 +140,8 @@ export default function CaseStudy() {
     year: '',
     industries: '',
     description: '',
+    challenges: '',
+    solution: '',
     services: '',
     duration: '',
     link: '',
@@ -253,6 +255,92 @@ export default function CaseStudy() {
     [isClient]
   );
 
+  // TipTap editor instance for challenges - only create on client side
+  const challengesEditor = useEditor(
+    {
+      immediatelyRender: false,
+      extensions: [
+        StarterKit.configure({
+          heading: {
+            levels: [1, 2, 3],
+          },
+        }),
+        Link.configure({
+          openOnClick: false,
+          HTMLAttributes: {
+            target: '_blank',
+            rel: 'noopener noreferrer',
+          },
+        }),
+        Image,
+        Placeholder.configure({
+          placeholder: 'Write your project challenges here...',
+        }),
+      ],
+      content: formData.challenges || '',
+      editorProps: {
+        attributes: {
+          class: 'tiptap-editor',
+        },
+        // Preserve all Unicode characters including emojis when pasting
+        transformPastedHTML: (html) => {
+          // Return HTML as-is to preserve emojis and all Unicode characters
+          return html;
+        },
+      },
+      onUpdate: ({ editor }) => {
+        // Use getHTML() which preserves Unicode characters including emojis
+        // TipTap automatically preserves all Unicode characters in HTML output
+        const html = editor.getHTML();
+        setFormData({ ...formData, challenges: html });
+      },
+    },
+    [isClient]
+  );
+
+  // TipTap editor instance for solution - only create on client side
+  const solutionEditor = useEditor(
+    {
+      immediatelyRender: false,
+      extensions: [
+        StarterKit.configure({
+          heading: {
+            levels: [1, 2, 3],
+          },
+        }),
+        Link.configure({
+          openOnClick: false,
+          HTMLAttributes: {
+            target: '_blank',
+            rel: 'noopener noreferrer',
+          },
+        }),
+        Image,
+        Placeholder.configure({
+          placeholder: 'Write your project solution here...',
+        }),
+      ],
+      content: formData.solution || '',
+      editorProps: {
+        attributes: {
+          class: 'tiptap-editor',
+        },
+        // Preserve all Unicode characters including emojis when pasting
+        transformPastedHTML: (html) => {
+          // Return HTML as-is to preserve emojis and all Unicode characters
+          return html;
+        },
+      },
+      onUpdate: ({ editor }) => {
+        // Use getHTML() which preserves Unicode characters including emojis
+        // TipTap automatically preserves all Unicode characters in HTML output
+        const html = editor.getHTML();
+        setFormData({ ...formData, solution: html });
+      },
+    },
+    [isClient]
+  );
+
   // TipTap editor instance for conclusion - only create on client side
   const conclusionEditor = useEditor(
     {
@@ -325,6 +413,34 @@ export default function CaseStudy() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData.results]);
 
+  // Update challenges editor content when formData.challenges changes
+  const isUpdatingChallengesEditorRef = useRef(false);
+  useEffect(() => {
+    if (challengesEditor && formData.challenges !== challengesEditor.getHTML() && !isUpdatingChallengesEditorRef.current) {
+      isUpdatingChallengesEditorRef.current = true;
+      challengesEditor.commands.setContent(formData.challenges || '');
+      // Reset flag after a short delay to allow editor to update
+      setTimeout(() => {
+        isUpdatingChallengesEditorRef.current = false;
+      }, 100);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formData.challenges]);
+
+  // Update solution editor content when formData.solution changes
+  const isUpdatingSolutionEditorRef = useRef(false);
+  useEffect(() => {
+    if (solutionEditor && formData.solution !== solutionEditor.getHTML() && !isUpdatingSolutionEditorRef.current) {
+      isUpdatingSolutionEditorRef.current = true;
+      solutionEditor.commands.setContent(formData.solution || '');
+      // Reset flag after a short delay to allow editor to update
+      setTimeout(() => {
+        isUpdatingSolutionEditorRef.current = false;
+      }, 100);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formData.solution]);
+
   // Update conclusion editor content when formData.conclusion changes
   const isUpdatingConclusionEditorRef = useRef(false);
   useEffect(() => {
@@ -345,6 +461,12 @@ export default function CaseStudy() {
       if (editor) {
         editor.destroy();
       }
+      if (challengesEditor) {
+        challengesEditor.destroy();
+      }
+      if (solutionEditor) {
+        solutionEditor.destroy();
+      }
       if (resultsEditor) {
         resultsEditor.destroy();
       }
@@ -352,7 +474,7 @@ export default function CaseStudy() {
         conclusionEditor.destroy();
       }
     };
-  }, [editor, resultsEditor, conclusionEditor]);
+  }, [editor, challengesEditor, solutionEditor, resultsEditor, conclusionEditor]);
 
   useEffect(() => {
     if (fetchingRef.current) return;
@@ -384,6 +506,8 @@ export default function CaseStudy() {
       year: new Date().getFullYear().toString(),
       industries: '',
       description: '',
+      challenges: '',
+      solution: '',
       services: '',
       duration: '',
       link: '',
@@ -424,6 +548,8 @@ export default function CaseStudy() {
       year: caseStudy.year || new Date().getFullYear().toString(),
       industries: caseStudy.industry || caseStudy.industries || '',
       description: caseStudy.description || '',
+      challenges: caseStudy.challenges || '',
+      solution: caseStudy.solution || '',
       services: caseStudy.services || caseStudy.category || '',
       duration: caseStudy.duration || '',
       link: caseStudy.link || '',
@@ -492,6 +618,24 @@ export default function CaseStudy() {
               // Normalize HTML content before saving (same as description)
               const normalizedResults = normalizeContentForSave(value);
               formDataToSend.append(key, normalizedResults);
+            }
+          } else if (key === 'challenges') {
+            // Handle challenges as HTML (from rich text editor) - store as HTML like description
+            // This preserves all formatting, emojis, and structure
+            const value = formData[key].trim();
+            if (value) {
+              // Normalize HTML content before saving (same as description)
+              const normalizedChallenges = normalizeContentForSave(value);
+              formDataToSend.append(key, normalizedChallenges);
+            }
+          } else if (key === 'solution') {
+            // Handle solution as HTML (from rich text editor) - store as HTML like description
+            // This preserves all formatting, emojis, and structure
+            const value = formData[key].trim();
+            if (value) {
+              // Normalize HTML content before saving (same as description)
+              const normalizedSolution = normalizeContentForSave(value);
+              formDataToSend.append(key, normalizedSolution);
             }
           } else if (key === 'conclusion') {
             // Handle conclusion as HTML (from rich text editor) - store as HTML like description
@@ -836,6 +980,238 @@ export default function CaseStudy() {
                       </div>
                       {/* Editor Content */}
                       <EditorContent editor={editor} />
+                    </>
+                  )}
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label>Challenges</label>
+                <div className="rich-text-editor-wrapper">
+                  {isClient && challengesEditor && (
+                    <>
+                      {/* Toolbar */}
+                      <div className="tiptap-toolbar">
+                        <button
+                          type="button"
+                          onClick={() => challengesEditor.chain().focus().toggleBold().run()}
+                          className={challengesEditor.isActive('bold') ? 'is-active' : ''}
+                          title="Bold"
+                        >
+                          <strong>B</strong>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => challengesEditor.chain().focus().toggleItalic().run()}
+                          className={challengesEditor.isActive('italic') ? 'is-active' : ''}
+                          title="Italic"
+                        >
+                          <em>I</em>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => challengesEditor.chain().focus().toggleStrike().run()}
+                          className={challengesEditor.isActive('strike') ? 'is-active' : ''}
+                          title="Strike"
+                        >
+                          <s>S</s>
+                        </button>
+                        <div className="toolbar-divider"></div>
+                        <button
+                          type="button"
+                          onClick={() => challengesEditor.chain().focus().toggleHeading({ level: 1 }).run()}
+                          className={challengesEditor.isActive('heading', { level: 1 }) ? 'is-active' : ''}
+                          title="Heading 1"
+                        >
+                          H1
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => challengesEditor.chain().focus().toggleHeading({ level: 2 }).run()}
+                          className={challengesEditor.isActive('heading', { level: 2 }) ? 'is-active' : ''}
+                          title="Heading 2"
+                        >
+                          H2
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => challengesEditor.chain().focus().toggleHeading({ level: 3 }).run()}
+                          className={challengesEditor.isActive('heading', { level: 3 }) ? 'is-active' : ''}
+                          title="Heading 3"
+                        >
+                          H3
+                        </button>
+                        <div className="toolbar-divider"></div>
+                        <button
+                          type="button"
+                          onClick={() => challengesEditor.chain().focus().toggleBulletList().run()}
+                          className={challengesEditor.isActive('bulletList') ? 'is-active' : ''}
+                          title="Bullet List"
+                        >
+                          •
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => challengesEditor.chain().focus().toggleOrderedList().run()}
+                          className={challengesEditor.isActive('orderedList') ? 'is-active' : ''}
+                          title="Numbered List"
+                        >
+                          1.
+                        </button>
+                        <div className="toolbar-divider"></div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const url = window.prompt('Enter URL:');
+                            if (url) {
+                              challengesEditor.chain().focus().setLink({ href: url }).run();
+                            }
+                          }}
+                          className={challengesEditor.isActive('link') ? 'is-active' : ''}
+                          title="Link"
+                        >
+                          🔗
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const url = window.prompt('Enter image URL:');
+                            if (url) {
+                              challengesEditor.chain().focus().setImage({ src: url }).run();
+                            }
+                          }}
+                          title="Image"
+                        >
+                          🖼️
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => challengesEditor.chain().focus().unsetLink().run()}
+                          className={challengesEditor.isActive('link') ? '' : 'disabled'}
+                          title="Remove Link"
+                          disabled={!challengesEditor.isActive('link')}
+                        >
+                          Unlink
+                        </button>
+                      </div>
+                      {/* Editor Content */}
+                      <EditorContent editor={challengesEditor} />
+                    </>
+                  )}
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label>Solution</label>
+                <div className="rich-text-editor-wrapper">
+                  {isClient && solutionEditor && (
+                    <>
+                      {/* Toolbar */}
+                      <div className="tiptap-toolbar">
+                        <button
+                          type="button"
+                          onClick={() => solutionEditor.chain().focus().toggleBold().run()}
+                          className={solutionEditor.isActive('bold') ? 'is-active' : ''}
+                          title="Bold"
+                        >
+                          <strong>B</strong>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => solutionEditor.chain().focus().toggleItalic().run()}
+                          className={solutionEditor.isActive('italic') ? 'is-active' : ''}
+                          title="Italic"
+                        >
+                          <em>I</em>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => solutionEditor.chain().focus().toggleStrike().run()}
+                          className={solutionEditor.isActive('strike') ? 'is-active' : ''}
+                          title="Strike"
+                        >
+                          <s>S</s>
+                        </button>
+                        <div className="toolbar-divider"></div>
+                        <button
+                          type="button"
+                          onClick={() => solutionEditor.chain().focus().toggleHeading({ level: 1 }).run()}
+                          className={solutionEditor.isActive('heading', { level: 1 }) ? 'is-active' : ''}
+                          title="Heading 1"
+                        >
+                          H1
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => solutionEditor.chain().focus().toggleHeading({ level: 2 }).run()}
+                          className={solutionEditor.isActive('heading', { level: 2 }) ? 'is-active' : ''}
+                          title="Heading 2"
+                        >
+                          H2
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => solutionEditor.chain().focus().toggleHeading({ level: 3 }).run()}
+                          className={solutionEditor.isActive('heading', { level: 3 }) ? 'is-active' : ''}
+                          title="Heading 3"
+                        >
+                          H3
+                        </button>
+                        <div className="toolbar-divider"></div>
+                        <button
+                          type="button"
+                          onClick={() => solutionEditor.chain().focus().toggleBulletList().run()}
+                          className={solutionEditor.isActive('bulletList') ? 'is-active' : ''}
+                          title="Bullet List"
+                        >
+                          •
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => solutionEditor.chain().focus().toggleOrderedList().run()}
+                          className={solutionEditor.isActive('orderedList') ? 'is-active' : ''}
+                          title="Numbered List"
+                        >
+                          1.
+                        </button>
+                        <div className="toolbar-divider"></div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const url = window.prompt('Enter URL:');
+                            if (url) {
+                              solutionEditor.chain().focus().setLink({ href: url }).run();
+                            }
+                          }}
+                          className={solutionEditor.isActive('link') ? 'is-active' : ''}
+                          title="Link"
+                        >
+                          🔗
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const url = window.prompt('Enter image URL:');
+                            if (url) {
+                              solutionEditor.chain().focus().setImage({ src: url }).run();
+                            }
+                          }}
+                          title="Image"
+                        >
+                          🖼️
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => solutionEditor.chain().focus().unsetLink().run()}
+                          className={solutionEditor.isActive('link') ? '' : 'disabled'}
+                          title="Remove Link"
+                          disabled={!solutionEditor.isActive('link')}
+                        >
+                          Unlink
+                        </button>
+                      </div>
+                      {/* Editor Content */}
+                      <EditorContent editor={solutionEditor} />
                     </>
                   )}
                 </div>
