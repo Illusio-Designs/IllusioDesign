@@ -352,12 +352,6 @@ export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage
             <div className="case-study-header">
               {(currentProject.tags && currentProject.tags.length > 0) || currentProject.industry ? (
                 <div className="project-tags">
-                  {currentProject.tags?.map((tag, tagIndex) => {
-                    const cleanTag = cleanString(tag);
-                    return cleanTag ? (
-                      <span key={tagIndex} className="project-tag">{cleanTag}</span>
-                    ) : null;
-                  })}
                   {currentProject.industry && (
                     <span className="project-tag">{cleanString(currentProject.industry).toUpperCase()}</span>
                   )}

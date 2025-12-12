@@ -588,10 +588,6 @@ body.dark-theme .related-project-card h3 {
     gap: 2rem;
   }
 
-  .service-image-placeholder {
-    height: 300px;
-  }
-
   .process-flow {
     min-height: 600px;
   }

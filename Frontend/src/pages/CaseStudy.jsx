@@ -326,9 +326,6 @@ export default function CaseStudy({ navigateTo, currentPage }) {
                           <span key={tagIndex} className="project-tag">{cleanTag}</span>
                         ) : null;
                       })}
-                      {project.industry && (
-                        <span className="project-tag">{cleanString(project.industry).toUpperCase()}</span>
-                      )}
                     </div>
                   ) : null}
                   <h3 className="project-title-main">
