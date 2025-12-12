@@ -951,6 +951,7 @@
   .sticky-sidebar {
     position: relative;
     top: 0;
+    width: 100%;
   }
   .solution-section,
   .results-section {
@@ -1124,11 +1125,6 @@
   .conclusion-with-sidebar {
     grid-template-columns: 1fr;
     gap: 2rem;
-  }
-
-  .sticky-sidebar {
-    position: relative;
-    top: 0;
   }
 
   .solution-results-grid {
