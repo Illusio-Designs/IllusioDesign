@@ -30,6 +30,21 @@
 
 html {
   scroll-behavior: smooth;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
+/* Prevent zoom on iOS Safari */
+@supports (-webkit-touch-callout: none) {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  
+  body {
+    -webkit-text-size-adjust: 100%;
+  }
 }
 
 html,
@@ -41,8 +56,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-display: optional;
-  touch-action: pan-x pan-y;
-  -ms-touch-action: pan-x pan-y;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
 }
 
 h1, h2, h3, h4, h5, h6 {

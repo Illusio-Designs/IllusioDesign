@@ -1460,6 +1460,9 @@
 }
 
 @media (max-width: 426px) {
+  .section-title{
+    font-weight: 300;
+  }
   .testimonials-container{
     gap: 0;
   }
