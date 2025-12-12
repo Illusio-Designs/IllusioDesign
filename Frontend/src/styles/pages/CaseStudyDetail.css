@@ -931,36 +931,500 @@
 }
 
 @media (max-width: 426px) {
-  .case-study-gallery-grid {
-    grid-template-columns: 1fr;
-    grid-auto-rows: auto;
-    gap: 1.25rem;
-    margin: 2rem 0;
+  .case-study-detail-section {
+    padding: 3rem 1rem;
   }
+
+  .case-study-header {
+    margin-bottom: 2rem;
+  }
+
+  .case-study-header .project-title-main {
+    font-size: 1.75rem;
+  }
+
+  .case-study-header .project-tag {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.75rem;
+  }
+
+  .view-website-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+    margin-top: 0.75rem;
+  }
+
+  .case-study-hero-image {
+    margin-bottom: 1.25rem;
+    border-radius: 10px;
+  }
+
   .description-with-sidebar,
   .conclusion-with-sidebar {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-    margin: 2rem 0;
+    gap: 1.25rem;
   }
-  .solution-results-grid {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-    margin: 2rem 0;
-  }
+
   .sticky-sidebar {
+    order: 1;
     position: relative;
     top: 0;
     width: 100%;
   }
+
+  .project-details-sticky {
+    padding: 1.25rem;
+    border-radius: 10px;
+  }
+
+  .project-details-sticky .detail-row {
+    gap: 0.5rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .project-details-sticky .detail-label {
+    font-size: 0.7rem;
+  }
+
+  .project-details-sticky .detail-value-bold {
+    font-size: 0.85rem;
+  }
+
+  .description-main,
+  .conclusion-main {
+    order: 2;
+  }
+
+  .description-content,
+  .conclusion-content {
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .description-content p,
+  .conclusion-content p {
+    font-size: 0.95rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .description-content h1,
+  .conclusion-content h1 {
+    font-size: 1.75rem;
+  }
+
+  .description-content h2,
+  .conclusion-content h2 {
+    font-size: 1.5rem;
+  }
+
+  .description-content h3,
+  .conclusion-content h3 {
+    font-size: 1.3rem;
+  }
+
+  .description-content h4,
+  .conclusion-content h4 {
+    font-size: 1.15rem;
+  }
+
+  .description-content ul,
+  .description-content ol,
+  .conclusion-content ul,
+  .conclusion-content ol {
+    padding-left: 1.75rem;
+    margin: 1.5rem 0;
+  }
+
+  .description-content li,
+  .conclusion-content li {
+    font-size: 0.95rem;
+    margin: 0.8rem 0;
+  }
+
+  .solution-results-grid {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+    margin: 1.75rem 0;
+  }
+
   .solution-section,
   .results-section {
-    margin-bottom: 0rem;
-    padding: 1.5rem;
+    padding: 1.25rem;
+    border-radius: 10px;
   }
+
+  .solution-content,
+  .results-content {
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .solution-content p,
+  .results-content p {
+    font-size: 0.95rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .solution-content h1,
+  .results-content h1 {
+    font-size: 1.75rem;
+  }
+
+  .solution-content h2,
+  .results-content h2 {
+    font-size: 1.5rem;
+  }
+
+  .solution-content h3,
+  .results-content h3 {
+    font-size: 1.3rem;
+  }
+
+  .solution-content h4,
+  .results-content h4 {
+    font-size: 1.15rem;
+  }
+
+  .solution-content ul,
+  .solution-content ol,
+  .results-content ul,
+  .results-content ol {
+    padding-left: 1.75rem;
+    margin: 1.5rem 0;
+  }
+
+  .solution-content li,
+  .results-content li {
+    font-size: 0.95rem;
+    margin: 0.8rem 0;
+  }
+
   .conclusion-section {
-    margin-bottom: 2rem;
-    padding: 0rem 0;
+    margin-bottom: 1.75rem;
+  }
+
+  .case-study-gallery-grid {
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+    gap: 1rem;
+    margin: 1.75rem 0;
+  }
+
+  .gallery-item-grid {
+    border-radius: 10px;
+  }
+}
+
+@media (max-width: 384px) {
+  .case-study-detail-section {
+    padding: 2.5rem 0.75rem;
+  }
+
+  .case-study-header {
+    margin-bottom: 1.75rem;
+  }
+
+  .case-study-header .project-title-main {
+    font-size: 1.5rem;
+  }
+
+  .case-study-header .project-tag {
+    padding: 0.35rem 0.7rem;
+    font-size: 0.7rem;
+  }
+
+  .view-website-button {
+    padding: 0.7rem 1.25rem;
+    font-size: 0.85rem;
+  }
+
+  .case-study-hero-image {
+    margin-bottom: 1rem;
+    border-radius: 8px;
+  }
+
+  .description-with-sidebar,
+  .conclusion-with-sidebar {
+    gap: 1rem;
+  }
+
+  .project-details-sticky {
+    padding: 1rem;
+    border-radius: 8px;
+  }
+
+  .project-details-sticky .detail-row {
+    gap: 0.45rem;
+    margin-bottom: 1rem;
+  }
+
+  .project-details-sticky .detail-label {
+    font-size: 0.65rem;
+  }
+
+  .project-details-sticky .detail-value-bold {
+    font-size: 0.8rem;
+  }
+
+  .description-content,
+  .conclusion-content {
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .description-content p,
+  .conclusion-content p {
+    font-size: 0.9rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .description-content h1,
+  .conclusion-content h1 {
+    font-size: 1.6rem;
+  }
+
+  .description-content h2,
+  .conclusion-content h2 {
+    font-size: 1.4rem;
+  }
+
+  .description-content h3,
+  .conclusion-content h3 {
+    font-size: 1.2rem;
+  }
+
+  .description-content h4,
+  .conclusion-content h4 {
+    font-size: 1.1rem;
+  }
+
+  .description-content ul,
+  .description-content ol,
+  .conclusion-content ul,
+  .conclusion-content ol {
+    padding-left: 1.5rem;
+    margin: 1.25rem 0;
+  }
+
+  .description-content li,
+  .conclusion-content li {
+    font-size: 0.9rem;
+    margin: 0.7rem 0;
+  }
+
+  .solution-section,
+  .results-section {
+    padding: 1rem;
+    border-radius: 8px;
+  }
+
+  .solution-content,
+  .results-content {
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .solution-content p,
+  .results-content p {
+    font-size: 0.9rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .solution-content h1,
+  .results-content h1 {
+    font-size: 1.6rem;
+  }
+
+  .solution-content h2,
+  .results-content h2 {
+    font-size: 1.4rem;
+  }
+
+  .solution-content h3,
+  .results-content h3 {
+    font-size: 1.2rem;
+  }
+
+  .solution-content h4,
+  .results-content h4 {
+    font-size: 1.1rem;
+  }
+
+  .solution-content ul,
+  .solution-content ol,
+  .results-content ul,
+  .results-content ol {
+    padding-left: 1.5rem;
+    margin: 1.25rem 0;
+  }
+
+  .solution-content li,
+  .results-content li {
+    font-size: 0.9rem;
+    margin: 0.7rem 0;
+  }
+
+  .case-study-gallery-grid {
+    gap: 0.9rem;
+    margin: 1.5rem 0;
+  }
+}
+
+@media (max-width: 320px) {
+  .case-study-detail-section {
+    padding: 2rem 0.5rem;
+  }
+
+  .case-study-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .case-study-header .project-title-main {
+    font-size: 1.35rem;
+  }
+
+  .case-study-header .project-tag {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.65rem;
+  }
+
+  .view-website-button {
+    padding: 0.65rem 1.1rem;
+    font-size: 0.8rem;
+  }
+
+  .case-study-hero-image {
+    margin-bottom: 0.9rem;
+    border-radius: 6px;
+  }
+
+  .description-with-sidebar,
+  .conclusion-with-sidebar {
+    gap: 0.9rem;
+  }
+
+  .project-details-sticky {
+    padding: 0.9rem;
+    border-radius: 6px;
+  }
+
+  .project-details-sticky .detail-row {
+    gap: 0.4rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .project-details-sticky .detail-label {
+    font-size: 0.6rem;
+  }
+
+  .project-details-sticky .detail-value-bold {
+    font-size: 0.75rem;
+  }
+
+  .description-content,
+  .conclusion-content {
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+
+  .description-content p,
+  .conclusion-content p {
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+  }
+
+  .description-content h1,
+  .conclusion-content h1 {
+    font-size: 1.4rem;
+  }
+
+  .description-content h2,
+  .conclusion-content h2 {
+    font-size: 1.25rem;
+  }
+
+  .description-content h3,
+  .conclusion-content h3 {
+    font-size: 1.1rem;
+  }
+
+  .description-content h4,
+  .conclusion-content h4 {
+    font-size: 1rem;
+  }
+
+  .description-content ul,
+  .description-content ol,
+  .conclusion-content ul,
+  .conclusion-content ol {
+    padding-left: 1.3rem;
+    margin: 1rem 0;
+  }
+
+  .description-content li,
+  .conclusion-content li {
+    font-size: 0.85rem;
+    margin: 0.6rem 0;
+  }
+
+  .solution-section,
+  .results-section {
+    padding: 0.9rem;
+    border-radius: 6px;
+  }
+
+  .solution-content,
+  .results-content {
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+
+  .solution-content p,
+  .results-content p {
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+  }
+
+  .solution-content h1,
+  .results-content h1 {
+    font-size: 1.4rem;
+  }
+
+  .solution-content h2,
+  .results-content h2 {
+    font-size: 1.25rem;
+  }
+
+  .solution-content h3,
+  .results-content h3 {
+    font-size: 1.1rem;
+  }
+
+  .solution-content h4,
+  .results-content h4 {
+    font-size: 1rem;
+  }
+
+  .solution-content ul,
+  .solution-content ol,
+  .results-content ul,
+  .results-content ol {
+    padding-left: 1.3rem;
+    margin: 1rem 0;
+  }
+
+  .solution-content li,
+  .results-content li {
+    font-size: 0.85rem;
+    margin: 0.6rem 0;
+  }
+
+  .case-study-gallery-grid {
+    gap: 0.8rem;
+    margin: 1.25rem 0;
+  }
+
+  .gallery-item-grid {
+    border-radius: 6px;
   }
 }
 
@@ -1093,6 +1557,49 @@
 
 /* Responsive Design */
 @media (max-width: 1024px) {
+  .case-study-detail-section {
+    padding: 5rem 3rem;
+  }
+
+  .case-study-header {
+    margin-bottom: 3rem;
+  }
+
+  .case-study-header .project-title-main {
+    font-size: 2.5rem;
+  }
+
+  .description-with-sidebar,
+  .conclusion-with-sidebar {
+    grid-template-columns: 64% 32%;
+    gap: 2.5rem;
+  }
+
+  .sticky-sidebar {
+    position: sticky;
+    top: 6rem;
+  }
+
+  .project-details-sticky {
+    padding: 1.75rem;
+  }
+
+  .project-details-sticky .detail-label {
+    font-size: 0.8rem;
+  }
+
+  .project-details-sticky .detail-value-bold {
+    font-size: 0.95rem;
+  }
+
+  .solution-results-grid {
+    gap: 2.5rem;
+  }
+
+  .case-study-gallery-grid {
+    gap: 1.5rem;
+    margin: 2.5rem 0;
+  }
 
   .results-cards-section {
     grid-template-columns: 1fr;
@@ -1102,10 +1609,6 @@
   .case-study-gallery {
     grid-template-columns: repeat(2, 1fr);
   }
-
-  .case-study-header .project-title-main {
-    font-size: 2.5rem;
-  }
 }
 
 @media (max-width: 768px) {
@@ -1113,23 +1616,141 @@
     padding: 4rem 1.5rem;
   }
 
-  .case-study-hero-image {
-    border-radius: 12px;
+  .case-study-header {
+    margin-bottom: 2.5rem;
   }
 
   .case-study-header .project-title-main {
     font-size: 2rem;
   }
 
+  .view-website-button {
+    padding: 0.85rem 1.75rem;
+    font-size: 0.95rem;
+  }
+
+  .case-study-hero-image {
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Reorder: sidebar appears after hero image, before main content */
   .description-with-sidebar,
   .conclusion-with-sidebar {
-    grid-template-columns: 1fr;
-    gap: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin: 0;
+  }
+
+  .sticky-sidebar {
+    order: 1;
+    position: relative;
+    top: 0;
+    width: 100%;
+    margin-bottom: 0;
+  }
+
+  .description-main,
+  .conclusion-main {
+    order: 2;
+  }
+
+  /* Hide duplicate sticky sidebar in conclusion section at mobile */
+  .conclusion-with-sidebar .sticky-sidebar {
+    display: none;
+  }
+
+  .project-details-sticky {
+    padding: 1.5rem;
+  }
+
+  .project-details-sticky .detail-row {
+    gap: 0.6rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .project-details-sticky .detail-label {
+    font-size: 0.75rem;
+  }
+
+  .project-details-sticky .detail-value-bold {
+    font-size: 0.9rem;
+  }
+
+  .description-content,
+  .conclusion-content {
+    font-size: 1rem;
+    line-height: 1.8;
+  }
+
+  .description-content p,
+  .conclusion-content p,
+  .challenges-content p,
+  .solution-content p,
+  .results-content p {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .description-content h1,
+  .conclusion-content h1,
+  .challenges-content h1,
+  .solution-content h1,
+  .results-content h1 {
+    font-size: 2rem;
+  }
+
+  .description-content h2,
+  .conclusion-content h2,
+  .challenges-content h2,
+  .solution-content h2,
+  .results-content h2 {
+    font-size: 1.75rem;
+  }
+
+  .description-content h3,
+  .conclusion-content h3,
+  .challenges-content h3,
+  .solution-content h3,
+  .results-content h3 {
+    font-size: 1.5rem;
+  }
+
+  .description-content h4,
+  .conclusion-content h4,
+  .challenges-content h4,
+  .solution-content h4,
+  .results-content h4 {
+    font-size: 1.25rem;
   }
 
   .solution-results-grid {
-    grid-template-columns: 1fr;
     gap: 2rem;
+    margin: 2rem 0;
+  }
+
+  .solution-section,
+  .results-section {
+    padding: 1.5rem;
+  }
+
+  .solution-content,
+  .results-content {
+    font-size: 1rem;
+    line-height: 1.8;
+  }
+
+  .case-study-gallery-grid {
+    gap: 1.25rem;
+    margin: 2rem 0;
+  }
+
+  .gallery-item-grid,
+  .gallery-item-grid.wide,
+  .gallery-item-grid.tall,
+  .gallery-item-grid.square {
+    grid-column: span 1 !important;
   }
 
   .results-cards-section {

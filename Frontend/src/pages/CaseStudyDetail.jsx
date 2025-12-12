@@ -421,7 +421,6 @@ export default function CaseStudyDetail({ caseStudyName, navigateTo, currentPage
                         return (
                           <div
                             className="description-content"
-                            style={{ maxWidth: '70%' }}
                             dangerouslySetInnerHTML={{ __html: sanitizedContent }}
                           />
                         );
