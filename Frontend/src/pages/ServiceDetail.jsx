@@ -9,14 +9,17 @@ import {
   SiReact,
   SiNextdotjs,
   SiNodedotjs,
-  SiReact as SiReactNative,
   SiPhp,
   SiFigma,
   SiAdobeillustrator,
   SiAdobephotoshop,
   SiGoogleanalytics,
   SiGoogleads,
-  SiMeta
+  SiMeta,
+  SiShopify,
+  SiWordpress,
+  SiFramer,
+  SiWebflow
 } from 'react-icons/si';
 import { useSEO } from '@/hooks/useSEO';
 import { caseStudyAPI } from '@/services/api';
@@ -56,8 +59,11 @@ const serviceData = {
       { label: 'React', icon: <SiReact /> },
       { label: 'Next.js', icon: <SiNextdotjs /> },
       { label: 'Node.js', icon: <SiNodedotjs /> },
-      { label: 'React Native', icon: <SiReactNative /> },
       { label: 'PHP', icon: <SiPhp /> },
+      { label: 'Shopify', icon: <SiShopify /> },
+      { label: 'WordPress', icon: <SiWordpress /> },
+      { label: 'Framer', icon: <SiFramer /> },
+      { label: 'Webflow', icon: <SiWebflow /> },
     ],
     description: [
       'Your website and app are the digital faces of your brand, and we build them with perfection in mind. Our focus is on blending beautiful designs with high performance, ensuring that every page feels smooth, modern, and user-friendly. Whether it’s a business website, an e-commerce store, or a full-featured mobile app—we deliver solutions tailored to your business needs.',
