@@ -172,6 +172,8 @@ export default function Home({ navigateTo, currentPage }) {
   const [projects, setProjects] = useState([]);
   const [blogPosts, setBlogPosts] = useState([]);
   const [reviews, setReviews] = useState([]);
+  const [shouldUseBlogSlider, setShouldUseBlogSlider] = useState(false);
+  const blogGridRef = useRef(null);
   const [isConsentHidden, setIsConsentHidden] = useState(true);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [isSubmittingReview, setIsSubmittingReview] = useState(false);
@@ -372,8 +374,8 @@ export default function Home({ navigateTo, currentPage }) {
           console.log('✅ Valid blogs data found, transforming...');
           try {
             // Transform API data to match component structure
-            // Limit to 3 posts for home page
-            const transformedPosts = blogsData.slice(0, 3).map((post) => {
+            // Use all posts (no limit)
+            const transformedPosts = blogsData.map((post) => {
               if (!post) {
                 console.warn('Invalid blog post item:', post);
                 return null;
@@ -519,6 +521,43 @@ export default function Home({ navigateTo, currentPage }) {
       observer.disconnect();
     };
   }, []);
+
+  // Check if blog content exceeds screen width (for mobile slider)
+  useEffect(() => {
+    // Always use slider if more than 3 blogs - set immediately
+    if (blogPosts.length > 3) {
+      setShouldUseBlogSlider(true);
+      return;
+    }
+
+    if (blogPosts.length === 0) {
+      setShouldUseBlogSlider(false);
+      return;
+    }
+
+    const checkBlogSlider = () => {
+      // For 3 or fewer blogs, check if content exceeds screen width on mobile
+      setTimeout(() => {
+        if (blogGridRef.current) {
+          const gridElement = blogGridRef.current;
+          const gridWidth = gridElement.scrollWidth;
+          const screenWidth = window.innerWidth;
+          const isMobile = screenWidth <= 768;
+          
+          // Use slider if content width > screen width on mobile
+          setShouldUseBlogSlider(isMobile && gridWidth > screenWidth);
+        }
+      }, 150);
+    };
+
+    // Check initially and on resize
+    checkBlogSlider();
+    window.addEventListener('resize', checkBlogSlider);
+
+    return () => {
+      window.removeEventListener('resize', checkBlogSlider);
+    };
+  }, [blogPosts]);
 
 
   const handleLoaderComplete = () => {
@@ -1049,7 +1088,113 @@ export default function Home({ navigateTo, currentPage }) {
               Digital Growth Hub
             </SplitText>
           </ScrollReveal>
-          <div className="blog-grid">
+          {shouldUseBlogSlider ? (
+            // Infinite slider for more than 3 blogs or when content exceeds screen width on mobile
+            <div className={`blogs-slider ${blogPosts.length === 1 ? 'single-item' : ''}`}>
+              <div className={`blogs-track ${blogPosts.length === 1 ? 'single-item' : ''}`}>
+                {blogPosts.length > 0 ? (
+                  <>
+                    {/* First set of cards */}
+                    {blogPosts.map((post) => (
+                      <a
+                        key={`original-${post.id}`}
+                        href={`/blog/${post.slug}`}
+                        className="blog-card"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          navigateTo('blog-detail', post.slug);
+                        }}
+                        onMouseEnter={() => setHoveredBlog(post.id)}
+                        onMouseLeave={() => setHoveredBlog(null)}
+                        style={{ cursor: 'pointer', textDecoration: 'none', color: 'inherit', display: 'block' }}
+                      >
+                        {post.image ? (
+                          <div className="blog-placeholder" style={{ padding: 0, background: 'transparent', overflow: 'hidden' }}>
+                            <img
+                              src={post.image}
+                              alt={post.title}
+                              style={{
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'cover',
+                                display: 'block'
+                              }}
+                              onError={(e) => {
+                                e.target.style.display = 'none';
+                                e.target.parentElement.style.background = '#e0e0e0';
+                              }}
+                            />
+                          </div>
+                        ) : (
+                          <div className="blog-placeholder"></div>
+                        )}
+                        <div className="blog-content">
+                          <div className="blog-title-wrapper">
+                            <span className="blog-date">{post.date}</span>
+                            <p className="blog-title">{post.title}</p>
+                          </div>
+                          <span className={`blog-arrow ${hoveredBlog === post.id ? 'arrow-visible' : ''}`}>
+                            →
+                          </span>
+                        </div>
+                      </a>
+                    ))}
+                    {/* Duplicate set for seamless infinite loop */}
+                    {blogPosts.map((post) => (
+                      <a
+                        key={`duplicate-${post.id}`}
+                        href={`/blog/${post.slug}`}
+                        className="blog-card"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          navigateTo('blog-detail', post.slug);
+                        }}
+                        onMouseEnter={() => setHoveredBlog(post.id)}
+                        onMouseLeave={() => setHoveredBlog(null)}
+                        style={{ cursor: 'pointer', textDecoration: 'none', color: 'inherit', display: 'block' }}
+                      >
+                        {post.image ? (
+                          <div className="blog-placeholder" style={{ padding: 0, background: 'transparent', overflow: 'hidden' }}>
+                            <img
+                              src={post.image}
+                              alt={post.title}
+                              style={{
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'cover',
+                                display: 'block'
+                              }}
+                              onError={(e) => {
+                                e.target.style.display = 'none';
+                                e.target.parentElement.style.background = '#e0e0e0';
+                              }}
+                            />
+                          </div>
+                        ) : (
+                          <div className="blog-placeholder"></div>
+                        )}
+                        <div className="blog-content">
+                          <div className="blog-title-wrapper">
+                            <span className="blog-date">{post.date}</span>
+                            <p className="blog-title">{post.title}</p>
+                          </div>
+                          <span className={`blog-arrow ${hoveredBlog === post.id ? 'arrow-visible' : ''}`}>
+                            →
+                          </span>
+                        </div>
+                      </a>
+                    ))}
+                  </>
+                ) : (
+                  <div style={{ padding: '20px', textAlign: 'center', color: '#999' }}>
+                    {process.env.NODE_ENV === 'development' ? 'No blog posts to display' : ''}
+                  </div>
+                )}
+              </div>
+            </div>
+          ) : (
+            // Grid layout for 3 or fewer blogs and when content fits on screen
+            <div className="blog-grid" ref={blogGridRef}>
             {blogPosts.length > 0 ? blogPosts.map((post, index) => (
               <ScrollReveal
                 key={post.id}
@@ -1108,6 +1253,7 @@ export default function Home({ navigateTo, currentPage }) {
               </div>
             )}
           </div>
+          )}
         </div>
       </section>
 
