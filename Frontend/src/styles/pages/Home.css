@@ -2085,3 +2085,22 @@ body.dark-theme .blog-title {
 body.dark-theme .blog-date {
   color: #999;
 }
+
+/* Cookie Consent Banner Responsive */
+@media (max-width: 1024px) {
+  .consent-banner {
+    width: 40% !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .consent-banner {
+    width: 50% !important;
+  }
+}
+
+@media (max-width: 426px) {
+  .consent-banner {
+    width: 75% !important;
+  }
+}
