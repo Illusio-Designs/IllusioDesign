@@ -21,13 +21,14 @@ export default function SEO() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
   const fetchingRef = useRef(false);
-  const [formData, setFormData] = useState({
+  const initialFormData = {
     page: '',
     title: '',
     description: '',
     keywords: '',
     ogImage: null
-  });
+  };
+  const [formData, setFormData] = useState(initialFormData);
 
   useEffect(() => {
     if (fetchingRef.current) return;
@@ -52,9 +53,13 @@ export default function SEO() {
     }
   };
 
-  const handleAdd = () => {
+  const resetForm = () => {
     setEditingSEO(null);
-    setFormData({ page: '', title: '', description: '', keywords: '', ogImage: null });
+    setFormData(initialFormData);
+  };
+
+  const handleAdd = () => {
+    resetForm();
     setIsModalOpen(true);
     setShowTable(false);
   };
@@ -105,6 +110,7 @@ export default function SEO() {
         toast.success('SEO data created successfully');
       }
       
+      resetForm();
       setIsModalOpen(false);
       setShowTable(true);
       fetchSEO();
@@ -143,6 +149,7 @@ export default function SEO() {
   const paginatedData = filteredSEOData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const handleBack = () => {
+    resetForm();
     setShowTable(true);
     setIsModalOpen(false);
   };

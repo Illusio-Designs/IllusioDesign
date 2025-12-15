@@ -492,7 +492,7 @@ export default function CaseStudy() {
     }
   };
 
-  const handleAdd = () => {
+  const resetForm = () => {
     setEditingCaseStudy(null);
     setFormData({
       ...initialFormData,
@@ -508,10 +508,18 @@ export default function CaseStudy() {
     if (conclusionEditor) {
       conclusionEditor.commands.setContent('');
     }
-    // Reset any persisted additional images state
-    setFormData(prev => ({ ...prev, additionalImagesToKeep: [] }));
+    if (challengesEditor) {
+      challengesEditor.commands.setContent('');
+    }
+    if (solutionEditor) {
+      solutionEditor.commands.setContent('');
+    }
     setCurrentMainImage(null);
     setCurrentAdditionalImages([]);
+  };
+
+  const handleAdd = () => {
+    resetForm();
     setIsModalOpen(true);
     setShowTable(false);
   };
@@ -679,10 +687,9 @@ export default function CaseStudy() {
         toast.success('Project created successfully');
       }
       
+      resetForm();
       setIsModalOpen(false);
       setShowTable(true);
-      setCurrentMainImage(null);
-      setCurrentAdditionalImages([]);
       fetchCaseStudies();
     } catch (error) {
       console.error('Error saving case study:', error);
@@ -756,6 +763,7 @@ export default function CaseStudy() {
   const paginatedData = filteredCaseStudies.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const handleBack = () => {
+    resetForm();
     setShowTable(true);
     setIsModalOpen(false);
   };

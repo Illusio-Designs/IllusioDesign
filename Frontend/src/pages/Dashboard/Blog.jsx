@@ -44,21 +44,25 @@ export default function Blog() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
   const fetchingRef = useRef(false);
-  const [formData, setFormData] = useState({
-    title: '',
-    slug: '',
-    date: '',
-    category: '',
-    tags: '',
-    content: '',
-    author: '',
-    publishDate: '',
-    seoTitle: '',
-    metaDescription: '',
-    seoKeywords: '',
-    seoUrl: '',
-    image: null
-  });
+  const createInitialFormData = () => {
+    const today = new Date().toISOString().split('T')[0];
+    return {
+      title: '',
+      slug: '',
+      date: today,
+      category: '',
+      tags: '',
+      content: '',
+      author: '',
+      publishDate: today,
+      seoTitle: '',
+      metaDescription: '',
+      seoKeywords: '',
+      seoUrl: '',
+      image: null
+    };
+  };
+  const [formData, setFormData] = useState(createInitialFormData);
   const [originalTitle, setOriginalTitle] = useState('');
   const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false);
   const [currentMainImage, setCurrentMainImage] = useState(null);
@@ -106,11 +110,23 @@ export default function Blog() {
         // Use getHTML() which preserves Unicode characters including emojis
         // TipTap automatically preserves all Unicode characters in HTML output
         const html = editor.getHTML();
-        setFormData({ ...formData, content: html });
+        setFormData((prev) => ({ ...prev, content: html }));
       },
     },
     [isClient] // Only create when isClient is true
   );
+
+  const resetForm = () => {
+    const initialData = createInitialFormData();
+    setEditingBlog(null);
+    setFormData(initialData);
+    setOriginalTitle('');
+    setIsSlugManuallyEdited(false);
+    setCurrentMainImage(null);
+    if (editor) {
+      editor.commands.setContent(initialData.content || '');
+    }
+  };
 
   // Update editor content when formData.content changes (e.g., when editing)
   // Use a ref to prevent infinite loops and ensure we only update when needed
@@ -160,28 +176,7 @@ export default function Blog() {
   };
 
   const handleAdd = () => {
-    setEditingBlog(null);
-    setFormData({
-      title: '',
-      slug: '',
-      date: new Date().toISOString().split('T')[0],
-      category: '',
-      tags: '',
-      content: '',
-      author: '',
-      publishDate: new Date().toISOString().split('T')[0],
-      seoTitle: '',
-      metaDescription: '',
-      seoKeywords: '',
-      seoUrl: '',
-      image: null
-    });
-    setOriginalTitle('');
-    setIsSlugManuallyEdited(false);
-    if (editor) {
-      editor.commands.setContent('');
-    }
-    setCurrentMainImage(null);
+    resetForm();
     setIsModalOpen(true);
     setShowTable(false);
   };
@@ -293,9 +288,9 @@ export default function Blog() {
         toast.success('Blog created successfully');
       }
       
+      resetForm();
       setIsModalOpen(false);
       setShowTable(true);
-      setCurrentMainImage(null);
       fetchBlogs();
     } catch (error) {
       console.error('Error saving blog:', error);
@@ -338,6 +333,7 @@ export default function Blog() {
   const paginatedBlogs = filteredBlogs.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const handleBack = () => {
+    resetForm();
     setShowTable(true);
     setIsModalOpen(false);
   };

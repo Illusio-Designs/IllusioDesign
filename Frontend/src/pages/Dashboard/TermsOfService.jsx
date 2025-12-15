@@ -25,9 +25,8 @@ export default function TermsOfService() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
   const fetchingRef = useRef(false);
-  const [formData, setFormData] = useState({
-    content: ''
-  });
+  const initialFormData = { content: '' };
+  const [formData, setFormData] = useState(initialFormData);
   const [isClient, setIsClient] = useState(false);
 
   // Ensure we're on client side before initializing editor
@@ -79,6 +78,14 @@ export default function TermsOfService() {
     [isClient]
   );
 
+  const resetForm = () => {
+    setEditingTerms(null);
+    setFormData(initialFormData);
+    if (editor) {
+      editor.commands.setContent(initialFormData.content || '');
+    }
+  };
+
   // Update editor content when formData.content changes
   // Use a ref to prevent infinite loops and ensure we only update when needed
   const isUpdatingEditorRef = useRef(false);
@@ -127,11 +134,7 @@ export default function TermsOfService() {
   };
 
   const handleAdd = () => {
-    setEditingTerms(null);
-    setFormData({ content: '' });
-    if (editor) {
-      editor.commands.setContent('');
-    }
+    resetForm();
     setIsModalOpen(true);
     setShowTable(false);
   };
@@ -178,6 +181,7 @@ export default function TermsOfService() {
         toast.success('Terms of Service created successfully');
       }
       
+      resetForm();
       setIsModalOpen(false);
       setShowTable(true);
       fetchTermsOfService();
@@ -190,6 +194,7 @@ export default function TermsOfService() {
   };
 
   const handleBack = () => {
+    resetForm();
     setShowTable(true);
     setIsModalOpen(false);
   };

@@ -20,12 +20,13 @@ export default function Users() {
   const [showTable, setShowTable] = useState(true);
   const [editingUser, setEditingUser] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({
+  const initialFormData = {
     name: '',
     email: '',
     password: '',
     role: 'user'
-  });
+  };
+  const [formData, setFormData] = useState(initialFormData);
 
   const itemsPerPage = 8;
 
@@ -70,14 +71,14 @@ export default function Users() {
     }
   };
 
-  const handleAdd = () => {
+  const resetForm = () => {
     setEditingUser(null);
-    setFormData({
-      name: '',
-      email: '',
-      password: '',
-      role: 'user'
-    });
+    setShowPassword(false);
+    setFormData(initialFormData);
+  };
+
+  const handleAdd = () => {
+    resetForm();
     setIsModalOpen(true);
     setShowTable(false);
   };
@@ -95,6 +96,7 @@ export default function Users() {
   };
 
   const handleBack = () => {
+    resetForm();
     setShowTable(true);
     setIsModalOpen(false);
   };
@@ -133,6 +135,7 @@ export default function Users() {
         toast.success('User created successfully');
       }
       
+      resetForm();
       setIsModalOpen(false);
       setShowTable(true);
       fetchUsers();

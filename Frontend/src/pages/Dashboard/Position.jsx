@@ -21,7 +21,7 @@ export default function Position() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
   const fetchingRef = useRef(false);
-  const [formData, setFormData] = useState({
+  const initialFormData = {
     title: '',
     experience: '',
     location: '',
@@ -29,7 +29,8 @@ export default function Position() {
     description: '',
     requirements: '',
     isActive: true
-  });
+  };
+  const [formData, setFormData] = useState(initialFormData);
 
   useEffect(() => {
     if (fetchingRef.current) return;
@@ -54,17 +55,13 @@ export default function Position() {
     }
   };
 
-  const handleAdd = () => {
+  const resetForm = () => {
     setEditingPosition(null);
-    setFormData({
-      title: '',
-      experience: '',
-      location: '',
-      type: '',
-      description: '',
-      requirements: '',
-      isActive: true
-    });
+    setFormData(initialFormData);
+  };
+
+  const handleAdd = () => {
+    resetForm();
     setIsModalOpen(true);
     setShowTable(false);
   };
@@ -107,6 +104,7 @@ export default function Position() {
         toast.success('Position created successfully');
       }
       
+      resetForm();
       setIsModalOpen(false);
       setShowTable(true);
       fetchPositions();
@@ -143,6 +141,7 @@ export default function Position() {
   const paginatedData = filteredPositions.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const handleBack = () => {
+    resetForm();
     setShowTable(true);
     setIsModalOpen(false);
   };

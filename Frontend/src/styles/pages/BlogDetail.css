@@ -998,6 +998,10 @@ body.dark-theme .blog-content-html h6 {
   color: #FAF9F6;
 }
 
+body.dark-theme strong{
+  color: #FAF9F6;
+}
+
 body.dark-theme .blog-content-html code,
 body.dark-theme .blog-content-html pre {
   background: #2a2a2a;

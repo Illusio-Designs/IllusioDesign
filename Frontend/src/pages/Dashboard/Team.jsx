@@ -58,13 +58,14 @@ export default function Team() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
   const fetchingRef = useRef(false);
-  const [formData, setFormData] = useState({
+  const initialFormData = {
     name: '',
     role: '',
     bio: '',
     order: '',
     image: null
-  });
+  };
+  const [formData, setFormData] = useState(initialFormData);
   const [currentImage, setCurrentImage] = useState(null);
 
   useEffect(() => {
@@ -90,10 +91,14 @@ export default function Team() {
     }
   };
 
-  const handleAdd = () => {
+  const resetForm = () => {
     setEditingMember(null);
-    setFormData({ name: '', role: '', bio: '', order: '', image: null });
+    setFormData(initialFormData);
     setCurrentImage(null);
+  };
+
+  const handleAdd = () => {
+    resetForm();
     setIsModalOpen(true);
     setShowTable(false);
   };
@@ -155,9 +160,9 @@ export default function Team() {
         toast.success('Team member created successfully');
       }
       
+      resetForm();
       setIsModalOpen(false);
       setShowTable(true);
-      setCurrentImage(null);
       fetchTeamMembers();
     } catch (error) {
       console.error('Error saving team member:', error);
@@ -198,6 +203,7 @@ export default function Team() {
   const paginatedData = filteredTeamMembers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const handleBack = () => {
+    resetForm();
     setShowTable(true);
     setIsModalOpen(false);
   };

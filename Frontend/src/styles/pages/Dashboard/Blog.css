@@ -207,34 +207,3 @@
   text-decoration: line-through;
 }
 
-/* Dark theme support */
-body.dark-theme .rich-text-editor-wrapper {
-  background: #1a1a1a;
-  border-color: #333;
-}
-
-body.dark-theme .tiptap-toolbar {
-  background: #1a1a1a;
-  border-bottom-color: #333;
-}
-
-body.dark-theme .tiptap-toolbar button {
-  color: #FAF9F6;
-}
-
-body.dark-theme .tiptap-toolbar button:hover:not(.disabled) {
-  background: rgba(236, 105, 31, 0.2);
-}
-
-body.dark-theme .toolbar-divider {
-  background: #333;
-}
-
-body.dark-theme .rich-text-editor-wrapper .ProseMirror {
-  color: #FAF9F6;
-}
-
-body.dark-theme .rich-text-editor-wrapper .ProseMirror p.is-editor-empty:first-child::before {
-  color: #666;
-}
-
