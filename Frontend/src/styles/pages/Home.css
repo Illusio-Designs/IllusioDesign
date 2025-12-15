@@ -965,7 +965,7 @@
 /* Testimonials Section */
 .testimonials-section {
   padding: 2rem 6rem;
-  background-color: rgba(236, 105, 31, 0.08);
+  background: rgba(236, 105, 31, 0.1);
   position: relative;
 }
 
@@ -2032,14 +2032,6 @@ body.dark-theme .testimonial-text {
 
 body.dark-theme .testimonial-signature h1 {
   color: #FAF9F6;
-}
-
-body.dark-theme .testimonial-slider::before {
-  background: linear-gradient(to right, #000000, transparent);
-}
-
-body.dark-theme .testimonial-slider::after {
-  background: linear-gradient(to left, #000000, transparent);
 }
 
 body.dark-theme .rating-text {
