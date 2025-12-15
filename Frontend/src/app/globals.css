@@ -144,6 +144,11 @@ html {
   scrollbar-width: 20px;
 }
 
+::-webkit-scrollbar {
+  width: 20px;
+  height: 20px;
+}
+
 ::-webkit-scrollbar-track {
   border-radius: 0;
   background: #000000;
@@ -182,6 +187,17 @@ body.dark-theme ::-webkit-scrollbar-thumb {
   border: 3px solid var(--bg-color);
   box-shadow:
     0 4px 10px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(236, 105, 31, 0.45);
+}
 
-
+@keyframes scrollbar-flow {
+  0% {
+    background-position: 0% 50%;
   }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
