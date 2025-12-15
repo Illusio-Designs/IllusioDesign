@@ -13,7 +13,6 @@ import DOMPurify from 'dompurify';
 export default function BlogDetail({ blogName, navigateTo, currentPage }) {
   const [isLoading, setIsLoading] = useState(true);
   const [currentBlog, setCurrentBlog] = useState(null);
-  const [relatedPosts, setRelatedPosts] = useState([]);
   const [error, setError] = useState(null);
 
   // Set page context synchronously before any API calls (useLayoutEffect runs before paint)
@@ -229,30 +228,6 @@ export default function BlogDetail({ blogName, navigateTo, currentPage }) {
             }
           }
 
-          // Fetch related posts (all published blogs except current one)
-          try {
-            const allBlogsResponse = await blogAPI.getAllPublic();
-            
-            if (allBlogsResponse && allBlogsResponse.data) {
-              const related = allBlogsResponse.data
-                .filter(b => b.id !== blog.id && b.published)
-                .slice(0, 5)
-                .map(b => ({
-                  id: b.id,
-                  title: b.title,
-                  slug: b.slug || b.seoUrl || `blog-${b.id}`,
-                  date: formatDate(b.date || b.publishDate || b.createdAt)
-                }));
-              if (isMounted) {
-                setRelatedPosts(related);
-              }
-            }
-          } catch (relatedError) {
-            console.error('Error fetching related posts:', relatedError);
-            if (isMounted) {
-              setRelatedPosts([]);
-            }
-          }
         }
       } catch (error) {
         console.error('Error fetching blog post:', error);
@@ -460,22 +435,6 @@ export default function BlogDetail({ blogName, navigateTo, currentPage }) {
                     <div className="blog-detail-row">
                       <span className="blog-detail-label">Category</span>
                       <span className="blog-detail-value">{currentBlog.category}</span>
-                    </div>
-                  )}
-                  {relatedPosts.length > 0 && (
-                    <div className="blog-detail-row">
-                      <span className="blog-detail-label">Related Posts</span>
-                      <div className="related-posts-list">
-                        {relatedPosts.map((post) => (
-                          <div 
-                            key={post.id} 
-                            className="related-post-item"
-                            onClick={() => navigateTo('blog-detail', post.slug)}
-                          >
-                            {post.title}
-                          </div>
-                        ))}
-                      </div>
                     </div>
                   )}
                 </div>

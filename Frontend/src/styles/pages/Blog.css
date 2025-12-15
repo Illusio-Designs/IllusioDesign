@@ -142,10 +142,6 @@
     gap: 1.75rem;
   }
 
-  .blog-placeholder {
-    height: 230px;
-  }
-
   .blog-content {
     padding: 1.4rem;
     min-height: 110px;
@@ -177,10 +173,6 @@
 
   .blog-grid {
     gap: 1.5rem;
-  }
-
-  .blog-placeholder {
-    height: 200px;
   }
 
   .blog-content {
@@ -227,7 +219,6 @@
   }
 
   .blog-placeholder {
-    height: 180px;
     border-radius: 8px;
   }
 
@@ -271,9 +262,6 @@
     gap: 1.1rem;
   }
 
-  .blog-placeholder {
-    height: 170px;
-  }
 
   .blog-content {
     padding: 1rem;
@@ -306,10 +294,6 @@
 
   .blog-grid {
     gap: 1rem;
-  }
-
-  .blog-placeholder {
-    height: 160px;
   }
 
   .blog-content {
@@ -350,7 +334,6 @@
   }
 
   .blog-placeholder {
-    height: 150px;
     border-radius: 6px;
   }
 

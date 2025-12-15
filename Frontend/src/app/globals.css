@@ -137,3 +137,51 @@ body.dark-theme .ripple-cell {
 body.dark-theme .ripple-cell:hover {
   border-color: rgba(250, 249, 246, 0.15) !important;
 }
+
+/* Global scrollbar styling */
+html {
+  scrollbar-color: var(--accent-color) rgba(0, 0, 0, 0.06);
+  scrollbar-width: 20px;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 0;
+  background: #000000;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(236, 105, 31, 0.95),
+    rgba(236, 105, 31, 0.65)
+  );
+  border: 3px solid var(--bg-color);
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(236, 105, 31, 0.2);
+  background-size: 200% 200%;
+  animation: scrollbar-flow 3s linear infinite;
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+body.dark-theme ::-webkit-scrollbar-track {
+  background: #000000;
+}
+
+body.dark-theme ::-webkit-scrollbar-thumb {
+  border: 3px solid var(--bg-color);
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.45),
+
+
+  }
