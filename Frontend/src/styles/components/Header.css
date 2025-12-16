@@ -343,7 +343,9 @@
     -webkit-clip-path: polygon(0% 12px, 0px 0%, calc(100% - 0px) 0%, 100% 12px, 100% calc(100% - 55px), calc(100% - 50px) 100%, 12px 100%, 0% calc(100% - 0px));
     clip-path: polygon(0% 12px, 0px 0%, calc(100% - 0px) 0%, 100% 12px, 100% calc(100% - 46px), calc(100% - 50px) 100%, 12px 100%, 0% calc(100% - 0px));
     text-align: center;
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
     text-decoration: none;
   }
@@ -369,7 +371,7 @@
   }
 
   .nav.nav-open {
-    max-height: 500px;
+    max-height: 800px;
     margin-top: 1rem;
     padding-top: 1rem;
     border-top: 1px solid rgba(236, 105, 31, 0.2);
@@ -385,24 +387,37 @@
   .nav ul li {
     width: 100%;
     padding: 0.75rem 0;
-    border-bottom: 1px solid rgba(236, 105, 31, 0.1);
     display: block;
   }
 
-  .nav ul li:last-child {
-    border-bottom: none;
-  }
 
   .nav ul li a {
     font-size: 1rem;
     padding: 0.5rem 0;
-    display: block;
+    display: flex;
     width: 100%;
   }
 
   .services-nav-item {
     width: 100%;
+    position: relative;
   }
+
+  /* Ensure mobile dropdown is visible and properly positioned */
+  .services-nav-item .card-nav-mobile-dropdown {
+    position: relative;
+    z-index: 10;
+    margin-top: 0.5rem;
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.services-nav-item .card-nav-mobile-item a{
+  padding: 0 !important;
+}
 }
 
 @media (max-width: 426px) {
@@ -433,6 +448,10 @@
     margin-top: 0.75rem;
     padding-top: 0.75rem;
   }
+
+  .services-nav-item .card-nav-mobile-dropdown {
+    grid-template-columns: 1fr;
+}
 
   .nav ul li {
     padding: 0.65rem 0;
