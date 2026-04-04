@@ -23,6 +23,20 @@ export default function RootLayout({ children }) {
       <body>
         <ClientLayout>{children}</ClientLayout>
 
+        {/* Google Analytics GA4 */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-426939665"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-426939665');
+          `}
+        </Script>
+
         {/* Facebook Pixel */}
         <Script id="facebook-pixel" strategy="afterInteractive">
           {`
