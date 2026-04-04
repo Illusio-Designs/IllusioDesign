@@ -55,6 +55,10 @@ export default function ContactUs({ navigateTo, currentPage }) {
       
       if (result.data) {
         toast.success('Message sent successfully! We will get back to you soon.');
+        // Fire Facebook Pixel Lead event
+        if (typeof window !== 'undefined' && window.fbq) {
+          window.fbq('track', 'Lead');
+        }
         // Reset form
         setFormData({
           name: '',
