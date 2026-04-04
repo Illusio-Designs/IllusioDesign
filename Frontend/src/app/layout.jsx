@@ -17,6 +17,7 @@ export default function RootLayout({ children }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, shrink-to-fit=no" />
+        <meta name="google-site-verification" content="sTtAzZpcIWSNn_mLAK4zx7H7KiUzaW-4Mu_2wFT3W4w" />
       </head>
       <body>
         <ClientLayout>{children}</ClientLayout>
