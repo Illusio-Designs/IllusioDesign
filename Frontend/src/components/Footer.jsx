@@ -107,7 +107,8 @@ export default function Footer({ navigateTo }) {
               <p>
                 <a href="/terms" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('terms'); }}>Terms of Service</a> | <a href="/privacy" onClick={(e) => { e.preventDefault(); navigateTo && navigateTo('privacy'); }}>Privacy Policy</a>
               </p>
-              <p>Copyright © 2025 Illusio Designs. All rights reserved.</p>
+              <p>Copyright © 2026 Illusio Designs. All rights reserved.</p>
+              <p>Managed by Finvera Solutions LLP</p>
             </div>
           </div>
         </ScrollReveal>
