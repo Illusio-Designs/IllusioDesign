@@ -19,6 +19,7 @@ export default function RootLayout({ children }) {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, shrink-to-fit=no" />
         <meta name="google-site-verification" content="sTtAzZpcIWSNn_mLAK4zx7H7KiUzaW-4Mu_2wFT3W4w" />
+        <meta name="facebook-domain-verification" content="e9b8j5nwc6g522izl31gqa5koho9mo" />
       </head>
       <body>
         <ClientLayout>{children}</ClientLayout>
