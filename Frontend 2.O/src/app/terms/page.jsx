@@ -47,7 +47,10 @@ export default function TermsPage() {
     return () => { m = false; };
   }, []);
 
-  const html = DOMPurify.sanitize(normalizeContentForDisplay(content || fallback));
+  const html = DOMPurify.sanitize(normalizeContentForDisplay(content || fallback), {
+    ADD_TAGS: ['iframe', 'video', 'audio', 'source'],
+    ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'controls', 'target'],
+  });
 
   return (
     <>

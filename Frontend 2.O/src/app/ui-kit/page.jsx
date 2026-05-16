@@ -17,6 +17,7 @@ import { StarRating, StarRatingInput } from '@/components/ui/StarRating';
 import BackgroundRipple from '@/components/ui/BackgroundRipple';
 import Tag from '@/components/ui/Tag';
 import Skeleton, { SkeletonText, SkeletonTable, SkeletonCards } from '@/components/ui/Skeleton';
+import RichTextEditor from '@/components/ui/RichTextEditor';
 import { useToast } from '@/components/providers/Toaster';
 
 const palette = [
@@ -37,6 +38,9 @@ export default function UIKitPage() {
   const [stars, setStars] = useState(4);
   const [toggle, setToggle] = useState(true);
   const [input, setInput] = useState('');
+  const [richText, setRichText] = useState(
+    '<h3>Rich text editor</h3><p>A WYSIWYG editor with a <strong>formatting toolbar</strong> — used in the dashboard to edit the <em>Privacy Policy</em> and <em>Terms of Service</em>.</p><ul><li>Bold, italic, underline &amp; strikethrough</li><li>Headings, bullet &amp; numbered lists</li><li>Links</li></ul>',
+  );
 
   return (
     <>
@@ -261,7 +265,24 @@ export default function UIKitPage() {
             </div>
 
             <div className="kit-block">
-              <h2 className="kit-h">13 — Background ripple</h2>
+              <h2 className="kit-h">13 — Rich text editor</h2>
+              <div className="kit-grid-form">
+                <div className="form-card">
+                  <div className="field">
+                    <label>WYSIWYG editor</label>
+                    <RichTextEditor
+                      value={richText}
+                      onChange={setRichText}
+                      placeholder="Start writing…"
+                      minHeight={220}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="kit-block">
+              <h2 className="kit-h">14 — Background ripple</h2>
               <div className="ripple-stage">
                 <BackgroundRipple rows={8} cols={14} cellSize={36} />
                 <div className="ripple-overlay">
