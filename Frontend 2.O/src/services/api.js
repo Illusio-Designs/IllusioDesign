@@ -208,13 +208,53 @@ export const seoAPI = {
     extractItem(await apiCall(`/public/seo/${page}`)),
 };
 
-/* Privacy / Terms */
+/* Privacy / Terms — public read + private admin CRUD */
 export const privacyPolicyAPI = {
   getPublic: async () => extractItem(await apiCall('/public/privacy-policy')),
+  getAll: async () => extractList(await apiCall('/private/privacy-policy')),
+  create: (data) =>
+    apiCall('/private/privacy-policy', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+  update: (id, data) =>
+    apiCall(`/private/privacy-policy/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+  remove: (id) => apiCall(`/private/privacy-policy/${id}`, { method: 'DELETE' }),
 };
 
 export const termsOfServiceAPI = {
   getPublic: async () => extractItem(await apiCall('/public/terms-of-service')),
+  getAll: async () => extractList(await apiCall('/private/terms-of-service')),
+  create: (data) =>
+    apiCall('/private/terms-of-service', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+  update: (id, data) =>
+    apiCall(`/private/terms-of-service/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+  remove: (id) => apiCall(`/private/terms-of-service/${id}`, { method: 'DELETE' }),
+};
+
+/* Admin users — private admin endpoints */
+export const userAPI = {
+  getAll: async () => extractList(await apiCall('/private/admin/users')),
+  create: (data) =>
+    apiCall('/private/admin/users', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+  update: (id, data) =>
+    apiCall(`/private/admin/users/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+  remove: (id) => apiCall(`/private/admin/users/${id}`, { method: 'DELETE' }),
 };
 
 export default API_BASE_URL;
