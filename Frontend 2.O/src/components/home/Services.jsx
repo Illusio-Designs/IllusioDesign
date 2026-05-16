@@ -7,30 +7,34 @@ import SectionHeader from '@/components/ui/SectionHeader';
 const services = [
   {
     num: '01',
+    slug: 'branding',
     title: 'Branding & Design',
-    body: 'Logo systems, identity guidelines and visual language that make founders proud and customers loyal.',
-    tags: ['Identity', 'Naming', 'Guidelines', 'Packaging'],
+    body: 'Build a brand that stands out with identity systems, visual guidelines, and impactful creatives tailored to your audience.',
+    tags: ['Logo', 'Identity', 'Guidelines', 'Packaging'],
     variant: '',
   },
   {
     num: '02',
+    slug: 'web-app',
     title: 'Web & App Development',
-    body: 'Next.js, React Native and headless stacks shipped with care — performance, accessibility and SEO built in.',
-    tags: ['Next.js', 'React Native', 'Headless CMS', 'CI/CD'],
+    body: 'Fast, scalable, and user-friendly digital products — from websites to mobile apps — crafted for real-world performance.',
+    tags: ['React', 'Next.js', 'React Native', 'Shopify'],
     variant: 'accent',
   },
   {
     num: '03',
+    slug: 'marketing',
     title: 'Digital Marketing',
-    body: 'Landing pages, paid creative and lifecycle programs that turn traffic into qualified pipeline.',
-    tags: ['CRO', 'SEO', 'Paid Social', 'Lifecycle'],
-    variant: 'light',
+    body: 'Grow your business with performance-driven strategies across SEO, social media, ads, automation, and content.',
+    tags: ['SEO', 'Meta Ads', 'Google Ads', 'Lifecycle'],
+    variant: 'accent',
   },
   {
     num: '04',
+    slug: 'b2b',
     title: 'B2B & Custom Solutions',
-    body: 'Dashboards, internal tools and bespoke B2B platforms designed for the people who actually run the business.',
-    tags: ['Dashboards', 'Workflows', 'Integrations', 'Tools'],
+    body: 'Custom-built portals, internal tools, automated workflows and enterprise solutions that streamline operations.',
+    tags: ['Portals', 'CRM', 'ERP', 'Dashboards'],
     variant: '',
   },
 ];
@@ -47,8 +51,8 @@ export default function Services() {
         <SectionHeader
           eyebrow="What we do"
           index="01"
-          title={<>Four capabilities,<br /> one senior team.</>}
-          description="Every engagement is scoped around the outcome you actually want — not a list of deliverables."
+          title={<>Services <em>we offer.</em></>}
+          description="Four focused capabilities. One senior team. Every engagement is scoped around the outcome you actually want."
         />
 
         <motion.div
@@ -59,8 +63,9 @@ export default function Services() {
           variants={{ hidden: {}, show: { transition: { staggerChildren: 0.08 } } }}
         >
           {services.map((s) => (
-            <motion.article
+            <motion.a
               key={s.num}
+              href={`/services/${s.slug}`}
               className={`service-card ${s.variant ? `service-card-${s.variant}` : ''}`}
               variants={cardVariant}
             >
@@ -72,7 +77,7 @@ export default function Services() {
                   <span key={t} className="service-tag">{t}</span>
                 ))}
               </div>
-            </motion.article>
+            </motion.a>
           ))}
         </motion.div>
       </Container>

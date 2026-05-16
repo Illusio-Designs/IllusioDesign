@@ -8,21 +8,22 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import PageHeader from '@/components/ui/PageHeader';
 import Container from '@/components/ui/Container';
+import { SkeletonCards } from '@/components/ui/Skeleton';
+import Button from '@/components/ui/Button';
+import Tag from '@/components/ui/Tag';
 import CTA from '@/components/home/CTA';
-import { caseStudyAPI, resolveImage } from '@/services/api';
+import useSEO from '@/hooks/useSEO';
+import { caseStudyAPI, resolveImage, toArrayField } from '@/services/api';
 
-const fallback = [
-  { id: '1', slug: 'amrut-app', title: 'Amrut App', category: 'Mobile App', body: 'A heritage jewellery brand made shoppable on mobile.', image: '/images/Amrut App.webp' },
-  { id: '2', slug: 'aicumen-ai', title: 'Aicumen AI', category: 'SaaS', body: 'An AI workspace built for analyst teams.', image: '/images/aicumen-ai.webp' },
-  { id: '3', slug: 'crosscoin', title: 'Crosscoin', category: 'Fintech', body: 'Cross-border payments redesigned end-to-end.', image: '/images/crosscoin.webp' },
-  { id: '4', slug: 'flowline', title: 'Flowline', category: 'Dashboard', body: 'A logistics ops dashboard that feels like a product.', image: '/images/flowline.webp' },
-  { id: '5', slug: 'nanak-finserv', title: 'Nanak Finserv', category: 'Branding', body: 'A new identity for a 30-year-old finance brand.', image: '/images/nanak-finserv.webp' },
-  { id: '6', slug: 'vivera-lighting', title: 'Vivera Lighting', category: 'E-commerce', body: 'A premium lighting brand brought online.', image: '/images/vivera-lighting.webp' },
-  { id: '7', slug: 'radhe-consultancy', title: 'Radhe Consultancy', category: 'Branding', body: 'A consultancy site engineered for trust.', image: '/images/radhe-consultancy.webp' },
-  { id: '8', slug: 'immune-protector', title: 'Immune Protector', category: 'D2C', body: 'A wellness brand built for ritual.', image: '/images/immune-protector.webp' },
+const categories = [
+  { key: '', label: 'All' },
+  { key: 'branding', label: 'Branding & Design' },
+  { key: 'web', label: 'Web' },
+  { key: 'app', label: 'App' },
+  { key: 'b2b', label: 'B2B & Custom Solution' },
 ];
 
-const categories = ['All', 'Mobile App', 'SaaS', 'Fintech', 'Dashboard', 'Branding', 'E-commerce', 'D2C'];
+const colorTones = ['c1', 'c2', 'c3', 'c4', 'c5'];
 
 const cardVariant = {
   hidden: { opacity: 0, y: 28 },
@@ -30,75 +31,142 @@ const cardVariant = {
 };
 
 export default function WorkPage() {
-  const [projects, setProjects] = useState(fallback);
-  const [filter, setFilter] = useState('All');
+  useSEO('case-study');
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState('');
 
   useEffect(() => {
     let m = true;
-    caseStudyAPI.getAllPublic().then((items) => {
-      if (!m || !items?.length) return;
-      const mapped = items.filter(Boolean).map((p) => ({
-        id: p.id,
-        slug: p.seoUrl || p.slug || p.id,
-        title: p.title,
-        category: p.category || 'Case Study',
-        body: p.summary || p.description || '',
-        image: resolveImage(p.image) || fallback[0].image,
-      }));
-      if (mapped.length) setProjects(mapped);
-    }).catch(() => {});
+    setLoading(true);
+    caseStudyAPI.getAllPublic(filter || undefined)
+      .then((items) => {
+        if (!m) return;
+        const mapped = (Array.isArray(items) ? items : []).filter(Boolean).map((p) => ({
+          id: p.id,
+          title: p.title,
+          category: p.category || 'project',
+          tags: toArrayField(p.tags),
+          clientName: p.clientName || p.client || '',
+          location: p.location || '',
+          techStack: toArrayField(p.techStack || p.technologies),
+          duration: p.duration || '',
+          image: resolveImage(p.image),
+        }));
+        setProjects(mapped);
+      })
+      .catch(() => { if (m) setProjects([]); })
+      .finally(() => { if (m) setLoading(false); });
     return () => { m = false; };
-  }, []);
-
-  const filtered = filter === 'All' ? projects : projects.filter((p) => (p.category || '').toLowerCase() === filter.toLowerCase());
+  }, [filter]);
 
   return (
     <>
       <Navbar />
       <main>
         <PageHeader
-          crumbs={[{ label: 'Home', href: '/' }, { label: 'Work' }]}
-          eyebrow="Selected work"
-          title={<>Recent projects we&apos;re <em>proud of.</em></>}
-          description="A selection of recent product, brand and growth work shipped with our partners."
+          crumbs={[{ label: 'Home', href: '/' }, { label: 'Case Study' }]}
+          eyebrow="Case studies"
+          title={<>Case <em>Studies.</em></>}
+          description="A selection of recent brand, web, app and custom solution work shipped with our partners."
         />
 
         <section style={{ padding: '20px 0 100px' }}>
           <Container>
             <div className="filter-pills">
-              {categories.map((cat) => (
+              {categories.map((c) => (
                 <button
-                  key={cat}
-                  className={`filter-pill ${filter === cat ? 'is-active' : ''}`}
-                  onClick={() => setFilter(cat)}
+                  key={c.key || 'all'}
+                  className={`filter-pill ${filter === c.key ? 'is-active' : ''}`}
+                  onClick={() => setFilter(c.key)}
                 >
-                  {cat}
+                  {c.label}
                 </button>
               ))}
             </div>
 
-            <motion.div
-              className="work-list"
-              initial="hidden"
-              animate="show"
-              variants={{ hidden: {}, show: { transition: { staggerChildren: 0.06 } } }}
-              key={filter}
-            >
-              {filtered.map((project, i) => (
-                <motion.div key={project.id} variants={cardVariant}>
-                  <Link href={`/work/${project.slug}`} className="work-list-card">
-                    <div className="work-list-thumb">
-                      <Image src={project.image} alt={project.title} width={720} height={520} />
+            {loading ? (
+              <SkeletonCards count={6} height={260} />
+            ) : projects.length === 0 ? (
+              <div className="empty-state">
+                <h3>No projects in this category yet</h3>
+                <p>Try another filter or <Link href="/contact">get in touch</Link> about a new engagement.</p>
+              </div>
+            ) : (
+              <motion.div
+                className="cs-list"
+                key={filter || 'all'}
+                initial="hidden"
+                animate="show"
+                variants={{ hidden: {}, show: { transition: { staggerChildren: 0.08 } } }}
+              >
+                {projects.map((project, i) => (
+                  <motion.article
+                    key={i}
+                    className={`cs-card ${i % 2 ? 'cs-card-alt' : ''}`}
+                    variants={cardVariant}
+                  >
+                    <Link href={`/work/${project.id}`} className="cs-card-thumb">
+                      {project.image ? (
+                        <Image src={project.image} alt={project.title} width={860} height={620} />
+                      ) : (
+                        <span className="thumb-empty" aria-hidden />
+                      )}
+                      <span className="cs-card-arrow" aria-hidden>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M7 17L17 7M17 7H8M17 7V16" />
+                        </svg>
+                      </span>
+                      {project.category ? (
+                        <span className="cs-card-cat">{project.category}</span>
+                      ) : null}
+                    </Link>
+
+                    <div className="cs-card-body">
+                      <span className="cs-index">{String(i + 1).padStart(2, '0')}</span>
+
+                      {project.tags.length ? (
+                        <div className="cs-tags">
+                          {project.tags.slice(0, 3).map((t, ti) => (
+                            <Tag key={t} tone={colorTones[ti % colorTones.length]} size="sm">{t}</Tag>
+                          ))}
+                        </div>
+                      ) : null}
+
+                      <h3 className="cs-title">{project.title}</h3>
+
+                      {(project.clientName || project.location) ? (
+                        <div className="cs-meta-tags">
+                          {project.clientName ? <Tag size="sm">{project.clientName}</Tag> : null}
+                          {project.location ? <Tag size="sm">{project.location}</Tag> : null}
+                        </div>
+                      ) : null}
+
+                      {(project.techStack.length || project.duration) ? (
+                        <div className="cs-specs">
+                          {project.techStack.length ? (
+                            <div>
+                              <small>Tech Stack</small>
+                              <span>{project.techStack.join(', ')}</span>
+                            </div>
+                          ) : null}
+                          {project.duration ? (
+                            <div>
+                              <small>Duration</small>
+                              <span>{project.duration}</span>
+                            </div>
+                          ) : null}
+                        </div>
+                      ) : null}
+
+                      <Button href={`/work/${project.id}`} variant="accent" size="md">
+                        Explore
+                      </Button>
                     </div>
-                    <div className="work-list-meta">
-                      <span className="tag">{project.category}</span>
-                      <h3>{project.title}</h3>
-                      {project.body ? <p>{project.body}</p> : null}
-                    </div>
-                  </Link>
-                </motion.div>
-              ))}
-            </motion.div>
+                  </motion.article>
+                ))}
+              </motion.div>
+            )}
           </Container>
         </section>
 

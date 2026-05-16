@@ -3,42 +3,41 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { FaXTwitter, FaInstagram, FaLinkedinIn, FaYoutube } from 'react-icons/fa6';
+import { FaInstagram, FaLinkedinIn, FaFacebookF } from 'react-icons/fa6';
 
 const cols = [
   {
-    title: 'For Clients',
+    title: 'Services',
     links: [
-      { label: 'Services', href: '#services' },
-      { label: 'Process', href: '#process' },
-      { label: 'Case studies', href: '#work' },
-      { label: 'Start a project', href: '#contact' },
+      { label: 'Branding & Design', href: '/services/branding' },
+      { label: 'Web & App Development', href: '/services/web-app' },
+      { label: 'Digital Marketing', href: '/services/marketing' },
+      { label: 'B2B & Custom Solutions', href: '/services/b2b' },
     ],
   },
   {
-    title: 'Studio',
+    title: 'Resources',
     links: [
-      { label: 'About', href: '#about' },
-      { label: 'Journal', href: '#blog' },
-      { label: 'Testimonials', href: '#testimonials' },
-      { label: 'Careers', href: '#contact' },
+      { label: 'Case Studies', href: '/work' },
+      { label: 'Blogs', href: '/journal' },
+      { label: 'About Us', href: '/about' },
+      { label: 'Contact Us', href: '/contact' },
     ],
   },
   {
-    title: 'Company',
-    links: [
-      { label: 'Contact', href: '#contact' },
-      { label: 'Privacy', href: '#' },
-      { label: 'Terms', href: '#' },
+    title: 'Contact',
+    items: [
+      { label: '+91 76000 48416', href: 'tel:+917600048416' },
+      { label: 'Info@illusiodesigns.agency', href: 'mailto:Info@illusiodesigns.agency' },
+      { label: '211-212 2nd Floor, Runway Heights, Ayodhya chowk, 150ft Ring Road, Rajkot 360001' },
     ],
   },
 ];
 
 const socials = [
-  { Icon: FaXTwitter, href: '#', label: 'X (Twitter)' },
-  { Icon: FaInstagram, href: '#', label: 'Instagram' },
   { Icon: FaLinkedinIn, href: '#', label: 'LinkedIn' },
-  { Icon: FaYoutube, href: '#', label: 'YouTube' },
+  { Icon: FaInstagram, href: '#', label: 'Instagram' },
+  { Icon: FaFacebookF, href: '#', label: 'Facebook' },
 ];
 
 export default function Footer() {
@@ -62,8 +61,9 @@ export default function Footer() {
               />
             </Link>
             <p className="footer-tag">
-              A product design studio crafting interfaces, brands and digital
-              experiences — built on a decade of craft.
+              Illusio Designs is a creative and technology-driven agency
+              dedicated to building brands and digital experiences that leave a
+              lasting impression.
             </p>
             <div className="footer-socials" aria-label="Social links">
               {socials.map(({ Icon, href, label }) => (
@@ -77,11 +77,18 @@ export default function Footer() {
           {cols.map((col) => (
             <div className="footer-col" key={col.title}>
               <h4>{col.title}</h4>
-              {col.links.map((l) => (
+              {col.links?.map((l) => (
                 <Link key={l.label} href={l.href}>
                   {l.label}
                 </Link>
               ))}
+              {col.items?.map((item) =>
+                item.href ? (
+                  <a key={item.label} href={item.href}>{item.label}</a>
+                ) : (
+                  <span key={item.label}>{item.label}</span>
+                ),
+              )}
             </div>
           ))}
         </div>
@@ -90,15 +97,21 @@ export default function Footer() {
 
         <div className="footer-bottom">
           <div className="footer-bottom-left">
-            <span>© {new Date().getFullYear()} Illusio Designs. All rights reserved.</span>
+            <span>Copyright © {new Date().getFullYear()} Illusio Designs. All rights reserved.</span>
             <span>
-              Managed by <strong>Finvera Solution LLP</strong>
+              Managed by <strong>Finvera Solutions LLP</strong>
             </span>
           </div>
           <div className="footer-bottom-right">
-            <Link href="#">Privacy Policy</Link>
-            <Link href="#">Terms of Service</Link>
-            <Link href="#">Cookies</Link>
+            <Link href="/privacy">Privacy Policy</Link>
+            <Link href="/terms">Terms of Service</Link>
+            <button
+              type="button"
+              className="footer-cookie-btn"
+              onClick={() => window.dispatchEvent(new Event('illusio:cookie-settings'))}
+            >
+              Cookie Settings
+            </button>
           </div>
         </div>
 

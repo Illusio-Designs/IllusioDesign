@@ -4,51 +4,26 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Container from '@/components/ui/Container';
 import SectionHeader from '@/components/ui/SectionHeader';
-import { reviewAPI } from '@/services/api';
+import { StarRating, StarRatingInput } from '@/components/ui/StarRating';
+import Modal from '@/components/ui/Modal';
+import Button from '@/components/ui/Button';
+import { SkeletonCards } from '@/components/ui/Skeleton';
+import { reviewAPI, cleanText } from '@/services/api';
+import { useToast } from '@/components/providers/Toaster';
+import { runValidation, required, minLen } from '@/utils/validators';
 
-const fallback = [
-  {
-    id: 't1',
-    rating: 5,
-    quote:
-      'Working with Illusio felt like having an in-house product team. They mapped the journey, redesigned every touchpoint, and shipped on time.',
-    client: 'Henry Arthur',
-    role: 'CTO, Food Express',
-  },
-  {
-    id: 't2',
-    rating: 5,
-    quote:
-      'The new brand and landing page lifted our demo bookings within the first month. Easy to work with and incredibly detail-oriented.',
-    client: 'Joshua Singh',
-    role: 'CEO, FX Charger',
-  },
-  {
-    id: 't3',
-    rating: 5,
-    quote:
-      'Best agency partnership we have had. Strategy, design and execution all clicked into place from day one.',
-    client: 'Priya Nair',
-    role: 'Founder, Aicumen',
-  },
-  {
-    id: 't4',
-    rating: 5,
-    quote:
-      'Our dashboard finally feels like a product, not a tool. The team translated complex flows into something operators enjoy.',
-    client: 'Daniel Ross',
-    role: 'Head of Ops, Crosscoin',
-  },
-];
+const FieldError = ({ msg }) =>
+  msg ? (
+    <span className="field-error">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M12 8v4M12 16h.01" />
+      </svg>
+      {msg}
+    </span>
+  ) : null;
 
-const initial = (name = '') =>
-  name
-    .split(' ')
-    .map((p) => p[0])
-    .filter(Boolean)
-    .slice(0, 2)
-    .join('')
-    .toUpperCase();
+const initial = (n = '') => n.split(' ').map((p) => p[0]).filter(Boolean).slice(0, 2).join('').toUpperCase();
 
 const cardVariant = {
   hidden: { opacity: 0, y: 30 },
@@ -56,67 +31,157 @@ const cardVariant = {
 };
 
 export default function Testimonials() {
-  const [reviews, setReviews] = useState(fallback);
+  const [reviews, setReviews] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [open, setOpen] = useState(false);
+  const [form, setForm] = useState({ author: '', company: '', rating: 5, comment: '' });
+  const [errors, setErrors] = useState({});
+  const [submitting, setSubmitting] = useState(false);
+  const { push } = useToast();
 
-  useEffect(() => {
-    let mounted = true;
+  const load = () => {
     reviewAPI
       .getAllPublic()
       .then((items) => {
-        if (!mounted || !items?.length) return;
-        const mapped = items
-          .filter(Boolean)
-          .slice(0, 4)
-          .map((r, i) => ({
-            id: r.id || `r-${i}`,
-            rating: r.rating || 5,
-            quote: r.quote || r.review || r.message,
-            client: r.client || r.name,
-            role: r.role || r.position || '',
-          }));
-        if (mapped.length) setReviews(mapped);
+        const mapped = (Array.isArray(items) ? items : []).filter(Boolean).map((r) => ({
+          id: r.id,
+          rating: Number(r.rating) || 5,
+          comment: cleanText(r.comment || r.quote || r.message),
+          author: cleanText(r.author || r.client || r.name),
+          company: cleanText(r.company || r.role || r.position || ''),
+        }));
+        setReviews(mapped);
       })
-      .catch(() => {});
-    return () => {
-      mounted = false;
-    };
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    let mounted = true;
+    if (mounted) load();
+    return () => { mounted = false; };
   }, []);
 
+  const submit = async (e) => {
+    e.preventDefault();
+    const found = runValidation(form, {
+      author: [required('Name')],
+      comment: [required('Comment'), minLen(10, 'Comment')],
+    });
+    setErrors(found);
+    if (Object.keys(found).length) return;
+    setSubmitting(true);
+    try {
+      await reviewAPI.submit(form);
+      push({ tone: 'success', title: 'Thanks!', body: 'Your review is under review and will appear shortly.' });
+      setForm({ author: '', company: '', rating: 5, comment: '' });
+      setErrors({});
+      setOpen(false);
+      load();
+    } catch {
+      push({ tone: 'error', title: 'Could not send', body: 'Try again in a moment.' });
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
-    <section className="testimonials" id="testimonials">
-      <Container>
+    <section className="container" id="testimonials">
+      <div className="testimonials">
         <SectionHeader
+          inverted
           eyebrow="Kind words"
           index="05"
           title={<>What partners say<br /> about <em>working with us.</em></>}
           align="center"
-          description="Real outcomes from founders, product teams and operators who&apos;ve trusted us with their next move."
+          description="Real outcomes from founders, product teams and operators who've trusted us with their next move."
         />
 
-        <motion.div
-          className="testimonials-track"
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: '-80px' }}
-          variants={{ hidden: {}, show: { transition: { staggerChildren: 0.1 } } }}
-        >
-          {reviews.map((r) => (
-            <motion.article key={r.id} className="testimonial-card" variants={cardVariant}>
-              <div className="stars" aria-label={`${r.rating} out of 5`}>
-                {'★'.repeat(Math.min(5, r.rating))}
-              </div>
-              <blockquote>&ldquo;{r.quote}&rdquo;</blockquote>
-              <div className="author">
-                <span className="avatar-init">{initial(r.client)}</span>
-                <div>
-                  <h4>{r.client}</h4>
-                  <span>{r.role}</span>
+        {loading ? (
+          <SkeletonCards count={2} height={150} />
+        ) : reviews.length === 0 ? (
+          <div className="testimonials-empty">
+            <p>No reviews yet — be the first to share your experience.</p>
+          </div>
+        ) : (
+          <motion.div
+            className="testimonials-track"
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: '-80px' }}
+            variants={{ hidden: {}, show: { transition: { staggerChildren: 0.1 } } }}
+          >
+            {reviews.slice(0, 4).map((r, i) => (
+              <motion.article key={i} className="testimonial-card" variants={cardVariant}>
+                <div className="stars-row">
+                  <StarRating value={r.rating} />
                 </div>
-              </div>
-            </motion.article>
-          ))}
-        </motion.div>
-      </Container>
+                <blockquote>&ldquo;{r.comment}&rdquo;</blockquote>
+                <div className="author">
+                  <span className="avatar-init">{initial(r.author)}</span>
+                  <div>
+                    <h4>{r.author}</h4>
+                    <span>{r.company}</span>
+                  </div>
+                </div>
+              </motion.article>
+            ))}
+          </motion.div>
+        )}
+
+        <div style={{ position: 'relative', display: 'flex', justifyContent: 'center', marginTop: 28 }}>
+          <Button variant="accent" size="md" onClick={() => setOpen(true)} icon={false}>
+            Share your experience
+          </Button>
+        </div>
+      </div>
+
+      <Modal
+        open={open}
+        onClose={() => setOpen(false)}
+        title="Share your experience"
+        description="Help others choose Illusio Designs with confidence."
+        size="md"
+      >
+        <form className="review-form" onSubmit={submit} noValidate>
+          <div className="field-row">
+            <div className="field">
+              <label>Your name</label>
+              <input
+                className={errors.author ? 'is-invalid' : ''}
+                value={form.author}
+                onChange={(e) => { setForm({ ...form, author: e.target.value }); setErrors((p) => ({ ...p, author: '' })); }}
+                placeholder="Jane Doe"
+              />
+              <FieldError msg={errors.author} />
+            </div>
+            <div className="field">
+              <label>Company / role</label>
+              <input value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })} placeholder="CTO, Brand Inc." />
+            </div>
+          </div>
+          <div className="field">
+            <label>Rating</label>
+            <StarRatingInput value={form.rating} onChange={(n) => setForm({ ...form, rating: n })} />
+          </div>
+          <div className="field">
+            <label>Comment</label>
+            <textarea
+              className={errors.comment ? 'is-invalid' : ''}
+              value={form.comment}
+              onChange={(e) => { setForm({ ...form, comment: e.target.value }); setErrors((p) => ({ ...p, comment: '' })); }}
+              placeholder="What was working with us like?"
+            />
+            <FieldError msg={errors.comment} />
+          </div>
+          <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
+            <Button variant="ghost" size="md" icon={false} onClick={() => setOpen(false)}>Cancel</Button>
+            <Button variant="primary" size="md" type="submit" icon={false}>
+              {submitting ? 'Sending…' : 'Submit review'}
+            </Button>
+          </div>
+        </form>
+      </Modal>
     </section>
   );
 }

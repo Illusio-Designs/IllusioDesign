@@ -42,7 +42,7 @@ export default function Process() {
             eyebrow="How we work"
             index="04"
             title={<>A clear path<br /> from brief to <em>launch.</em></>}
-            description="Four short phases. Weekly demos. No mystery — and no scope creep."
+            description="Four short phases. Weekly demos. No mystery and no scope creep — just steady, measurable progress."
           />
 
           <motion.div

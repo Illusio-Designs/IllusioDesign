@@ -1,59 +1,104 @@
-const rows = [
-  { name: 'Amrut App v2', client: 'Amrut Jewels', lead: 'Krunal', stage: 'Design', progress: 64, due: 'Jun 14', tone: 'warn' },
-  { name: 'Aicumen Dashboard', client: 'Aicumen AI', lead: 'Priya', stage: 'Build', progress: 82, due: 'May 28', tone: 'success' },
-  { name: 'Crosscoin Rebrand', client: 'Crosscoin', lead: 'Riya', stage: 'Discovery', progress: 22, due: 'Jul 02', tone: 'info' },
-  { name: 'Flowline Ops', client: 'Flowline', lead: 'Aman', stage: 'Launched', progress: 100, due: '—', tone: 'success' },
-  { name: 'Nanak Site', client: 'Nanak Finserv', lead: 'Krunal', stage: 'On hold', progress: 40, due: '—', tone: 'error' },
-  { name: 'Vivera Lighting', client: 'Vivera', lead: 'Riya', stage: 'Kickoff', progress: 8, due: 'Aug 01', tone: 'info' },
-];
+'use client';
+
+import { useEffect, useState } from 'react';
+import Button from '@/components/ui/Button';
+import { SkeletonTable } from '@/components/ui/Skeleton';
+import { useDashSearch } from '@/components/dashboard/SearchContext';
+import { caseStudyAPI, toArrayField } from '@/services/api';
+
+const toneFor = (cat = '') => {
+  const c = cat.toLowerCase();
+  if (c.includes('brand')) return 'warn';
+  if (c.includes('web') || c.includes('app')) return 'success';
+  if (c.includes('b2b')) return 'info';
+  return 'info';
+};
 
 export default function ProjectsPage() {
+  const [rows, setRows] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { query } = useDashSearch();
+
+  useEffect(() => {
+    let m = true;
+    caseStudyAPI.getAllPublic()
+      .then((list) => {
+        if (!m) return;
+        const mapped = (Array.isArray(list) ? list : []).filter(Boolean).map((p) => ({
+          id: p.id,
+          name: p.title || 'Untitled',
+          client: p.clientName || p.client || '—',
+          category: p.category || 'project',
+          tech: toArrayField(p.techStack || p.technologies).join(', ') || '—',
+          duration: p.duration || '—',
+        }));
+        setRows(mapped);
+      })
+      .catch(() => {})
+      .finally(() => { if (m) setLoading(false); });
+    return () => { m = false; };
+  }, []);
+
+  const q = query.trim().toLowerCase();
+  const filtered = q
+    ? rows.filter((r) =>
+        `${r.name} ${r.client} ${r.category} ${r.tech}`.toLowerCase().includes(q),
+      )
+    : rows;
+
   return (
     <>
       <div className="dash-page-head">
         <div>
           <span className="page-eyebrow">Projects</span>
-          <h1>All projects</h1>
-          <p>Track every engagement from kickoff to launch.</p>
+          <h1>All case studies</h1>
+          <p>Every project published on the public site.</p>
         </div>
-        <button className="btn btn-primary btn-sm">+ New project</button>
+        <Button variant="primary" size="sm" icon={false}>+ New project</Button>
       </div>
 
       <section className="dash-card">
         <header className="dash-card-head">
           <div>
-            <h3>Active</h3>
-            <span>6 of 12</span>
+            <h3>Case studies</h3>
+            <span>{rows.length} total{q ? ` · ${filtered.length} matched` : ''}</span>
           </div>
-          <input className="dash-mini-search" placeholder="Search projects..." />
         </header>
-        <table className="dash-table">
-          <thead>
-            <tr>
-              <th>Project</th>
-              <th>Client</th>
-              <th>Lead</th>
-              <th>Stage</th>
-              <th>Progress</th>
-              <th>Due</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((r) => (
-              <tr key={r.name}>
-                <td><strong>{r.name}</strong></td>
-                <td>{r.client}</td>
-                <td>{r.lead}</td>
-                <td><span className={`kit-badge kit-badge-${r.tone}`}><span className="dot" />{r.stage}</span></td>
-                <td>
-                  <div className="progress-bar"><span style={{ width: `${r.progress}%` }} /></div>
-                  <small style={{ color: 'var(--muted)' }}>{r.progress}%</small>
-                </td>
-                <td>{r.due}</td>
+
+        {loading ? (
+          <SkeletonTable rows={6} cols={5} />
+        ) : filtered.length ? (
+          <table className="dash-table">
+            <thead>
+              <tr>
+                <th>Project</th>
+                <th>Client</th>
+                <th>Category</th>
+                <th>Tech stack</th>
+                <th>Duration</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filtered.map((r, i) => (
+                <tr key={r.id || i}>
+                  <td><strong>{r.name}</strong></td>
+                  <td>{r.client}</td>
+                  <td>
+                    <span className={`kit-badge kit-badge-${toneFor(r.category)}`}>
+                      <span className="dot" />{r.category}
+                    </span>
+                  </td>
+                  <td>{r.tech}</td>
+                  <td>{r.duration}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <div style={{ padding: 24, color: 'var(--muted)', fontSize: 14 }}>
+            No projects match your search.
+          </div>
+        )}
       </section>
     </>
   );

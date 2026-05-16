@@ -11,11 +11,34 @@ import Process from '@/components/home/Process';
 export const metadata = { title: 'Services — Illusio Designs' };
 
 const services = [
-  { slug: 'ui-ux-design', title: 'UI / UX Design', tag: 'Product Design', image: '/images/aicumen-ai.webp', body: 'Research, journeys, hi-fi screens and design systems engineered to scale.' },
-  { slug: 'branding-design', title: 'Branding & Design', tag: 'Brand', image: '/images/Branding&Designing.webp', body: 'Logos, identity systems, packaging and brand guidelines that earn loyalty.' },
-  { slug: 'web-app-development', title: 'Web & App Development', tag: 'Engineering', image: '/images/web&app.webp', body: 'Next.js, React Native and headless stacks — performance and accessibility built in.' },
-  { slug: 'digital-marketing', title: 'Digital Marketing', tag: 'Growth', image: '/images/digitalmarketing.webp', body: 'Landing pages, paid creative and lifecycle programs that move qualified pipeline.' },
-  { slug: 'b2b-solutions', title: 'B2B & Custom Solutions', tag: 'Enterprise', image: '/images/b2b.webp', body: 'Bespoke internal tools and dashboards that make complex ops feel effortless.' },
+  {
+    slug: 'branding',
+    tag: 'Branding & Design',
+    title: "Carve Your Brand's Iconic Mark.",
+    image: '/images/Branding&Designing.webp',
+    body: 'Build a brand that stands out with identity systems, visual guidelines, and impactful creatives tailored to your audience.',
+  },
+  {
+    slug: 'web-app',
+    tag: 'Web & App Development',
+    title: 'Shape Your Brand, Stand Out!',
+    image: '/images/web&app.webp',
+    body: 'Fast, scalable, and user-friendly digital products — from websites to mobile apps — crafted for real-world performance.',
+  },
+  {
+    slug: 'marketing',
+    tag: 'Digital Marketing',
+    title: 'Your Product, Our Stunning Wrap!',
+    image: '/images/digitalmarketing.webp',
+    body: 'Grow your business with performance-driven strategies across SEO, social media, ads, automation, and content.',
+  },
+  {
+    slug: 'b2b',
+    tag: 'B2B & Custom Solutions',
+    title: 'Spark Your Digital Presence!',
+    image: '/images/b2b.webp',
+    body: 'Custom-built portals, internal tools, automated workflows, and enterprise solutions to streamline operations.',
+  },
 ];
 
 export default function ServicesPage() {
@@ -26,8 +49,8 @@ export default function ServicesPage() {
         <PageHeader
           crumbs={[{ label: 'Home', href: '/' }, { label: 'Services' }]}
           eyebrow="What we do"
-          title={<>Services that ship <em>outcomes.</em></>}
-          description="Five focused capabilities. One senior team. Every engagement is scoped around the outcome you actually want."
+          title={<>Services <em>we offer.</em></>}
+          description="Four focused capabilities. One senior team. Every engagement is scoped around the outcome you actually want."
         />
 
         <section style={{ padding: '40px 0 80px' }}>
@@ -37,7 +60,7 @@ export default function ServicesPage() {
                 <Reveal key={s.slug} delay={i * 0.04}>
                   <Link href={`/services/${s.slug}`} className="service-row">
                     <div className="service-row-thumb">
-                      <Image src={s.image} alt={s.title} width={520} height={340} />
+                      <Image src={s.image} alt={s.tag} width={520} height={340} />
                     </div>
                     <div className="service-row-body">
                       <span className="service-row-tag">{s.tag}</span>

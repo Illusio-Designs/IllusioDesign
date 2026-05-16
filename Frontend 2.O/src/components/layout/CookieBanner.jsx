@@ -16,6 +16,9 @@ export default function CookieBanner() {
     } catch {
       // ignore
     }
+    const reopen = () => setOpen(true);
+    window.addEventListener('illusio:cookie-settings', reopen);
+    return () => window.removeEventListener('illusio:cookie-settings', reopen);
   }, []);
 
   const decide = (decision) => {

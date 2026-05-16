@@ -6,6 +6,7 @@ import Container from '@/components/ui/Container';
 import Button from '@/components/ui/Button';
 import MagneticButton from '@/components/ui/MagneticButton';
 import Counter from '@/components/ui/Counter';
+import { StarRating } from '@/components/ui/StarRating';
 
 export default function About() {
   return (
@@ -36,7 +37,7 @@ export default function About() {
               transition={{ duration: 0.6, delay: 0.4 }}
             >
               <div className="num"><Counter value={4.9} suffix="" duration={1.8} /></div>
-              <div className="lab">★★★★★ rating</div>
+              <div className="lab"><StarRating value={5} size={11} /> rating</div>
             </motion.div>
             <motion.div
               className="about-floating br"

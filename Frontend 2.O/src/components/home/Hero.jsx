@@ -7,12 +7,13 @@ import AnimatedHeading from '@/components/ui/AnimatedHeading';
 import Button from '@/components/ui/Button';
 import MagneticButton from '@/components/ui/MagneticButton';
 import Counter from '@/components/ui/Counter';
+import BackgroundRipple from '@/components/ui/BackgroundRipple';
 
 const stats = [
-  { num: 600, suffix: '+', label: 'Projects Shipped' },
-  { num: 50, suffix: '+', label: 'Industries Covered' },
+  { num: 883, suffix: '', label: 'Project Completed' },
+  { num: 19, suffix: '+', label: 'Total Top Services' },
   { num: 98, suffix: '%', label: 'Positive Feedback' },
-  { num: 7, suffix: '+', label: 'Years of Craft' },
+  { num: 7, suffix: '+', label: 'Years of Experience' },
 ];
 
 export default function Hero() {
@@ -26,6 +27,7 @@ export default function Hero() {
 
   return (
     <section className="hero" ref={ref} id="home">
+      <BackgroundRipple bare rows={9} cols={28} cellSize={66} className="hero-ripple" />
       <Container size="xl">
         <motion.div className="hero-inner" style={{ y, opacity }}>
           <div>
@@ -36,12 +38,12 @@ export default function Hero() {
               transition={{ duration: 0.6 }}
             >
               <span className="live-dot" />
-              Booking Q3 — 2 slots remain
+              Illusio Designs · Since 2007
             </motion.span>
 
             <AnimatedHeading
               as="h1"
-              text={['Design that', 'feels *inevitable.*']}
+              text={['Designate Illusio thoughts', 'to flow into *magic.*']}
             />
           </div>
 
@@ -52,19 +54,19 @@ export default function Hero() {
             transition={{ duration: 0.8, delay: 0.4 }}
           >
             <p>
-              Illusio is a product design studio. We craft interfaces, brands
-              and digital experiences for fintech, SaaS and DTC teams — from
-              first sketch to engineered launch.
+              Illusio Designs is a creative and technology-driven agency
+              building brands, web, mobile and custom B2B experiences that
+              leave a lasting impression — from strategy through launch.
             </p>
             <div className="hero-actions">
               <MagneticButton strength={0.18}>
-                <Button href="#work" variant="primary" size="md">
+                <Button href="/work" variant="primary" size="md">
                   See our work
                 </Button>
               </MagneticButton>
               <MagneticButton strength={0.18}>
-                <Button href="#contact" variant="ghost" size="md" icon={false}>
-                  Start a project
+                <Button href="/contact" variant="ghost" size="md" icon={false}>
+                  Let&apos;s Engage
                 </Button>
               </MagneticButton>
             </div>
@@ -104,26 +106,31 @@ export default function Hero() {
 
         <div className="hero-mark" aria-hidden>
           <div className="ring">
-            <svg viewBox="0 0 130 130">
+            <svg viewBox="0 0 132 132">
               <defs>
                 <path
                   id="hero-ring-path"
-                  d="M65,65 m-50,0 a50,50 0 1,1 100,0 a50,50 0 1,1 -100,0"
+                  d="M66,66 m-47,0 a47,47 0 1,1 94,0 a47,47 0 1,1 -94,0"
                 />
               </defs>
-              <text fontSize="9">
+              <text fontSize="8.6">
                 <textPath
                   href="#hero-ring-path"
                   startOffset="0"
-                  textLength="314"
+                  textLength="295"
                   lengthAdjust="spacing"
                 >
-                  Illusio Designs · Since 2007 ·
+                  ILLUSIO DESIGNS&#160;&#160;&#8226;&#160;&#160;SINCE 2007&#160;&#160;&#8226;&#160;&#160;
                 </textPath>
               </text>
             </svg>
           </div>
-          <span>↓ Scroll</span>
+          <span className="hero-mark-cue">
+            <svg className="hero-mark-arrow" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 5v14M19 12l-7 7-7-7" />
+            </svg>
+            <span className="hero-mark-label">Scroll</span>
+          </span>
         </div>
       </Container>
     </section>

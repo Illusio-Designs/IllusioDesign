@@ -8,30 +8,28 @@ import Container from '@/components/ui/Container';
 import SectionHeader from '@/components/ui/SectionHeader';
 import Button from '@/components/ui/Button';
 import MagneticButton from '@/components/ui/MagneticButton';
+import Tag from '@/components/ui/Tag';
+import { SkeletonCards } from '@/components/ui/Skeleton';
 import { caseStudyAPI, resolveImage } from '@/services/api';
-
-const fallback = [
-  { id: 'f1', title: 'Amrut App', tag: 'Mobile App', image: '/images/Amrut App.webp' },
-  { id: 'f2', title: 'Aicumen AI', tag: 'SaaS Platform', image: '/images/aicumen-ai.webp' },
-  { id: 'f3', title: 'Crosscoin', tag: 'Fintech', image: '/images/crosscoin.webp' },
-  { id: 'f4', title: 'Flowline', tag: 'Dashboard', image: '/images/flowline.webp' },
-];
 
 const cardVariant = {
   hidden: { opacity: 0, y: 32 },
   show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
 };
 
+const tagTones = ['c1', 'c2', 'c3', 'c4', 'c5'];
+
 export default function Work() {
-  const [projects, setProjects] = useState(fallback);
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let mounted = true;
     caseStudyAPI
       .getAllPublic()
       .then((items) => {
-        if (!mounted || !items?.length) return;
-        const mapped = items
+        if (!mounted) return;
+        const mapped = (Array.isArray(items) ? items : [])
           .filter(Boolean)
           .slice(0, 4)
           .map((p) => ({
@@ -39,11 +37,12 @@ export default function Work() {
             slug: p.seoUrl || p.slug || p.id,
             title: p.title,
             tag: p.category || 'Case Study',
-            image: resolveImage(p.image) || fallback[0].image,
+            image: resolveImage(p.image),
           }));
-        if (mapped.length) setProjects(mapped);
+        setProjects(mapped);
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => { if (mounted) setLoading(false); });
     return () => {
       mounted = false;
     };
@@ -54,47 +53,60 @@ export default function Work() {
       <Container>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: 24, marginBottom: 60, flexWrap: 'wrap' }}>
           <SectionHeader
-            eyebrow="Selected work"
+            eyebrow="Case Studies"
             index="02"
-            title={<>Recent projects<br /> we&apos;re <em>proud of.</em></>}
+            title={<>Case studies<br /> we&apos;re <em>proud of.</em></>}
             className="section-header-flush"
           />
           <MagneticButton strength={0.18}>
-            <Button href="#contact" variant="light" size="md">
-              All projects
+            <Button href="/work" variant="light" size="md">
+              All case studies
             </Button>
           </MagneticButton>
         </div>
 
-        <motion.div
-          className="work-grid"
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: '-80px' }}
-          variants={{ hidden: {}, show: { transition: { staggerChildren: 0.1 } } }}
-        >
-          {projects.map((project) => (
-            <motion.article key={project.id} className="work-card" variants={cardVariant}>
-              <Link href={project.slug ? `#work-${project.id}` : '#contact'} className="work-thumb">
-                <Image
-                  src={project.image}
-                  alt={project.title}
-                  width={720}
-                  height={540}
-                />
-                <span className="work-arrow" aria-hidden>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M7 17L17 7M17 7H8M17 7V16" />
-                  </svg>
-                </span>
-              </Link>
-              <div className="work-meta">
-                <h3>{project.title}</h3>
-                <span className="work-category">{project.tag}</span>
-              </div>
-            </motion.article>
-          ))}
-        </motion.div>
+        {loading ? (
+          <SkeletonCards count={4} height={300} />
+        ) : projects.length === 0 ? (
+          <div className="empty-state">
+            <h3>Work coming soon</h3>
+            <p>New case studies are on the way.</p>
+          </div>
+        ) : (
+          <motion.div
+            className="work-grid"
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: '-80px' }}
+            variants={{ hidden: {}, show: { transition: { staggerChildren: 0.1 } } }}
+          >
+            {projects.map((project, i) => (
+              <motion.article key={i} className="work-card" variants={cardVariant}>
+                <Link href={`/work/${project.id}`} className="work-thumb">
+                  {project.image ? (
+                    <Image
+                      src={project.image}
+                      alt={project.title}
+                      width={720}
+                      height={540}
+                    />
+                  ) : (
+                    <span className="thumb-empty" aria-hidden />
+                  )}
+                  <span className="work-arrow" aria-hidden>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M7 17L17 7M17 7H8M17 7V16" />
+                    </svg>
+                  </span>
+                </Link>
+                <div className="work-meta">
+                  <h3>{project.title}</h3>
+                  <Tag tone={tagTones[i % tagTones.length]} size="sm">{project.tag}</Tag>
+                </div>
+              </motion.article>
+            ))}
+          </motion.div>
+        )}
       </Container>
     </section>
   );
