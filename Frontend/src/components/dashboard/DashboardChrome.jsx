@@ -19,8 +19,8 @@ const navItems = [
   { href: '/dashboard/team', label: 'Team', icon: 'user' },
   { href: '/dashboard/reviews', label: 'Reviews', icon: 'star' },
   { href: '/dashboard/seo', label: 'SEO', icon: 'search' },
-  { href: '/dashboard/privacy', label: 'Privacy', icon: 'shield' },
-  { href: '/dashboard/terms', label: 'Terms', icon: 'scroll' },
+  { href: '/dashboard/policy', label: 'Policy', icon: 'shield' },
+  { href: '/dashboard/content', label: 'Content', icon: 'layers' },
   { href: '/dashboard/users', label: 'Users', icon: 'users' },
 ];
 
@@ -36,7 +36,7 @@ const icons = {
   inbox: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2" /><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" /></svg>,
   mail: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="4" width="20" height="16" rx="2" /><path d="M22 7l-10 6L2 7" /></svg>,
   shield: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>,
-  scroll: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><path d="M14 2v6h6M8 13h8M8 17h5" /></svg>,
+  layers: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2l9 5-9 5-9-5 9-5z" /><path d="M3 12l9 5 9-5M3 17l9 5 9-5" /></svg>,
 };
 
 export default function DashboardChrome({ children }) {

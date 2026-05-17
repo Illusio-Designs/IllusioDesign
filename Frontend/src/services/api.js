@@ -267,6 +267,33 @@ export const termsOfServiceAPI = {
   remove: (id) => apiCall(`/private/terms-of-service/${id}`, { method: 'DELETE' }),
 };
 
+/* Policy — unified privacy + terms (one row per type: 'privacy' | 'terms') */
+export const policyAPI = {
+  getPublic: async (type) => extractItem(await apiCall(`/public/policy/${type}`)),
+  getAll: async () => extractList(await apiCall('/private/policy')),
+  getByType: async (type) => extractItem(await apiCall(`/private/policy/${type}`)),
+  upsert: (type, data) =>
+    apiCall(`/private/policy/${type}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+  remove: (type) => apiCall(`/private/policy/${type}`, { method: 'DELETE' }),
+};
+
+/* Content — reusable content blocks keyed by a unique slug */
+export const contentAPI = {
+  getAllPublic: async () => extractList(await apiCall('/public/content')),
+  getByKeyPublic: async (key) =>
+    extractItem(await apiCall(`/public/content/${encodeURIComponent(key)}`)),
+  getAll: async () => extractList(await apiCall('/private/content')),
+  getById: async (id) => extractItem(await apiCall(`/private/content/${id}`)),
+  create: (data) =>
+    apiCall('/private/content', { method: 'POST', body: JSON.stringify(data) }),
+  update: (id, data) =>
+    apiCall(`/private/content/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  remove: (id) => apiCall(`/private/content/${id}`, { method: 'DELETE' }),
+};
+
 /* Admin users — private admin endpoints */
 export const userAPI = {
   getAll: async () => extractList(await apiCall('/private/admin/users')),

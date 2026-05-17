@@ -1,16 +1,6 @@
-'use client';
+import { redirect } from 'next/navigation';
 
-import LegalEditor from '@/components/dashboard/LegalEditor';
-import { termsOfServiceAPI } from '@/services/api';
-
-export default function DashboardTerms() {
-  return (
-    <LegalEditor
-      api={termsOfServiceAPI}
-      eyebrow="Legal"
-      title="Terms of Service"
-      subtitle="Edit the terms of service shown on the public site."
-      publicHref="/terms"
-    />
-  );
+// Privacy + Terms are now managed together under /dashboard/policy.
+export default function DashboardTermsRedirect() {
+  redirect('/dashboard/policy');
 }
