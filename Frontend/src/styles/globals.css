@@ -462,12 +462,17 @@ em {
   gap: 10px;
 }
 
-.navbar-drawer a {
+.navbar-drawer a:not(.btn) {
   font-size: 18px;
   font-family: var(--display);
   color: var(--ink);
   padding: 12px 0;
   border-bottom: 1px solid var(--line);
+}
+
+.navbar-drawer .btn {
+  margin-top: 8px;
+  justify-content: center;
 }
 
 @media (max-width: 900px) {
