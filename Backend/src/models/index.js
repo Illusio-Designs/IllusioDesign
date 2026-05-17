@@ -6,8 +6,6 @@ import Application from './Application.js';
 import ContactMessage from './ContactMessage.js';
 import Team from './Team.js';
 import SEO from './SEO.js';
-import PrivacyPolicy from './PrivacyPolicy.js';
-import TermsOfService from './TermsOfService.js';
 import Review from './Review.js';
 import Policy from './Policy.js';
 import Setting from './Setting.js';
@@ -17,9 +15,10 @@ import Content from './Content.js';
 Application.belongsTo(Position, { foreignKey: 'positionId', as: 'position' });
 Position.hasMany(Application, { foreignKey: 'positionId', as: 'applications' });
 
-// NOTE: PrivacyPolicy and TermsOfService are legacy models, kept only so the
-// existing tables stay available for the one-time migration into `policies`.
-// All policy reads/writes now go through the unified `Policy` model.
+// All policy reads/writes go through the unified `Policy` model. The legacy
+// privacy_policy / terms_of_service tables are no longer modelled here — the
+// one-time migration in initDatabase.js reads them via raw SQL instead, so
+// sequelize.sync() no longer recreates those decommissioned tables.
 
 export {
   User,
@@ -30,8 +29,6 @@ export {
   ContactMessage,
   Team,
   SEO,
-  PrivacyPolicy,
-  TermsOfService,
   Review,
   Policy,
   Setting,

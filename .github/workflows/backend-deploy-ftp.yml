@@ -1,0 +1,170 @@
+name: Deploy backend to FTP
+
+# Auto-deploys Backend/ → the api.illusiodesigns.agency app root on the
+# production FTP server every time a commit on main touches backend code.
+# Pushes that only edit Frontend/ or docs are skipped (paths filter) so we
+# don't waste a deploy run.
+#
+# What gets uploaded:
+#   Backend/src/**
+#   Backend/package.json
+#
+# What is NEVER uploaded:
+#   .env / .env.*       — the server has its own production secrets
+#   package-lock.json   — server's lock-state is owned by cPanel nodevenv
+#   node_modules/       — server's is a symlink into cPanel nodevenv
+#   .htaccess           — Apache routing config; production-managed
+#   uploads/            — user-uploaded media lives ONLY on the server
+#   scripts/ftp-*.js    — local-only FTP helpers (ftp-test / ftp-restart)
+#   ftp-test.js, deploy.js, deploy.sh, deployFTP.ps1 — local deploy helpers
+#   tests, .git, .vscode, logs, tmp, coverage, .well-known
+#
+# Required GitHub repo secrets — Settings → Secrets and variables → Actions:
+#   FTP_SERVER       → s814.bom1.mysecurecloudhost.com
+#                      ^ Use the HOSTING SERVER hostname, NOT
+#                      ftp.illusiodesigns.agency. The server's TLS cert is a
+#                      valid Sectigo wildcard for *.bom1.mysecurecloudhost.com
+#                      but does NOT cover illusiodesigns.agency — connecting
+#                      via the vanity FTP name fails strict cert validation,
+#                      and FTP-Deploy-Action verifies the cert. Both names
+#                      point at the same IP (69.57.172.137).
+#   FTP_USERNAME     → Riya@illusiodesigns.agency   (dedicated FTP account,
+#                      chrooted to the api.illusiodesigns.agency app root)
+#   FTP_PASSWORD     → (the FTP account password)
+#   FTP_SERVER_DIR   → /         (that account's "/" IS the api app root —
+#                      it already holds src/, package.json, node_modules)
+#
+# Auto-restart: after the upload finishes, scripts/ftp-restart.js touches
+# <FTP_SERVER_DIR>/tmp/restart.txt — Phusion Passenger (cPanel's Node
+# runtime) recycles the process on the next request once that mtime changes.
+# That restart also re-runs initDatabase(), which creates any new Sequelize
+# tables (contents, policies, settings) via syncDatabase({ alter: true }).
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'Backend/**'
+      - '.github/workflows/backend-deploy-ftp.yml'
+  workflow_dispatch:
+
+# Only one deploy at a time against the same FTP host.
+concurrency:
+  group: backend-ftp-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # Quick syntax sanity-check before we waste an upload run on broken
+      # JS. The backend isn't built — it's shipped as-is — so a parse error
+      # would only surface on the server otherwise.
+      - name: Syntax-check backend source
+        working-directory: Backend
+        run: |
+          set -e
+          find src -name '*.js' -type f -print0 | xargs -0 -n1 node --check
+          node --check src/server.js
+          echo "✅ all .js files parse"
+
+      - name: Sync to FTP server (FTPS, port 21)
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          # Explicit FTPS — same port (21), upgrades to TLS via AUTH TLS.
+          # Pure-FTPd accepts; verified manually with Backend/ftp-test.js.
+          protocol: ftps
+          port: 21
+          local-dir: ./Backend/
+          server-dir: ${{ secrets.FTP_SERVER_DIR || '/' }}
+          # Diff-based from the second run onwards via a sync-state file the
+          # action keeps on the server, so later deploys only upload changes.
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/.github/**
+            **/.vscode/**
+            **/.idea/**
+            **/.DS_Store
+            **/Thumbs.db
+            **/.env
+            **/.env.*
+            **/.envrc
+            **/node_modules/**
+            **/package-lock.json
+            **/.htaccess
+            **/.well-known/**
+            **/uploads/**
+            **/scripts/ftp-*.js
+            **/scripts/test.js
+            **/ftp-test.js
+            **/deploy.js
+            **/deploy.sh
+            **/deployFTP.ps1
+            **/__tests__/**
+            **/test/**
+            **/tests/**
+            **/*.test.js
+            **/*.spec.js
+            **/coverage/**
+            **/.nyc_output/**
+            **/.eslintcache
+            **/.cache/**
+            **/tmp/**
+            **/logs/**
+            **/*.log
+            **/.seed-state.json
+            **/DEPLOY_TEST.txt
+
+      # Auto-restart the Node app via Phusion Passenger by touching
+      # tmp/restart.txt. ftp-restart.js is dependency-free (built-in net/tls),
+      # so no npm install is needed here.
+      - name: Trigger Passenger restart
+        working-directory: Backend
+        env:
+          FTP_HOST: ${{ secrets.FTP_SERVER }}
+          FTP_PORT: '21'
+          FTP_USER: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_SECURE: explicit
+          FTP_BASE_DIR: ${{ secrets.FTP_SERVER_DIR || '/' }}
+        run: node scripts/ftp-restart.js
+
+      - name: Verify the new build is live
+        run: |
+          # Passenger recycles on the next request, so a curl after the
+          # restart trigger both verifies HTTP reachability AND warms the
+          # new workers. /health is the inline route in src/server.js.
+          echo "Pinging /health to confirm the new code is serving..."
+          for i in 1 2 3 4 5; do
+            if curl -fsS --max-time 10 https://api.illusiodesigns.agency/health; then
+              echo ""
+              echo "✅ Backend healthy."
+              exit 0
+            fi
+            echo "  attempt $i failed, retrying in 5s..."
+            sleep 5
+          done
+          echo "::warning::/health didn't respond within 5 attempts. Check cPanel → Setup Node.js App for errors."
+          # Don't fail the workflow — the upload succeeded; cold cPanel
+          # hosts sometimes take >30s to warm up after a restart.
+
+      - name: Done
+        run: |
+          echo "✅ Backend deployed to ${{ secrets.FTP_SERVER_DIR || '/' }}"
+          echo "   App restart triggered via tmp/restart.txt"
+          echo "   New DB tables (if any) are created by initDatabase() on boot"
+          echo "   Verify anytime: curl https://api.illusiodesigns.agency/health"

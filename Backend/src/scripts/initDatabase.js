@@ -1,5 +1,5 @@
 import { connectDB, syncDatabase, sequelize } from '../config/db.js';
-import { User, SEO, Policy, Setting, PrivacyPolicy, TermsOfService } from '../models/index.js';
+import { User, SEO, Policy, Setting } from '../models/index.js';
 import bcrypt from 'bcryptjs';
 
 // Import all models to ensure they're registered
@@ -231,51 +231,44 @@ const initDefaultSEO = async () => {
 };
 
 // One-time migration: copy the latest privacy_policy / terms_of_service rows
-// into the unified `policies` table. Runs only when a type has no row yet.
+// into the unified `policies` table. The legacy tables are read with raw SQL
+// (their Sequelize models have been removed), so this keeps working — and once
+// those tables are dropped, the query simply fails and the step is skipped.
+// Runs only for a `type` that has no row in `policies` yet.
+const legacyPolicyTables = [
+  { type: 'privacy', table: 'privacy_policy', label: 'privacy policy' },
+  { type: 'terms', table: 'terms_of_service', label: 'terms of service' }
+];
+
 const migratePolicies = async () => {
   try {
     console.log('🔄 Migrating legacy policy tables into unified policies table...');
 
-    const hasPrivacy = await Policy.findOne({ where: { type: 'privacy' } });
-    if (!hasPrivacy) {
+    for (const { type, table, label } of legacyPolicyTables) {
+      const existing = await Policy.findOne({ where: { type } });
+      if (existing) {
+        console.log(`  ℹ️  ${label} already present in policies table`);
+        continue;
+      }
       try {
-        const latest = await PrivacyPolicy.findOne({ order: [['updatedAt', 'DESC']] });
+        const [rows] = await sequelize.query(
+          `SELECT content, lastUpdated FROM \`${table}\` ORDER BY updatedAt DESC LIMIT 1`
+        );
+        const latest = rows && rows[0];
         if (latest && latest.content) {
           await Policy.create({
-            type: 'privacy',
+            type,
             content: latest.content,
             lastUpdated: latest.lastUpdated || new Date()
           });
-          console.log('  ✅ Migrated privacy policy into policies table');
+          console.log(`  ✅ Migrated ${label} from ${table} into policies table`);
         } else {
-          console.log('  ℹ️  No legacy privacy policy to migrate');
+          console.log(`  ℹ️  No legacy ${label} to migrate`);
         }
       } catch (error) {
-        console.warn('  ⚠️  privacy_policy migration skipped:', error.message);
+        // Legacy table no longer exists (already dropped) — nothing to migrate.
+        console.warn(`  ⚠️  ${table} migration skipped:`, error.message);
       }
-    } else {
-      console.log('  ℹ️  Privacy policy already present in policies table');
-    }
-
-    const hasTerms = await Policy.findOne({ where: { type: 'terms' } });
-    if (!hasTerms) {
-      try {
-        const latest = await TermsOfService.findOne({ order: [['updatedAt', 'DESC']] });
-        if (latest && latest.content) {
-          await Policy.create({
-            type: 'terms',
-            content: latest.content,
-            lastUpdated: latest.lastUpdated || new Date()
-          });
-          console.log('  ✅ Migrated terms of service into policies table');
-        } else {
-          console.log('  ℹ️  No legacy terms of service to migrate');
-        }
-      } catch (error) {
-        console.warn('  ⚠️  terms_of_service migration skipped:', error.message);
-      }
-    } else {
-      console.log('  ℹ️  Terms of service already present in policies table');
     }
 
     console.log('✅ Policy migration check completed');
