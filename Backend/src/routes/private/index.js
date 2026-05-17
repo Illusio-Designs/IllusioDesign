@@ -16,6 +16,9 @@ import { getAllReviews, getReviewById } from '../../controllers/private/reviewCo
 import privacyPolicyRoutes from './privacyPolicy.js';
 import termsOfServiceRoutes from './termsOfService.js';
 import reviewRoutes from './review.js';
+import policyRoutes from './policy.js';
+import settingRoutes from './setting.js';
+import contentRoutes from './content.js';
 
 // Import controllers and middleware for write operations (accessible to all authenticated users)
 import { createCaseStudy, updateCaseStudy, deleteCaseStudy } from '../../controllers/private/caseStudyController.js';
@@ -107,9 +110,15 @@ router.post('/admin/images/upload-multiple', isAdmin, upload.array('images', 10)
 router.get('/admin/images', isAdmin, getAllImages);
 router.delete('/admin/images/:filename', isAdmin, deleteImage);
 
-// Privacy Policy and Terms of Service routes
+// Privacy Policy and Terms of Service routes (legacy paths — backed by the
+// unified `policies` table)
 router.use('/privacy-policy', privacyPolicyRoutes);
 router.use('/terms-of-service', termsOfServiceRoutes);
+
+// Unified policy, platform settings and content-management routes
+router.use('/policy', policyRoutes);
+router.use('/settings', settingRoutes);
+router.use('/content', contentRoutes);
 
 // Review routes
 router.use('/reviews', reviewRoutes);

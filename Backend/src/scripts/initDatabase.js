@@ -1,5 +1,5 @@
 import { connectDB, syncDatabase, sequelize } from '../config/db.js';
-import { User, SEO } from '../models/index.js';
+import { User, SEO, Policy, Setting, PrivacyPolicy, TermsOfService } from '../models/index.js';
 import bcrypt from 'bcryptjs';
 
 // Import all models to ensure they're registered
@@ -33,7 +33,13 @@ export const initDatabase = async () => {
     
     // Initialize default SEO entries
     await initDefaultSEO();
-    
+
+    // Migrate legacy policy tables into the unified policies table
+    await migratePolicies();
+
+    // Initialize default platform settings
+    await initDefaultSettings();
+
     // Initialize admin user
     await initAdminUser();
     
@@ -221,6 +227,93 @@ const initDefaultSEO = async () => {
     console.log('✅ Default SEO entries initialized');
   } catch (error) {
     console.error('❌ Error initializing SEO entries:', error);
+  }
+};
+
+// One-time migration: copy the latest privacy_policy / terms_of_service rows
+// into the unified `policies` table. Runs only when a type has no row yet.
+const migratePolicies = async () => {
+  try {
+    console.log('🔄 Migrating legacy policy tables into unified policies table...');
+
+    const hasPrivacy = await Policy.findOne({ where: { type: 'privacy' } });
+    if (!hasPrivacy) {
+      try {
+        const latest = await PrivacyPolicy.findOne({ order: [['updatedAt', 'DESC']] });
+        if (latest && latest.content) {
+          await Policy.create({
+            type: 'privacy',
+            content: latest.content,
+            lastUpdated: latest.lastUpdated || new Date()
+          });
+          console.log('  ✅ Migrated privacy policy into policies table');
+        } else {
+          console.log('  ℹ️  No legacy privacy policy to migrate');
+        }
+      } catch (error) {
+        console.warn('  ⚠️  privacy_policy migration skipped:', error.message);
+      }
+    } else {
+      console.log('  ℹ️  Privacy policy already present in policies table');
+    }
+
+    const hasTerms = await Policy.findOne({ where: { type: 'terms' } });
+    if (!hasTerms) {
+      try {
+        const latest = await TermsOfService.findOne({ order: [['updatedAt', 'DESC']] });
+        if (latest && latest.content) {
+          await Policy.create({
+            type: 'terms',
+            content: latest.content,
+            lastUpdated: latest.lastUpdated || new Date()
+          });
+          console.log('  ✅ Migrated terms of service into policies table');
+        } else {
+          console.log('  ℹ️  No legacy terms of service to migrate');
+        }
+      } catch (error) {
+        console.warn('  ⚠️  terms_of_service migration skipped:', error.message);
+      }
+    } else {
+      console.log('  ℹ️  Terms of service already present in policies table');
+    }
+
+    console.log('✅ Policy migration check completed');
+  } catch (error) {
+    console.warn('⚠️  Policy migration error (continuing anyway):', error.message);
+  }
+};
+
+// Default platform settings — created once, never overwritten.
+const defaultSettings = [
+  { key: 'site_name', value: 'Illusio Designs', category: 'general', label: 'Site name', isPublic: true },
+  { key: 'contact_email', value: 'info@illusiodesigns.agency', category: 'contact', label: 'Contact email', isPublic: true },
+  { key: 'contact_phone', value: '+91 76000 46416', category: 'contact', label: 'Contact phone', isPublic: true },
+  { key: 'contact_address', value: '', category: 'contact', label: 'Office address', isPublic: true },
+  { key: 'social_facebook', value: '', category: 'social', label: 'Facebook URL', isPublic: true },
+  { key: 'social_instagram', value: '', category: 'social', label: 'Instagram URL', isPublic: true },
+  { key: 'social_linkedin', value: '', category: 'social', label: 'LinkedIn URL', isPublic: true },
+  { key: 'social_twitter', value: '', category: 'social', label: 'Twitter / X URL', isPublic: true },
+  { key: 'ga_measurement_id', value: '', category: 'analytics', label: 'Google Analytics 4 ID', isPublic: true },
+  { key: 'facebook_pixel_id', value: '', category: 'analytics', label: 'Facebook Pixel ID', isPublic: true },
+  { key: 'gtm_id', value: '', category: 'analytics', label: 'Google Tag Manager ID', isPublic: true }
+];
+
+const initDefaultSettings = async () => {
+  try {
+    console.log('🔄 Initializing default platform settings...');
+    for (const setting of defaultSettings) {
+      const [, created] = await Setting.findOrCreate({
+        where: { key: setting.key },
+        defaults: setting
+      });
+      if (created) {
+        console.log(`  ✅ Created setting: ${setting.key}`);
+      }
+    }
+    console.log('✅ Default platform settings initialized');
+  } catch (error) {
+    console.error('❌ Error initializing platform settings:', error);
   }
 };
 

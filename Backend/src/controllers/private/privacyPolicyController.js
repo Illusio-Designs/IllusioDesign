@@ -1,15 +1,13 @@
-import PrivacyPolicy from '../../models/PrivacyPolicy.js';
+// Legacy privacy-policy endpoints — kept for API compatibility but now
+// backed by the unified `policies` table (type = 'privacy').
+import Policy from '../../models/Policy.js';
+
+const TYPE = 'privacy';
 
 export const getAllPrivacyPolicies = async (req, res) => {
   try {
-    // Ensure UTF-8 encoding for response to preserve emojis
-    res.setHeader('Content-Type', 'application/json; charset=utf-8');
-    
-    const privacyPolicies = await PrivacyPolicy.findAll({
-      order: [['createdAt', 'DESC']]
-    });
-    
-    res.json({ data: privacyPolicies });
+    const rows = await Policy.findAll({ where: { type: TYPE } });
+    res.json({ data: rows });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -17,45 +15,31 @@ export const getAllPrivacyPolicies = async (req, res) => {
 
 export const getPrivacyPolicyById = async (req, res) => {
   try {
-    // Ensure UTF-8 encoding for response to preserve emojis
-    res.setHeader('Content-Type', 'application/json; charset=utf-8');
-    
-    const { id } = req.params;
-    const privacyPolicy = await PrivacyPolicy.findByPk(id);
-    
-    if (!privacyPolicy) {
+    const policy = await Policy.findOne({ where: { type: TYPE } });
+    if (!policy) {
       return res.status(404).json({ error: 'Privacy Policy not found' });
     }
-    
-    res.json({ data: privacyPolicy });
+    res.json({ data: policy });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
+// Upsert — there is only ever one privacy policy row.
 export const createPrivacyPolicy = async (req, res) => {
   try {
-    // Ensure UTF-8 encoding for response
-    res.setHeader('Content-Type', 'application/json; charset=utf-8');
-    
     const { content } = req.body;
-    
     if (!content) {
       return res.status(400).json({ error: 'Content is required' });
     }
-    
-    // Ensure content is properly decoded as UTF-8 string to preserve emojis
-    const decodedContent = content ? String(content) : '';
-    
-    const privacyPolicy = await PrivacyPolicy.create({
-      content: decodedContent, // Use decoded content to preserve emojis
-      lastUpdated: new Date()
-    });
-    
-    res.status(201).json({
-      message: 'Privacy Policy created successfully',
-      data: privacyPolicy
-    });
+    const decodedContent = String(content);
+    let policy = await Policy.findOne({ where: { type: TYPE } });
+    if (policy) {
+      await policy.update({ content: decodedContent, lastUpdated: new Date() });
+    } else {
+      policy = await Policy.create({ type: TYPE, content: decodedContent, lastUpdated: new Date() });
+    }
+    res.status(201).json({ message: 'Privacy Policy saved successfully', data: policy });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -63,29 +47,20 @@ export const createPrivacyPolicy = async (req, res) => {
 
 export const updatePrivacyPolicy = async (req, res) => {
   try {
-    // Ensure UTF-8 encoding for response
-    res.setHeader('Content-Type', 'application/json; charset=utf-8');
-    
-    const { id } = req.params;
     const { content } = req.body;
-    
-    const privacyPolicy = await PrivacyPolicy.findByPk(id);
-    if (!privacyPolicy) {
-      return res.status(404).json({ error: 'Privacy Policy not found' });
+    let policy = await Policy.findOne({ where: { type: TYPE } });
+    if (!policy) {
+      if (!content) {
+        return res.status(404).json({ error: 'Privacy Policy not found' });
+      }
+      policy = await Policy.create({ type: TYPE, content: String(content), lastUpdated: new Date() });
+    } else {
+      await policy.update({
+        content: content !== undefined ? String(content) : policy.content,
+        lastUpdated: new Date()
+      });
     }
-    
-    // Ensure content is properly decoded as UTF-8 string if present
-    const decodedContent = content !== undefined ? String(content) : content;
-    
-    await privacyPolicy.update({
-      content: decodedContent, // Use decoded content to preserve emojis
-      lastUpdated: new Date()
-    });
-    
-    res.json({
-      message: 'Privacy Policy updated successfully',
-      data: privacyPolicy
-    });
+    res.json({ message: 'Privacy Policy updated successfully', data: policy });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -93,17 +68,13 @@ export const updatePrivacyPolicy = async (req, res) => {
 
 export const deletePrivacyPolicy = async (req, res) => {
   try {
-    const { id } = req.params;
-    const privacyPolicy = await PrivacyPolicy.findByPk(id);
-    
-    if (!privacyPolicy) {
+    const policy = await Policy.findOne({ where: { type: TYPE } });
+    if (!policy) {
       return res.status(404).json({ error: 'Privacy Policy not found' });
     }
-    
-    await privacyPolicy.destroy();
+    await policy.destroy();
     res.json({ message: 'Privacy Policy deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
-

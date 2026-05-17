@@ -9,6 +9,9 @@ import applicationRoutes from './application.js';
 import privacyPolicyRoutes from './privacyPolicy.js';
 import termsOfServiceRoutes from './termsOfService.js';
 import reviewRoutes from './review.js';
+import policyRoutes from './policy.js';
+import settingRoutes from './setting.js';
+import contentRoutes from './content.js';
 
 const router = express.Router();
 
@@ -22,5 +25,8 @@ router.use('/applications', applicationRoutes);
 router.use('/privacy-policy', privacyPolicyRoutes);
 router.use('/terms-of-service', termsOfServiceRoutes);
 router.use('/reviews', reviewRoutes);
+router.use('/policy', policyRoutes);
+router.use('/settings', settingRoutes);
+router.use('/content', contentRoutes);
 
 export default router;
