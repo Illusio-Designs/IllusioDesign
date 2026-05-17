@@ -1,41 +1,26 @@
-'use client';
-
-import { useRouter } from 'next/navigation';
+import Navbar from '@/components/layout/Navbar';
+import Footer from '@/components/layout/Footer';
+import Container from '@/components/ui/Container';
+import Button from '@/components/ui/Button';
 
 export default function NotFound() {
-  const router = useRouter();
-
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      minHeight: '100vh',
-      textAlign: 'center',
-      padding: '2rem'
-    }}>
-      <h1 style={{ fontSize: '4rem', marginBottom: '1rem' }}>404</h1>
-      <h2 style={{ fontSize: '2rem', marginBottom: '1rem' }}>Page Not Found</h2>
-      <p style={{ marginBottom: '2rem', color: '#666' }}>
-        The page you are looking for does not exist.
-      </p>
-      <button
-        onClick={() => router.push('/')}
-        style={{
-          padding: '0.75rem 2rem',
-          fontSize: '1rem',
-          backgroundColor: '#0070f3',
-          color: 'white',
-          border: 'none',
-          borderRadius: '0.5rem',
-          cursor: 'pointer'
-        }}
-      >
-        Go Home
-      </button>
-    </div>
+    <>
+      <Navbar />
+      <main>
+        <section className="notfound">
+          <Container size="sm">
+            <span className="notfound-tag">Lost in design space</span>
+            <h1>404</h1>
+            <p>This page took a wrong turn. Let&apos;s get you back on track.</p>
+            <div className="notfound-actions">
+              <Button href="/" variant="primary" size="md">Back to home</Button>
+              <Button href="/contact" variant="ghost" size="md" icon={false}>Get in touch</Button>
+            </div>
+          </Container>
+        </section>
+      </main>
+      <Footer />
+    </>
   );
 }
-
-
