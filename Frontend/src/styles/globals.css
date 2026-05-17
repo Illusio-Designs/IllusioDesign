@@ -4683,6 +4683,7 @@ em {
 .img-field {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 16px;
   padding: 14px;
   border: 1px dashed var(--line);
@@ -5349,6 +5350,23 @@ em {
   .dash-topbar { padding: 12px 18px; }
   .dash-content { padding: 22px 18px 60px; }
   .dash-search { display: none; }
+}
+
+@media (max-width: 760px) {
+  /* Wide tables scroll horizontally instead of being clipped by the card */
+  .dash-card {
+    overflow-x: auto;
+  }
+  .dash-table {
+    min-width: 620px;
+  }
+  /* Application detail grid stacks to one column */
+  .app-detail-grid {
+    grid-template-columns: 1fr;
+  }
+  .dash-form-actions {
+    flex-wrap: wrap;
+  }
 }
 
 /* ============== MODAL ============== */
