@@ -34,8 +34,10 @@ export const initDatabase = async () => {
     // Initialize default SEO entries
     await initDefaultSEO();
 
-    // Migrate legacy policy tables into the unified policies table
+    // Migrate legacy policy tables into the unified policies table, then
+    // drop them once their data is safely present in `policies`.
     await migratePolicies();
+    await dropLegacyPolicyTables();
 
     // Initialize default platform settings
     await initDefaultSettings();
@@ -135,66 +137,9 @@ const fixTableCharset = async () => {
       }
     }
     
-    // Fix privacy_policy table
-    try {
-      await sequelize.query(`
-        ALTER TABLE privacy_policy 
-        CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
-      `);
-      console.log('  ✅ Fixed privacy_policy table charset to utf8mb4');
-    } catch (error) {
-      if (error.message.includes("doesn't exist")) {
-        console.log('  ℹ️  privacy_policy table does not exist yet, will be created with correct charset');
-      } else {
-        console.warn('  ⚠️  Could not alter privacy_policy table charset:', error.message);
-      }
-    }
-    
-    // Fix privacy_policy.content column specifically
-    try {
-      await sequelize.query(`
-        ALTER TABLE privacy_policy 
-        MODIFY COLUMN content LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
-      `);
-      console.log('  ✅ Fixed privacy_policy.content column charset to utf8mb4');
-    } catch (error) {
-      if (error.message.includes("doesn't exist")) {
-        // Table doesn't exist yet, that's fine
-      } else {
-        console.warn('  ⚠️  Could not alter privacy_policy.content column:', error.message);
-      }
-    }
-    
-    // Fix terms_of_service table
-    try {
-      await sequelize.query(`
-        ALTER TABLE terms_of_service 
-        CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
-      `);
-      console.log('  ✅ Fixed terms_of_service table charset to utf8mb4');
-    } catch (error) {
-      if (error.message.includes("doesn't exist")) {
-        console.log('  ℹ️  terms_of_service table does not exist yet, will be created with correct charset');
-      } else {
-        console.warn('  ⚠️  Could not alter terms_of_service table charset:', error.message);
-      }
-    }
-    
-    // Fix terms_of_service.content column specifically
-    try {
-      await sequelize.query(`
-        ALTER TABLE terms_of_service 
-        MODIFY COLUMN content LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
-      `);
-      console.log('  ✅ Fixed terms_of_service.content column charset to utf8mb4');
-    } catch (error) {
-      if (error.message.includes("doesn't exist")) {
-        // Table doesn't exist yet, that's fine
-      } else {
-        console.warn('  ⚠️  Could not alter terms_of_service.content column:', error.message);
-      }
-    }
-    
+    // Note: charset fixes for privacy_policy / terms_of_service were removed —
+    // those tables are decommissioned and dropped by dropLegacyPolicyTables().
+
   } catch (error) {
     console.warn('⚠️  Error fixing table charset (continuing anyway):', error.message);
     // Don't throw - allow server to start even if charset fix fails
@@ -274,6 +219,34 @@ const migratePolicies = async () => {
     console.log('✅ Policy migration check completed');
   } catch (error) {
     console.warn('⚠️  Policy migration error (continuing anyway):', error.message);
+  }
+};
+
+// After migration, drop the legacy privacy_policy / terms_of_service tables —
+// but ONLY once their data is confirmed present in the unified `policies`
+// table. Safe and idempotent: a table is dropped only after its row exists in
+// `policies`, and DROP TABLE IF EXISTS is a no-op once the table is gone.
+const dropLegacyPolicyTables = async () => {
+  try {
+    console.log('🔄 Cleaning up legacy policy tables...');
+
+    for (const { type, table, label } of legacyPolicyTables) {
+      const migrated = await Policy.findOne({ where: { type } });
+      if (!migrated) {
+        console.log(`  ⏭️  Keeping ${table} — ${label} not yet migrated into policies`);
+        continue;
+      }
+      try {
+        await sequelize.query(`DROP TABLE IF EXISTS \`${table}\``);
+        console.log(`  🗑️  Dropped legacy table ${table} (data preserved in policies)`);
+      } catch (error) {
+        console.warn(`  ⚠️  Could not drop ${table}:`, error.message);
+      }
+    }
+
+    console.log('✅ Legacy policy table cleanup completed');
+  } catch (error) {
+    console.warn('⚠️  Legacy table cleanup error (continuing anyway):', error.message);
   }
 };
 
