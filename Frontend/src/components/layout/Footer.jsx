@@ -3,9 +3,10 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { FaInstagram, FaLinkedinIn, FaFacebookF } from 'react-icons/fa6';
+import { FaInstagram, FaLinkedinIn, FaFacebookF, FaBehance, FaDribbble, FaGoogle } from 'react-icons/fa6';
+import { useSettings } from '@/components/providers/SettingsProvider';
 
-const cols = [
+const linkCols = [
   {
     title: 'Services',
     links: [
@@ -24,23 +25,34 @@ const cols = [
       { label: 'Contact Us', href: '/contact' },
     ],
   },
-  {
-    title: 'Contact',
-    items: [
-      { label: '+91 76000 48416', href: 'tel:+917600048416' },
-      { label: 'Info@illusiodesigns.agency', href: 'mailto:Info@illusiodesigns.agency' },
-      { label: '211-212 2nd Floor, Runway Heights, Ayodhya chowk, 150ft Ring Road, Rajkot 360001' },
-    ],
-  },
 ];
 
-const socials = [
-  { Icon: FaLinkedinIn, href: '#', label: 'LinkedIn' },
-  { Icon: FaInstagram, href: '#', label: 'Instagram' },
-  { Icon: FaFacebookF, href: '#', label: 'Facebook' },
+// Social icons — rendered only when a URL is set in platform settings.
+const socialDefs = [
+  { Icon: FaLinkedinIn, key: 'social_linkedin', label: 'LinkedIn' },
+  { Icon: FaInstagram, key: 'social_instagram', label: 'Instagram' },
+  { Icon: FaFacebookF, key: 'social_facebook', label: 'Facebook' },
+  { Icon: FaBehance, key: 'social_behance', label: 'Behance' },
+  { Icon: FaDribbble, key: 'social_dribbble', label: 'Dribbble' },
+  { Icon: FaGoogle, key: 'gmb_url', label: 'Google Business' },
 ];
+
+const FALLBACK = {
+  contact_phone: '+91 76000 48416',
+  contact_email: 'Info@illusiodesigns.agency',
+  contact_address: '211-212 2nd Floor, Runway Heights, Ayodhya chowk, 150ft Ring Road, Rajkot 360001',
+};
 
 export default function Footer() {
+  const { settings } = useSettings();
+  const get = (k) => settings[k] || FALLBACK[k] || '';
+
+  const phone = get('contact_phone');
+  const email = get('contact_email');
+  const address = get('contact_address');
+  const telHref = `tel:${phone.replace(/[^\d+]/g, '')}`;
+  const socials = socialDefs.filter((s) => settings[s.key]);
+
   return (
     <footer className="footer-wrap">
       <motion.div
@@ -65,32 +77,40 @@ export default function Footer() {
               dedicated to building brands and digital experiences that leave a
               lasting impression.
             </p>
-            <div className="footer-socials" aria-label="Social links">
-              {socials.map(({ Icon, href, label }) => (
-                <a key={label} href={href} aria-label={label}>
-                  <Icon />
-                </a>
-              ))}
-            </div>
+            {socials.length ? (
+              <div className="footer-socials" aria-label="Social links">
+                {socials.map(({ Icon, key, label }) => (
+                  <a
+                    key={key}
+                    href={settings[key]}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    aria-label={label}
+                  >
+                    <Icon />
+                  </a>
+                ))}
+              </div>
+            ) : null}
           </div>
 
-          {cols.map((col) => (
+          {linkCols.map((col) => (
             <div className="footer-col" key={col.title}>
               <h4>{col.title}</h4>
-              {col.links?.map((l) => (
+              {col.links.map((l) => (
                 <Link key={l.label} href={l.href}>
                   {l.label}
                 </Link>
               ))}
-              {col.items?.map((item) =>
-                item.href ? (
-                  <a key={item.label} href={item.href}>{item.label}</a>
-                ) : (
-                  <span key={item.label}>{item.label}</span>
-                ),
-              )}
             </div>
           ))}
+
+          <div className="footer-col">
+            <h4>Contact</h4>
+            {phone ? <a href={telHref}>{phone}</a> : null}
+            {email ? <a href={`mailto:${email}`}>{email}</a> : null}
+            {address ? <span>{address}</span> : null}
+          </div>
         </div>
 
         <div className="footer-divider" />

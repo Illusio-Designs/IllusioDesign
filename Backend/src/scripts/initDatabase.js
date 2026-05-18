@@ -260,8 +260,12 @@ const defaultSettings = [
   { key: 'social_instagram', value: '', category: 'social', label: 'Instagram URL', isPublic: true },
   { key: 'social_linkedin', value: '', category: 'social', label: 'LinkedIn URL', isPublic: true },
   { key: 'social_twitter', value: '', category: 'social', label: 'Twitter / X URL', isPublic: true },
+  { key: 'social_behance', value: '', category: 'social', label: 'Behance URL', isPublic: true },
+  { key: 'social_dribbble', value: '', category: 'social', label: 'Dribbble URL', isPublic: true },
+  { key: 'gmb_url', value: '', category: 'social', label: 'Google Business Profile URL', isPublic: true },
   { key: 'ga_measurement_id', value: 'G-5RZ7ZTPGDK', category: 'analytics', label: 'Google Analytics 4 ID', isPublic: true },
   { key: 'facebook_pixel_id', value: '913443784211004', category: 'analytics', label: 'Facebook Pixel ID', isPublic: true },
+  { key: 'clarity_id', value: '', category: 'analytics', label: 'Microsoft Clarity ID', isPublic: true },
   { key: 'gtm_id', value: '', category: 'analytics', label: 'Google Tag Manager ID', isPublic: true }
 ];
 

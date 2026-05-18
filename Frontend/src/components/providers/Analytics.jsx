@@ -6,20 +6,22 @@ import { settingsAPI } from '@/services/api';
 
 const ENV_GA_ID = process.env.NEXT_PUBLIC_GA_ID || '';
 const ENV_FB_PIXEL_ID = process.env.NEXT_PUBLIC_FB_PIXEL_ID || '';
+const ENV_CLARITY_ID = process.env.NEXT_PUBLIC_CLARITY_ID || '';
 const CONSENT_KEY = 'illusio_cookie_consent';
 
 /**
- * Loads Google Analytics 4 and the Meta (Facebook) Pixel — but only after the
- * visitor accepts cookies.
+ * Loads Google Analytics 4, the Meta (Facebook) Pixel and Microsoft Clarity —
+ * but only after the visitor accepts cookies.
  *
- * The GA / Pixel IDs come from the platform settings managed in the dashboard
- * (`ga_measurement_id`, `facebook_pixel_id`), falling back to the build-time
- * env vars NEXT_PUBLIC_GA_ID / NEXT_PUBLIC_FB_PIXEL_ID if a setting is empty.
+ * The tracking IDs come from the platform settings managed in the dashboard
+ * (`ga_measurement_id`, `facebook_pixel_id`, `clarity_id`), falling back to the
+ * build-time env vars if a setting is empty.
  */
 export default function Analytics() {
   const [consented, setConsented] = useState(false);
   const [gaId, setGaId] = useState(ENV_GA_ID);
   const [fbPixelId, setFbPixelId] = useState(ENV_FB_PIXEL_ID);
+  const [clarityId, setClarityId] = useState(ENV_CLARITY_ID);
 
   // Resolve the analytics IDs from platform settings.
   useEffect(() => {
@@ -29,6 +31,7 @@ export default function Analytics() {
         if (!active || !settings) return;
         if (settings.ga_measurement_id) setGaId(settings.ga_measurement_id);
         if (settings.facebook_pixel_id) setFbPixelId(settings.facebook_pixel_id);
+        if (settings.clarity_id) setClarityId(settings.clarity_id);
       })
       .catch(() => {
         // Keep the env-var fallback values on failure.
@@ -54,7 +57,7 @@ export default function Analytics() {
     };
   }, []);
 
-  if (!consented || (!gaId && !fbPixelId)) return null;
+  if (!consented || (!gaId && !fbPixelId && !clarityId)) return null;
 
   return (
     <>
@@ -88,6 +91,18 @@ export default function Analytics() {
             'https://connect.facebook.net/en_US/fbevents.js');
             fbq('init', '${fbPixelId}');
             fbq('track', 'PageView');
+          `}
+        </Script>
+      ) : null}
+
+      {clarityId ? (
+        <Script id="ms-clarity" strategy="afterInteractive">
+          {`
+            (function(c,l,a,r,i,t,y){
+              c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+              t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+              y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+            })(window,document,'clarity','script','${clarityId}');
           `}
         </Script>
       ) : null}

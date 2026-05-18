@@ -2,6 +2,7 @@ import '@/styles/globals.css';
 import SmoothScroll from '@/components/providers/SmoothScroll';
 import Toaster from '@/components/providers/Toaster';
 import Analytics from '@/components/providers/Analytics';
+import { SettingsProvider } from '@/components/providers/SettingsProvider';
 import CookieBanner from '@/components/layout/CookieBanner';
 import ScrollTop from '@/components/layout/ScrollTop';
 import { buildPageMetadata } from '@/utils/seo';
@@ -24,12 +25,14 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <Toaster>
-          <SmoothScroll>{children}</SmoothScroll>
-          <ScrollTop />
-          <CookieBanner />
-        </Toaster>
-        <Analytics />
+        <SettingsProvider>
+          <Toaster>
+            <SmoothScroll>{children}</SmoothScroll>
+            <ScrollTop />
+            <CookieBanner />
+          </Toaster>
+          <Analytics />
+        </SettingsProvider>
       </body>
     </html>
   );
