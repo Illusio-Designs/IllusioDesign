@@ -9,6 +9,7 @@ import Container from '@/components/ui/Container';
 import Reveal from '@/components/ui/Reveal';
 import Counter from '@/components/ui/Counter';
 import Process from '@/components/home/Process';
+import Roadmap from '@/components/about/Roadmap';
 import Testimonials from '@/components/home/Testimonials';
 import CTA from '@/components/home/CTA';
 import useSEO from '@/hooks/useSEO';
@@ -26,25 +27,6 @@ const stats = [
   { value: 19, suffix: '+', label: 'Total Top Services' },
   { value: 98, suffix: '%', label: 'Positive Feedback' },
   { value: 7, suffix: '+', label: 'Years of Experience' },
-];
-
-// Milestone timeline — add more entries here and they flow into the timeline.
-const journey = [
-  {
-    year: '2015',
-    title: 'Founded as a branding agency',
-    body: 'Illusio Designs began as a branding agency — crafting brand identities, logos and visual systems for ambitious businesses.',
-  },
-  {
-    year: '2017',
-    title: 'Expanded into development',
-    body: 'We grew into a full development agency, adding website and product engineering alongside our design craft.',
-  },
-  {
-    year: '2019',
-    title: '100 development projects',
-    body: 'Reached a major milestone — 100 development projects designed, built and delivered for clients.',
-  },
 ];
 
 const fallbackTeam = [
@@ -157,30 +139,7 @@ export default function AboutPage() {
           </Container>
         </section>
 
-        <section className="journey">
-          <Container>
-            <Reveal>
-              <div className="journey-head">
-                <span className="page-eyebrow">Our journey</span>
-                <h2 className="section-title">Milestones that shaped Illusio Designs.</h2>
-              </div>
-            </Reveal>
-            <div className="journey-track">
-              {journey.map((m, i) => (
-                <Reveal key={m.year} delay={i * 0.08}>
-                  <div className="journey-step">
-                    <span className="journey-dot" aria-hidden />
-                    <span className="journey-year">{m.year}</span>
-                    <div className="journey-card">
-                      <h3>{m.title}</h3>
-                      <p>{m.body}</p>
-                    </div>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
-          </Container>
-        </section>
+        <Roadmap />
 
         <section className="team">
           <Container>

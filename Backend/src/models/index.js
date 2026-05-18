@@ -10,6 +10,7 @@ import Review from './Review.js';
 import Policy from './Policy.js';
 import Setting from './Setting.js';
 import Content from './Content.js';
+import Milestone from './Milestone.js';
 
 // Define associations
 Application.belongsTo(Position, { foreignKey: 'positionId', as: 'position' });
@@ -32,5 +33,6 @@ export {
   Review,
   Policy,
   Setting,
-  Content
+  Content,
+  Milestone
 };

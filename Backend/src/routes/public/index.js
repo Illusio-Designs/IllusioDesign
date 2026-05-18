@@ -12,6 +12,7 @@ import reviewRoutes from './review.js';
 import policyRoutes from './policy.js';
 import settingRoutes from './setting.js';
 import contentRoutes from './content.js';
+import milestoneRoutes from './milestone.js';
 
 const router = express.Router();
 
@@ -28,5 +29,6 @@ router.use('/reviews', reviewRoutes);
 router.use('/policy', policyRoutes);
 router.use('/settings', settingRoutes);
 router.use('/content', contentRoutes);
+router.use('/milestones', milestoneRoutes);
 
 export default router;

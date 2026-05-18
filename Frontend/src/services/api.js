@@ -294,6 +294,18 @@ export const contentAPI = {
   remove: (id) => apiCall(`/private/content/${id}`, { method: 'DELETE' }),
 };
 
+/* Milestones — public company roadmap read + private admin CRUD */
+export const milestoneAPI = {
+  getAllPublic: async () => extractList(await apiCall('/public/milestones')),
+  getAll: async () => extractList(await apiCall('/private/milestones')),
+  getById: async (id) => extractItem(await apiCall(`/private/milestones/${id}`)),
+  create: (data) =>
+    apiCall('/private/milestones', { method: 'POST', body: JSON.stringify(data) }),
+  update: (id, data) =>
+    apiCall(`/private/milestones/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  remove: (id) => apiCall(`/private/milestones/${id}`, { method: 'DELETE' }),
+};
+
 /* Platform settings — key/value site configuration */
 export const settingsAPI = {
   getPublic: async () => (await extractItem(await apiCall('/public/settings'))) || {},

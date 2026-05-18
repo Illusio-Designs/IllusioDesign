@@ -1,5 +1,5 @@
 import { connectDB, syncDatabase, sequelize } from '../config/db.js';
-import { User, SEO, Policy, Setting } from '../models/index.js';
+import { User, SEO, Policy, Setting, Milestone } from '../models/index.js';
 import bcrypt from 'bcryptjs';
 
 // Import all models to ensure they're registered
@@ -41,6 +41,9 @@ export const initDatabase = async () => {
 
     // Initialize default platform settings
     await initDefaultSettings();
+
+    // Seed the company roadmap milestones (only on a fresh table)
+    await initDefaultMilestones();
 
     // Initialize admin user
     await initAdminUser();
@@ -290,6 +293,28 @@ const initDefaultSettings = async () => {
     console.log('✅ Default platform settings initialized');
   } catch (error) {
     console.error('❌ Error initializing platform settings:', error);
+  }
+};
+
+// Default company-roadmap milestones — seeded once, only when the table is
+// empty, so the admin's edits/deletes are never overwritten.
+const defaultMilestones = [
+  { label: '2015', title: 'Founded as a branding agency', description: 'Illusio Designs began as a branding agency — crafting brand identities, logos and visual systems.', order: 1, status: 'published' },
+  { label: '2017', title: 'Expanded into development', description: 'We grew into a full development agency, adding website and product engineering to our craft.', order: 2, status: 'published' },
+  { label: '2019', title: '100 development projects', description: 'Reached a major milestone — 100 development projects designed, built and delivered for clients.', order: 3, status: 'published' }
+];
+
+const initDefaultMilestones = async () => {
+  try {
+    const count = await Milestone.count();
+    if (count > 0) {
+      console.log('ℹ️  Milestones already present, skipping seed');
+      return;
+    }
+    await Milestone.bulkCreate(defaultMilestones);
+    console.log(`✅ Seeded ${defaultMilestones.length} default milestones`);
+  } catch (error) {
+    console.error('❌ Error seeding milestones:', error);
   }
 };
 

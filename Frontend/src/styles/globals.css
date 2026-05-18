@@ -6840,114 +6840,151 @@ em {
   }
 }
 
-/* ============== ABOUT — OUR JOURNEY TIMELINE ============== */
-.journey {
-  padding: 60px 0;
+/* ============== ABOUT — COMPANY ROADMAP TIMELINE ============== */
+.roadmap {
+  padding: 70px 0;
 }
 
-.journey-head {
+.roadmap-head {
   text-align: center;
   max-width: 640px;
-  margin: 0 auto 56px;
+  margin: 0 auto 12px;
 }
 
-.journey-track {
-  position: relative;
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: 1fr;
-  gap: 24px;
-}
-
-/* the connecting rail running through every dot */
-.journey-track::before {
-  content: '';
-  position: absolute;
-  top: 7px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--line-strong);
-  z-index: 0;
-}
-
-.journey-step {
+.roadmap-track {
   position: relative;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  align-items: stretch;
+  min-height: 460px;
+  margin-top: 16px;
 }
 
-.journey-dot {
+/* horizontal rail the dots sit on */
+.roadmap-rail {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(50% - 1.5px);
+  height: 3px;
+  border-radius: 3px;
+  transform-origin: left center;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+}
+
+.roadmap-node {
   position: relative;
-  z-index: 1;
-  width: 14px;
-  height: 14px;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* glowing dot on the rail */
+.roadmap-dot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  margin: -9px 0 0 -9px;
   border-radius: 50%;
   background: var(--accent);
-  box-shadow: 0 0 0 5px var(--bg);
+  box-shadow: 0 0 0 5px var(--bg), 0 0 0 8px var(--accent-soft);
+  z-index: 3;
 }
 
-.journey-year {
+/* vertical connector from the dot to the card */
+.roadmap-connector {
+  position: absolute;
+  left: 50%;
+  width: 2px;
+  height: 52px;
+  margin-left: -1px;
+  background: var(--line-strong);
+  z-index: 1;
+}
+
+.roadmap-node.is-above .roadmap-connector {
+  bottom: 50%;
+  transform-origin: bottom center;
+}
+
+.roadmap-node.is-below .roadmap-connector {
+  top: 50%;
+  transform-origin: top center;
+}
+
+/* milestone card — centred over the dot, scales with the node width */
+.roadmap-card {
+  position: absolute;
+  left: 5%;
+  width: 90%;
+  text-align: center;
+}
+
+.roadmap-node.is-above .roadmap-card {
+  bottom: calc(50% + 64px);
+}
+
+.roadmap-node.is-below .roadmap-card {
+  top: calc(50% + 64px);
+}
+
+.roadmap-label {
+  display: inline-block;
   font-family: var(--display);
-  font-size: 26px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--ink);
-  margin: 20px 0 14px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+  margin-bottom: 6px;
 }
 
-.journey-card {
-  width: 100%;
-  background: var(--paper);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-md);
-  padding: 22px;
-  transition: transform 0.3s ease, border-color 0.3s ease;
-}
-
-.journey-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--ink);
-}
-
-.journey-card h3 {
+.roadmap-title {
   font-family: var(--display);
-  font-size: 18px;
+  font-size: 17px;
+  line-height: 1.3;
   letter-spacing: -0.01em;
-  margin-bottom: 8px;
+  color: var(--ink);
+  margin-bottom: 7px;
 }
 
-.journey-card p {
-  font-size: 14px;
-  line-height: 1.6;
+.roadmap-desc {
+  font-size: 12.5px;
+  line-height: 1.55;
   color: var(--muted);
 }
 
-/* On smaller screens the timeline becomes a vertical rail. */
-@media (max-width: 720px) {
-  .journey-track {
-    grid-auto-flow: row;
-    grid-auto-columns: auto;
+/* On smaller screens the roadmap becomes a vertical timeline. */
+@media (max-width: 760px) {
+  .roadmap-track {
+    flex-direction: column;
+    min-height: 0;
     gap: 30px;
+    padding-left: 30px;
   }
-  .journey-track::before {
-    top: 7px;
-    bottom: 7px;
-    left: 6px;
+  .roadmap-rail {
+    left: 8px;
     right: auto;
-    width: 2px;
-    height: auto;
-  }
-  .journey-step {
-    padding-left: 36px;
-  }
-  .journey-dot {
-    position: absolute;
-    left: 0;
     top: 0;
+    bottom: 0;
+    width: 3px;
+    height: auto;
+    background: linear-gradient(180deg, var(--accent), var(--accent-2));
   }
-  .journey-year {
-    margin: -4px 0 12px;
+  .roadmap-dot {
+    left: -22px;
+    top: 4px;
+    margin: 0;
+  }
+  .roadmap-connector {
+    display: none;
+  }
+  .roadmap-node.is-above .roadmap-card,
+  .roadmap-node.is-below .roadmap-card {
+    position: static;
+    left: auto;
+    top: auto;
+    bottom: auto;
+    width: 100%;
+    text-align: left;
   }
 }
