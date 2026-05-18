@@ -6855,11 +6855,11 @@ em {
   position: relative;
   display: flex;
   align-items: stretch;
-  min-height: 460px;
+  min-height: 500px;
   margin-top: 16px;
 }
 
-/* horizontal rail the dots sit on */
+/* horizontal rail with a continuously flowing glow */
 .roadmap-rail {
   position: absolute;
   left: 0;
@@ -6868,7 +6868,21 @@ em {
   height: 3px;
   border-radius: 3px;
   transform-origin: left center;
-  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  background: linear-gradient(
+    90deg,
+    var(--accent) 0%,
+    var(--accent-2) 28%,
+    var(--accent-soft) 50%,
+    var(--accent-2) 72%,
+    var(--accent) 100%
+  );
+  background-size: 220% 100%;
+  animation: roadmap-flow 3.4s linear infinite;
+}
+
+@keyframes roadmap-flow {
+  from { background-position: 220% 0; }
+  to { background-position: -220% 0; }
 }
 
 .roadmap-node {
@@ -6896,7 +6910,7 @@ em {
   position: absolute;
   left: 50%;
   width: 2px;
-  height: 52px;
+  height: 64px;
   margin-left: -1px;
   background: var(--line-strong);
   z-index: 1;
@@ -6915,9 +6929,20 @@ em {
 /* milestone card — centred over the dot, scales with the node width */
 .roadmap-card {
   position: absolute;
-  left: 5%;
-  width: 90%;
+  left: 4%;
+  width: 92%;
+  padding: 18px 18px 20px;
   text-align: center;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-soft);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.roadmap-card:hover {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-card);
 }
 
 .roadmap-node.is-above .roadmap-card {
@@ -6968,7 +6993,16 @@ em {
     bottom: 0;
     width: 3px;
     height: auto;
-    background: linear-gradient(180deg, var(--accent), var(--accent-2));
+    background: linear-gradient(
+      180deg,
+      var(--accent) 0%,
+      var(--accent-2) 28%,
+      var(--accent-soft) 50%,
+      var(--accent-2) 72%,
+      var(--accent) 100%
+    );
+    background-size: 100% 220%;
+    animation: roadmap-flow-v 3.4s linear infinite;
   }
   .roadmap-dot {
     left: -22px;
@@ -6987,4 +7021,9 @@ em {
     width: 100%;
     text-align: left;
   }
+}
+
+@keyframes roadmap-flow-v {
+  from { background-position: 0 220%; }
+  to { background-position: 0 -220%; }
 }
