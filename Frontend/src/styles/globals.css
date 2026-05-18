@@ -3091,6 +3091,30 @@ em {
   font-weight: 600;
 }
 
+.field-labelrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.setting-remove-btn {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.setting-remove-btn:hover {
+  color: #c0392b;
+}
+
 .field input,
 .field textarea,
 .field select {

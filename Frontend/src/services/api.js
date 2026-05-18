@@ -308,6 +308,8 @@ export const settingsAPI = {
       method: 'PUT',
       body: JSON.stringify(data),
     }),
+  remove: (key) =>
+    apiCall(`/private/settings/${encodeURIComponent(key)}`, { method: 'DELETE' }),
 };
 
 /* Admin users — private admin endpoints */
