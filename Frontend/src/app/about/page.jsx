@@ -28,6 +28,25 @@ const stats = [
   { value: 7, suffix: '+', label: 'Years of Experience' },
 ];
 
+// Milestone timeline — add more entries here and they flow into the timeline.
+const journey = [
+  {
+    year: '2015',
+    title: 'Founded as a branding agency',
+    body: 'Illusio Designs began as a branding agency — crafting brand identities, logos and visual systems for ambitious businesses.',
+  },
+  {
+    year: '2017',
+    title: 'Expanded into development',
+    body: 'We grew into a full development agency, adding website and product engineering alongside our design craft.',
+  },
+  {
+    year: '2019',
+    title: '100 development projects',
+    body: 'Reached a major milestone — 100 development projects designed, built and delivered for clients.',
+  },
+];
+
 const fallbackTeam = [
   { id: '1', name: 'Krunal Soni', role: 'Founder & Lead Designer', image: '/images/founder.webp' },
   { id: '2', name: 'Priya Nair', role: 'Senior Product Designer', image: '/images/IllusioDesignLogoicon.webp' },
@@ -131,6 +150,31 @@ export default function AboutPage() {
                     <span className="value-num">{g.num}</span>
                     <h3>{g.title}</h3>
                     <p>{g.body}</p>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </Container>
+        </section>
+
+        <section className="journey">
+          <Container>
+            <Reveal>
+              <div className="journey-head">
+                <span className="page-eyebrow">Our journey</span>
+                <h2 className="section-title">Milestones that shaped Illusio Designs.</h2>
+              </div>
+            </Reveal>
+            <div className="journey-track">
+              {journey.map((m, i) => (
+                <Reveal key={m.year} delay={i * 0.08}>
+                  <div className="journey-step">
+                    <span className="journey-dot" aria-hidden />
+                    <span className="journey-year">{m.year}</span>
+                    <div className="journey-card">
+                      <h3>{m.title}</h3>
+                      <p>{m.body}</p>
+                    </div>
                   </div>
                 </Reveal>
               ))}

@@ -6839,3 +6839,115 @@ em {
     flex-shrink: 0;
   }
 }
+
+/* ============== ABOUT — OUR JOURNEY TIMELINE ============== */
+.journey {
+  padding: 60px 0;
+}
+
+.journey-head {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto 56px;
+}
+
+.journey-track {
+  position: relative;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 24px;
+}
+
+/* the connecting rail running through every dot */
+.journey-track::before {
+  content: '';
+  position: absolute;
+  top: 7px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--line-strong);
+  z-index: 0;
+}
+
+.journey-step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.journey-dot {
+  position: relative;
+  z-index: 1;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 5px var(--bg);
+}
+
+.journey-year {
+  font-family: var(--display);
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 20px 0 14px;
+}
+
+.journey-card {
+  width: 100%;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 22px;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.journey-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--ink);
+}
+
+.journey-card h3 {
+  font-family: var(--display);
+  font-size: 18px;
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+}
+
+.journey-card p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+/* On smaller screens the timeline becomes a vertical rail. */
+@media (max-width: 720px) {
+  .journey-track {
+    grid-auto-flow: row;
+    grid-auto-columns: auto;
+    gap: 30px;
+  }
+  .journey-track::before {
+    top: 7px;
+    bottom: 7px;
+    left: 6px;
+    right: auto;
+    width: 2px;
+    height: auto;
+  }
+  .journey-step {
+    padding-left: 36px;
+  }
+  .journey-dot {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  .journey-year {
+    margin: -4px 0 12px;
+  }
+}
