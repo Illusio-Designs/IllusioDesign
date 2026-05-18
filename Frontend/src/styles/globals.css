@@ -3110,6 +3110,21 @@ em {
   background: #fff;
 }
 
+/* Keep browser-autofilled fields looking like normal fields (no blue/yellow) */
+.field input:-webkit-autofill,
+.field input:-webkit-autofill:hover,
+.field input:-webkit-autofill:focus,
+.field textarea:-webkit-autofill,
+.field select:-webkit-autofill {
+  -webkit-text-fill-color: var(--ink);
+  -webkit-box-shadow: 0 0 0 1000px var(--bg) inset;
+  box-shadow: 0 0 0 1000px var(--bg) inset;
+  caret-color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  transition: background-color 9999s ease-out 0s;
+}
+
 .field textarea {
   resize: vertical;
   min-height: 120px;
@@ -3768,6 +3783,11 @@ em {
 
 .auth-pass {
   position: relative;
+}
+
+.auth-pass input {
+  width: 100%;
+  padding-right: 64px;
 }
 
 .auth-pass-toggle {
