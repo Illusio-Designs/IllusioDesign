@@ -2,20 +2,41 @@
 
 import { useEffect, useState } from 'react';
 import Script from 'next/script';
+import { settingsAPI } from '@/services/api';
 
-const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
-const FB_PIXEL_ID = process.env.NEXT_PUBLIC_FB_PIXEL_ID;
+const ENV_GA_ID = process.env.NEXT_PUBLIC_GA_ID || '';
+const ENV_FB_PIXEL_ID = process.env.NEXT_PUBLIC_FB_PIXEL_ID || '';
 const CONSENT_KEY = 'illusio_cookie_consent';
 
 /**
  * Loads Google Analytics 4 and the Meta (Facebook) Pixel — but only after the
- * visitor accepts cookies, and only when the corresponding env var is set:
- *   NEXT_PUBLIC_GA_ID         e.g. G-XXXXXXXXXX
- *   NEXT_PUBLIC_FB_PIXEL_ID   e.g. 1234567890
+ * visitor accepts cookies.
+ *
+ * The GA / Pixel IDs come from the platform settings managed in the dashboard
+ * (`ga_measurement_id`, `facebook_pixel_id`), falling back to the build-time
+ * env vars NEXT_PUBLIC_GA_ID / NEXT_PUBLIC_FB_PIXEL_ID if a setting is empty.
  */
 export default function Analytics() {
   const [consented, setConsented] = useState(false);
+  const [gaId, setGaId] = useState(ENV_GA_ID);
+  const [fbPixelId, setFbPixelId] = useState(ENV_FB_PIXEL_ID);
 
+  // Resolve the analytics IDs from platform settings.
+  useEffect(() => {
+    let active = true;
+    settingsAPI.getPublic()
+      .then((settings) => {
+        if (!active || !settings) return;
+        if (settings.ga_measurement_id) setGaId(settings.ga_measurement_id);
+        if (settings.facebook_pixel_id) setFbPixelId(settings.facebook_pixel_id);
+      })
+      .catch(() => {
+        // Keep the env-var fallback values on failure.
+      });
+    return () => { active = false; };
+  }, []);
+
+  // Track cookie consent.
   useEffect(() => {
     const read = () => {
       try {
@@ -33,14 +54,14 @@ export default function Analytics() {
     };
   }, []);
 
-  if (!consented || (!GA_ID && !FB_PIXEL_ID)) return null;
+  if (!consented || (!gaId && !fbPixelId)) return null;
 
   return (
     <>
-      {GA_ID ? (
+      {gaId ? (
         <>
           <Script
-            src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+            src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
             strategy="afterInteractive"
           />
           <Script id="ga4-init" strategy="afterInteractive">
@@ -48,13 +69,13 @@ export default function Analytics() {
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
-              gtag('config', '${GA_ID}', { anonymize_ip: true });
+              gtag('config', '${gaId}', { anonymize_ip: true });
             `}
           </Script>
         </>
       ) : null}
 
-      {FB_PIXEL_ID ? (
+      {fbPixelId ? (
         <Script id="fb-pixel" strategy="afterInteractive">
           {`
             !function(f,b,e,v,n,t,s)
@@ -65,7 +86,7 @@ export default function Analytics() {
             t.src=v;s=b.getElementsByTagName(e)[0];
             s.parentNode.insertBefore(t,s)}(window,document,'script',
             'https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', '${FB_PIXEL_ID}');
+            fbq('init', '${fbPixelId}');
             fbq('track', 'PageView');
           `}
         </Script>

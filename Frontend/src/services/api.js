@@ -294,6 +294,22 @@ export const contentAPI = {
   remove: (id) => apiCall(`/private/content/${id}`, { method: 'DELETE' }),
 };
 
+/* Platform settings — key/value site configuration */
+export const settingsAPI = {
+  getPublic: async () => (await extractItem(await apiCall('/public/settings'))) || {},
+  getAll: async () => extractList(await apiCall('/private/settings')),
+  update: (values) =>
+    apiCall('/private/settings', {
+      method: 'PUT',
+      body: JSON.stringify({ settings: values }),
+    }),
+  updateOne: (key, data) =>
+    apiCall(`/private/settings/${encodeURIComponent(key)}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+};
+
 /* Admin users — private admin endpoints */
 export const userAPI = {
   getAll: async () => extractList(await apiCall('/private/admin/users')),

@@ -3969,6 +3969,46 @@ em {
   white-space: nowrap;
 }
 
+/* Collapsible nav groups */
+.dash-nav-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.dash-nav-grouphead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 13px 12px 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 0.18s ease;
+}
+
+.dash-nav-grouphead:hover {
+  color: var(--ink);
+}
+
+.dash-nav-chevron {
+  flex-shrink: 0;
+  transition: transform 0.22s ease;
+}
+
+.dash-nav-group.is-open .dash-nav-chevron {
+  transform: rotate(180deg);
+}
+
+.dash-nav-groupitems {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 /* Tooltip — shown only when the sidebar is collapsed */
 .dash-nav-tip {
   position: absolute;

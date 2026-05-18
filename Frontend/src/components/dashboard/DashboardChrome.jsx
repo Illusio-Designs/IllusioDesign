@@ -9,19 +9,45 @@ import TopbarActions from '@/components/dashboard/TopbarActions';
 import { useDashSearch } from '@/components/dashboard/SearchContext';
 import { authAPI } from '@/services/api';
 
-const navItems = [
-  { href: '/dashboard', label: 'Overview', icon: 'home' },
-  { href: '/dashboard/blog', label: 'Blog', icon: 'doc' },
-  { href: '/dashboard/projects', label: 'Project', icon: 'grid' },
-  { href: '/dashboard/positions', label: 'Position', icon: 'badge' },
-  { href: '/dashboard/applications', label: 'Applications', icon: 'inbox' },
-  { href: '/dashboard/messages', label: 'Messages', icon: 'mail' },
-  { href: '/dashboard/team', label: 'Team', icon: 'user' },
-  { href: '/dashboard/reviews', label: 'Reviews', icon: 'star' },
-  { href: '/dashboard/seo', label: 'SEO', icon: 'search' },
-  { href: '/dashboard/policy', label: 'Policy', icon: 'shield' },
-  { href: '/dashboard/content', label: 'Content', icon: 'layers' },
-  { href: '/dashboard/users', label: 'Users', icon: 'users' },
+const overviewItem = { href: '/dashboard', label: 'Overview', icon: 'home' };
+
+const navGroups = [
+  {
+    id: 'content',
+    label: 'Content',
+    items: [
+      { href: '/dashboard/blog', label: 'Blog', icon: 'doc' },
+      { href: '/dashboard/projects', label: 'Project', icon: 'grid' },
+      { href: '/dashboard/positions', label: 'Position', icon: 'badge' },
+      { href: '/dashboard/content', label: 'Content', icon: 'layers' },
+    ],
+  },
+  {
+    id: 'engagement',
+    label: 'Engagement',
+    items: [
+      { href: '/dashboard/applications', label: 'Applications', icon: 'inbox' },
+      { href: '/dashboard/messages', label: 'Messages', icon: 'mail' },
+      { href: '/dashboard/reviews', label: 'Reviews', icon: 'star' },
+    ],
+  },
+  {
+    id: 'studio',
+    label: 'Studio',
+    items: [
+      { href: '/dashboard/team', label: 'Team', icon: 'user' },
+      { href: '/dashboard/users', label: 'Users', icon: 'users' },
+    ],
+  },
+  {
+    id: 'config',
+    label: 'Configuration',
+    items: [
+      { href: '/dashboard/seo', label: 'SEO', icon: 'search' },
+      { href: '/dashboard/policy', label: 'Policy', icon: 'shield' },
+      { href: '/dashboard/settings', label: 'Settings', icon: 'cog' },
+    ],
+  },
 ];
 
 const icons = {
@@ -37,7 +63,11 @@ const icons = {
   mail: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="4" width="20" height="16" rx="2" /><path d="M22 7l-10 6L2 7" /></svg>,
   shield: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>,
   layers: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2l9 5-9 5-9-5 9-5z" /><path d="M3 12l9 5 9-5M3 17l9 5 9-5" /></svg>,
+  cog: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" /></svg>,
 };
+
+const isItemActive = (href, pathname) =>
+  pathname === href || (href !== '/dashboard' && pathname.startsWith(href));
 
 export default function DashboardChrome({ children }) {
   const pathname = usePathname() || '/dashboard';
@@ -47,10 +77,21 @@ export default function DashboardChrome({ children }) {
   const [authed, setAuthed] = useState(false);
   const { query, setQuery } = useDashSearch();
 
+  const activeGroupId =
+    navGroups.find((g) => g.items.some((it) => isItemActive(it.href, pathname)))?.id || null;
+  const [openGroups, setOpenGroups] = useState(() =>
+    activeGroupId ? { [activeGroupId]: true } : {},
+  );
+
   // Clear the shared search whenever the page changes.
   useEffect(() => {
     setQuery('');
   }, [pathname, setQuery]);
+
+  // Keep the group of the current page expanded.
+  useEffect(() => {
+    if (activeGroupId) setOpenGroups((p) => ({ ...p, [activeGroupId]: true }));
+  }, [activeGroupId]);
 
   // Protect the dashboard — redirect to /login when there is no token.
   useEffect(() => {
@@ -72,6 +113,8 @@ export default function DashboardChrome({ children }) {
     router.replace('/login');
   };
 
+  const toggleGroup = (id) => setOpenGroups((p) => ({ ...p, [id]: !p[id] }));
+
   if (!authed) {
     return (
       <div className="dash-auth-gate">
@@ -80,6 +123,18 @@ export default function DashboardChrome({ children }) {
       </div>
     );
   }
+
+  const navLink = (item) => (
+    <Link
+      href={item.href}
+      key={item.href}
+      className={`dash-nav-item ${isItemActive(item.href, pathname) ? 'is-active' : ''}`}
+    >
+      <span className="dash-nav-icon">{icons[item.icon]}</span>
+      <span className="dash-nav-label">{item.label}</span>
+      <span className="dash-nav-tip">{item.label}</span>
+    </Link>
+  );
 
   return (
     <div className={`dash ${open ? 'dash-open' : ''} ${collapsed ? 'dash-collapsed' : ''}`}>
@@ -113,22 +168,36 @@ export default function DashboardChrome({ children }) {
         </div>
 
         <nav className="dash-nav">
-          {navItems.map((item) => {
-            const active =
-              pathname === item.href ||
-              (item.href !== '/dashboard' && pathname.startsWith(item.href));
-            return (
-              <Link
-                href={item.href}
-                key={item.href}
-                className={`dash-nav-item ${active ? 'is-active' : ''}`}
-              >
-                <span className="dash-nav-icon">{icons[item.icon]}</span>
-                <span className="dash-nav-label">{item.label}</span>
-                <span className="dash-nav-tip">{item.label}</span>
-              </Link>
-            );
-          })}
+          {navLink(overviewItem)}
+
+          {collapsed ? (
+            /* Collapsed sidebar — flat icon list, grouping hidden */
+            navGroups.flatMap((g) => g.items).map((item) => navLink(item))
+          ) : (
+            navGroups.map((group) => {
+              const isOpen = !!openGroups[group.id];
+              return (
+                <div className={`dash-nav-group ${isOpen ? 'is-open' : ''}`} key={group.id}>
+                  <button
+                    type="button"
+                    className="dash-nav-grouphead"
+                    onClick={() => toggleGroup(group.id)}
+                    aria-expanded={isOpen}
+                  >
+                    <span>{group.label}</span>
+                    <svg className="dash-nav-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M6 9l6 6 6-6" />
+                    </svg>
+                  </button>
+                  {isOpen ? (
+                    <div className="dash-nav-groupitems">
+                      {group.items.map((item) => navLink(item))}
+                    </div>
+                  ) : null}
+                </div>
+              );
+            })
+          )}
         </nav>
 
         <div className="dash-side-foot">
