@@ -266,7 +266,8 @@ const defaultSettings = [
   { key: 'ga_measurement_id', value: 'G-5RZ7ZTPGDK', category: 'analytics', label: 'Google Analytics 4 ID', isPublic: true },
   { key: 'facebook_pixel_id', value: '913443784211004', category: 'analytics', label: 'Facebook Pixel ID', isPublic: true },
   { key: 'clarity_id', value: '', category: 'analytics', label: 'Microsoft Clarity ID', isPublic: true },
-  { key: 'gtm_id', value: '', category: 'analytics', label: 'Google Tag Manager ID', isPublic: true }
+  { key: 'gtm_id', value: '', category: 'analytics', label: 'Google Tag Manager ID', isPublic: true },
+  { key: 'clarity_id', value: '', category: 'analytics', label: 'Microsoft Clarity ID', isPublic: true }
 ];
 
 const initDefaultSettings = async () => {
