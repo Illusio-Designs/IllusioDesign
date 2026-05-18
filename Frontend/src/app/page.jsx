@@ -12,12 +12,14 @@ import Testimonials from '@/components/home/Testimonials';
 import Journal from '@/components/home/Journal';
 import FAQ from '@/components/home/FAQ';
 import CTA from '@/components/home/CTA';
+import IntroLoader from '@/components/ui/IntroLoader';
 import useSEO from '@/hooks/useSEO';
 
 export default function Page() {
   useSEO('home');
   return (
     <>
+      <IntroLoader label="Illusio Designs" />
       <Navbar />
       <main>
         <Hero />
