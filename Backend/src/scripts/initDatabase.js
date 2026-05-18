@@ -260,8 +260,8 @@ const defaultSettings = [
   { key: 'social_instagram', value: '', category: 'social', label: 'Instagram URL', isPublic: true },
   { key: 'social_linkedin', value: '', category: 'social', label: 'LinkedIn URL', isPublic: true },
   { key: 'social_twitter', value: '', category: 'social', label: 'Twitter / X URL', isPublic: true },
-  { key: 'ga_measurement_id', value: '', category: 'analytics', label: 'Google Analytics 4 ID', isPublic: true },
-  { key: 'facebook_pixel_id', value: '', category: 'analytics', label: 'Facebook Pixel ID', isPublic: true },
+  { key: 'ga_measurement_id', value: 'G-5RZ7ZTPGDK', category: 'analytics', label: 'Google Analytics 4 ID', isPublic: true },
+  { key: 'facebook_pixel_id', value: '913443784211004', category: 'analytics', label: 'Facebook Pixel ID', isPublic: true },
   { key: 'gtm_id', value: '', category: 'analytics', label: 'Google Tag Manager ID', isPublic: true }
 ];
 
@@ -269,12 +269,17 @@ const initDefaultSettings = async () => {
   try {
     console.log('🔄 Initializing default platform settings...');
     for (const setting of defaultSettings) {
-      const [, created] = await Setting.findOrCreate({
+      const [row, created] = await Setting.findOrCreate({
         where: { key: setting.key },
         defaults: setting
       });
       if (created) {
         console.log(`  ✅ Created setting: ${setting.key}`);
+      } else if (setting.value && !row.value) {
+        // Backfill: a setting row that already exists but is still empty
+        // picks up the new default value (never overwrites a real value).
+        await row.update({ value: setting.value });
+        console.log(`  ✏️  Backfilled empty setting: ${setting.key}`);
       }
     }
     console.log('✅ Default platform settings initialized');
