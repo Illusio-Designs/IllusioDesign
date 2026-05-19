@@ -36,6 +36,10 @@ const fallbackTeam = [
   { id: '4', name: 'Riya Shah', role: 'Brand Designer', image: '/images/IllusioDesignLogoicon.webp' },
 ];
 
+// Temporarily hidden on the About page — flip to true to restore.
+const SHOW_PORTRAIT = false;
+const SHOW_TEAM = false;
+
 export default function AboutPage() {
   useSEO('about');
   const [team, setTeam] = useState(fallbackTeam);
@@ -72,14 +76,19 @@ export default function AboutPage() {
 
         <section className="about-intro">
           <Container>
-            <div className="about-intro-grid">
-              <Reveal>
-                <div className="about-portrait-wrap">
-                  <div className="about-portrait-frame">
-                    <Image src="/images/founder.webp" alt="Illusio Designs studio" width={800} height={1000} />
+            <div
+              className="about-intro-grid"
+              style={SHOW_PORTRAIT ? undefined : { gridTemplateColumns: 'minmax(0, 760px)', justifyContent: 'center' }}
+            >
+              {SHOW_PORTRAIT && (
+                <Reveal>
+                  <div className="about-portrait-wrap">
+                    <div className="about-portrait-frame">
+                      <Image src="/images/founder.webp" alt="Illusio Designs studio" width={800} height={1000} />
+                    </div>
                   </div>
-                </div>
-              </Reveal>
+                </Reveal>
+              )}
               <Reveal delay={0.1}>
                 <div className="about-intro-text">
                   <h2 className="section-title">Built around craft, run like a product team.</h2>
@@ -141,6 +150,7 @@ export default function AboutPage() {
 
         <Roadmap />
 
+        {SHOW_TEAM && (
         <section className="team">
           <Container>
             <Reveal>
@@ -164,6 +174,7 @@ export default function AboutPage() {
             </div>
           </Container>
         </section>
+        )}
 
         <Process />
         <Testimonials />
