@@ -3,12 +3,31 @@
 import { useEffect, useState } from 'react';
 import { SkeletonTable } from '@/components/ui/Skeleton';
 import { useDashSearch } from '@/components/dashboard/SearchContext';
+import Modal from '@/components/ui/Modal';
+import Button from '@/components/ui/Button';
 import { contactAPI, cleanText } from '@/services/api';
+
+const fmtDate = (d) => {
+  const t = d ? new Date(d) : null;
+  return t && !Number.isNaN(t.getTime())
+    ? t.toLocaleString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+    : '—';
+};
+
+const STATUS = {
+  unread: { label: 'Unread', tone: 'error' },
+  read: { label: 'Read', tone: 'success' },
+  replied: { label: 'Replied', tone: 'success' },
+};
+
+const waNumber = (phone) => (phone || '').replace(/[^\d]/g, '');
 
 export default function DashboardMessages() {
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [authError, setAuthError] = useState(false);
+  const [active, setActive] = useState(null);
+  const [saving, setSaving] = useState(false);
   const { query } = useDashSearch();
 
   useEffect(() => {
@@ -20,6 +39,8 @@ export default function DashboardMessages() {
           id: c.id,
           name: cleanText(c.name) || 'Unknown',
           email: cleanText(c.email) || '—',
+          phone: cleanText(c.phone) || '',
+          createdAt: c.createdAt,
           subject: cleanText(c.subject) || '—',
           message: cleanText(c.message) || '',
           status: (c.status || 'unread').toLowerCase(),
@@ -33,10 +54,29 @@ export default function DashboardMessages() {
     return () => { m = false; };
   }, []);
 
+  const setStatus = async (row, status) => {
+    if (!row || row.status === status) return;
+    setSaving(true);
+    try {
+      await contactAPI.update(row.id, { status });
+      setRows((prev) => prev.map((r) => (r.id === row.id ? { ...r, status } : r)));
+      setActive((a) => (a && a.id === row.id ? { ...a, status } : a));
+    } catch {
+      /* keep current status on failure */
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const openRow = (row) => {
+    setActive(row);
+    if (row.status === 'unread') setStatus(row, 'read');
+  };
+
   const q = query.trim().toLowerCase();
   const filtered = q
     ? rows.filter((r) =>
-        `${r.name} ${r.email} ${r.subject} ${r.message}`.toLowerCase().includes(q),
+        `${r.name} ${r.email} ${r.phone} ${r.subject} ${r.message}`.toLowerCase().includes(q),
       )
     : rows;
   const unread = rows.filter((r) => r.status === 'unread').length;
@@ -60,7 +100,7 @@ export default function DashboardMessages() {
         </header>
 
         {loading ? (
-          <SkeletonTable rows={6} cols={4} />
+          <SkeletonTable rows={6} cols={5} />
         ) : authError ? (
           <div className="dash-empty">
             <div className="dash-empty-icon" aria-hidden>
@@ -70,26 +110,40 @@ export default function DashboardMessages() {
             <p>Contact messages are private. Connect an authenticated admin session to read the inbox.</p>
           </div>
         ) : filtered.length ? (
+          <div style={{ overflowX: 'auto' }}>
           <table className="dash-table">
             <thead>
-              <tr><th>Name</th><th>Email</th><th>Subject</th><th>Message</th><th>Status</th></tr>
+              <tr><th>Received</th><th>Name</th><th>Contact</th><th>Subject</th><th>Message</th><th>Status</th></tr>
             </thead>
             <tbody>
               {filtered.map((r, i) => (
-                <tr key={r.id || i}>
+                <tr
+                  key={r.id || i}
+                  onClick={() => openRow(r)}
+                  style={{ cursor: 'pointer', fontWeight: r.status === 'unread' ? 600 : 400 }}
+                >
+                  <td style={{ whiteSpace: 'nowrap' }}>{fmtDate(r.createdAt)}</td>
                   <td><strong>{r.name}</strong></td>
-                  <td>{r.email}</td>
-                  <td>{r.subject}</td>
-                  <td>{r.message}</td>
                   <td>
-                    <span className={`kit-badge kit-badge-${r.status === 'unread' ? 'error' : 'success'}`}>
-                      <span className="dot" />{r.status === 'unread' ? 'Unread' : 'Read'}
+                    <div>{r.email}</div>
+                    {r.phone ? <small>{r.phone}</small> : null}
+                  </td>
+                  <td>{r.subject}</td>
+                  <td style={{ maxWidth: 280 }}>
+                    <div style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                      {r.message}
+                    </div>
+                  </td>
+                  <td>
+                    <span className={`kit-badge kit-badge-${(STATUS[r.status] || STATUS.read).tone}`}>
+                      <span className="dot" />{(STATUS[r.status] || STATUS.read).label}
                     </span>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+          </div>
         ) : (
           <div className="dash-empty">
             <h3>No messages yet</h3>
@@ -97,6 +151,39 @@ export default function DashboardMessages() {
           </div>
         )}
       </section>
+
+      <Modal
+        open={!!active}
+        onClose={() => setActive(null)}
+        title={active ? active.subject : ''}
+        description={active ? `From ${active.name} · ${fmtDate(active.createdAt)}` : ''}
+        size="md"
+      >
+        {active ? (
+          <div style={{ display: 'grid', gap: 16 }}>
+            <div style={{ display: 'grid', gap: 6 }}>
+              <div><small>Email</small><div><a href={`mailto:${active.email}`}>{active.email}</a></div></div>
+              <div>
+                <small>Phone</small>
+                <div>{active.phone ? <a href={`tel:${active.phone.replace(/\s/g, '')}`}>{active.phone}</a> : '—'}</div>
+              </div>
+            </div>
+            <div>
+              <small>Message</small>
+              <p style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', margin: '6px 0 0' }}>{active.message || '—'}</p>
+            </div>
+            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+              {active.phone ? (
+                <Button href={`https://wa.me/${waNumber(active.phone)}`} variant="ghost" size="md" icon={false}>WhatsApp</Button>
+              ) : null}
+              <Button href={`mailto:${active.email}?subject=${encodeURIComponent('Re: ' + active.subject)}`} variant="ghost" size="md" icon={false}>Reply by email</Button>
+              <Button variant="primary" size="md" icon={false} onClick={() => setStatus(active, active.status === 'replied' ? 'read' : 'replied')}>
+                {saving ? 'Saving…' : active.status === 'replied' ? 'Mark as not replied' : 'Mark as replied'}
+              </Button>
+            </div>
+          </div>
+        ) : null}
+      </Modal>
     </>
   );
 }
