@@ -63,13 +63,13 @@ export default function About() {
               We design with rigour,<br /> ship with <em>craft.</em>
             </h2>
             <p>
-              Illusio is a senior product design studio. We partner with founders
-              and product teams to ship interfaces, brands and digital experiences
-              that actually move the needle.
+              Illusio is a design and technology studio. We help local business
+              owners get more customers with websites, brands and online ads
+              that actually bring in enquiries.
             </p>
             <p>
               Every engagement is run like an embedded team: weekly demos, clear
-              scope, no surprises — just outcomes you can put on a board deck.
+              scope, no surprises — just results you can see in your enquiries.
             </p>
 
             <div className="about-stats">

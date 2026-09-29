@@ -94,7 +94,7 @@ export default function Testimonials() {
           index="05"
           title={<>What partners say<br /> about <em>working with us.</em></>}
           align="center"
-          description="Real outcomes from founders, product teams and operators who've trusted us with their next move."
+          description="Real results from business owners and teams who've trusted us with their next move."
         />
 
         {loading ? (

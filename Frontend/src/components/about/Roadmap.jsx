@@ -7,7 +7,7 @@ import { milestoneAPI } from '@/services/api';
 
 // Used until the API responds (and if it returns nothing / errors).
 const fallbackMilestones = [
-  { id: 'f1', label: '2015', title: 'Founded as a branding agency', description: 'Illusio Designs began as a branding agency — crafting brand identities and visual systems.' },
+  { id: 'f1', label: '2007', title: 'Founded as a branding agency', description: 'Illusio Designs began as a branding agency — crafting brand identities and visual systems.' },
   { id: 'f2', label: '2017', title: 'Expanded into development', description: 'We grew into a full development agency, adding web and product engineering to our craft.' },
   { id: 'f3', label: '2019', title: '100 development projects', description: 'Reached a major milestone — 100 development projects designed, built and delivered.' },
 ];

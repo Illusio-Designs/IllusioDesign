@@ -8,7 +8,8 @@ import MagneticButton from '@/components/ui/MagneticButton';
 import Modal from '@/components/ui/Modal';
 import { contactAPI } from '@/services/api';
 import { useToast } from '@/components/providers/Toaster';
-import { runValidation, required, email, minLen } from '@/utils/validators';
+import PhoneInput, { dialFor } from '@/components/ui/PhoneInput';
+import { runValidation, required, email, phone, minLen } from '@/utils/validators';
 
 const FieldError = ({ msg }) =>
   msg ? (
@@ -25,7 +26,8 @@ export default function CTA() {
   const { push } = useToast();
   const [open, setOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [form, setForm] = useState({ name: '', email: '', message: '' });
+  const [form, setForm] = useState({ name: '', email: '', mobile: '', message: '' });
+  const [country, setCountry] = useState('in');
   const [errors, setErrors] = useState({});
   const change = (k) => (e) => {
     setForm((p) => ({ ...p, [k]: e.target.value }));
@@ -37,15 +39,16 @@ export default function CTA() {
     const found = runValidation(form, {
       name: [required('Name')],
       email: [required('Email'), email],
+      mobile: [phone],
       message: [required('Message'), minLen(10, 'Message')],
     });
     setErrors(found);
     if (Object.keys(found).length) return;
     setSubmitting(true);
     try {
-      await contactAPI.create({ ...form, subject: 'Free consultation request' });
+      await contactAPI.create({ ...form, mobile: `${dialFor(country)} ${form.mobile}`.trim(), subject: 'Free website review request' });
       push({ tone: 'success', title: 'Request sent', body: 'We will reach out within one working day.' });
-      setForm({ name: '', email: '', message: '' });
+      setForm({ name: '', email: '', mobile: '', message: '' });
       setErrors({});
       setOpen(false);
     } catch {
@@ -72,7 +75,7 @@ export default function CTA() {
           <div className="cta-actions">
             <MagneticButton strength={0.18}>
               <Button variant="light" size="lg" icon={false} onClick={() => setOpen(true)}>
-                Get a Free Consultation
+                Get a Free Website Review
               </Button>
             </MagneticButton>
             <MagneticButton strength={0.18}>
@@ -87,7 +90,7 @@ export default function CTA() {
       <Modal
         open={open}
         onClose={() => setOpen(false)}
-        title="Get a free consultation"
+        title="Get a free website review"
         description="Tell us a little about your project — we reply within one working day."
         size="md"
       >
@@ -116,6 +119,21 @@ export default function CTA() {
             </div>
           </div>
           <div className="field">
+            <label>Mobile number</label>
+            <PhoneInput
+              country={country}
+              number={form.mobile}
+              error={errors.mobile}
+              placeholder="Your mobile number*"
+              onCountryChange={setCountry}
+              onNumberChange={(n) => {
+                setForm((p) => ({ ...p, mobile: n }));
+                setErrors((p) => ({ ...p, mobile: '' }));
+              }}
+            />
+            <FieldError msg={errors.mobile} />
+          </div>
+          <div className="field">
             <label>What do you need?</label>
             <textarea
               className={errors.message ? 'is-invalid' : ''}
@@ -128,7 +146,7 @@ export default function CTA() {
           <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
             <Button variant="ghost" size="md" icon={false} onClick={() => setOpen(false)}>Cancel</Button>
             <Button variant="primary" size="md" type="submit" icon={false}>
-              {submitting ? 'Sending…' : 'Request consultation'}
+              {submitting ? 'Sending…' : 'Request website review'}
             </Button>
           </div>
         </form>

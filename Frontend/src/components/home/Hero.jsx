@@ -13,7 +13,7 @@ const stats = [
   { num: 883, suffix: '', label: 'Project Completed' },
   { num: 19, suffix: '+', label: 'Total Top Services' },
   { num: 98, suffix: '%', label: 'Positive Feedback' },
-  { num: 7, suffix: '+', label: 'Years of Experience' },
+  { num: 19, suffix: '+', label: 'Years of Experience' },
 ];
 
 export default function Hero() {
