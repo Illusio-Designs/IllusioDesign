@@ -11,9 +11,9 @@ import BackgroundRipple from '@/components/ui/BackgroundRipple';
 
 const stats = [
   { num: 883, suffix: '', label: 'Project Completed' },
-  { num: 19, suffix: '+', label: 'Total Top Services' },
+  { num: 11, suffix: '+', label: 'Total Top Services' },
   { num: 98, suffix: '%', label: 'Positive Feedback' },
-  { num: 19, suffix: '+', label: 'Years of Experience' },
+  { num: 11, suffix: '+', label: 'Years of Experience' },
 ];
 
 export default function Hero() {
@@ -38,7 +38,7 @@ export default function Hero() {
               transition={{ duration: 0.6 }}
             >
               <span className="live-dot" />
-              Illusio Designs · Since 2007
+              Illusio Designs · Since 2015
             </motion.span>
 
             <AnimatedHeading
@@ -120,7 +120,7 @@ export default function Hero() {
                   textLength="295"
                   lengthAdjust="spacing"
                 >
-                  ILLUSIO DESIGNS&#160;&#160;&#8226;&#160;&#160;SINCE 2007&#160;&#160;&#8226;&#160;&#160;
+                  ILLUSIO DESIGNS&#160;&#160;&#8226;&#160;&#160;SINCE 2015&#160;&#160;&#8226;&#160;&#160;
                 </textPath>
               </text>
             </svg>
