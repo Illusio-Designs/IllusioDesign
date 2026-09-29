@@ -100,7 +100,7 @@ export default function DashboardMessages() {
         </header>
 
         {loading ? (
-          <SkeletonTable rows={6} cols={5} />
+          <SkeletonTable rows={6} cols={6} />
         ) : authError ? (
           <div className="dash-empty">
             <div className="dash-empty-icon" aria-hidden>
@@ -113,7 +113,7 @@ export default function DashboardMessages() {
           <div style={{ overflowX: 'auto' }}>
           <table className="dash-table">
             <thead>
-              <tr><th>Received</th><th>Name</th><th>Contact</th><th>Subject</th><th>Message</th><th>Status</th></tr>
+              <tr><th>Received</th><th>Name</th><th>Contact</th><th>Subject</th><th>Message</th><th>Status</th><th>Action</th></tr>
             </thead>
             <tbody>
               {filtered.map((r, i) => (
@@ -138,6 +138,11 @@ export default function DashboardMessages() {
                     <span className={`kit-badge kit-badge-${(STATUS[r.status] || STATUS.read).tone}`}>
                       <span className="dot" />{(STATUS[r.status] || STATUS.read).label}
                     </span>
+                  </td>
+                  <td>
+                    <Button variant="ghost" size="sm" icon={false} onClick={(e) => { e.stopPropagation(); openRow(r); }}>
+                      View
+                    </Button>
                   </td>
                 </tr>
               ))}
