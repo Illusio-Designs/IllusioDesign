@@ -52,6 +52,7 @@ export default function WorkPage() {
           techStack: toArrayField(p.techStack || p.technologies),
           duration: p.duration || '',
           image: resolveImage(p.image),
+          summary: p.description || '',
         }));
         setProjects(mapped);
       })
@@ -134,6 +135,8 @@ export default function WorkPage() {
                       ) : null}
 
                       <h3 className="cs-title">{project.title}</h3>
+
+                      {project.summary ? <p style={{ margin: '8px 0 0', fontSize: 14, lineHeight: 1.5, opacity: 0.75, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{project.summary}</p> : null}
 
                       {(project.clientName || project.location) ? (
                         <div className="cs-meta-tags">
