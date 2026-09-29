@@ -299,7 +299,7 @@ const initDefaultSettings = async () => {
 // Default company-roadmap milestones — seeded once, only when the table is
 // empty, so the admin's edits/deletes are never overwritten.
 const defaultMilestones = [
-  { label: '2015', title: 'Founded as a branding agency', description: 'Illusio Designs began as a branding agency — crafting brand identities, logos and visual systems.', order: 1, status: 'published' },
+  { label: '2007', title: 'Founded as a branding agency', description: 'Illusio Designs began as a branding agency — crafting brand identities, logos and visual systems.', order: 1, status: 'published' },
   { label: '2017', title: 'Expanded into development', description: 'We grew into a full development agency, adding website and product engineering to our craft.', order: 2, status: 'published' },
   { label: '2019', title: '100 development projects', description: 'Reached a major milestone — 100 development projects designed, built and delivered for clients.', order: 3, status: 'published' }
 ];
