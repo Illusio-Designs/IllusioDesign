@@ -38,6 +38,7 @@ export default function Work() {
             title: p.title,
             tag: p.category || 'Case Study',
             image: resolveImage(p.image),
+            summary: p.description || '',
           }));
         setProjects(mapped);
       })
@@ -101,6 +102,7 @@ export default function Work() {
                 </Link>
                 <div className="work-meta">
                   <h3>{project.title}</h3>
+                  {project.summary ? <p style={{ margin: '8px 0 0', fontSize: 14, lineHeight: 1.5, opacity: 0.75, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{project.summary}</p> : null}
                   <Tag tone={tagTones[i % tagTones.length]} size="sm">{project.tag}</Tag>
                 </div>
               </motion.article>
