@@ -62,7 +62,7 @@ const services = {
     title: 'Shape Your Brand, Stand Out!',
     tag: 'Web & App Development',
     image: '/images/web&app.webp',
-    processTitle: 'Timeless Brand Identity.',
+    processTitle: 'Built To Perform.',
     description: [
       "Your website and app are the digital faces of your brand, and we build them with perfection in mind. Our focus is on blending beautiful designs with high performance, ensuring that every page feels smooth, modern, and user-friendly. Whether it's a business website, an e-commerce store, or a full-featured mobile app—we deliver solutions tailored to your business needs.",
       "We use the latest technologies and clean code practices to create digital products that load fast, work on all devices, and scale with your growth. From UI/UX design to backend development, we ensure every project is secure, optimized, and built for long-term success.",
@@ -87,10 +87,10 @@ const services = {
     ],
   },
   marketing: {
-    title: 'Your Product, Our Stunning Wrap!',
+    title: 'Ads That Bring You Customers!',
     tag: 'Digital Marketing',
     image: '/images/digitalmarketing.webp',
-    processTitle: 'Packaging That Speaks.',
+    processTitle: 'Campaigns That Bring Leads.',
     description: [
       "In a world where attention is the real currency, we help brands grow with strategies that cut through the noise. Our digital marketing approach blends creativity with data-driven insights, allowing your business to reach the right audience with the right message.",
       "Every campaign is tailored to your goals—whether it's brand building, lead generation, or increasing sales. We continuously optimize performance, track metrics, and refine strategies to deliver measurable results.",

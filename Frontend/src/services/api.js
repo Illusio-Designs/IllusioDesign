@@ -167,10 +167,11 @@ export const applicationAPI = {
 
 /* Contact — public create + private admin endpoints */
 export const contactAPI = {
-  create: (data) =>
+  // Backend expects `phone`; forms may pass `mobile`.
+  create: ({ mobile, ...data }) =>
     apiCall('/public/contact', {
       method: 'POST',
-      body: JSON.stringify(data),
+      body: JSON.stringify({ ...data, phone: data.phone || mobile }),
     }),
   getAll: async () => extractList(await apiCall('/private/contact-messages')),
   update: (id, data) =>

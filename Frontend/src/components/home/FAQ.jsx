@@ -28,7 +28,7 @@ const items = [
   },
   {
     q: 'How do I get started with Illusio Designs?',
-    a: 'It’s simple! Just reach out to us through WhatsApp, email, or our contact form. We’ll schedule a free consultation to discuss your project and explore how we can help you achieve your digital goals.',
+    a: 'It’s simple! Just reach out to us through WhatsApp, email, or our contact form. We’ll arrange a free website review to discuss your project and explore how we can help you achieve your digital goals.',
   },
 ];
 

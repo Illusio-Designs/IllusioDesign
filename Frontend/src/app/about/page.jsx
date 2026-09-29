@@ -24,9 +24,9 @@ const goals = [
 
 const stats = [
   { value: 883, suffix: '', label: 'Project Completed' },
-  { value: 19, suffix: '+', label: 'Total Top Services' },
+  { value: 11, suffix: '+', label: 'Total Top Services' },
   { value: 98, suffix: '%', label: 'Positive Feedback' },
-  { value: 7, suffix: '+', label: 'Years of Experience' },
+  { value: 11, suffix: '+', label: 'Years of Experience' },
 ];
 
 const fallbackTeam = [
